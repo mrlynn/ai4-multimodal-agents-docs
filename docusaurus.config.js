@@ -83,8 +83,8 @@ const darkCodeTheme = themes.dracula;
 const config = {
   title: `${title}`,
   tagline: `${tagLine}`,
-  url: process.env.CODESPACES ? `https://${process.env.CODESPACE_NAME}-3000.${process.env.GITHUB_CODESPACES_PORT_FORWARDING_DOMAIN}` : `https://${workshopName}.github.io`,
-  baseUrl: process.env.CODESPACES ? `/` : `/${workshopName}/`,
+  url: process.env.CODESPACES ? `https://${process.env.CODESPACE_NAME}-3000.${process.env.GITHUB_CODESPACES_PORT_FORWARDING_DOMAIN}` : process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : `https://${workshopName}.github.io`,
+  baseUrl: process.env.CODESPACES || process.env.VERCEL_URL ? `/` : `/${workshopName}/`,
   projectName: `${organizationName}.github.io`,
   organizationName: `${organizationName}`,
   trailingSlash: false,
@@ -182,17 +182,13 @@ const config = {
       removeLegacyPostBuildHeadAttribute: true,
       useCssCascadeLayers: true,
     },
-    // Disabled experimental_faster options for Codespaces compatibility
-    // experimental_faster: {
-    //   swcJsLoader: true,
-    //   swcJsMinimizer: true,
-    //   swcHtmlMinimizer: true,
-    //   lightningCssMinimizer: true,
-    //   rspackBundler: true,
-    //   rspackPersistentCache: true,
-    //   ssgWorkerThreads: true,
-    //   mdxCrossCompilerCache: true,
-    // },
+    // Enable faster build options for Vercel deployment
+    experimental_faster: {
+      swcJsLoader: true,
+      swcJsMinimizer: true,
+      swcHtmlMinimizer: true,
+      lightningCssMinimizer: true,
+    },
     experimental_storage: {
       type: "localStorage",
       namespace: true,

@@ -374,19 +374,19 @@ export default {
       "removeLegacyPostBuildHeadAttribute": true,
       "useCssCascadeLayers": true
     },
-    "experimental_storage": {
-      "type": "localStorage",
-      "namespace": true
-    },
     "experimental_faster": {
-      "swcJsLoader": false,
-      "swcJsMinimizer": false,
-      "swcHtmlMinimizer": false,
-      "lightningCssMinimizer": false,
+      "swcJsLoader": true,
+      "swcJsMinimizer": true,
+      "swcHtmlMinimizer": true,
+      "lightningCssMinimizer": true,
       "mdxCrossCompilerCache": false,
       "rspackBundler": false,
       "rspackPersistentCache": false,
       "ssgWorkerThreads": false
+    },
+    "experimental_storage": {
+      "type": "localStorage",
+      "namespace": true
     },
     "experimental_router": "browser"
   },
