@@ -1,0 +1,250 @@
+.exercise {
+  border: 2px solid #e1e8ed;
+  border-radius: 12px;
+  margin: 1.5rem 0;
+  background: linear-gradient(145deg, #ffffff, #f8f9fa);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  transition: all 0.3s ease;
+}
+
+.exercise:hover {
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+  transform: translateY(-2px);
+}
+
+.exercise.completed {
+  border-color: #28a745;
+  background: linear-gradient(145deg, #f8fff9, #e8f5e8);
+}
+
+.header {
+  padding: 1.5rem;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #e1e8ed;
+}
+
+.titleSection {
+  flex: 1;
+}
+
+.title {
+  margin: 0 0 0.5rem 0;
+  font-size: 1.3rem;
+  color: #1c1e21;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.checkmark {
+  font-size: 1rem;
+}
+
+.metadata {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+}
+
+.difficulty {
+  padding: 0.25rem 0.75rem;
+  border-radius: 20px;
+  color: white;
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.time {
+  color: #6c757d;
+  font-size: 0.9rem;
+}
+
+.expandButton {
+  background: none;
+  border: none;
+  font-size: 1.2rem;
+  cursor: pointer;
+  padding: 0.5rem;
+  border-radius: 4px;
+  transition: background-color 0.2s;
+}
+
+.expandButton:hover {
+  background-color: #f1f3f4;
+}
+
+.content {
+  padding: 1.5rem;
+}
+
+.objectives {
+  background-color: #e3f2fd;
+  padding: 1rem;
+  border-radius: 8px;
+  margin-bottom: 1.5rem;
+  border-left: 4px solid #2196f3;
+}
+
+.objectives h4 {
+  margin: 0 0 0.5rem 0;
+  color: #1565c0;
+}
+
+.objectives ul {
+  margin: 0;
+  padding-left: 1.2rem;
+}
+
+.objectives li {
+  margin-bottom: 0.25rem;
+  color: #1976d2;
+}
+
+.instructions {
+  margin-bottom: 1.5rem;
+}
+
+.completeButton {
+  background: linear-gradient(135deg, #28a745, #20c997);
+  color: white;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: 1rem;
+}
+
+.completeButton:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(40, 167, 69, 0.3);
+}
+
+.completedMessage {
+  background: linear-gradient(135deg, #d4edda, #c3e6cb);
+  color: #155724;
+  padding: 1rem;
+  border-radius: 8px;
+  text-align: center;
+  font-weight: 600;
+  border: 2px solid #28a745;
+}
+
+/* Step Components */
+.step {
+  border: 1px solid #dee2e6;
+  border-radius: 8px;
+  margin: 1rem 0;
+  background: white;
+}
+
+.stepHeader {
+  display: flex;
+  align-items: center;
+  padding: 1rem;
+  background: #f8f9fa;
+  border-bottom: 1px solid #dee2e6;
+}
+
+.stepNumber {
+  width: 2rem;
+  height: 2rem;
+  border-radius: 50%;
+  background: #6c757d;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  margin-right: 1rem;
+  font-size: 0.9rem;
+}
+
+.stepNumber.stepCompleted {
+  background: #28a745;
+}
+
+.stepTitle {
+  margin: 0;
+  color: #495057;
+}
+
+.stepContent {
+  padding: 1rem;
+}
+
+.stepCompleteButton {
+  margin: 0 1rem 1rem 1rem;
+  background: #007bff;
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: background-color 0.2s;
+}
+
+.stepCompleteButton:hover {
+  background: #0056b3;
+}
+
+/* Validation Components */
+.validation {
+  background: #fff3cd;
+  border: 1px solid #ffeaa7;
+  border-radius: 8px;
+  padding: 1rem;
+  margin: 1rem 0;
+}
+
+.validation h4 {
+  margin: 0 0 1rem 0;
+  color: #856404;
+}
+
+.checks {
+  margin-bottom: 1rem;
+}
+
+.check {
+  margin-bottom: 0.75rem;
+}
+
+.checkLabel {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+  cursor: pointer;
+  font-weight: 500;
+}
+
+.checkLabel input[type="checkbox"] {
+  margin: 0;
+  transform: scale(1.2);
+}
+
+.hint {
+  margin-top: 0.5rem;
+  padding: 0.5rem;
+  background: #e3f2fd;
+  border-radius: 4px;
+  font-size: 0.9rem;
+  color: #1565c0;
+  margin-left: 1.7rem;
+}
+
+.validationSuccess {
+  background: #d4edda;
+  color: #155724;
+  padding: 0.75rem;
+  border-radius: 6px;
+  text-align: center;
+  font-weight: 600;
+  border: 1px solid #c3e6cb;
+}

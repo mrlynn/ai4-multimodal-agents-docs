@@ -17,11 +17,11 @@
   },
   "sidebar": "tutorialSidebar",
   "previous": {
-    "title": "🚢 Voyage AI Embedding Service Setup",
+    "title": "Voyage AI Configuration",
     "permalink": "/multimodal-pdf-agent-n8n/es/docs/voyage-ai-setup"
   },
   "next": {
-    "title": "💻 Docker Development Best Practices",
-    "permalink": "/multimodal-pdf-agent-n8n/es/docs/local-setup-tips"
+    "title": "Vector Search Implementation",
+    "permalink": "/multimodal-pdf-agent-n8n/es/docs/vector-search-workflow"
   }
 }

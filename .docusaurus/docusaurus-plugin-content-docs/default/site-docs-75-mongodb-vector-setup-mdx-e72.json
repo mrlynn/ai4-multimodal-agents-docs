@@ -17,11 +17,11 @@
   },
   "sidebar": "tutorialSidebar",
   "previous": {
-    "title": "🧠 Complete Multimodal PDF Agent",
+    "title": "Complete Multimodal Agent",
     "permalink": "/multimodal-pdf-agent-n8n/es/docs/complete-multimodal-agent"
   },
   "next": {
-    "title": "🌐 Web Upload Interface",
+    "title": "Web Upload Interface",
     "permalink": "/multimodal-pdf-agent-n8n/es/docs/upload-interface"
   }
 }

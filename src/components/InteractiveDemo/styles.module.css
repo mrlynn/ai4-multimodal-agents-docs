@@ -1,0 +1,320 @@
+.demoContainer {
+  border: 2px solid #e1e8ed;
+  border-radius: 12px;
+  background: #ffffff;
+  margin: 2rem 0;
+  overflow: hidden;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+}
+
+.header {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  padding: 1.5rem;
+  text-align: center;
+}
+
+.header h3 {
+  margin: 0 0 0.5rem 0;
+  font-size: 1.4rem;
+}
+
+.header p {
+  margin: 0;
+  opacity: 0.9;
+}
+
+.progressIndicator {
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 1rem;
+  background: #f8f9fa;
+  border-bottom: 1px solid #e1e8ed;
+}
+
+.progressDot {
+  width: 1rem;
+  height: 1rem;
+  border-radius: 50%;
+  background: #dee2e6;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.progressDot.active {
+  background: #007bff;
+  transform: scale(1.2);
+}
+
+.progressDot.completed {
+  background: #28a745;
+}
+
+.stepContent {
+  padding: 2rem;
+}
+
+.stepHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid #e1e8ed;
+}
+
+.stepHeader h4 {
+  margin: 0;
+  color: #495057;
+}
+
+.timeEstimate {
+  color: #6c757d;
+  font-size: 0.9rem;
+}
+
+.stepBody {
+  margin-bottom: 2rem;
+  line-height: 1.6;
+}
+
+.interactive {
+  background: #f8f9fa;
+  border: 1px solid #e1e8ed;
+  border-radius: 8px;
+  padding: 1.5rem;
+  margin: 1rem 0;
+}
+
+.navigation {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 1rem;
+  border-top: 1px solid #e1e8ed;
+}
+
+.navButton {
+  background: #007bff;
+  color: white;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+.navButton:hover:not(:disabled) {
+  background: #0056b3;
+  transform: translateY(-2px);
+}
+
+.navButton:disabled {
+  background: #6c757d;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.stepCounter {
+  color: #6c757d;
+  font-weight: 500;
+}
+
+.completion {
+  padding: 3rem 2rem;
+  text-align: center;
+}
+
+.completionIcon {
+  font-size: 4rem;
+  margin-bottom: 1rem;
+}
+
+.completion h4 {
+  color: #28a745;
+  margin-bottom: 1rem;
+}
+
+.completionData {
+  background: #f8f9fa;
+  border: 1px solid #e1e8ed;
+  border-radius: 8px;
+  padding: 1rem;
+  margin: 1.5rem 0;
+  text-align: left;
+}
+
+.completionData h5 {
+  margin: 0 0 0.5rem 0;
+  color: #495057;
+}
+
+.completionData pre {
+  background: #343a40;
+  color: #ffffff;
+  padding: 1rem;
+  border-radius: 4px;
+  overflow-x: auto;
+  font-size: 0.9rem;
+}
+
+.resetButton {
+  background: #6c757d;
+  color: white;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.resetButton:hover {
+  background: #5a6268;
+}
+
+/* Config Builder */
+.configBuilder {
+  background: #ffffff;
+  border: 1px solid #e1e8ed;
+  border-radius: 8px;
+  padding: 1.5rem;
+  margin: 1rem 0;
+}
+
+.configBuilder h4 {
+  margin: 0 0 1rem 0;
+  color: #495057;
+}
+
+.configForm {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.configField {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.configLabel {
+  font-weight: 500;
+  color: #495057;
+}
+
+.configInput {
+  padding: 0.75rem;
+  border: 1px solid #ced4da;
+  border-radius: 4px;
+  font-size: 1rem;
+  transition: border-color 0.2s ease;
+}
+
+.configInput:focus {
+  outline: none;
+  border-color: #007bff;
+  box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
+}
+
+/* Service Tester */
+.serviceTester {
+  background: #ffffff;
+  border: 1px solid #e1e8ed;
+  border-radius: 8px;
+  margin: 1rem 0;
+  overflow: hidden;
+}
+
+.testerHeader {
+  background: #f8f9fa;
+  padding: 1rem 1.5rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #e1e8ed;
+}
+
+.testerHeader h4 {
+  margin: 0;
+  color: #495057;
+}
+
+.testButton {
+  background: #28a745;
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+.testButton:hover:not(:disabled) {
+  background: #218838;
+  transform: translateY(-1px);
+}
+
+.testButton:disabled {
+  background: #6c757d;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.error {
+  background: #f8d7da;
+  color: #721c24;
+  padding: 1rem 1.5rem;
+  border-bottom: 1px solid #f5c6cb;
+}
+
+.success {
+  background: #d4edda;
+  color: #155724;
+  padding: 1rem 1.5rem;
+  border-bottom: 1px solid #c3e6cb;
+}
+
+.resultData {
+  background: #343a40;
+  color: #ffffff;
+  padding: 1rem;
+  border-radius: 4px;
+  margin-top: 0.5rem;
+  overflow-x: auto;
+  font-size: 0.9rem;
+}
+
+.testDetails {
+  padding: 1rem 1.5rem;
+}
+
+.testDetails summary {
+  cursor: pointer;
+  font-weight: 500;
+  color: #495057;
+  margin-bottom: 0.5rem;
+}
+
+.testConfig {
+  background: #f8f9fa;
+  padding: 1rem;
+  border-radius: 4px;
+  margin-top: 0.5rem;
+}
+
+.testConfig p {
+  margin: 0.5rem 0;
+}
+
+.testConfig pre {
+  background: #343a40;
+  color: #ffffff;
+  padding: 1rem;
+  border-radius: 4px;
+  overflow-x: auto;
+  font-size: 0.9rem;
+}

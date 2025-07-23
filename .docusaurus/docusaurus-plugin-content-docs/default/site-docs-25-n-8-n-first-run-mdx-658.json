@@ -1,7 +1,7 @@
 {
   "id": "n8n-first-run",
   "title": "🚀 n8n First Run Experience",
-  "description": "Let's walk through what happens when you first access n8n in our Docker environment.",
+  "description": "<StepIndicator current= total={6} titles={[",
   "source": "@site/docs/25-n8n-first-run.mdx",
   "sourceDirName": ".",
   "slug": "/n8n-first-run",
@@ -17,11 +17,11 @@
   },
   "sidebar": "tutorialSidebar",
   "previous": {
-    "title": "🛠️ Prerequisites & Setup",
+    "title": "Prerequisites & Local Setup",
     "permalink": "/multimodal-pdf-agent-n8n/es/docs/prerequisites"
   },
   "next": {
-    "title": "🗄️ MongoDB Setup: Local Development & Atlas Production",
+    "title": "MongoDB Atlas Setup",
     "permalink": "/multimodal-pdf-agent-n8n/es/docs/mongodb-atlas-setup"
   }
 }

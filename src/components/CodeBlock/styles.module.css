@@ -1,0 +1,184 @@
+.codeBlockContainer {
+  margin: 1.5rem 0;
+  border-radius: 8px;
+  background: #1e1e1e;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.header {
+  background: #2d2d30;
+  padding: 0.75rem 1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #404040;
+}
+
+.title {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.filename {
+  color: #ffd700;
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+.codeTitle {
+  color: #c9d1d9;
+  font-weight: 500;
+}
+
+.copyButton {
+  background: #238636;
+  color: white;
+  border: none;
+  padding: 0.4rem 0.8rem;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.8rem;
+  transition: all 0.2s ease;
+}
+
+.copyButton:hover:not(:disabled) {
+  background: #2ea043;
+  transform: translateY(-1px);
+}
+
+.copyButton:disabled {
+  background: #28a745;
+  cursor: not-allowed;
+}
+
+.codeBlock {
+  position: relative;
+  background: #1e1e1e;
+}
+
+.code {
+  margin: 0;
+  padding: 1.5rem;
+  background: transparent;
+  color: #c9d1d9;
+  font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+  font-size: 0.9rem;
+  line-height: 1.6;
+  overflow-x: auto;
+}
+
+.floatingCopyButton {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  background: rgba(45, 45, 48, 0.8);
+  color: #c9d1d9;
+  border: 1px solid #404040;
+  padding: 0.5rem;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.8rem;
+  backdrop-filter: blur(4px);
+  transition: all 0.2s ease;
+}
+
+.floatingCopyButton:hover:not(:disabled) {
+  background: rgba(35, 134, 54, 0.8);
+  border-color: #238636;
+}
+
+.floatingCopyButton:disabled {
+  background: rgba(40, 167, 69, 0.8);
+  cursor: not-allowed;
+}
+
+/* Terminal Component */
+.terminal {
+  margin: 1.5rem 0;
+  border-radius: 8px;
+  background: #000;
+  overflow: hidden;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+  font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+}
+
+.terminalHeader {
+  background: #2c2c2c;
+  padding: 0.75rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.terminalButtons {
+  position: absolute;
+  left: 1rem;
+  display: flex;
+  gap: 0.5rem;
+}
+
+.terminalButton {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+}
+
+.terminalTitle {
+  color: #c9d1d9;
+  font-weight: 500;
+  font-size: 0.9rem;
+}
+
+.terminalContent {
+  padding: 1rem;
+  background: #000;
+  color: #00ff00;
+}
+
+.commandLine {
+  display: flex;
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+
+.prompt {
+  color: #00ff00;
+  margin-right: 0.5rem;
+  font-weight: bold;
+}
+
+.command {
+  color: #ffffff;
+}
+
+.showOutputButton {
+  background: transparent;
+  color: #6c757d;
+  border: 1px solid #404040;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  margin-top: 0.5rem;
+  transition: all 0.2s ease;
+}
+
+.showOutputButton:hover {
+  color: #c9d1d9;
+  border-color: #6c757d;
+}
+
+.output {
+  margin-top: 0.5rem;
+  color: #c9d1d9;
+  font-size: 0.9rem;
+}
+
+.output pre {
+  margin: 0;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+}

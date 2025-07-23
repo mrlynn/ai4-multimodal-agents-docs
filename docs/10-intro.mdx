@@ -13,6 +13,45 @@ import TabItem from '@theme/TabItem';
 |Prerequisites|n8n installed, MongoDB Atlas account, Voyage AI API key|
 |Time to complete|2 hours|
 
+<ProgressTracker steps={[
+  {
+    title: "Environment Setup",
+    description: "Set up Docker, n8n, and MongoDB Atlas",
+    timeEstimate: "15 minutes",
+    difficulty: "beginner"
+  },
+  {
+    title: "PDF Processing Workflow", 
+    description: "Build workflow to extract and process PDF content",
+    timeEstimate: "25 minutes",
+    difficulty: "intermediate"
+  },
+  {
+    title: "Vector Search Implementation",
+    description: "Configure MongoDB Atlas Vector Search",
+    timeEstimate: "20 minutes", 
+    difficulty: "intermediate"
+  },
+  {
+    title: "AI Agent Creation",
+    description: "Build intelligent agent with tool calling",
+    timeEstimate: "30 minutes",
+    difficulty: "advanced"
+  },
+  {
+    title: "Memory & Context",
+    description: "Add conversation history and context management",
+    timeEstimate: "20 minutes",
+    difficulty: "advanced"
+  },
+  {
+    title: "Production Deployment",
+    description: "Deploy and scale your multimodal agent",
+    timeEstimate: "15 minutes",
+    difficulty: "intermediate"
+  }
+]} />
+
 ## 🎯 What We're Building
 
 A production-ready system that:
@@ -57,56 +96,126 @@ graph LR
 
 ## 🚀 Choose Your Setup Method
 
+<WorkshopExercise 
+  title="Setup Your Development Environment" 
+  difficulty="beginner"
+  timeEstimate="15 minutes"
+  objectives={[
+    "Choose between Codespaces or local development",
+    "Set up all required services and tools", 
+    "Verify your environment is working correctly"
+  ]}
+>
+
 <Tabs>
   <TabItem value="cloud" label="☁️ GitHub Codespaces (Fastest)" default>
 
-### Zero Installation Required!
+<ExerciseStep stepNumber="1" title="Launch GitHub Codespaces">
 
-**Launch in 30 seconds** - Everything runs in your browser:
+**Zero Installation Required!** Everything runs in your browser:
 
-1. Click **Code** → **Codespaces** → **Create codespace**
-2. Wait for automatic setup (3-5 minutes first time)
-3. All services start automatically
-4. Access via forwarded ports
+<TerminalCommand 
+  command="# Navigate to deployment repository"
+  output="Opening: https://github.com/mongodb-developer/multimodal-pdf-agent-n8n"
+/>
+
+1. Go to [deployment repository](https://github.com/mongodb-developer/multimodal-pdf-agent-n8n)
+2. Click **Code** → **Codespaces** → **Create codespace**  
+3. Wait for automatic setup (3-5 minutes first time)
+4. All services start automatically
 
 **Requirements:**
-- GitHub account
+- GitHub account (free)
 - Web browser
 - Internet connection
 
-👉 **[Start with Codespaces](./github-codespaces)**
+</ExerciseStep>
+
+<ExerciseValidation 
+  title="Verify Codespaces Setup"
+  checks={[
+    {
+      id: "codespace_running",
+      description: "Codespace is running and accessible",
+      hint: "Check that VS Code opens in your browser"
+    },
+    {
+      id: "ports_forwarded", 
+      description: "Ports are automatically forwarded (check Ports tab)",
+      hint: "Look for ports 5678, 8081, and 3000 in the Ports panel"
+    },
+    {
+      id: "services_healthy",
+      description: "All Docker services are running (green status)",
+      hint: "Run 'docker-compose ps' in the terminal"
+    }
+  ]}
+/>
+
+👉 **[Continue with Codespaces Setup](./github-codespaces)**
 
   </TabItem>
   <TabItem value="local" label="🐳 Local Docker">
 
-### Run on Your Machine
+<ExerciseStep stepNumber="1" title="Clone and Start Services">
 
 **Full control** - Work offline, customize everything:
 
-```bash
-# Clone workshop deployment repo
+<CodeBlock language="bash" title="Local Setup Commands">
+{`# Clone workshop deployment repo
 git clone https://github.com/mongodb-developer/multimodal-pdf-agent-n8n.git
 cd multimodal-pdf-agent-n8n
 
 # Start services
 cp .env.example .env
-docker-compose up -d
+docker-compose up -d`}
+</CodeBlock>
 
-# Access services
-# n8n: http://localhost:5678
-# MongoDB UI: http://localhost:8081
-# Docs: npm start (http://localhost:3000)
-```
+<ServiceTester 
+  serviceName="n8n"
+  testUrl="http://localhost:5678"
+  testData={{}}
+/>
 
 **Requirements:**
 - Docker Desktop
 - Git
 - 8GB RAM
 
-👉 **[Local Setup Guide](./prerequisites)**
+</ExerciseStep>
+
+<ExerciseValidation 
+  title="Verify Local Setup"
+  checks={[
+    {
+      id: "docker_running",
+      description: "Docker Desktop is running",
+      hint: "Check Docker icon in system tray"
+    },
+    {
+      id: "services_up",
+      description: "All services are up (docker-compose ps shows 'Up')",
+      hint: "Run 'docker-compose ps' to check status"
+    },
+    {
+      id: "n8n_accessible",
+      description: "n8n is accessible at http://localhost:5678",
+      hint: "Open the URL in your browser"
+    },
+    {
+      id: "mongodb_accessible",
+      description: "MongoDB Express is accessible at http://localhost:8081",
+      hint: "Open the URL in your browser"
+    }
+  ]}
+/>
+
+👉 **[Continue with Local Setup](./prerequisites)**
 
   </TabItem>
 </Tabs>
+
+</WorkshopExercise>
 
 ## 📋 Required for Both Methods
 

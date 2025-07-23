@@ -17,11 +17,11 @@
   },
   "sidebar": "tutorialSidebar",
   "previous": {
-    "title": "🗄️ MongoDB Setup: Local Development & Atlas Production",
+    "title": "MongoDB Atlas Setup",
     "permalink": "/multimodal-pdf-agent-n8n/es/docs/mongodb-atlas-setup"
   },
   "next": {
-    "title": "📄 PDF Processing Workflow",
+    "title": "PDF Processing Workflow",
     "permalink": "/multimodal-pdf-agent-n8n/es/docs/pdf-processing-workflow"
   }
 }

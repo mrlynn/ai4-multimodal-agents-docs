@@ -17,11 +17,11 @@
   },
   "sidebar": "tutorialSidebar",
   "previous": {
-    "title": "💻 Docker Development Best Practices",
-    "permalink": "/multimodal-pdf-agent-n8n/es/docs/local-setup-tips"
+    "title": "PDF Processing Workflow",
+    "permalink": "/multimodal-pdf-agent-n8n/es/docs/pdf-processing-workflow"
   },
   "next": {
-    "title": "🤖 AI Agent with Function Calling",
+    "title": "AI Agent with Tool Calling",
     "permalink": "/multimodal-pdf-agent-n8n/es/docs/ai-agent-workflow"
   }
 }

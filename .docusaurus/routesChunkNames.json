@@ -6,18 +6,22 @@
     },
     "config": "5e9f5e1a"
   },
-  "/multimodal-pdf-agent-n8n/es/docs-f12": {
+  "/multimodal-pdf-agent-n8n/es/docs-502": {
     "__comp": "5e95c892",
     "__context": {
       "plugin": "aba21aa0"
     }
   },
-  "/multimodal-pdf-agent-n8n/es/docs-9e5": {
+  "/multimodal-pdf-agent-n8n/es/docs-437": {
     "__comp": "a7bd4aaa",
     "__props": "5117ca29"
   },
-  "/multimodal-pdf-agent-n8n/es/docs-4c9": {
+  "/multimodal-pdf-agent-n8n/es/docs-11a": {
     "__comp": "a94703ab"
+  },
+  "/multimodal-pdf-agent-n8n/es/docs-7d4": {
+    "__comp": "17896441",
+    "content": "4edc808e"
   },
   "/multimodal-pdf-agent-n8n/es/docs/ai-agent-workflow-08a": {
     "__comp": "17896441",

@@ -17,11 +17,11 @@
   },
   "sidebar": "tutorialSidebar",
   "previous": {
-    "title": "📘 Introduction to Multimodal PDF Agents with n8n",
+    "title": "Workshop Introduction",
     "permalink": "/multimodal-pdf-agent-n8n/es/docs/intro"
   },
   "next": {
-    "title": "🛠️ Prerequisites & Setup",
+    "title": "Prerequisites & Local Setup",
     "permalink": "/multimodal-pdf-agent-n8n/es/docs/prerequisites"
   }
 }

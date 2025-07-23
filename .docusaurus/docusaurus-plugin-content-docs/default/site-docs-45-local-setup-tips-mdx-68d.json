@@ -17,11 +17,11 @@
   },
   "sidebar": "tutorialSidebar",
   "previous": {
-    "title": "📄 PDF Processing Workflow",
-    "permalink": "/multimodal-pdf-agent-n8n/es/docs/pdf-processing-workflow"
+    "title": "Web Upload Interface",
+    "permalink": "/multimodal-pdf-agent-n8n/es/docs/upload-interface"
   },
   "next": {
-    "title": "🔍 Vector Search Workflow",
-    "permalink": "/multimodal-pdf-agent-n8n/es/docs/vector-search-workflow"
+    "title": "Troubleshooting Guide",
+    "permalink": "/multimodal-pdf-agent-n8n/es/docs/docker-troubleshooting"
   }
 }

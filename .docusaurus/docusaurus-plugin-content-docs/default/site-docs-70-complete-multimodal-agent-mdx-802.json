@@ -17,11 +17,11 @@
   },
   "sidebar": "tutorialSidebar",
   "previous": {
-    "title": "🤖 AI Agent with Function Calling",
+    "title": "AI Agent with Tool Calling",
     "permalink": "/multimodal-pdf-agent-n8n/es/docs/ai-agent-workflow"
   },
   "next": {
-    "title": "🗄️ MongoDB Vector Search Setup",
+    "title": "Production Vector Search",
     "permalink": "/multimodal-pdf-agent-n8n/es/docs/mongodb-vector-setup"
   }
 }

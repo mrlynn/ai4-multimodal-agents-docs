@@ -16,8 +16,12 @@
     "sidebar_position": 10
   },
   "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "🎓 Workshop Overview",
+    "permalink": "/multimodal-pdf-agent-n8n/es/docs/"
+  },
   "next": {
-    "title": "🌐 GitHub Codespaces: Zero-Install Workshop",
+    "title": "GitHub Codespaces Setup",
     "permalink": "/multimodal-pdf-agent-n8n/es/docs/github-codespaces"
   }
 }

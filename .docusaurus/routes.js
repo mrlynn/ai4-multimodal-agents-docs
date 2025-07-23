@@ -9,16 +9,22 @@ export default [
   },
   {
     path: '/multimodal-pdf-agent-n8n/es/docs',
-    component: ComponentCreator('/multimodal-pdf-agent-n8n/es/docs', 'f12'),
+    component: ComponentCreator('/multimodal-pdf-agent-n8n/es/docs', '502'),
     routes: [
       {
         path: '/multimodal-pdf-agent-n8n/es/docs',
-        component: ComponentCreator('/multimodal-pdf-agent-n8n/es/docs', '9e5'),
+        component: ComponentCreator('/multimodal-pdf-agent-n8n/es/docs', '437'),
         routes: [
           {
             path: '/multimodal-pdf-agent-n8n/es/docs',
-            component: ComponentCreator('/multimodal-pdf-agent-n8n/es/docs', '4c9'),
+            component: ComponentCreator('/multimodal-pdf-agent-n8n/es/docs', '11a'),
             routes: [
+              {
+                path: '/multimodal-pdf-agent-n8n/es/docs',
+                component: ComponentCreator('/multimodal-pdf-agent-n8n/es/docs', '7d4'),
+                exact: true,
+                sidebar: "tutorialSidebar"
+              },
               {
                 path: '/multimodal-pdf-agent-n8n/es/docs/ai-agent-workflow',
                 component: ComponentCreator('/multimodal-pdf-agent-n8n/es/docs/ai-agent-workflow', '08a'),

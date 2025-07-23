@@ -1,0 +1,139 @@
+---
+sidebar_position: 1
+slug: /
+title: Workshop Overview
+---
+
+# 🎓 Multimodal PDF Agent Workshop
+
+Welcome to the **Build a Multimodal PDF Agent with n8n** workshop! This interactive, hands-on experience will guide you through creating a production-ready AI system that processes PDFs using cutting-edge technologies.
+
+<ProgressTracker steps={[
+  {
+    title: "Environment Setup",
+    description: "Set up Docker, n8n, and MongoDB Atlas",
+    timeEstimate: "15 minutes",
+    difficulty: "beginner"
+  },
+  {
+    title: "PDF Processing Workflow", 
+    description: "Build workflow to extract and process PDF content",
+    timeEstimate: "25 minutes",
+    difficulty: "intermediate"
+  },
+  {
+    title: "Vector Search Implementation",
+    description: "Configure MongoDB Atlas Vector Search",
+    timeEstimate: "20 minutes", 
+    difficulty: "intermediate"
+  },
+  {
+    title: "AI Agent Creation",
+    description: "Build intelligent agent with tool calling",
+    timeEstimate: "30 minutes",
+    difficulty: "advanced"
+  },
+  {
+    title: "Memory & Context",
+    description: "Add conversation history and context management",
+    timeEstimate: "20 minutes",
+    difficulty: "advanced"
+  },
+  {
+    title: "Production Deployment",
+    description: "Deploy and scale your multimodal agent",
+    timeEstimate: "15 minutes",
+    difficulty: "intermediate"
+  }
+]} />
+
+## 🚀 Workshop Sections
+
+### [🚀 Getting Started](/docs/intro)
+Begin your journey with environment setup and n8n basics. Choose between GitHub Codespaces for instant setup or local Docker development.
+
+### [⚙️ Setup & Configuration](/docs/mongodb-atlas-setup)
+Configure MongoDB Atlas for vector search and set up Voyage AI for multimodal embeddings. These are the foundational services for your agent.
+
+### [🔧 Building Workflows](/docs/pdf-processing-workflow)
+Create powerful automation workflows step by step. Start with PDF processing, implement vector search, and build an AI agent with tool calling.
+
+### [🎯 Advanced Topics](/docs/complete-multimodal-agent)
+Take your agent to production with advanced features like memory management, web interfaces, and production-grade vector search.
+
+### [📚 Resources & Support](/docs/local-setup-tips)
+Find Docker best practices, troubleshooting guides, and community resources to help you succeed.
+
+## 🎯 What You'll Build
+
+By the end of this workshop, you'll have created:
+
+- **PDF Ingestion Pipeline**: Automated processing of documents
+- **Multimodal Embeddings**: Text and image understanding with Voyage AI
+- **Vector Search API**: Fast similarity search with MongoDB Atlas
+- **AI Agent**: Intelligent question answering with Gemini 2.0
+- **Production Workflows**: Error handling, monitoring, and scaling
+
+## 🛠️ Technologies Used
+
+<div style={{display: 'flex', gap: '2rem', flexWrap: 'wrap', marginTop: '2rem'}}>
+  <div style={{textAlign: 'center'}}>
+    <img src="/img/n8n-logo.png" alt="n8n" width="80" />
+    <p><strong>n8n</strong><br/>Visual Workflow Automation</p>
+  </div>
+  <div style={{textAlign: 'center'}}>
+    <img src="/img/mongodb-logo.png" alt="MongoDB" width="80" />
+    <p><strong>MongoDB Atlas</strong><br/>Vector Database</p>
+  </div>
+  <div style={{textAlign: 'center'}}>
+    <img src="/img/voyage-logo.png" alt="Voyage AI" width="80" />
+    <p><strong>Voyage AI</strong><br/>Multimodal Embeddings</p>
+  </div>
+  <div style={{textAlign: 'center'}}>
+    <img src="/img/gemini-logo.png" alt="Gemini" width="80" />
+    <p><strong>Gemini 2.0</strong><br/>AI Agent Capabilities</p>
+  </div>
+</div>
+
+## 🏁 Ready to Start?
+
+<WorkshopExercise 
+  title="Pre-Workshop Checklist" 
+  difficulty="beginner"
+  timeEstimate="5 minutes"
+  objectives={[
+    "Verify you have all prerequisites",
+    "Choose your development environment",
+    "Get excited about building!"
+  ]}
+>
+
+<ExerciseValidation 
+  title="Before You Begin"
+  checks={[
+    {
+      id: "github_account",
+      description: "I have a GitHub account (for Codespaces) or Docker Desktop installed",
+      hint: "GitHub account is free at github.com, Docker Desktop from docker.com"
+    },
+    {
+      id: "mongodb_ready",
+      description: "I'm ready to create a MongoDB Atlas account (free tier)",
+      hint: "You'll need an email address for signup"
+    },
+    {
+      id: "time_allocated",
+      description: "I have ~2 hours for the complete workshop",
+      hint: "You can also complete it in sections"
+    },
+    {
+      id: "excitement_level",
+      description: "I'm excited to build a multimodal AI agent! 🚀",
+      hint: "This is the most important prerequisite!"
+    }
+  ]}
+/>
+
+</WorkshopExercise>
+
+[**Start the Workshop →**](/docs/intro)

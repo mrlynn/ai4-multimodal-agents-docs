@@ -17,11 +17,11 @@
   },
   "sidebar": "tutorialSidebar",
   "previous": {
-    "title": "🔍 Vector Search Workflow",
+    "title": "Vector Search Implementation",
     "permalink": "/multimodal-pdf-agent-n8n/es/docs/vector-search-workflow"
   },
   "next": {
-    "title": "🧠 Complete Multimodal PDF Agent",
+    "title": "Complete Multimodal Agent",
     "permalink": "/multimodal-pdf-agent-n8n/es/docs/complete-multimodal-agent"
   }
 }

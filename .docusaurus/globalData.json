@@ -8,7 +8,7 @@
           "label": "Next",
           "isLast": true,
           "path": "/multimodal-pdf-agent-n8n/es/docs",
-          "mainDocId": "intro",
+          "mainDocId": "index",
           "docs": [
             {
               "id": "ai-agent-workflow",
@@ -33,6 +33,11 @@
             {
               "id": "github-codespaces",
               "path": "/multimodal-pdf-agent-n8n/es/docs/github-codespaces",
+              "sidebar": "tutorialSidebar"
+            },
+            {
+              "id": "index",
+              "path": "/multimodal-pdf-agent-n8n/es/docs/",
               "sidebar": "tutorialSidebar"
             },
             {
@@ -95,8 +100,8 @@
           "sidebars": {
             "tutorialSidebar": {
               "link": {
-                "path": "/multimodal-pdf-agent-n8n/es/docs/intro",
-                "label": "intro"
+                "path": "/multimodal-pdf-agent-n8n/es/docs/",
+                "label": "🎓 Workshop Overview"
               }
             }
           }
@@ -117,8 +122,8 @@
   "docusaurus-lunr-search": {
     "default": {
       "fileNames": {
-        "searchDoc": "search-doc-1753294086950.json",
-        "lunrIndex": "lunr-index-1753294086950.json"
+        "searchDoc": "search-doc-1753312865743.json",
+        "lunrIndex": "lunr-index-1753312865743.json"
       }
     }
   }

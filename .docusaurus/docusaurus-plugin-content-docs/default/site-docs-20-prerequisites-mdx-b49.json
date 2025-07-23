@@ -17,11 +17,11 @@
   },
   "sidebar": "tutorialSidebar",
   "previous": {
-    "title": "🌐 GitHub Codespaces: Zero-Install Workshop",
+    "title": "GitHub Codespaces Setup",
     "permalink": "/multimodal-pdf-agent-n8n/es/docs/github-codespaces"
   },
   "next": {
-    "title": "🚀 n8n First Run Experience",
+    "title": "n8n First Run Experience",
     "permalink": "/multimodal-pdf-agent-n8n/es/docs/n8n-first-run"
   }
 }

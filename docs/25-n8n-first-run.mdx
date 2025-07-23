@@ -4,71 +4,161 @@ sidebar_position: 25
 
 # 🚀 n8n First Run Experience
 
-Let's walk through what happens when you first access n8n in our Docker environment.
+<StepIndicator current={1} total={6} titles={[
+  "Environment Setup", 
+  "n8n First Run", 
+  "MongoDB Atlas", 
+  "PDF Processing", 
+  "Vector Search", 
+  "AI Agent"
+]} />
 
-## Starting n8n with Docker
+Let's walk through your first n8n experience and set up the foundation for our multimodal PDF agent.
 
-With our Docker setup, n8n is already running! Check the status:
+<WorkshopExercise 
+  title="Launch and Configure n8n" 
+  difficulty="beginner"
+  timeEstimate="10 minutes"
+  objectives={[
+    "Verify n8n is running and accessible",
+    "Complete initial setup wizard",
+    "Unlock premium features for free",
+    "Explore the n8n interface"
+  ]}
+>
 
-```bash
-# Check if n8n is running
-docker-compose ps
+<ExerciseStep stepNumber="1" title="Verify n8n Service">
 
-# You should see:
-NAME           IMAGE              STATUS       PORTS
-n8n-workshop   n8nio/n8n:latest   Up X mins    0.0.0.0:5678->5678/tcp
-```
+With our Docker setup, n8n should already be running! Let's verify:
 
-If n8n isn't running:
+<TerminalCommand 
+  command="docker-compose ps"
+  output={`NAME           IMAGE              STATUS       PORTS
+n8n-workshop   n8nio/n8n:latest   Up 2 mins    0.0.0.0:5678->5678/tcp
+mongodb        mongo:7.0          Up 2 mins    0.0.0.0:27017->27017/tcp`}
+/>
 
-```bash
-# Start all services
+If n8n isn't running, start the services:
+
+<CodeBlock language="bash" title="Start All Services">
+{`# Start all services
 docker-compose up -d
 
 # Wait 10-15 seconds for services to initialize
 # Then check logs
-docker-compose logs n8n
-```
+docker-compose logs n8n`}
+</CodeBlock>
 
-## Initial Setup Wizard
+<ServiceTester 
+  serviceName="n8n" 
+  testUrl="http://localhost:5678"
+  testData={{}}
+/>
 
-### 1. Account Creation
+</ExerciseStep>
 
-When you first visit `http://localhost:5678`:
+<ExerciseStep stepNumber="2" title="Complete Initial Setup Wizard">
 
+Navigate to `http://localhost:5678` in your browser:
+
+**Account Creation:**
 - Enter your email address
-- Create a password
-- You're automatically on the Community Edition
+- Create a secure password  
+- You're automatically on the Community Edition (perfect for learning!)
 
-### 2. Unlock Free Features
+<Screenshot src="/img/n8n-1.png" alt="n8n Initial Setup" />
 
-Don't skip this step! Get premium features free:
+</ExerciseStep>
 
-1. Navigate to **Settings** (gear icon)
-2. Click **Usage and Plan**
-3. Click **"Get paid features for free forever"**
-4. Check your email for the license key
-5. Click the activation link in the email
+<ExerciseStep stepNumber="3" title="Unlock Premium Features (Free!)">
 
-### 3. Configure Your Workspace
+Don't skip this step! Get premium features at no cost:
 
-#### Theme Selection
+<InteractiveDemo 
+  title="Unlock n8n Premium Features"
+  description="Follow these steps to get advanced features free forever"
+  steps={[
+    {
+      title: "Navigate to Settings",
+      content: (
+        <div>
+          <p>1. Click the **Settings** (gear icon) in the left sidebar</p>
+          <p>2. Look for the **Usage and Plan** section</p>
+        </div>
+      ),
+      timeEstimate: "1 minute"
+    },
+    {
+      title: "Request Free License",
+      content: (
+        <div>
+          <p>3. Click **"Get paid features for free forever"**</p>
+          <p>4. Enter your email when prompted</p>
+          <p>5. Check your email inbox immediately</p>
+        </div>
+      ),
+      timeEstimate: "2 minutes"
+    },
+    {
+      title: "Activate License",
+      content: (
+        <div>
+          <p>6. Click the activation link in your email</p>
+          <p>7. Your license will be automatically applied</p>
+          <p>✅ You now have access to premium features!</p>
+        </div>
+      ),
+      timeEstimate: "1 minute"
+    }
+  ]}
+/>
 
-- **Settings** → **Personal**
-- Choose Light or Dark theme
-- The instructor prefers light theme 😎
+**Premium Features You'll Get:**
+- ✅ Workflow history and versioning
+- ✅ Advanced debugging tools
+- ✅ Execution search and tagging
+- ✅ Folder organization
+- ✅ Enhanced performance monitoring
 
-#### API Keys (Optional)
+</ExerciseStep>
 
-- **Settings** → **API Keys**
-- Create keys for external access
-- Not needed for our workshop
+<ExerciseStep stepNumber="4" title="Configure Your Workspace">
 
-#### Community Nodes
+Let's customize n8n for our workshop:
 
-- **Settings** → **Community Nodes**
+**Theme Selection:**
+- Navigate to **Settings** → **Personal**
+- Choose Light or Dark theme (instructor prefers light theme 😎)
+
+**Community Nodes (Optional):**
+- Go to **Settings** → **Community Nodes**
 - Browse available extensions
-- Install later as needed
+- We'll install specific nodes as needed during the workshop
+
+</ExerciseStep>
+
+<ExerciseValidation 
+  title="Verify n8n Setup Complete"
+  checks={[
+    {
+      id: "account_created",
+      description: "Successfully created n8n account and logged in",
+      hint: "You should see the n8n dashboard with your email in the top right"
+    },
+    {
+      id: "license_activated",
+      description: "Premium features unlocked (check Settings → Usage and Plan)",
+      hint: "Look for 'Premium features activated' or similar message"
+    },
+    {
+      id: "interface_accessible",
+      description: "Can navigate through different sections (Workflows, Credentials, Settings)",
+      hint: "Click through the left sidebar menu items"
+    }
+  ]}
+/>
+
+</WorkshopExercise>
 
 ## Understanding the n8n Interface
 

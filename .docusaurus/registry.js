@@ -6,6 +6,7 @@ export default {
   "317957c9": [() => import(/* webpackChunkName: "317957c9" */ "@site/docs/10-intro.mdx"), "@site/docs/10-intro.mdx", require.resolveWeak("@site/docs/10-intro.mdx")],
   "3aaaf183": [() => import(/* webpackChunkName: "3aaaf183" */ "@site/docs/summary.mdx"), "@site/docs/summary.mdx", require.resolveWeak("@site/docs/summary.mdx")],
   "4429c3d9": [() => import(/* webpackChunkName: "4429c3d9" */ "@site/docs/80-upload-interface.mdx"), "@site/docs/80-upload-interface.mdx", require.resolveWeak("@site/docs/80-upload-interface.mdx")],
+  "4edc808e": [() => import(/* webpackChunkName: "4edc808e" */ "@site/docs/index.mdx"), "@site/docs/index.mdx", require.resolveWeak("@site/docs/index.mdx")],
   "5117ca29": [() => import(/* webpackChunkName: "5117ca29" */ "@generated/docusaurus-plugin-content-docs/default/p/multimodal-pdf-agent-n-8-n-es-docs-0cf.json"), "@generated/docusaurus-plugin-content-docs/default/p/multimodal-pdf-agent-n-8-n-es-docs-0cf.json", require.resolveWeak("@generated/docusaurus-plugin-content-docs/default/p/multimodal-pdf-agent-n-8-n-es-docs-0cf.json")],
   "5e95c892": [() => import(/* webpackChunkName: "5e95c892" */ "@theme/DocsRoot"), "@theme/DocsRoot", require.resolveWeak("@theme/DocsRoot")],
   "5e9f5e1a": [() => import(/* webpackChunkName: "5e9f5e1a" */ "@generated/docusaurus.config"), "@generated/docusaurus.config", require.resolveWeak("@generated/docusaurus.config")],

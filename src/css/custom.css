@@ -47,3 +47,130 @@
 a.footer__link-item {
   font-size: 20px;
 }
+
+/* Sidebar Category Styling */
+.sidebar-getting-started > .menu__link {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white !important;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+
+.sidebar-getting-started > .menu__link:hover {
+  opacity: 0.9;
+}
+
+.sidebar-setup > .menu__link {
+  background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+  color: white !important;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+
+.sidebar-workflows > .menu__link {
+  background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+  color: white !important;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+
+.sidebar-advanced > .menu__link {
+  background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+  color: white !important;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+
+.sidebar-resources > .menu__link {
+  background: linear-gradient(135deg, #30cfd0 0%, #330867 100%);
+  color: white !important;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+
+/* Enhanced sidebar spacing */
+.theme-doc-sidebar-container nav {
+  padding: 1rem;
+}
+
+.menu__list-item:not(:first-child) {
+  margin-top: 0.75rem;
+}
+
+/* Sidebar category icons */
+.menu__link--sublist-caret:after {
+  background-size: 1.5rem 1.5rem;
+}
+
+/* Active category highlighting */
+.menu__list-item--active > .menu__link--sublist {
+  font-weight: 700;
+}
+
+/* Better sidebar item styling */
+.menu__link {
+  border-radius: 0.5rem;
+  transition: all 0.2s ease;
+  padding: 0.75rem 1rem;
+}
+
+.menu__link:hover {
+  background-color: var(--ifm-menu-color-background-hover);
+  transform: translateX(4px);
+}
+
+/* Nested item indentation */
+.menu__list .menu__list {
+  margin-left: 0;
+  padding-left: 0.5rem;
+  border-left: 2px solid var(--ifm-color-emphasis-300);
+}
+
+/* Progress indicator for completed sections */
+.menu__link--active {
+  position: relative;
+}
+
+.menu__link--active::before {
+  content: '✓';
+  position: absolute;
+  right: 1rem;
+  color: var(--ifm-color-success);
+  font-weight: bold;
+}
+
+/* Workshop progress bar at top of sidebar */
+.theme-doc-sidebar-container::before {
+  content: '';
+  display: block;
+  height: 4px;
+  background: linear-gradient(90deg, #10b981 0%, #10b981 var(--workshop-progress, 0%), #e5e7eb var(--workshop-progress, 0%), #e5e7eb 100%);
+  margin-bottom: 1rem;
+  border-radius: 2px;
+}
+
+/* Dark mode adjustments */
+[data-theme='dark'] .menu__link {
+  color: var(--ifm-menu-color);
+}
+
+[data-theme='dark'] .sidebar-getting-started > .menu__link,
+[data-theme='dark'] .sidebar-setup > .menu__link,
+[data-theme='dark'] .sidebar-workflows > .menu__link,
+[data-theme='dark'] .sidebar-advanced > .menu__link,
+[data-theme='dark'] .sidebar-resources > .menu__link {
+  color: white !important;
+  opacity: 0.95;
+}
+
+/* Smooth transitions */
+.menu__list-item {
+  transition: all 0.3s ease;
+}
+
+/* Mobile responsive sidebar */
+@media (max-width: 996px) {
+  .menu__link {
+    padding: 1rem 1.25rem;
+  }
+}

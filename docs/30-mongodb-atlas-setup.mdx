@@ -309,6 +309,77 @@ If you can't connect from n8n:
 - Check JSON syntax in index definition
 - Verify field names match your schema
 
+## 🧠 Knowledge Check
+
+<Quiz 
+  title="MongoDB Atlas & Vector Search Fundamentals"
+  passingScore={75}
+  questions={[
+    {
+      question: "What is the primary purpose of MongoDB Atlas Vector Search in our multimodal PDF agent?",
+      options: [
+        "To store PDF files directly in the database",
+        "To enable semantic similarity search across document embeddings", 
+        "To compress PDF documents for faster loading",
+        "To convert PDFs to HTML format"
+      ],
+      correctAnswer: 1,
+      explanation: "Vector Search enables semantic similarity search by comparing embedding vectors, allowing us to find relevant content based on meaning rather than exact keyword matches."
+    },
+    {
+      question: "In our vector search index, what does 'numDimensions: 1024' specify?",
+      options: [
+        "The maximum number of documents that can be stored",
+        "The size of each embedding vector from Voyage AI",
+        "The number of PDF pages that can be processed",
+        "The maximum file size in kilobytes"
+      ],
+      correctAnswer: 1,
+      explanation: "numDimensions must match the embedding model's output size. Voyage AI's multimodal model produces 1024-dimensional vectors."
+    },
+    {
+      question: "Why do we use cosine similarity for our vector search index?",
+      options: [
+        "It's the fastest similarity metric available",
+        "It works well for high-dimensional embeddings and focuses on vector direction",
+        "It requires less storage space than other metrics", 
+        "It's the only metric supported by MongoDB Atlas"
+      ],
+      correctAnswer: 1,
+      explanation: "Cosine similarity measures the angle between vectors, making it ideal for high-dimensional embeddings where direction matters more than magnitude."
+    },
+    {
+      question: "What happens if you create a vector search index before the collection exists?",
+      options: [
+        "The index will be created successfully and wait for the collection",
+        "MongoDB will automatically create the collection",
+        "You'll get an error - the collection must exist first",
+        "The index will be created in a different database"
+      ],
+      correctAnswer: 2,
+      explanation: "Collections must exist before you can create search indexes on them. Always ensure your collection is created first."
+    },
+    {
+      question: "What is the benefit of adding filter fields to a vector search index?",
+      options: [
+        "It makes the index smaller and faster to build",
+        "It allows you to combine vector similarity with metadata filtering",
+        "It automatically optimizes the embedding dimensions",
+        "It enables real-time updates to the search results"
+      ],
+      correctAnswer: 1,
+      explanation: "Filter fields enable hybrid search - you can find semantically similar content AND filter by metadata like filename, date, or document type."
+    }
+  ]}
+/>
+
+<QuickCheck 
+  question="True or False: Scalar quantization in vector indexes reduces memory usage by approximately 75%?"
+  options={["True", "False"]}
+  correctAnswer={0}
+  explanation="Scalar quantization reduces memory usage by ~75% with minimal accuracy loss, making it ideal for large-scale deployments."
+/>
+
 ## Next Steps
 
 With MongoDB Atlas configured:
@@ -317,6 +388,7 @@ With MongoDB Atlas configured:
 ✅ Database and collection ready  
 ✅ Vector search index configured  
 ✅ n8n connection established  
+✅ **Knowledge validated** with quiz completion
 
 You're ready to start ingesting PDFs! Let's set up Voyage AI next.
 

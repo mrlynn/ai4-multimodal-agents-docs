@@ -17,11 +17,11 @@
   },
   "sidebar": "tutorialSidebar",
   "previous": {
-    "title": "🌐 Web Upload Interface",
-    "permalink": "/multimodal-pdf-agent-n8n/es/docs/upload-interface"
+    "title": "Troubleshooting Guide",
+    "permalink": "/multimodal-pdf-agent-n8n/es/docs/docker-troubleshooting"
   },
   "next": {
-    "title": "🐳 Docker Troubleshooting Guide",
-    "permalink": "/multimodal-pdf-agent-n8n/es/docs/docker-troubleshooting"
+    "title": "🎉 Workshop Summary",
+    "permalink": "/multimodal-pdf-agent-n8n/es/docs/summary"
   }
 }
