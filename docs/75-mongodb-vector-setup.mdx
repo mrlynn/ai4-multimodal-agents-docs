@@ -1,0 +1,144 @@
+---
+sidebar_position: 75
+---
+
+# 🗄️ MongoDB Vector Search Setup
+
+Configure MongoDB for real vector search capabilities in your multimodal PDF agent.
+
+## Local MongoDB Setup (Codespace)
+
+### 1. Connect to MongoDB
+
+```bash
+# MongoDB is already running in your Codespace
+mongosh mongodb://localhost:27017/workshop
+```
+
+### 2. Create the Vector Search Index
+
+```javascript
+// In mongosh, run:
+use workshop
+
+db.pdf_documents.createIndex({
+  "embedding": "cosmosSearch"
+}, {
+  "cosmosSearchOptions": {
+    "kind": "vector-ivf",
+    "numLists": 100,
+    "dimensions": 1536,
+    "similarity": "COS"
+  }
+})
+```
+
+### 3. Alternative: Atlas Search Index
+
+If using MongoDB Atlas, create this search index:
+
+```json
+{
+  "mappings": {
+    "dynamic": true,
+    "fields": {
+      "embedding": {
+        "type": "knnVector",
+        "dimensions": 1536,
+        "similarity": "cosine"
+      }
+    }
+  }
+}
+```
+
+## Setting Up n8n Credentials
+
+### 1. MongoDB Connection
+
+1. In n8n, go to **Credentials** → **New**
+2. Search for **MongoDB**
+3. Configure:
+   - **Connection String**: `mongodb://localhost:27017/workshop`
+   - **Database**: `workshop`
+
+### 2. OpenAI API (for embeddings)
+
+1. **Credentials** → **New** → **OpenAI**
+2. Add your OpenAI API key
+3. Name it: `OpenAI Workshop`
+
+## Testing Your Setup
+
+### 1. Test MongoDB Connection
+
+```javascript
+// In mongosh:
+db.pdf_documents.insertOne({
+  filename: "test.pdf",
+  textContent: "Test document",
+  embedding: new Array(1536).fill(0.1)
+})
+
+// Verify:
+db.pdf_documents.findOne()
+```
+
+### 2. Test Vector Search
+
+```javascript
+// Test vector search query:
+db.pdf_documents.aggregate([
+  {
+    "$search": {
+      "index": "vector_index",
+      "knnBeta": {
+        "vector": new Array(1536).fill(0.1),
+        "path": "embedding",
+        "k": 5
+      }
+    }
+  }
+])
+```
+
+## Import the Real Workflow
+
+1. In n8n, import: `/workspaces/ai4-multimodal-agents-n8n/init/workflows/05-real-multimodal-agent.json`
+2. Update credentials:
+   - MongoDB connection
+   - OpenAI API key
+3. Test the webhooks!
+
+## Using the Real Agent
+
+### Upload a PDF
+```bash
+curl -X POST http://localhost:5678/webhook/pdf-upload \
+  -F "file=@your-document.pdf"
+```
+
+### Ask Questions
+```bash
+curl -X POST http://localhost:5678/webhook/ask \
+  -H "Content-Type: application/json" \
+  -d '{
+    "question": "What does the document say about AI?"
+  }'
+```
+
+## Troubleshooting
+
+### "Index not found"
+- Ensure you created the vector index with the exact name: `vector_index`
+- Check index exists: `db.pdf_documents.getIndexes()`
+
+### "Dimension mismatch"
+- OpenAI text-embedding-3-small produces 1536 dimensions
+- Ensure your index matches this dimension count
+
+### "Connection refused"
+- Check MongoDB is running: `sudo service mongod status`
+- Verify connection string: `mongodb://localhost:27017/workshop`
+
+Your real multimodal PDF agent is now ready!

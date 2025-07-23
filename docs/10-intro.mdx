@@ -1,0 +1,156 @@
+---
+sidebar_position: 10
+---
+
+# 📘 Introduction to Multimodal PDF Agents with n8n
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+|Workshop goals|Build a multimodal AI agent that processes PDFs using n8n, MongoDB Atlas, and Voyage AI|
+|-|-|
+|What you'll learn|Visual workflow automation, vector search, multimodal embeddings, AI agent patterns|
+|Prerequisites|n8n installed, MongoDB Atlas account, Voyage AI API key|
+|Time to complete|2 hours|
+
+## 🎯 What We're Building
+
+A production-ready system that:
+- **Ingests PDFs** and extracts both text and images
+- **Generates multimodal embeddings** using Voyage AI
+- **Stores in MongoDB Atlas** with vector search capabilities
+- **Provides an AI agent** with tool calling via Gemini 2.0
+- **Maintains conversation memory** for context
+- **Implements ReAct pattern** for intelligent reasoning
+
+## 🏗️ Architecture Overview
+
+```mermaid
+graph LR
+    A[PDF Input] --> B[n8n Workflow]
+    B --> C[Page Extraction]
+    C --> D[Voyage AI Embeddings]
+    D --> E[MongoDB Atlas]
+    F[User Query] --> G[AI Agent]
+    G --> H[Vector Search]
+    H --> E
+    G --> I[Gemini Response]
+```
+
+## 🚀 Why This Approach?
+
+### Visual Development
+- No code complexity
+- See data flow in real-time
+- Easy debugging and modification
+
+### Production Ready
+- Built-in error handling
+- Scalable architecture
+- Enterprise features
+
+### Best-in-Class Tools
+- **MongoDB Atlas**: Leading vector database
+- **Voyage AI**: State-of-the-art multimodal embeddings
+- **n8n**: Powerful workflow automation
+- **Gemini 2.0**: Advanced AI capabilities
+
+## 🚀 Choose Your Setup Method
+
+<Tabs>
+  <TabItem value="cloud" label="☁️ GitHub Codespaces (Fastest)" default>
+
+### Zero Installation Required!
+
+**Launch in 30 seconds** - Everything runs in your browser:
+
+1. Click **Code** → **Codespaces** → **Create codespace**
+2. Wait for automatic setup (3-5 minutes first time)
+3. All services start automatically
+4. Access via forwarded ports
+
+**Requirements:**
+- GitHub account
+- Web browser
+- Internet connection
+
+👉 **[Start with Codespaces](./github-codespaces)**
+
+  </TabItem>
+  <TabItem value="local" label="🐳 Local Docker">
+
+### Run on Your Machine
+
+**Full control** - Work offline, customize everything:
+
+```bash
+# Clone workshop
+git clone https://github.com/mrlynn/ai4-multimodal-agents-n8n.git
+cd ai4-multimodal-agents-n8n
+
+# Start services
+cp .env.example .env
+docker-compose up -d
+
+# Access services
+# n8n: http://localhost:5678
+# MongoDB UI: http://localhost:8081
+# Docs: npm start (http://localhost:3000)
+```
+
+**Requirements:**
+- Docker Desktop
+- Git
+- 8GB RAM
+
+👉 **[Local Setup Guide](./prerequisites)**
+
+  </TabItem>
+</Tabs>
+
+## 📋 Required for Both Methods
+
+✅ **MongoDB Atlas account** (free tier) - [Sign up](https://www.mongodb.com/try)  
+✅ **Google AI Studio API key** for Gemini (optional) - [Get key](https://makersuite.google.com/app/apikey)  
+✅ **Sample PDFs** for testing  
+
+## 🗺️ Workshop Journey
+
+1. **Environment Setup** → Get all tools configured
+2. **PDF Processing** → Build ingestion workflow
+3. **Vector Search** → Implement similarity search
+4. **AI Agent** → Create intelligent assistant
+5. **Memory & Context** → Add conversation history
+6. **ReAct Pattern** → Implement reasoning loops
+7. **Production Deploy** → Scale your solution
+
+## 💡 Key Concepts
+
+### Multimodal Embeddings
+Voyage AI's `voyage-multimodal-3` model processes both text and images into a unified vector space, enabling semantic search across different content types.
+
+### Vector Search
+MongoDB Atlas Vector Search provides efficient similarity search at scale, perfect for RAG (Retrieval Augmented Generation) applications.
+
+### Visual Workflows
+n8n's node-based interface makes complex integrations intuitive, with built-in error handling and monitoring.
+
+### Agent Patterns
+We'll implement industry-standard patterns like tool calling and ReAct (Reasoning and Acting) for intelligent agent behavior.
+
+## 🎓 Learning Outcomes
+
+By the end of this workshop, you'll be able to:
+
+1. **Design and build** visual AI workflows in n8n
+2. **Process multimodal content** from PDFs
+3. **Implement vector search** with MongoDB Atlas
+4. **Create AI agents** with tool calling capabilities
+5. **Add memory** to maintain context
+6. **Deploy to production** with confidence
+
+## 🚦 Ready to Start?
+
+Let's begin by setting up your development environment and ensuring all prerequisites are in place.
+
+[Get Started with Prerequisites →](./prerequisites)

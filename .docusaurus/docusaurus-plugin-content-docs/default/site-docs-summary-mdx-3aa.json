@@ -1,0 +1,23 @@
+{
+  "id": "summary",
+  "title": "🎯 Workshop Summary",
+  "description": "Congratulations! Following this tutorial, you have successfully:",
+  "source": "@site/docs/summary.mdx",
+  "sourceDirName": ".",
+  "slug": "/summary",
+  "permalink": "/multimodal-pdf-agent-n8n/docs/summary",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/mongodb-developer/multimodal-pdf-agent-n8n/blob/main/docs/summary.mdx",
+  "tags": [],
+  "version": "current",
+  "sidebarPosition": 100,
+  "frontMatter": {
+    "sidebar_position": 100
+  },
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "🐳 Docker Troubleshooting Guide",
+    "permalink": "/multimodal-pdf-agent-n8n/docs/docker-troubleshooting"
+  }
+}

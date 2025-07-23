@@ -1,0 +1,127 @@
+---
+sidebar_position: 80
+---
+
+# 🌐 Web Upload Interface
+
+A complete web interface for uploading PDFs and chatting with your multimodal agent.
+
+## Accessing the Interface
+
+### Option 1: Via Docusaurus (Recommended)
+
+The upload interface is available at:
+```
+http://localhost:3000/upload-interface.html
+```
+
+### Option 2: Direct File Access
+
+Open the file directly in your browser:
+```
+/workspaces/ai4-multimodal-agents-n8n/static/upload-interface.html
+```
+
+## Features
+
+### 📤 PDF Upload
+- **Drag & Drop** support
+- **Click to browse** file selection
+- **Automatic validation** (PDF files only)
+- **Progress feedback** during processing
+
+### 💬 Chat Interface
+- **Real-time Q&A** about uploaded PDFs
+- **Conversation history** display
+- **Loading indicators** for responses
+- **Error handling** with clear messages
+
+## Setup Requirements
+
+### 1. Import the Workflow
+
+First, import the real multimodal agent workflow:
+```
+/workspaces/ai4-multimodal-agents-n8n/init/workflows/06-real-voyage-multimodal.json
+```
+
+### 2. Configure Webhook URLs
+
+The interface expects these webhook endpoints:
+- **Upload**: `http://localhost:5678/webhook/pdf-upload`
+- **Chat**: `http://localhost:5678/webhook/ask`
+
+### 3. Start the Workflow
+
+1. Open the imported workflow in n8n
+2. Click **"Active"** toggle to enable
+3. The webhooks are now ready to receive requests
+
+## Using the Interface
+
+### Step 1: Upload a PDF
+
+1. **Drag a PDF** onto the upload area, or
+2. **Click "Choose PDF File"** to browse
+3. Wait for "Successfully processed" message
+4. The chat interface will appear automatically
+
+### Step 2: Ask Questions
+
+1. Type your question in the input field
+2. Press **Enter** or click **Ask**
+3. Watch the AI analyze your PDF and respond
+4. Continue the conversation with follow-up questions
+
+## Example Questions
+
+Try these types of questions:
+- "What is the main topic of this document?"
+- "Summarize the key findings"
+- "What does it say about [specific topic]?"
+- "List the main recommendations"
+
+## Customization
+
+### Modify the Interface
+
+Edit `/static/upload-interface.html` to:
+- Change colors and styling
+- Add additional features
+- Modify the layout
+
+### Update Webhook URLs
+
+If using different ports or paths:
+```javascript
+const UPLOAD_URL = 'http://localhost:5678/webhook/pdf-upload';
+const ASK_URL = 'http://localhost:5678/webhook/ask';
+```
+
+## Troubleshooting
+
+### "Failed to fetch" Error
+- Ensure n8n workflow is active
+- Check webhook URLs match your setup
+- Verify MongoDB is running
+
+### "No file uploaded" Error
+- Ensure file is a valid PDF
+- Check file size (keep under 10MB for testing)
+- Verify binary data handling in webhook
+
+### Chat Not Appearing
+- Check browser console for errors
+- Ensure PDF was processed successfully
+- Verify MongoDB stored the document
+
+## Production Deployment
+
+For production use:
+1. Update URLs to use HTTPS
+2. Add authentication/security
+3. Implement rate limiting
+4. Add file size restrictions
+5. Enable CORS properly
+
+Your complete multimodal PDF agent is now accessible via a user-friendly web interface!

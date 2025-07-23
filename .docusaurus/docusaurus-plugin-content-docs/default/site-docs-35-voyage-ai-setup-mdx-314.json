@@ -1,0 +1,27 @@
+{
+  "id": "voyage-ai-setup",
+  "title": "🚢 Voyage AI Embedding Service Setup",
+  "description": "Configure access to multimodal embeddings that process both text and images using our workshop serverless endpoint.",
+  "source": "@site/docs/35-voyage-ai-setup.mdx",
+  "sourceDirName": ".",
+  "slug": "/voyage-ai-setup",
+  "permalink": "/multimodal-pdf-agent-n8n/docs/voyage-ai-setup",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/mongodb-developer/multimodal-pdf-agent-n8n/blob/main/docs/35-voyage-ai-setup.mdx",
+  "tags": [],
+  "version": "current",
+  "sidebarPosition": 35,
+  "frontMatter": {
+    "sidebar_position": 35
+  },
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "🗄️ MongoDB Setup: Local Development & Atlas Production",
+    "permalink": "/multimodal-pdf-agent-n8n/docs/mongodb-atlas-setup"
+  },
+  "next": {
+    "title": "📄 PDF Processing Workflow",
+    "permalink": "/multimodal-pdf-agent-n8n/docs/pdf-processing-workflow"
+  }
+}

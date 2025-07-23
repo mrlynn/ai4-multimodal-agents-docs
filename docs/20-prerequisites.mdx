@@ -1,0 +1,524 @@
+---
+sidebar_position: 20
+---
+
+# 🛠️ Prerequisites & Setup
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+Before we start building, let's get all the tools and accounts you'll need.
+
+## 🐳 Docker-Based Workshop Setup
+
+This workshop uses Docker to provide a consistent, pre-configured environment. No need to install n8n or worry about Node.js versions!
+
+### ⚠️ Prerequisites Overview
+
+**Required:**
+- Docker Desktop (includes Docker and Docker Compose)
+- Git (for cloning the workshop)
+- Text editor (VS Code recommended)
+- MongoDB Atlas account (free tier)
+
+**Optional:**
+- Voyage AI API key (workshop provides serverless endpoint)
+- Google AI Studio API key (for Gemini features)
+
+## 🚀 Setup Instructions
+
+<Tabs>
+  <TabItem value="codespaces" label="GitHub Codespaces" default>
+
+### Instant Cloud Setup
+
+1. **Open in Codespaces**
+   ```
+   Repository → Code → Codespaces → Create codespace on main
+   ```
+
+2. **Automatic Configuration**
+   - All services start automatically
+   - Ports are forwarded with secure URLs
+   - VS Code opens in your browser
+
+3. **Access Services**
+   - Click **Ports** tab in terminal
+   - Click globe icon next to each service
+   - Or wait for pop-up notifications
+
+<Screenshot src="/img/n8n-3.png" alt="Ensure Ports are Public, and Open in Browser" />
+
+
+🎉 **That's it! Skip to [MongoDB Atlas Setup](./mongodb-atlas-setup)**
+
+  </TabItem>
+  <TabItem value="mac" label="macOS (Local)">
+
+### Step 1: Install Docker Desktop
+
+```bash
+# Download Docker Desktop for Mac
+# Visit: https://www.docker.com/products/docker-desktop/
+# Choose Apple Silicon (M1/M2) or Intel version
+
+# After installation, verify Docker is running:
+docker --version
+docker-compose --version
+```
+
+### Step 2: Clone the Workshop
+
+```bash
+# Clone the workshop repository
+git clone https://github.com/mrlynn/ai4-multimodal-agents-n8n.git
+cd ai4-multimodal-agents-n8n
+
+# Copy environment template
+cp .env.example .env
+```
+
+### Step 3: Start Workshop Services
+
+```bash
+# Start all services with one command
+docker-compose up -d
+
+# Services will be available at:
+# n8n: http://localhost:5678
+# MongoDB Express: http://localhost:8081
+# Documentation: Run 'npm start' separately
+```
+
+:::tip Why Docker?
+We use Docker to avoid Node.js version conflicts and provide a consistent environment. Everything is pre-configured and ready to go!
+:::
+
+  </TabItem>
+  <TabItem value="windows" label="Windows">
+
+### Step 1: Install Docker Desktop
+
+```powershell
+# Download Docker Desktop for Windows
+# Visit: https://www.docker.com/products/docker-desktop/
+# Download the installer and run it
+
+# After installation, verify Docker is running:
+docker --version
+docker-compose --version
+```
+
+### Step 2: Clone the Workshop
+
+```powershell
+# Clone the workshop repository
+git clone https://github.com/mrlynn/ai4-multimodal-agents-n8n.git
+cd ai4-multimodal-agents-n8n
+
+# Copy environment template
+copy .env.example .env
+```
+
+### Step 3: Start Workshop Services
+
+```powershell
+# Start all services with one command
+docker-compose up -d
+
+# Services will be available at:
+# n8n: http://localhost:5678
+# MongoDB Express: http://localhost:8081
+# Documentation: Run 'npm start' separately
+```
+
+:::tip Windows Docker Setup
+- Ensure WSL 2 is enabled for better performance
+- Docker Desktop handles this automatically during installation
+- You may need to restart after installing Docker Desktop
+:::
+
+  </TabItem>
+  <TabItem value="linux" label="Linux">
+
+### Step 1: Install Docker
+
+**Ubuntu/Debian:**
+```bash
+# Update package index
+sudo apt update
+
+# Install Docker
+sudo apt install docker.io docker-compose
+
+# Add your user to docker group (logout/login required)
+sudo usermod -aG docker $USER
+
+# Verify installation
+docker --version
+docker-compose --version
+```
+
+**Fedora/RHEL/CentOS:**
+```bash
+# Install Docker
+sudo dnf install docker docker-compose
+
+# Start Docker service
+sudo systemctl start docker
+sudo systemctl enable docker
+
+# Add user to docker group
+sudo usermod -aG docker $USER
+```
+
+### Step 2: Clone the Workshop
+
+```bash
+# Clone the workshop repository
+git clone https://github.com/mrlynn/ai4-multimodal-agents-n8n.git
+cd ai4-multimodal-agents-n8n
+
+# Copy environment template
+cp .env.example .env
+```
+
+### Step 3: Start Workshop Services
+
+```bash
+# Start all services with one command
+docker-compose up -d
+
+# Services will be available at:
+# n8n: http://localhost:5678
+# MongoDB Express: http://localhost:8081
+# Documentation: Run 'npm start' separately
+```
+
+:::tip Linux Docker Permissions
+If you get "permission denied" errors, logout and login again after adding yourself to the docker group.
+:::
+
+  </TabItem>
+</Tabs>
+
+## 🐳 Understanding the Docker Setup
+
+Our workshop uses Docker Compose to manage all services:
+
+### Services Included
+
+1. **n8n** (port 5678)
+   - Pre-configured workflow automation platform
+   - Connected to MongoDB for data persistence
+   - All necessary environment variables set
+
+2. **MongoDB** (port 27017)
+   - Database for storing workflows and vector data
+   - Pre-configured with authentication
+   - Health checks enabled
+
+3. **MongoDB Express** (port 8081)
+   - Web-based MongoDB admin interface
+   - View and manage your data
+   - No authentication required for workshop
+
+### Starting Services
+
+```bash
+# Start all services
+docker-compose up -d
+
+# Check service status
+docker-compose ps
+
+# View logs
+docker-compose logs -f
+
+# Stop services
+docker-compose down
+```
+
+:::tip Container Management
+The `-d` flag runs containers in detached mode (background). Remove it to see logs in real-time.
+:::
+
+## 📦 Workshop Files & Structure
+
+```
+workshop/
+├── docker-compose.yml      # Service definitions
+├── .env.example           # Environment template
+├── .env                   # Your configuration (create from .env.example)
+├── docs/                  # Workshop documentation
+├── init/
+│   ├── mongodb/          # Database initialization
+│   ├── workflows/        # Sample n8n workflows
+│   └── sample-data/      # Test PDFs
+└── files/                # File uploads directory
+```
+
+## 🔐 n8n Account Setup
+
+### Community Edition Features
+
+When you first access n8n:
+
+1. **Create Account**: Enter your email address
+2. **Community Edition**: You start with the free community edition
+3. **Unlock Features**: Get advanced features free forever!
+
+### Getting Your Free License Key
+
+1. Go to **Settings** → **Usage and Plan**
+2. Click **"Unlock selected paid features for free"**
+3. Features you'll get:
+    - ✅ Workflow history
+    - ✅ Advanced debugging
+    - ✅ Execution search and tagging
+    - ✅ Folder organization
+4. Click **"Send me a free license key"**
+5. Check your email immediately
+6. Click the activation link in the email
+
+:::info Activation Tip
+The activation link in your email automatically applies your license key - no need to copy/paste!
+:::
+
+## Understanding n8n's Interface
+
+### Key Areas to Explore
+
+1. **Workflows**: Your automation canvas
+2. **Credentials**: Store API keys securely
+3. **Executions**: View run history
+4. **Settings**: Personal, instance, and community nodes
+
+### Community Nodes
+
+n8n has a rich ecosystem of community-contributed nodes:
+
+1. Go to **Settings** → **Community Nodes**
+2. Click **"Browse"** to see available nodes
+3. Popular nodes include:
+    - DeepSeek AI integration
+    - MCP (Model Context Protocol) nodes
+    - Custom database connectors
+    - Specialized AI tools
+
+:::tip For Our Workshop
+We'll use the built-in MongoDB and HTTP Request nodes, but feel free to explore community nodes for extended functionality!
+:::
+
+## 🔧 Docker Troubleshooting
+
+<details>
+<summary>Docker services won't start</summary>
+
+```bash
+# Check if Docker is running
+docker info
+
+# If not, start Docker Desktop (GUI) or:
+sudo systemctl start docker  # Linux
+
+# Check for errors in logs
+docker-compose logs
+
+# Rebuild if needed
+docker-compose build --no-cache
+docker-compose up -d
+```
+
+</details>
+
+<details>
+<summary>Port 5678 already in use</summary>
+
+Another service is using the port:
+
+<Tabs>
+  <TabItem value="mac" label="macOS" default>
+
+```bash
+# Find what's using port 5678
+lsof -i :5678
+
+# Kill the process (replace PID with actual process ID)
+kill -9 <PID>
+
+# Or use different port:
+n8n start --port=5679
+```
+
+</TabItem>
+<TabItem value="windows" label="Windows">
+
+```powershell
+# Find what's using port 5678
+netstat -ano | findstr :5678
+
+# Kill the process (replace PID with actual process ID)
+taskkill /PID <PID> /F
+
+# Or use different port:
+n8n start --port=5679
+```
+
+</TabItem>
+<TabItem value="linux" label="Linux">
+
+```bash
+# Find what's using port 5678
+lsof -i :5678
+# or
+netstat -tulpn | grep :5678
+
+# Kill the process (replace PID with actual process ID)
+kill -9 <PID>
+
+# Or use different port:
+n8n start --port=5679
+```
+
+</TabItem>
+</Tabs>
+
+</details>
+
+<details>
+<summary>Permission/Installation Errors</summary>
+
+<Tabs>
+  <TabItem value="mac" label="macOS" default>
+
+```bash
+# Don't use: brew install n8n (package may be broken)
+# Use npm instead: npm install -g n8n
+
+# If permission errors:
+sudo npm install -g n8n
+
+# Better: Configure npm to avoid sudo
+mkdir ~/.npm-global
+npm config set prefix '~/.npm-global'
+echo 'export PATH=~/.npm-global/bin:$PATH' >> ~/.zshrc
+source ~/.zshrc
+npm install -g n8n
+```
+
+</TabItem>
+<TabItem value="windows" label="Windows">
+
+```powershell
+# Make sure you're running PowerShell as Administrator
+
+# If execution policy errors:
+Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
+
+# Clear npm cache if needed:
+npm cache clean --force
+
+# Reinstall n8n:
+npm install -g n8n
+```
+
+</TabItem>
+<TabItem value="linux" label="Linux">
+
+```bash
+# If permission errors with system npm:
+sudo npm install -g n8n
+
+# Better: Use nvm (no sudo needed):
+# First install nvm if not already installed
+curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.0/install.sh | bash
+source ~/.bashrc
+nvm install 22
+nvm use 22
+npm install -g n8n
+```
+
+</TabItem>
+</Tabs>
+
+</details>
+
+## MongoDB Atlas Setup
+
+### Create Your Atlas Account
+
+1. Go to [MongoDB Atlas](https://www.mongodb.com/try)
+2. Sign up with your email
+3. Create a new project
+4. Build your first cluster (free tier)
+
+### Configure Database Access
+
+1. **Database Access**: Create a user
+   - Username: `n8n-user`
+   - Password: Generate secure password
+   - Database User Privileges: Read and write to any database
+
+2. **Network Access**: Add IP addresses
+   - Add your current IP
+   - For development: Allow access from anywhere (0.0.0.0/0)
+
+### Get Connection String
+
+1. Click **Connect** on your cluster
+2. Choose **Connect your application**
+3. Copy the connection string
+4. Replace `<password>` with your user password
+
+## Workshop Embedding Service
+
+For this workshop, we'll use a serverless endpoint that handles embeddings without requiring API key management.
+
+### Test the Workshop Service
+
+```bash
+curl -X POST "https://ai4-workshop-embeddings.vercel.app/api/embed" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "input": "Test document",
+    "input_type": "document"
+  }'
+```
+
+This endpoint provides:
+- ✅ Voyage AI multimodal embeddings
+- ✅ No API key required
+- ✅ Workshop-optimized rate limits
+- ✅ Built-in error handling
+
+## ✅ Pre-Workshop Checklist
+
+Complete these BEFORE the workshop:
+
+- [ ] Install Docker Desktop
+- [ ] Clone workshop repository
+- [ ] Copy `.env.example` to `.env`
+- [ ] Run `docker-compose up -d`
+- [ ] Verify services at http://localhost:5678 and http://localhost:8081
+- [ ] Create MongoDB Atlas account (free tier)
+- [ ] Have a test PDF ready
+
+## 🚨 Common Docker Issues & Solutions
+
+1. **Docker not running**: Start Docker Desktop first
+2. **Port conflicts**: Check `lsof -i :5678` (Mac/Linux) or `netstat -ano | findstr :5678` (Windows)
+3. **Permission denied**: Add user to docker group (Linux)
+4. **Services won't start**: Check `docker-compose logs` for errors
+5. **Can't connect to services**: Ensure using `http://` not `https://`
+
+## 🎯 Quick Reference
+
+| Service | URL | Purpose |
+|---------|-----|---------|
+| n8n Editor | http://localhost:5678 | Build workflows |
+| MongoDB Express | http://localhost:8081 | Database admin |
+| Documentation | http://localhost:3000 | Workshop guide |
+| MongoDB | mongodb://localhost:27017 | Database connection |
+
+Ready to build your multimodal PDF agent! →

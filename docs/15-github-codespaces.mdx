@@ -1,0 +1,234 @@
+---
+sidebar_position: 15
+---
+
+# 🌐 GitHub Codespaces: Zero-Install Workshop
+
+The **fastest way** to start this workshop - no local setup required!
+
+## 🚀 What is GitHub Codespaces?
+
+GitHub Codespaces provides a complete, cloud-based development environment that runs in your browser. For this workshop, it means:
+
+- ✅ **No local installation** - Works on any device with a browser
+- ✅ **Pre-configured environment** - All services start automatically
+- ✅ **Consistent experience** - Same setup for all participants
+- ✅ **Built-in VS Code** - Full IDE in your browser
+
+## 🎯 Quick Start (30 Seconds!)
+
+### 1. Launch Codespace
+
+<Screenshot src="/img/codespaces-button.png" alt="GitHub Codespaces Button" />
+
+1. Go to the workshop repository
+2. Click the green **Code** button
+3. Select **Codespaces** tab
+4. Click **Create codespace on main**
+
+### 2. Wait for Setup (3-5 minutes)
+
+The first time takes a few minutes as it:
+- Builds the Docker environment
+- Installs all dependencies
+- Starts all services
+- Configures port forwarding
+
+<Screenshot src="/img/codespaces-building.png" alt="Codespaces Building" />
+
+### 3. Services Auto-Start
+
+Once ready, you'll see:
+- Terminal showing service status
+- Ports automatically forwarded
+- Pop-up notifications for available services
+
+## 🌟 Accessing Workshop Services
+
+### Automatic Port Forwarding
+
+GitHub Codespaces automatically forwards all ports with secure URLs:
+
+| Service | Local Port | Codespaces URL | Access |
+|---------|------------|----------------|--------|
+| **n8n Editor** | 5678 | `https://<name>-5678.preview.app.github.dev` | Auto-opens |
+| **MongoDB Express** | 8081 | `https://<name>-8081.preview.app.github.dev` | Click to open |
+| **Documentation** | 3000 | `https://<name>-3000.preview.app.github.dev` | Auto-opens |
+
+### Finding Your URLs
+
+1. Click **Ports** tab in the terminal panel
+2. Hover over any port
+3. Click the globe icon to open
+
+<Screenshot src="/img/codespaces-ports.png" alt="Codespaces Ports Panel" />
+
+## 📋 Codespaces vs Local Docker
+
+| Feature | GitHub Codespaces | Local Docker |
+|---------|------------------|--------------|
+| **Setup Time** | 30 seconds | 10-15 minutes |
+| **Prerequisites** | GitHub account | Docker Desktop |
+| **Performance** | Cloud-based | Local machine |
+| **Cost** | Free tier (60 hrs/month) | Free |
+| **Persistence** | While active | Permanent |
+| **Offline Work** | ❌ | ✅ |
+
+## 🔧 Codespaces Features
+
+### Pre-installed Extensions
+
+Your Codespace includes:
+- MongoDB for VS Code
+- Python & Pylance
+- YAML support
+- Docker tools
+- Prettier formatter
+
+### Terminal Commands
+
+All workshop commands work identically:
+
+```bash
+# Check service status
+docker-compose ps
+
+# View logs
+docker-compose logs -f n8n
+
+# Restart services
+docker-compose restart
+
+# Run documentation
+npm start
+```
+
+### File Persistence
+
+- Files are saved automatically
+- Changes persist between sessions
+- Export important workflows before stopping
+
+## 💡 Pro Tips for Codespaces
+
+### 1. Keep It Running
+
+Codespaces auto-suspend after 30 minutes of inactivity:
+- Keep the browser tab open
+- Interact periodically
+- Or adjust timeout in settings
+
+### 2. Resource Management
+
+Default Codespace has:
+- 2 CPU cores
+- 4 GB RAM
+- 32 GB storage
+
+For better performance:
+1. Go to repository settings
+2. Select "Change machine type"
+3. Choose 4-core option
+
+### 3. Multiple Windows
+
+- **Split Terminal**: Drag terminal tabs
+- **Preview Side-by-Side**: Right-click tabs → "Split Right"
+- **Multiple Browser Tabs**: Open services in separate tabs
+
+## 🛠️ Troubleshooting Codespaces
+
+### Services Not Starting
+
+```bash
+# Restart all services
+docker-compose down
+docker-compose up -d
+
+# Check logs
+docker-compose logs
+```
+
+### Port Not Accessible
+
+1. Check **Ports** tab
+2. Ensure port visibility is "Public" or "Private"
+3. Click globe icon to open
+
+### Performance Issues
+
+- Close unused browser tabs
+- Upgrade to larger machine type
+- Stop unused services
+
+## 🔒 Security & Privacy
+
+### Port Visibility
+
+By default, ports are private to you. The workshop sets:
+- Documentation (3000): Public
+- n8n (5678): Private
+- MongoDB (8081): Private
+
+### Data Security
+
+- All data stays in your Codespace
+- Encrypted in transit
+- Deleted when Codespace is deleted
+
+## 📊 Managing Your Codespace
+
+### View Active Codespaces
+
+1. Go to [github.com/codespaces](https://github.com/codespaces)
+2. See all your active Codespaces
+3. Monitor usage and billing
+
+### Stop vs Delete
+
+- **Stop**: Preserves state, can resume later
+- **Delete**: Removes everything permanently
+
+```bash
+# Export workflows before deleting
+docker-compose exec n8n n8n export:workflow --all
+```
+
+## 🎓 Workshop-Specific Setup
+
+Our devcontainer automatically:
+
+1. **Installs Dependencies**
+   - Node.js 22 (for n8n)
+   - Python 3.11 (for AI libraries)
+   - MongoDB tools
+
+2. **Starts Services**
+   - MongoDB with auth
+   - n8n with MongoDB connection
+   - MongoDB Express UI
+
+3. **Configures Environment**
+   - Copies `.env.example` to `.env`
+   - Sets up workshop directories
+   - Initializes sample data
+
+## 🚀 Ready to Start?
+
+With Codespaces, you can:
+- Start the workshop in seconds
+- Work from any device
+- Share your environment easily
+- Focus on learning, not setup
+
+### Next Steps
+
+1. ✅ Codespace is running
+2. ✅ Services are accessible
+3. ✅ Ready to build workflows
+
+Continue to [n8n First Run →](./n8n-first-run)
+
+---
+
+**Tip**: Bookmark your Codespace URL for quick access!

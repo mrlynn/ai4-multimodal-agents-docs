@@ -1,0 +1,370 @@
+---
+sidebar_position: 45
+---
+
+# 💻 Docker Development Best Practices
+
+Based on real-world experience, here's how to optimize your Docker-based n8n development environment.
+
+## 🐳 Docker Environment Management
+
+### Project Structure
+
+```
+workshop/
+├── docker-compose.yml      # Main services configuration
+├── docker-compose.dev.yml  # Development overrides
+├── .env                    # Environment variables
+├── volumes/
+│   ├── n8n/               # n8n data persistence
+│   ├── mongodb/           # MongoDB data
+│   └── files/             # Uploaded files
+├── workflows/
+│   ├── exports/           # Workflow backups
+│   └── templates/         # Reusable templates
+└── logs/                  # Container logs
+```
+
+### Environment Configuration
+
+Create a comprehensive `.env` file:
+
+```bash
+# Docker Configuration
+COMPOSE_PROJECT_NAME=n8n-workshop
+
+# n8n Configuration
+N8N_PORT=5678
+N8N_PROTOCOL=http
+N8N_HOST=localhost
+N8N_LOG_LEVEL=info
+N8N_METRICS=false
+N8N_VERSION=1.103.2
+
+# MongoDB Configuration
+MONGO_VERSION=7.0
+MONGO_USERNAME=workshop
+MONGO_PASSWORD=secure_password_here
+MONGO_DATABASE=pdf_workshop
+
+# Resource Limits
+N8N_MEMORY_LIMIT=2g
+MONGODB_MEMORY_LIMIT=1g
+
+# Development Settings
+DEBUG_MODE=true
+ENABLE_HOT_RELOAD=true
+```
+
+## 🔄 Service Management
+
+### Starting Services
+
+```bash
+# Start all services
+docker-compose up -d
+
+# Start specific service
+docker-compose up -d n8n
+
+# Start with logs visible
+docker-compose up n8n
+
+# Use development configuration
+docker-compose -f docker-compose.yml -f docker-compose.dev.yml up
+```
+
+### Monitoring Services
+
+```bash
+# Check status
+docker-compose ps
+
+# View logs
+docker-compose logs -f n8n
+
+# Monitor resource usage
+docker stats
+
+# Access container shell
+docker-compose exec n8n sh
+```
+
+## 📁 Data Persistence
+
+### Volume Management
+
+```yaml
+# docker-compose.yml
+volumes:
+  n8n_data:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: ./volumes/n8n
+  
+  mongodb_data:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: ./volumes/mongodb
+```
+
+### Backup Strategy
+
+Create automated backup script:
+
+```bash
+#!/bin/bash
+# backup.sh
+
+DATE=$(date +%Y%m%d_%H%M%S)
+BACKUP_DIR="./backups/$DATE"
+
+echo "Creating backup: $BACKUP_DIR"
+mkdir -p "$BACKUP_DIR"
+
+# Backup n8n workflows
+docker-compose exec n8n n8n export:workflow --all \
+  --output=/home/node/backups/workflows_$DATE.json
+
+# Backup MongoDB
+docker-compose exec mongodb mongodump \
+  --uri="mongodb://localhost:27017/pdf_workshop" \
+  --out="/backups/mongodb_$DATE"
+
+# Copy files
+cp -r ./volumes/files "$BACKUP_DIR/"
+
+echo "Backup complete!"
+```
+
+## 🚀 Performance Optimization
+
+### Docker Resource Configuration
+
+```yaml
+# docker-compose.yml
+services:
+  n8n:
+    deploy:
+      resources:
+        limits:
+          cpus: '2'
+          memory: 2G
+        reservations:
+          cpus: '1'
+          memory: 1G
+```
+
+### Container Health Checks
+
+```yaml
+services:
+  n8n:
+    healthcheck:
+      test: ["CMD", "wget", "--spider", "-q", "http://localhost:5678/healthz"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+```
+
+## 🔧 Development Workflow
+
+### Hot Reload for Custom Nodes
+
+```yaml
+# docker-compose.dev.yml
+services:
+  n8n:
+    volumes:
+      - ./custom-nodes:/home/node/.n8n/custom
+      - ./packages:/home/node/packages
+    environment:
+      - N8N_CUSTOM_EXTENSIONS=/home/node/custom-nodes
+```
+
+### Debugging Configuration
+
+```yaml
+services:
+  n8n:
+    environment:
+      - NODE_ENV=development
+      - N8N_LOG_LEVEL=debug
+      - DEBUG=n8n:*
+    ports:
+      - "9229:9229"  # Node.js debugger
+```
+
+## 🌐 Network Configuration
+
+### Service Communication
+
+```yaml
+# docker-compose.yml
+networks:
+  n8n-network:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.20.0.0/16
+```
+
+### External Service Access
+
+```bash
+# Access MongoDB from host
+mongodb://workshop:password@localhost:27017/pdf_workshop
+
+# Access from n8n container
+mongodb://workshop:password@mongodb:27017/pdf_workshop
+```
+
+## 📊 Monitoring & Logging
+
+### Centralized Logging
+
+```yaml
+# docker-compose.yml
+services:
+  n8n:
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+```
+
+### Log Analysis
+
+```bash
+# Search logs
+docker-compose logs n8n | grep ERROR
+
+# Export logs
+docker-compose logs > workshop_logs_$(date +%Y%m%d).log
+
+# Real-time monitoring
+watch docker-compose ps
+```
+
+## 🛡️ Security Best Practices
+
+### Secrets Management
+
+```bash
+# Use Docker secrets
+echo "your-api-key" | docker secret create voyage_api_key -
+
+# Reference in docker-compose.yml
+secrets:
+  voyage_api_key:
+    external: true
+```
+
+### Network Isolation
+
+```yaml
+services:
+  n8n:
+    networks:
+      - frontend
+      - backend
+  
+  mongodb:
+    networks:
+      - backend
+```
+
+## 🎯 Common Tasks
+
+### Rebuild Services
+
+```bash
+# Rebuild single service
+docker-compose build n8n
+
+# Rebuild all services
+docker-compose build
+
+# Force rebuild without cache
+docker-compose build --no-cache
+```
+
+### Clean Up
+
+```bash
+# Stop and remove containers
+docker-compose down
+
+# Remove volumes too
+docker-compose down -v
+
+# Clean Docker system
+docker system prune -a
+```
+
+## 💡 Pro Tips
+
+1. **Use Docker Compose profiles** for different environments:
+   ```yaml
+   services:
+     voyage-mock:
+       profiles: ["testing"]
+   ```
+
+2. **Implement health checks** for all services
+
+3. **Use named volumes** for better data management
+
+4. **Set resource limits** to prevent container runaway
+
+5. **Regular backups** of workflows and data
+
+6. **Monitor disk space** - Docker can consume significant space
+
+## 🚨 Troubleshooting
+
+### Container Won't Start
+
+```bash
+# Check logs
+docker-compose logs n8n
+
+# Inspect container
+docker-compose ps
+docker inspect n8n-workshop
+
+# Reset everything
+docker-compose down -v
+docker-compose up -d
+```
+
+### Performance Issues
+
+```bash
+# Check resource usage
+docker stats
+
+# Increase memory limits
+docker-compose down
+# Edit docker-compose.yml to increase limits
+docker-compose up -d
+```
+
+### Network Problems
+
+```bash
+# Test connectivity
+docker-compose exec n8n ping mongodb
+
+# Check network configuration
+docker network ls
+docker network inspect workshop_n8n-network
+```
+
+Ready to build production-ready workflows! →

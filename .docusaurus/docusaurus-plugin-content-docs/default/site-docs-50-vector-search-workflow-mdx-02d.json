@@ -1,0 +1,27 @@
+{
+  "id": "vector-search-workflow",
+  "title": "🔍 Vector Search Workflow",
+  "description": "Create a search endpoint that uses MongoDB Atlas Vector Search to find relevant PDF content.",
+  "source": "@site/docs/50-vector-search-workflow.mdx",
+  "sourceDirName": ".",
+  "slug": "/vector-search-workflow",
+  "permalink": "/multimodal-pdf-agent-n8n/docs/vector-search-workflow",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/mongodb-developer/multimodal-pdf-agent-n8n/blob/main/docs/50-vector-search-workflow.mdx",
+  "tags": [],
+  "version": "current",
+  "sidebarPosition": 50,
+  "frontMatter": {
+    "sidebar_position": 50
+  },
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "💻 Docker Development Best Practices",
+    "permalink": "/multimodal-pdf-agent-n8n/docs/local-setup-tips"
+  },
+  "next": {
+    "title": "🤖 AI Agent with Function Calling",
+    "permalink": "/multimodal-pdf-agent-n8n/docs/ai-agent-workflow"
+  }
+}

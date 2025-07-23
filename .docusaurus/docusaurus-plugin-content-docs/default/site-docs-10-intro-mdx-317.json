@@ -1,0 +1,23 @@
+{
+  "id": "intro",
+  "title": "📘 Introduction to Multimodal PDF Agents with n8n",
+  "description": "|Workshop goals|Build a multimodal AI agent that processes PDFs using n8n, MongoDB Atlas, and Voyage AI|",
+  "source": "@site/docs/10-intro.mdx",
+  "sourceDirName": ".",
+  "slug": "/intro",
+  "permalink": "/multimodal-pdf-agent-n8n/docs/intro",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/mongodb-developer/multimodal-pdf-agent-n8n/blob/main/docs/10-intro.mdx",
+  "tags": [],
+  "version": "current",
+  "sidebarPosition": 10,
+  "frontMatter": {
+    "sidebar_position": 10
+  },
+  "sidebar": "tutorialSidebar",
+  "next": {
+    "title": "🌐 GitHub Codespaces: Zero-Install Workshop",
+    "permalink": "/multimodal-pdf-agent-n8n/docs/github-codespaces"
+  }
+}

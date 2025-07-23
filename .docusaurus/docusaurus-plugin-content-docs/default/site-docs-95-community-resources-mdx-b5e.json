@@ -1,0 +1,27 @@
+{
+  "id": "community-resources",
+  "title": "🌐 Community Nodes & Extensions",
+  "description": "Extend your PDF analysis system with community contributions!",
+  "source": "@site/docs/95-community-resources.mdx",
+  "sourceDirName": ".",
+  "slug": "/community-resources",
+  "permalink": "/multimodal-pdf-agent-n8n/docs/community-resources",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/mongodb-developer/multimodal-pdf-agent-n8n/blob/main/docs/95-community-resources.mdx",
+  "tags": [],
+  "version": "current",
+  "sidebarPosition": 95,
+  "frontMatter": {
+    "sidebar_position": 95
+  },
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "🌐 Web Upload Interface",
+    "permalink": "/multimodal-pdf-agent-n8n/docs/upload-interface"
+  },
+  "next": {
+    "title": "🐳 Docker Troubleshooting Guide",
+    "permalink": "/multimodal-pdf-agent-n8n/docs/docker-troubleshooting"
+  }
+}

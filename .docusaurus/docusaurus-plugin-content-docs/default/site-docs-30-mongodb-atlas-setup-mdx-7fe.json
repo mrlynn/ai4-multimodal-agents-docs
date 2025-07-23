@@ -1,0 +1,27 @@
+{
+  "id": "mongodb-atlas-setup",
+  "title": "🗄️ MongoDB Setup: Local Development & Atlas Production",
+  "description": "This workshop uses two MongoDB environments:",
+  "source": "@site/docs/30-mongodb-atlas-setup.mdx",
+  "sourceDirName": ".",
+  "slug": "/mongodb-atlas-setup",
+  "permalink": "/multimodal-pdf-agent-n8n/docs/mongodb-atlas-setup",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/mongodb-developer/multimodal-pdf-agent-n8n/blob/main/docs/30-mongodb-atlas-setup.mdx",
+  "tags": [],
+  "version": "current",
+  "sidebarPosition": 30,
+  "frontMatter": {
+    "sidebar_position": 30
+  },
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "🚀 n8n First Run Experience",
+    "permalink": "/multimodal-pdf-agent-n8n/docs/n8n-first-run"
+  },
+  "next": {
+    "title": "🚢 Voyage AI Embedding Service Setup",
+    "permalink": "/multimodal-pdf-agent-n8n/docs/voyage-ai-setup"
+  }
+}

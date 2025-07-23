@@ -1,0 +1,182 @@
+---
+sidebar_position: 25
+---
+
+# 🚀 n8n First Run Experience
+
+Let's walk through what happens when you first access n8n in our Docker environment.
+
+## Starting n8n with Docker
+
+With our Docker setup, n8n is already running! Check the status:
+
+```bash
+# Check if n8n is running
+docker-compose ps
+
+# You should see:
+NAME           IMAGE              STATUS       PORTS
+n8n-workshop   n8nio/n8n:latest   Up X mins    0.0.0.0:5678->5678/tcp
+```
+
+If n8n isn't running:
+
+```bash
+# Start all services
+docker-compose up -d
+
+# Wait 10-15 seconds for services to initialize
+# Then check logs
+docker-compose logs n8n
+```
+
+## Initial Setup Wizard
+
+### 1. Account Creation
+
+When you first visit `http://localhost:5678`:
+
+- Enter your email address
+- Create a password
+- You're automatically on the Community Edition
+
+### 2. Unlock Free Features
+
+Don't skip this step! Get premium features free:
+
+1. Navigate to **Settings** (gear icon)
+2. Click **Usage and Plan**
+3. Click **"Get paid features for free forever"**
+4. Check your email for the license key
+5. Click the activation link in the email
+
+### 3. Configure Your Workspace
+
+#### Theme Selection
+
+- **Settings** → **Personal**
+- Choose Light or Dark theme
+- The instructor prefers light theme 😎
+
+#### API Keys (Optional)
+
+- **Settings** → **API Keys**
+- Create keys for external access
+- Not needed for our workshop
+
+#### Community Nodes
+
+- **Settings** → **Community Nodes**
+- Browse available extensions
+- Install later as needed
+
+## Understanding the n8n Interface
+
+### Main Navigation
+
+<Screenshot src="/img/n8n-1.png" alt="n8n Overview Dashboard" />
+
+### Workflow Canvas
+
+When you create a new workflow:
+
+1. **Canvas**: Main work area
+2. **Node Panel**: Click + to add nodes
+3. **Node Search**: Type to find nodes
+4. **Execution Panel**: See run results
+
+<Screenshot src="/img/n8n-2.png" alt="n8n Overview Dashboard" />
+
+## Your First Test
+
+Let's verify everything works:
+
+### 1. Create Test Workflow
+
+1. Click **Workflows** → **New**
+2. You'll see a blank canvas with "Start" node
+
+### 2. Add a Simple Node
+
+1. Click the **+** button next to the trigger node
+2. In the search field at the top, type "Set"
+3. Look for **"Edit Fields (Set)"** option (has a pencil icon)
+4. Click on it to add the node
+5. The node will be automatically connected to your trigger
+6. Configure the Set node:
+   - Click on the Set node to open its settings
+   - You'll see fields to add data
+   - Add a field with:
+     - Name: `test`
+     - Value: `Hello n8n!`
+   - Add another field:
+     - Name: `timestamp`
+     - Value: `{{ new Date().toISOString() }}`
+    
+
+### 3. Execute
+
+1. Click **Execute Workflow**
+2. You should see output with your test data
+
+## Pro Tips from the Field
+
+### 💡 Installation Tips
+
+Based on real experience:
+
+1. **Always use Node 22** - v24 doesn't work
+2. **Use npm, not Homebrew** for n8n install
+3. **Activate free license immediately** for better features
+4. **Start simple** - test basic nodes first
+
+### 🎯 Workflow Development Tips
+
+1. **Name your workflows** clearly
+2. **Use folders** to organize (with free license)
+3. **Test incrementally** - node by node
+4. **Save often** - use Ctrl/Cmd+S
+
+### 🔧 Useful Settings
+
+Enable these for better experience:
+
+1. **Settings** → **Workflow Defaults**
+    - Save execution progress: ON
+    - Save manual executions: ON
+2. **Settings** → **Personal**
+    - Execution timeout: 5 minutes (for our workshop)
+
+## Common First-Time Issues
+
+### "Site can't be reached"
+
+- Make sure n8n is running in terminal
+- Check [http://localhost:5678](http://localhost:5678/) (not https)
+- Verify no firewall blocking
+
+### "Invalid Node Version"
+
+```bash
+# Quick fix:
+nvm use 22
+n8n
+```
+
+### "License Key Not Working"
+
+- Click the link in email (don't copy/paste)
+- Check spam folder
+- Request new key if needed
+
+## Next Steps
+
+Now that n8n is running:
+
+✅ n8n installed and running  
+✅ Account created  
+✅ Free license activated  
+✅ Interface explored  
+✅ First test workflow created
+
+Ready to build our PDF system! →

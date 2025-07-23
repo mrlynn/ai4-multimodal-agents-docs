@@ -1,0 +1,27 @@
+{
+  "id": "local-setup-tips",
+  "title": "💻 Docker Development Best Practices",
+  "description": "Based on real-world experience, here's how to optimize your Docker-based n8n development environment.",
+  "source": "@site/docs/45-local-setup-tips.mdx",
+  "sourceDirName": ".",
+  "slug": "/local-setup-tips",
+  "permalink": "/multimodal-pdf-agent-n8n/docs/local-setup-tips",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/mongodb-developer/multimodal-pdf-agent-n8n/blob/main/docs/45-local-setup-tips.mdx",
+  "tags": [],
+  "version": "current",
+  "sidebarPosition": 45,
+  "frontMatter": {
+    "sidebar_position": 45
+  },
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "📄 PDF Processing Workflow",
+    "permalink": "/multimodal-pdf-agent-n8n/docs/pdf-processing-workflow"
+  },
+  "next": {
+    "title": "🔍 Vector Search Workflow",
+    "permalink": "/multimodal-pdf-agent-n8n/docs/vector-search-workflow"
+  }
+}

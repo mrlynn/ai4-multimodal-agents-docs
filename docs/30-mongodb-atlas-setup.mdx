@@ -1,0 +1,323 @@
+---
+sidebar_position: 30
+---
+
+# 🗄️ MongoDB Setup: Local Development & Atlas Production
+
+This workshop uses two MongoDB environments:
+- **Local MongoDB** (via Docker) for development and testing
+- **MongoDB Atlas** for production vector search
+
+## 🐳 Local MongoDB (Development)
+
+Our Docker setup includes a local MongoDB instance that's already configured and running:
+
+### Access Local MongoDB
+
+```bash
+# Check if MongoDB is running
+docker-compose ps mongodb
+
+# Access MongoDB shell
+docker-compose exec mongodb mongosh
+
+# Connection string for n8n
+mongodb://root:workshoppass@mongodb:27017/pdf_workshop?authSource=admin
+```
+
+### MongoDB Express UI
+
+Access the web-based MongoDB admin at http://localhost:8081
+- No authentication required
+- View collections and documents
+- Run queries and manage data
+
+## ☁️ MongoDB Atlas (Production)
+
+## Create Your Vector Database
+
+### 1. Atlas Account Setup
+
+If you don't have an account yet:
+
+1. Visit [MongoDB Atlas](https://www.mongodb.com/try?utm_campaign=devrel&utm_source=workshop&utm_medium=cta&utm_content=multimodal_pdf_agent_n8n&utm_term=michael.lynn)
+2. Sign up with your email
+3. Verify your email address
+4. Complete the onboarding questions
+
+### 2. Create a Cluster
+
+1. Click **"Build a Database"**
+2. Choose **M0 Free Tier** (perfect for our workshop)
+3. Select your preferred cloud provider and region
+4. Name your cluster: `multimodal-workshop`
+5. Click **"Create"** and wait for deployment (~2 minutes)
+
+:::tip Cluster Location
+Choose a region close to you for better performance during the workshop.
+:::
+
+### 3. Database Configuration
+
+Once your cluster is ready:
+
+1. Click **"Browse Collections"**
+2. Click **"Add My Own Data"**
+3. Create database and collection:
+   ```
+   Database: multimodal_workshop
+   Collection: pdf_documents
+   ```
+4. Click **"Create"**
+
+## 4. Create Vector Search Index
+
+Navigate to **Atlas Search** → **Create Index**:
+
+1. Click **"Create Search Index"**
+2. Select **"JSON Editor"**
+3. Choose **"Atlas Vector Search"** as the index type
+4. Choose your database: `multimodal_workshop`
+5. Choose your collection: `pdf_documents`
+6. Name your index: `vector_index`
+7. Paste this configuration:
+
+```json
+{
+  "fields": [
+    {
+      "type": "vector",
+      "path": "embedding",
+      "numDimensions": 1024,
+      "similarity": "cosine"
+    },
+    {
+      "type": "filter",
+      "path": "filename"
+    },
+    {
+      "type": "filter",
+      "path": "page_number"
+    },
+    {
+      "type": "filter",
+      "path": "content_type"
+    },
+    {
+      "type": "filter",
+      "path": "metadata.source_url"
+    }
+  ]
+}
+```
+
+:::info Vector Search Configuration
+- **Vector Field**: `embedding` with 1024 dimensions for Voyage AI's `voyage-multimodal-3` model
+- **Similarity Function**: `cosine` for normalized vectors (recommended for most embedding models)
+- **Filter Fields**: Additional fields for pre-filtering search results by filename, page, content type, and source
+:::
+
+### Understanding the Index Configuration
+
+**Vector Field Configuration:**
+- `type: "vector"` - Specifies this field contains vector embeddings
+- `path: "embedding"` - The field name in your documents containing the vector
+- `numDimensions: 1024` - Must match your embedding model's output dimensions
+- `similarity: "cosine"` - Similarity function for comparing vectors
+
+**Filter Field Configuration:**
+- `type: "filter"` - Allows pre-filtering documents before vector search
+- `path: "field_name"` - The document field to enable filtering on
+
+**Available Similarity Functions:**
+- `cosine` - Measures angle between vectors (recommended for normalized embeddings)
+- `euclidean` - Measures distance between vector endpoints
+- `dotProduct` - Like cosine but considers magnitude (requires normalized vectors)
+
+### Alternative Index Configurations
+
+#### Minimal Vector-Only Index
+If you only need basic vector search without filtering:
+
+```json
+{
+  "fields": [
+    {
+      "type": "vector",
+      "path": "embedding",
+      "numDimensions": 1024,
+      "similarity": "cosine"
+    }
+  ]
+}
+```
+
+#### Performance-Optimized Index with Quantization
+For large-scale deployments, enable scalar quantization to reduce memory usage:
+
+```json
+{
+  "fields": [
+    {
+      "type": "vector",
+      "path": "embedding",
+      "numDimensions": 1024,
+      "similarity": "cosine",
+      "quantization": "scalar"
+    },
+    {
+      "type": "filter",
+      "path": "filename"
+    }
+  ]
+}
+```
+
+:::tip Performance Optimization
+- **Scalar Quantization**: Reduces memory usage by ~75% with minimal accuracy loss
+- **Filter Fields**: Only add fields you'll actually filter on to avoid unnecessary indexing overhead
+- **Similarity Function**: Choose based on your embedding model's training method
+:::
+
+### Index Creation via MongoDB Drivers
+
+You can also create the index programmatically using MongoDB drivers:
+
+```javascript
+// Example using MongoDB Node.js driver
+const indexDefinition = {
+  fields: [
+    {
+      type: "vector",
+      path: "embedding", 
+      numDimensions: 1024,
+      similarity: "cosine"
+    }
+  ]
+};
+
+await collection.createSearchIndex({
+  name: "vector_index",
+  type: "vectorSearch", 
+  definition: indexDefinition
+});
+```
+
+## Connection in n8n
+
+### 1. Get Your Connection String
+
+1. In Atlas, click **"Connect"** on your cluster
+2. Choose **"Connect your application"**
+3. Select **"Node.js"** as driver
+4. Copy the connection string:
+   ```
+   mongodb+srv://<username>:<password>@multimodal-workshop.xxxxx.mongodb.net/
+   ```
+
+### 2. Add MongoDB Credentials in n8n
+
+1. In n8n, go to **Credentials** → **New**
+2. Search for **"MongoDB"**
+3. Configure:
+   - **Credential Name**: `MongoDB Atlas Workshop`
+   - **Connection String**: Paste your connection string
+   - **Database Name**: `multimodal_workshop`
+   - Replace `<username>` and `<password>` with your actual credentials
+
+### 3. Test Connection
+
+Create a test workflow to verify:
+
+1. Add a **Manual Trigger** node
+2. Add a **MongoDB** node
+3. Configure MongoDB node:
+   - **Credential**: Select `MongoDB Atlas Workshop`
+   - **Operation**: Find
+   - **Collection**: `pdf_documents`
+4. Execute the workflow
+
+You should see an empty result (no documents yet) - this confirms the connection works!
+
+## Document Schema
+
+Our PDF documents will follow this schema:
+
+```javascript
+{
+  "_id": ObjectId("..."),
+  "filename": "sample.pdf",
+  "page_number": 1,
+  "content_type": "image", // or "text"
+  "embedding": [0.123, -0.456, ...], // 1024 dimensions
+  "metadata": {
+    "source_url": "https://example.com/sample.pdf",
+    "processed_at": "2024-01-20T10:30:00Z",
+    "total_pages": 10,
+    "file_size": 2048576
+  },
+  "text_content": "Extracted text from page...", // if applicable
+  "image_data": {
+    "width": 1920,
+    "height": 1080,
+    "format": "png"
+  }
+}
+```
+
+## Best Practices
+
+### 1. Security
+
+- **Never** commit connection strings to version control
+- Use n8n's credential management system
+- Enable IP whitelisting in production
+
+### 2. Indexing
+
+- Create indexes on frequently queried fields
+- Monitor index performance in Atlas UI
+- Consider compound indexes for complex queries
+
+### 3. Data Management
+
+- Set up automatic backups (available in Atlas)
+- Monitor storage usage (512MB free tier limit)
+- Implement data retention policies
+
+## Troubleshooting
+
+### Connection Issues
+
+If you can't connect from n8n:
+
+1. **Check Network Access**:
+   - Atlas → Security → Network Access
+   - Add your IP or `0.0.0.0/0` for development
+   
+2. **Verify Credentials**:
+   - Ensure username/password are correct
+   - Check database user has read/write permissions
+
+3. **Connection String Format**:
+   - Must include `mongodb+srv://` prefix
+   - Replace placeholder values completely
+
+### Index Creation Errors
+
+- Ensure collection exists before creating index
+- Check JSON syntax in index definition
+- Verify field names match your schema
+
+## Next Steps
+
+With MongoDB Atlas configured:
+
+✅ Cluster created and running  
+✅ Database and collection ready  
+✅ Vector search index configured  
+✅ n8n connection established  
+
+You're ready to start ingesting PDFs! Let's set up Voyage AI next.
+
+[Continue to Voyage AI Setup →](./voyage-ai-setup)

@@ -1,0 +1,27 @@
+{
+  "id": "upload-interface",
+  "title": "🌐 Web Upload Interface",
+  "description": "A complete web interface for uploading PDFs and chatting with your multimodal agent.",
+  "source": "@site/docs/80-upload-interface.mdx",
+  "sourceDirName": ".",
+  "slug": "/upload-interface",
+  "permalink": "/multimodal-pdf-agent-n8n/docs/upload-interface",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/mongodb-developer/multimodal-pdf-agent-n8n/blob/main/docs/80-upload-interface.mdx",
+  "tags": [],
+  "version": "current",
+  "sidebarPosition": 80,
+  "frontMatter": {
+    "sidebar_position": 80
+  },
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "🗄️ MongoDB Vector Search Setup",
+    "permalink": "/multimodal-pdf-agent-n8n/docs/mongodb-vector-setup"
+  },
+  "next": {
+    "title": "🌐 Community Nodes & Extensions",
+    "permalink": "/multimodal-pdf-agent-n8n/docs/community-resources"
+  }
+}

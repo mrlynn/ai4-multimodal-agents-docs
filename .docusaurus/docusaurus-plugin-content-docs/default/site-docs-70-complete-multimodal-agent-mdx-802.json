@@ -1,0 +1,27 @@
+{
+  "id": "complete-multimodal-agent",
+  "title": "🧠 Complete Multimodal PDF Agent",
+  "description": "Build a complete multimodal AI agent that can process PDFs, understand both text and images, and answer questions using MongoDB Vector Search and Voyage AI.",
+  "source": "@site/docs/70-complete-multimodal-agent.mdx",
+  "sourceDirName": ".",
+  "slug": "/complete-multimodal-agent",
+  "permalink": "/multimodal-pdf-agent-n8n/docs/complete-multimodal-agent",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/mongodb-developer/multimodal-pdf-agent-n8n/blob/main/docs/70-complete-multimodal-agent.mdx",
+  "tags": [],
+  "version": "current",
+  "sidebarPosition": 70,
+  "frontMatter": {
+    "sidebar_position": 70
+  },
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "🤖 AI Agent with Function Calling",
+    "permalink": "/multimodal-pdf-agent-n8n/docs/ai-agent-workflow"
+  },
+  "next": {
+    "title": "🗄️ MongoDB Vector Search Setup",
+    "permalink": "/multimodal-pdf-agent-n8n/docs/mongodb-vector-setup"
+  }
+}

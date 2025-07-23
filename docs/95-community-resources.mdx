@@ -1,0 +1,198 @@
+---
+sidebar_position: 95
+---
+
+# 🌐 Community Nodes & Extensions
+
+Extend your PDF analysis system with community contributions!
+
+## What Are Community Nodes?
+
+Community nodes are extensions created by n8n users that add new integrations and capabilities.
+
+## Installing Community Nodes
+
+### 1. Access Community Nodes
+1. Go to **Settings** → **Community Nodes**
+2. Click **Install a community node**
+3. Enter the npm package name
+
+### 2. Browse Available Nodes
+Click **Browse** to see popular nodes:
+
+- 🤖 **AI/ML Nodes**: DeepSeek, Claude, Local LLMs
+- 📊 **Database Nodes**: Specialized connectors
+- 🔧 **Utility Nodes**: Advanced processors
+- 🌐 **API Nodes**: Service integrations
+
+## Recommended Nodes for PDF Enhancement
+
+### 1. n8n-nodes-deepseek
+For alternative AI processing:
+
+```bash
+npm install n8n-nodes-deepseek
+```
+
+Use cases:
+- Cost-effective alternative to OpenAI
+- Specialized reasoning tasks
+- Multi-language support
+
+### 2. n8n-nodes-mcp
+
+Model Context Protocol integration:
+
+```bash
+npm install n8n-nodes-mcp
+```
+
+Use cases:
+- Advanced context management
+- Multi-model orchestration
+- Tool use capabilities
+
+### 3. n8n-nodes-ocr-advanced
+
+Enhanced OCR capabilities:
+
+```bash
+npm install n8n-nodes-ocr-advanced
+```
+
+Use cases:
+- Extract text from images
+- Handle scanned PDFs
+- Multi-language OCR
+
+## Creating Your Own Node
+
+### Basic Structure
+
+```typescript
+import {
+  IExecuteFunctions,
+  INodeExecutionData,
+  INodeType,
+  INodeTypeDescription,
+} from 'n8n-workflow';
+
+export class MyPdfNode implements INodeType {
+  description: INodeTypeDescription = {
+    displayName: 'My PDF Processor',
+    name: 'myPdfProcessor',
+    group: ['transform'],
+    version: 1,
+    description: 'Custom PDF processing',
+    defaults: {
+      name: 'My PDF Processor',
+    },
+    inputs: ['main'],
+    outputs: ['main'],
+    properties: [
+      // Node properties
+    ],
+  };
+
+  async execute(this: IExecuteFunctions): Promise<INodeExecutionData[][]> {
+    // Your logic here
+    return this.prepareOutputData(items);
+  }
+}
+```
+
+### Publishing Your Node
+
+1. Create npm package
+2. Follow n8n node structure
+3. Publish to npm
+4. Share with community!
+
+## Integration Ideas
+
+### 1. Language Detection Node
+
+```javascript
+// Detect PDF language and route accordingly
+const language = await detectLanguage(pdfText);
+switch(language) {
+  case 'es': // Route to Spanish workflow
+  case 'en': // Route to English workflow
+  // etc.
+}
+```
+
+### 2. Image Enhancement Node
+
+```javascript
+// Enhance images before embedding
+const enhanced = await enhanceImage(imageBuffer);
+// Better OCR results
+// Clearer embeddings
+```
+
+### 3. Compliance Check Node
+
+```javascript
+// Check for sensitive information
+const compliance = await checkCompliance(pdfContent);
+if (compliance.hasPII) {
+  // Redact or flag
+}
+```
+
+## Community Resources
+
+### n8n Community Forum
+
+- [https://community.n8n.io](https://community.n8n.io/)
+- Share workflows
+- Get help
+- Find nodes
+
+### Node Development
+
+- [n8n Node Development Guide](https://docs.n8n.io/integrations/creating-nodes/)
+- [Example Nodes](https://github.com/n8n-io/n8n/tree/master/packages/nodes-base/nodes)
+- [Community Node Template](https://github.com/n8n-io/n8n-nodes-starter)
+
+## Best Practices
+
+### 1. Verify Node Quality
+
+- Check npm downloads
+- Review source code
+- Test in development first
+
+### 2. Security Considerations
+
+- Audit node code
+- Use specific versions
+- Monitor for updates
+
+### 3. Performance Impact
+
+- Test with your workload
+- Monitor execution time
+- Consider caching
+
+## Workshop Challenge
+
+### Create a Custom Node
+
+Try creating a simple node that:
+
+1. Accepts PDF metadata
+2. Adds custom fields
+3. Formats for your use case
+
+Example:
+
+```javascript
+// Add reading level analysis
+const readingLevel = analyzeReadingLevel(text);
+item.json.readingLevel = readingLevel;
+item.json.complexity = calculateComplexity(text);
+```
+
+Share your nodes with the community!

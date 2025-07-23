@@ -1,0 +1,27 @@
+{
+  "id": "ai-agent-workflow",
+  "title": "🤖 AI Agent with Function Calling",
+  "description": "Build an intelligent agent using Gemini 2.0 Flash and n8n's powerful workflow capabilities.",
+  "source": "@site/docs/60-ai-agent-workflow.mdx",
+  "sourceDirName": ".",
+  "slug": "/ai-agent-workflow",
+  "permalink": "/multimodal-pdf-agent-n8n/docs/ai-agent-workflow",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/mongodb-developer/multimodal-pdf-agent-n8n/blob/main/docs/60-ai-agent-workflow.mdx",
+  "tags": [],
+  "version": "current",
+  "sidebarPosition": 60,
+  "frontMatter": {
+    "sidebar_position": 60
+  },
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "🔍 Vector Search Workflow",
+    "permalink": "/multimodal-pdf-agent-n8n/docs/vector-search-workflow"
+  },
+  "next": {
+    "title": "🧠 Complete Multimodal PDF Agent",
+    "permalink": "/multimodal-pdf-agent-n8n/docs/complete-multimodal-agent"
+  }
+}

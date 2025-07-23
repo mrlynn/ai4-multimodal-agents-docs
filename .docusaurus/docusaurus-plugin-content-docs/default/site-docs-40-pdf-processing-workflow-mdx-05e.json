@@ -1,0 +1,27 @@
+{
+  "id": "pdf-processing-workflow",
+  "title": "📄 PDF Processing Workflow",
+  "description": "Build your first n8n workflow to process PDFs into searchable multimodal embeddings.",
+  "source": "@site/docs/40-pdf-processing-workflow.mdx",
+  "sourceDirName": ".",
+  "slug": "/pdf-processing-workflow",
+  "permalink": "/multimodal-pdf-agent-n8n/docs/pdf-processing-workflow",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/mongodb-developer/multimodal-pdf-agent-n8n/blob/main/docs/40-pdf-processing-workflow.mdx",
+  "tags": [],
+  "version": "current",
+  "sidebarPosition": 40,
+  "frontMatter": {
+    "sidebar_position": 40
+  },
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "🚢 Voyage AI Embedding Service Setup",
+    "permalink": "/multimodal-pdf-agent-n8n/docs/voyage-ai-setup"
+  },
+  "next": {
+    "title": "💻 Docker Development Best Practices",
+    "permalink": "/multimodal-pdf-agent-n8n/docs/local-setup-tips"
+  }
+}
