@@ -5,7 +5,7 @@
   "source": "@site/docs/95-docker-troubleshooting.mdx",
   "sourceDirName": ".",
   "slug": "/docker-troubleshooting",
-  "permalink": "/multimodal-pdf-agent-n8n/docs/docker-troubleshooting",
+  "permalink": "/multimodal-pdf-agent-n8n/es/docs/docker-troubleshooting",
   "draft": false,
   "unlisted": false,
   "editUrl": "https://github.com/mongodb-developer/multimodal-pdf-agent-n8n/blob/main/docs/95-docker-troubleshooting.mdx",
@@ -18,10 +18,10 @@
   "sidebar": "tutorialSidebar",
   "previous": {
     "title": "🌐 Community Nodes & Extensions",
-    "permalink": "/multimodal-pdf-agent-n8n/docs/community-resources"
+    "permalink": "/multimodal-pdf-agent-n8n/es/docs/community-resources"
   },
   "next": {
     "title": "🎯 Workshop Summary",
-    "permalink": "/multimodal-pdf-agent-n8n/docs/summary"
+    "permalink": "/multimodal-pdf-agent-n8n/es/docs/summary"
   }
 }

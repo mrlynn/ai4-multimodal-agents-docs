@@ -11,18 +11,22 @@ Based on real-world experience, here's how to optimize your Docker-based n8n dev
 ### Project Structure
 
 ```
-workshop/
-├── docker-compose.yml      # Main services configuration
-├── docker-compose.dev.yml  # Development overrides
-├── .env                    # Environment variables
+multimodal-pdf-agent-n8n/          # Deployment repository
+├── docker-compose.yml              # Main services configuration
+├── docker-compose.dev.yml          # Development overrides (optional)
+├── .env                            # Environment variables
+├── .devcontainer/                  # GitHub Codespaces configuration
 ├── volumes/
-│   ├── n8n/               # n8n data persistence
-│   ├── mongodb/           # MongoDB data
-│   └── files/             # Uploaded files
-├── workflows/
-│   ├── exports/           # Workflow backups
-│   └── templates/         # Reusable templates
-└── logs/                  # Container logs
+│   ├── n8n/                       # n8n data persistence
+│   ├── mongodb/                   # MongoDB data
+│   └── files/                     # Uploaded files
+├── init/
+│   ├── workflows/                 # Sample n8n workflows
+│   ├── sample-data/               # Test PDFs
+│   └── mongodb/                   # Database initialization
+├── scripts/                       # Testing and management scripts
+├── workshop-embedding-api/        # Serverless embedding endpoint
+└── logs/                          # Container logs (if configured)
 ```
 
 ### Environment Configuration

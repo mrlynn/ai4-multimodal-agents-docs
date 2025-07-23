@@ -5,7 +5,7 @@
   "source": "@site/docs/80-upload-interface.mdx",
   "sourceDirName": ".",
   "slug": "/upload-interface",
-  "permalink": "/multimodal-pdf-agent-n8n/docs/upload-interface",
+  "permalink": "/multimodal-pdf-agent-n8n/es/docs/upload-interface",
   "draft": false,
   "unlisted": false,
   "editUrl": "https://github.com/mongodb-developer/multimodal-pdf-agent-n8n/blob/main/docs/80-upload-interface.mdx",
@@ -18,10 +18,10 @@
   "sidebar": "tutorialSidebar",
   "previous": {
     "title": "🗄️ MongoDB Vector Search Setup",
-    "permalink": "/multimodal-pdf-agent-n8n/docs/mongodb-vector-setup"
+    "permalink": "/multimodal-pdf-agent-n8n/es/docs/mongodb-vector-setup"
   },
   "next": {
     "title": "🌐 Community Nodes & Extensions",
-    "permalink": "/multimodal-pdf-agent-n8n/docs/community-resources"
+    "permalink": "/multimodal-pdf-agent-n8n/es/docs/community-resources"
   }
 }

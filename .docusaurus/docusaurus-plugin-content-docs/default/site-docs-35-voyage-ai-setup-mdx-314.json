@@ -5,7 +5,7 @@
   "source": "@site/docs/35-voyage-ai-setup.mdx",
   "sourceDirName": ".",
   "slug": "/voyage-ai-setup",
-  "permalink": "/multimodal-pdf-agent-n8n/docs/voyage-ai-setup",
+  "permalink": "/multimodal-pdf-agent-n8n/es/docs/voyage-ai-setup",
   "draft": false,
   "unlisted": false,
   "editUrl": "https://github.com/mongodb-developer/multimodal-pdf-agent-n8n/blob/main/docs/35-voyage-ai-setup.mdx",
@@ -18,10 +18,10 @@
   "sidebar": "tutorialSidebar",
   "previous": {
     "title": "🗄️ MongoDB Setup: Local Development & Atlas Production",
-    "permalink": "/multimodal-pdf-agent-n8n/docs/mongodb-atlas-setup"
+    "permalink": "/multimodal-pdf-agent-n8n/es/docs/mongodb-atlas-setup"
   },
   "next": {
     "title": "📄 PDF Processing Workflow",
-    "permalink": "/multimodal-pdf-agent-n8n/docs/pdf-processing-workflow"
+    "permalink": "/multimodal-pdf-agent-n8n/es/docs/pdf-processing-workflow"
   }
 }

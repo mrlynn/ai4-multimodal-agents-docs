@@ -5,7 +5,7 @@
   "source": "@site/docs/25-n8n-first-run.mdx",
   "sourceDirName": ".",
   "slug": "/n8n-first-run",
-  "permalink": "/multimodal-pdf-agent-n8n/docs/n8n-first-run",
+  "permalink": "/multimodal-pdf-agent-n8n/es/docs/n8n-first-run",
   "draft": false,
   "unlisted": false,
   "editUrl": "https://github.com/mongodb-developer/multimodal-pdf-agent-n8n/blob/main/docs/25-n8n-first-run.mdx",
@@ -18,10 +18,10 @@
   "sidebar": "tutorialSidebar",
   "previous": {
     "title": "🛠️ Prerequisites & Setup",
-    "permalink": "/multimodal-pdf-agent-n8n/docs/prerequisites"
+    "permalink": "/multimodal-pdf-agent-n8n/es/docs/prerequisites"
   },
   "next": {
     "title": "🗄️ MongoDB Setup: Local Development & Atlas Production",
-    "permalink": "/multimodal-pdf-agent-n8n/docs/mongodb-atlas-setup"
+    "permalink": "/multimodal-pdf-agent-n8n/es/docs/mongodb-atlas-setup"
   }
 }

@@ -70,9 +70,9 @@ docker-compose --version
 ### Step 2: Clone the Workshop
 
 ```bash
-# Clone the workshop repository
-git clone https://github.com/mrlynn/ai4-multimodal-agents-n8n.git
-cd ai4-multimodal-agents-n8n
+# Clone the workshop deployment repository
+git clone https://github.com/mongodb-developer/multimodal-pdf-agent-n8n.git
+cd multimodal-pdf-agent-n8n
 
 # Copy environment template
 cp .env.example .env
@@ -112,9 +112,9 @@ docker-compose --version
 ### Step 2: Clone the Workshop
 
 ```powershell
-# Clone the workshop repository
-git clone https://github.com/mrlynn/ai4-multimodal-agents-n8n.git
-cd ai4-multimodal-agents-n8n
+# Clone the workshop deployment repository
+git clone https://github.com/mongodb-developer/multimodal-pdf-agent-n8n.git
+cd multimodal-pdf-agent-n8n
 
 # Copy environment template
 copy .env.example .env
@@ -175,9 +175,9 @@ sudo usermod -aG docker $USER
 ### Step 2: Clone the Workshop
 
 ```bash
-# Clone the workshop repository
-git clone https://github.com/mrlynn/ai4-multimodal-agents-n8n.git
-cd ai4-multimodal-agents-n8n
+# Clone the workshop deployment repository
+git clone https://github.com/mongodb-developer/multimodal-pdf-agent-n8n.git
+cd multimodal-pdf-agent-n8n
 
 # Copy environment template
 cp .env.example .env
@@ -246,16 +246,18 @@ The `-d` flag runs containers in detached mode (background). Remove it to see lo
 ## 📦 Workshop Files & Structure
 
 ```
-workshop/
-├── docker-compose.yml      # Service definitions
-├── .env.example           # Environment template
-├── .env                   # Your configuration (create from .env.example)
-├── docs/                  # Workshop documentation
+multimodal-pdf-agent-n8n/           # Deployment repository
+├── docker-compose.yml              # Service definitions
+├── .env.example                   # Environment template
+├── .env                           # Your configuration (create from .env.example)
+├── .devcontainer/                 # GitHub Codespaces configuration
 ├── init/
-│   ├── mongodb/          # Database initialization
-│   ├── workflows/        # Sample n8n workflows
-│   └── sample-data/      # Test PDFs
-└── files/                # File uploads directory
+│   ├── mongodb/                  # Database initialization
+│   ├── workflows/                # Sample n8n workflows
+│   └── sample-data/              # Test PDFs
+├── files/                        # File uploads directory
+├── scripts/                      # Testing and management scripts
+└── workshop-embedding-api/       # Serverless embedding endpoint
 ```
 
 ## 🔐 n8n Account Setup
@@ -497,7 +499,7 @@ This endpoint provides:
 Complete these BEFORE the workshop:
 
 - [ ] Install Docker Desktop
-- [ ] Clone workshop repository
+- [ ] Clone workshop deployment repository
 - [ ] Copy `.env.example` to `.env`
 - [ ] Run `docker-compose up -d`
 - [ ] Verify services at http://localhost:5678 and http://localhost:8081

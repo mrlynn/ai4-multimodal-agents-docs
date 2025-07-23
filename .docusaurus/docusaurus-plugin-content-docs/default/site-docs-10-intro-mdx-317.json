@@ -5,7 +5,7 @@
   "source": "@site/docs/10-intro.mdx",
   "sourceDirName": ".",
   "slug": "/intro",
-  "permalink": "/multimodal-pdf-agent-n8n/docs/intro",
+  "permalink": "/multimodal-pdf-agent-n8n/es/docs/intro",
   "draft": false,
   "unlisted": false,
   "editUrl": "https://github.com/mongodb-developer/multimodal-pdf-agent-n8n/blob/main/docs/10-intro.mdx",
@@ -18,6 +18,6 @@
   "sidebar": "tutorialSidebar",
   "next": {
     "title": "🌐 GitHub Codespaces: Zero-Install Workshop",
-    "permalink": "/multimodal-pdf-agent-n8n/docs/github-codespaces"
+    "permalink": "/multimodal-pdf-agent-n8n/es/docs/github-codespaces"
   }
 }

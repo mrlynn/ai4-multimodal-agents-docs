@@ -4,4 +4,6 @@ dist
 .DS_Store
 .claude
 .docusaurus
+.docusaurus/*
 .vercel
+DOCUMENTATION-UPDATE-PROMPT.md

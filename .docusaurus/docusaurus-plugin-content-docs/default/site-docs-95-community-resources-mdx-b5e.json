@@ -5,7 +5,7 @@
   "source": "@site/docs/95-community-resources.mdx",
   "sourceDirName": ".",
   "slug": "/community-resources",
-  "permalink": "/multimodal-pdf-agent-n8n/docs/community-resources",
+  "permalink": "/multimodal-pdf-agent-n8n/es/docs/community-resources",
   "draft": false,
   "unlisted": false,
   "editUrl": "https://github.com/mongodb-developer/multimodal-pdf-agent-n8n/blob/main/docs/95-community-resources.mdx",
@@ -18,10 +18,10 @@
   "sidebar": "tutorialSidebar",
   "previous": {
     "title": "🌐 Web Upload Interface",
-    "permalink": "/multimodal-pdf-agent-n8n/docs/upload-interface"
+    "permalink": "/multimodal-pdf-agent-n8n/es/docs/upload-interface"
   },
   "next": {
     "title": "🐳 Docker Troubleshooting Guide",
-    "permalink": "/multimodal-pdf-agent-n8n/docs/docker-troubleshooting"
+    "permalink": "/multimodal-pdf-agent-n8n/es/docs/docker-troubleshooting"
   }
 }

@@ -67,7 +67,7 @@ const footerLinks = [
   },
   {
     href: `https://github.com/${organizationName}/${workshopName}`,
-    label: "This lab in GitHub",
+    label: "Workshop GitHub (Deployment)",
   },
 ];
 
