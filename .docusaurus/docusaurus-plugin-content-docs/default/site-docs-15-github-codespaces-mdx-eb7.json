@@ -5,7 +5,7 @@
   "source": "@site/docs/15-github-codespaces.mdx",
   "sourceDirName": ".",
   "slug": "/github-codespaces",
-  "permalink": "/multimodal-pdf-agent-n8n/es/docs/github-codespaces",
+  "permalink": "/multimodal-pdf-agent-n8n/docs/github-codespaces",
   "draft": false,
   "unlisted": false,
   "editUrl": "https://github.com/mongodb-developer/multimodal-pdf-agent-n8n/blob/main/docs/15-github-codespaces.mdx",
@@ -18,10 +18,10 @@
   "sidebar": "tutorialSidebar",
   "previous": {
     "title": "Workshop Introduction",
-    "permalink": "/multimodal-pdf-agent-n8n/es/docs/intro"
+    "permalink": "/multimodal-pdf-agent-n8n/docs/intro"
   },
   "next": {
     "title": "Prerequisites & Local Setup",
-    "permalink": "/multimodal-pdf-agent-n8n/es/docs/prerequisites"
+    "permalink": "/multimodal-pdf-agent-n8n/docs/prerequisites"
   }
 }

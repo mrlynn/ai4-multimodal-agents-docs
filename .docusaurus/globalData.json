@@ -1,98 +1,98 @@
 {
   "docusaurus-plugin-content-docs": {
     "default": {
-      "path": "/multimodal-pdf-agent-n8n/es/docs",
+      "path": "/multimodal-pdf-agent-n8n/docs",
       "versions": [
         {
           "name": "current",
           "label": "Next",
           "isLast": true,
-          "path": "/multimodal-pdf-agent-n8n/es/docs",
+          "path": "/multimodal-pdf-agent-n8n/docs",
           "mainDocId": "index",
           "docs": [
             {
               "id": "ai-agent-workflow",
-              "path": "/multimodal-pdf-agent-n8n/es/docs/ai-agent-workflow",
+              "path": "/multimodal-pdf-agent-n8n/docs/ai-agent-workflow",
               "sidebar": "tutorialSidebar"
             },
             {
               "id": "community-resources",
-              "path": "/multimodal-pdf-agent-n8n/es/docs/community-resources",
+              "path": "/multimodal-pdf-agent-n8n/docs/community-resources",
               "sidebar": "tutorialSidebar"
             },
             {
               "id": "complete-multimodal-agent",
-              "path": "/multimodal-pdf-agent-n8n/es/docs/complete-multimodal-agent",
+              "path": "/multimodal-pdf-agent-n8n/docs/complete-multimodal-agent",
               "sidebar": "tutorialSidebar"
             },
             {
               "id": "docker-troubleshooting",
-              "path": "/multimodal-pdf-agent-n8n/es/docs/docker-troubleshooting",
+              "path": "/multimodal-pdf-agent-n8n/docs/docker-troubleshooting",
               "sidebar": "tutorialSidebar"
             },
             {
               "id": "github-codespaces",
-              "path": "/multimodal-pdf-agent-n8n/es/docs/github-codespaces",
+              "path": "/multimodal-pdf-agent-n8n/docs/github-codespaces",
               "sidebar": "tutorialSidebar"
             },
             {
               "id": "index",
-              "path": "/multimodal-pdf-agent-n8n/es/docs/",
+              "path": "/multimodal-pdf-agent-n8n/docs/",
               "sidebar": "tutorialSidebar"
             },
             {
               "id": "intro",
-              "path": "/multimodal-pdf-agent-n8n/es/docs/intro",
+              "path": "/multimodal-pdf-agent-n8n/docs/intro",
               "sidebar": "tutorialSidebar"
             },
             {
               "id": "local-setup-tips",
-              "path": "/multimodal-pdf-agent-n8n/es/docs/local-setup-tips",
+              "path": "/multimodal-pdf-agent-n8n/docs/local-setup-tips",
               "sidebar": "tutorialSidebar"
             },
             {
               "id": "mongodb-atlas-setup",
-              "path": "/multimodal-pdf-agent-n8n/es/docs/mongodb-atlas-setup",
+              "path": "/multimodal-pdf-agent-n8n/docs/mongodb-atlas-setup",
               "sidebar": "tutorialSidebar"
             },
             {
               "id": "mongodb-vector-setup",
-              "path": "/multimodal-pdf-agent-n8n/es/docs/mongodb-vector-setup",
+              "path": "/multimodal-pdf-agent-n8n/docs/mongodb-vector-setup",
               "sidebar": "tutorialSidebar"
             },
             {
               "id": "n8n-first-run",
-              "path": "/multimodal-pdf-agent-n8n/es/docs/n8n-first-run",
+              "path": "/multimodal-pdf-agent-n8n/docs/n8n-first-run",
               "sidebar": "tutorialSidebar"
             },
             {
               "id": "pdf-processing-workflow",
-              "path": "/multimodal-pdf-agent-n8n/es/docs/pdf-processing-workflow",
+              "path": "/multimodal-pdf-agent-n8n/docs/pdf-processing-workflow",
               "sidebar": "tutorialSidebar"
             },
             {
               "id": "prerequisites",
-              "path": "/multimodal-pdf-agent-n8n/es/docs/prerequisites",
+              "path": "/multimodal-pdf-agent-n8n/docs/prerequisites",
               "sidebar": "tutorialSidebar"
             },
             {
               "id": "summary",
-              "path": "/multimodal-pdf-agent-n8n/es/docs/summary",
+              "path": "/multimodal-pdf-agent-n8n/docs/summary",
               "sidebar": "tutorialSidebar"
             },
             {
               "id": "upload-interface",
-              "path": "/multimodal-pdf-agent-n8n/es/docs/upload-interface",
+              "path": "/multimodal-pdf-agent-n8n/docs/upload-interface",
               "sidebar": "tutorialSidebar"
             },
             {
               "id": "vector-search-workflow",
-              "path": "/multimodal-pdf-agent-n8n/es/docs/vector-search-workflow",
+              "path": "/multimodal-pdf-agent-n8n/docs/vector-search-workflow",
               "sidebar": "tutorialSidebar"
             },
             {
               "id": "voyage-ai-setup",
-              "path": "/multimodal-pdf-agent-n8n/es/docs/voyage-ai-setup",
+              "path": "/multimodal-pdf-agent-n8n/docs/voyage-ai-setup",
               "sidebar": "tutorialSidebar"
             }
           ],
@@ -100,7 +100,7 @@
           "sidebars": {
             "tutorialSidebar": {
               "link": {
-                "path": "/multimodal-pdf-agent-n8n/es/docs/",
+                "path": "/multimodal-pdf-agent-n8n/docs/",
                 "label": "🎓 Workshop Overview"
               }
             }
@@ -110,20 +110,11 @@
       "breadcrumbs": true
     }
   },
-  "docusaurus-plugin-google-gtag": {
-    "default": {
-      "trackingID": [
-        "G-ZJ28V71VTQ"
-      ],
-      "anonymizeIP": true,
-      "id": "default"
-    }
-  },
   "docusaurus-lunr-search": {
     "default": {
       "fileNames": {
-        "searchDoc": "search-doc-1753313754614.json",
-        "lunrIndex": "lunr-index-1753313754614.json"
+        "searchDoc": "search-doc-1753342736376.json",
+        "lunrIndex": "lunr-index-1753342736376.json"
       }
     }
   }

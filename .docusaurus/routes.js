@@ -3,121 +3,156 @@ import ComponentCreator from '@docusaurus/ComponentCreator';
 
 export default [
   {
-    path: '/multimodal-pdf-agent-n8n/es/helloWorld',
-    component: ComponentCreator('/multimodal-pdf-agent-n8n/es/helloWorld', '608'),
+    path: '/multimodal-pdf-agent-n8n/__docusaurus/debug',
+    component: ComponentCreator('/multimodal-pdf-agent-n8n/__docusaurus/debug', 'd0b'),
     exact: true
   },
   {
-    path: '/multimodal-pdf-agent-n8n/es/docs',
-    component: ComponentCreator('/multimodal-pdf-agent-n8n/es/docs', '502'),
+    path: '/multimodal-pdf-agent-n8n/__docusaurus/debug/config',
+    component: ComponentCreator('/multimodal-pdf-agent-n8n/__docusaurus/debug/config', '117'),
+    exact: true
+  },
+  {
+    path: '/multimodal-pdf-agent-n8n/__docusaurus/debug/content',
+    component: ComponentCreator('/multimodal-pdf-agent-n8n/__docusaurus/debug/content', 'c4f'),
+    exact: true
+  },
+  {
+    path: '/multimodal-pdf-agent-n8n/__docusaurus/debug/globalData',
+    component: ComponentCreator('/multimodal-pdf-agent-n8n/__docusaurus/debug/globalData', '941'),
+    exact: true
+  },
+  {
+    path: '/multimodal-pdf-agent-n8n/__docusaurus/debug/metadata',
+    component: ComponentCreator('/multimodal-pdf-agent-n8n/__docusaurus/debug/metadata', '814'),
+    exact: true
+  },
+  {
+    path: '/multimodal-pdf-agent-n8n/__docusaurus/debug/registry',
+    component: ComponentCreator('/multimodal-pdf-agent-n8n/__docusaurus/debug/registry', 'ac4'),
+    exact: true
+  },
+  {
+    path: '/multimodal-pdf-agent-n8n/__docusaurus/debug/routes',
+    component: ComponentCreator('/multimodal-pdf-agent-n8n/__docusaurus/debug/routes', '904'),
+    exact: true
+  },
+  {
+    path: '/multimodal-pdf-agent-n8n/helloWorld',
+    component: ComponentCreator('/multimodal-pdf-agent-n8n/helloWorld', '194'),
+    exact: true
+  },
+  {
+    path: '/multimodal-pdf-agent-n8n/docs',
+    component: ComponentCreator('/multimodal-pdf-agent-n8n/docs', '60f'),
     routes: [
       {
-        path: '/multimodal-pdf-agent-n8n/es/docs',
-        component: ComponentCreator('/multimodal-pdf-agent-n8n/es/docs', '437'),
+        path: '/multimodal-pdf-agent-n8n/docs',
+        component: ComponentCreator('/multimodal-pdf-agent-n8n/docs', 'dee'),
         routes: [
           {
-            path: '/multimodal-pdf-agent-n8n/es/docs',
-            component: ComponentCreator('/multimodal-pdf-agent-n8n/es/docs', '11a'),
+            path: '/multimodal-pdf-agent-n8n/docs',
+            component: ComponentCreator('/multimodal-pdf-agent-n8n/docs', '612'),
             routes: [
               {
-                path: '/multimodal-pdf-agent-n8n/es/docs',
-                component: ComponentCreator('/multimodal-pdf-agent-n8n/es/docs', '7d4'),
+                path: '/multimodal-pdf-agent-n8n/docs',
+                component: ComponentCreator('/multimodal-pdf-agent-n8n/docs', '248'),
                 exact: true,
                 sidebar: "tutorialSidebar"
               },
               {
-                path: '/multimodal-pdf-agent-n8n/es/docs/ai-agent-workflow',
-                component: ComponentCreator('/multimodal-pdf-agent-n8n/es/docs/ai-agent-workflow', '08a'),
+                path: '/multimodal-pdf-agent-n8n/docs/ai-agent-workflow',
+                component: ComponentCreator('/multimodal-pdf-agent-n8n/docs/ai-agent-workflow', '2b2'),
                 exact: true,
                 sidebar: "tutorialSidebar"
               },
               {
-                path: '/multimodal-pdf-agent-n8n/es/docs/community-resources',
-                component: ComponentCreator('/multimodal-pdf-agent-n8n/es/docs/community-resources', '5ed'),
+                path: '/multimodal-pdf-agent-n8n/docs/community-resources',
+                component: ComponentCreator('/multimodal-pdf-agent-n8n/docs/community-resources', '96d'),
                 exact: true,
                 sidebar: "tutorialSidebar"
               },
               {
-                path: '/multimodal-pdf-agent-n8n/es/docs/complete-multimodal-agent',
-                component: ComponentCreator('/multimodal-pdf-agent-n8n/es/docs/complete-multimodal-agent', '5d3'),
+                path: '/multimodal-pdf-agent-n8n/docs/complete-multimodal-agent',
+                component: ComponentCreator('/multimodal-pdf-agent-n8n/docs/complete-multimodal-agent', '4c7'),
                 exact: true,
                 sidebar: "tutorialSidebar"
               },
               {
-                path: '/multimodal-pdf-agent-n8n/es/docs/docker-troubleshooting',
-                component: ComponentCreator('/multimodal-pdf-agent-n8n/es/docs/docker-troubleshooting', 'e38'),
+                path: '/multimodal-pdf-agent-n8n/docs/docker-troubleshooting',
+                component: ComponentCreator('/multimodal-pdf-agent-n8n/docs/docker-troubleshooting', 'd0c'),
                 exact: true,
                 sidebar: "tutorialSidebar"
               },
               {
-                path: '/multimodal-pdf-agent-n8n/es/docs/github-codespaces',
-                component: ComponentCreator('/multimodal-pdf-agent-n8n/es/docs/github-codespaces', 'a08'),
+                path: '/multimodal-pdf-agent-n8n/docs/github-codespaces',
+                component: ComponentCreator('/multimodal-pdf-agent-n8n/docs/github-codespaces', 'b20'),
                 exact: true,
                 sidebar: "tutorialSidebar"
               },
               {
-                path: '/multimodal-pdf-agent-n8n/es/docs/intro',
-                component: ComponentCreator('/multimodal-pdf-agent-n8n/es/docs/intro', 'fd3'),
+                path: '/multimodal-pdf-agent-n8n/docs/intro',
+                component: ComponentCreator('/multimodal-pdf-agent-n8n/docs/intro', '2d3'),
                 exact: true,
                 sidebar: "tutorialSidebar"
               },
               {
-                path: '/multimodal-pdf-agent-n8n/es/docs/local-setup-tips',
-                component: ComponentCreator('/multimodal-pdf-agent-n8n/es/docs/local-setup-tips', '281'),
+                path: '/multimodal-pdf-agent-n8n/docs/local-setup-tips',
+                component: ComponentCreator('/multimodal-pdf-agent-n8n/docs/local-setup-tips', '7a9'),
                 exact: true,
                 sidebar: "tutorialSidebar"
               },
               {
-                path: '/multimodal-pdf-agent-n8n/es/docs/mongodb-atlas-setup',
-                component: ComponentCreator('/multimodal-pdf-agent-n8n/es/docs/mongodb-atlas-setup', '45b'),
+                path: '/multimodal-pdf-agent-n8n/docs/mongodb-atlas-setup',
+                component: ComponentCreator('/multimodal-pdf-agent-n8n/docs/mongodb-atlas-setup', 'baf'),
                 exact: true,
                 sidebar: "tutorialSidebar"
               },
               {
-                path: '/multimodal-pdf-agent-n8n/es/docs/mongodb-vector-setup',
-                component: ComponentCreator('/multimodal-pdf-agent-n8n/es/docs/mongodb-vector-setup', '151'),
+                path: '/multimodal-pdf-agent-n8n/docs/mongodb-vector-setup',
+                component: ComponentCreator('/multimodal-pdf-agent-n8n/docs/mongodb-vector-setup', 'd7a'),
                 exact: true,
                 sidebar: "tutorialSidebar"
               },
               {
-                path: '/multimodal-pdf-agent-n8n/es/docs/n8n-first-run',
-                component: ComponentCreator('/multimodal-pdf-agent-n8n/es/docs/n8n-first-run', 'f73'),
+                path: '/multimodal-pdf-agent-n8n/docs/n8n-first-run',
+                component: ComponentCreator('/multimodal-pdf-agent-n8n/docs/n8n-first-run', '529'),
                 exact: true,
                 sidebar: "tutorialSidebar"
               },
               {
-                path: '/multimodal-pdf-agent-n8n/es/docs/pdf-processing-workflow',
-                component: ComponentCreator('/multimodal-pdf-agent-n8n/es/docs/pdf-processing-workflow', 'd48'),
+                path: '/multimodal-pdf-agent-n8n/docs/pdf-processing-workflow',
+                component: ComponentCreator('/multimodal-pdf-agent-n8n/docs/pdf-processing-workflow', '808'),
                 exact: true,
                 sidebar: "tutorialSidebar"
               },
               {
-                path: '/multimodal-pdf-agent-n8n/es/docs/prerequisites',
-                component: ComponentCreator('/multimodal-pdf-agent-n8n/es/docs/prerequisites', '0c2'),
+                path: '/multimodal-pdf-agent-n8n/docs/prerequisites',
+                component: ComponentCreator('/multimodal-pdf-agent-n8n/docs/prerequisites', '88c'),
                 exact: true,
                 sidebar: "tutorialSidebar"
               },
               {
-                path: '/multimodal-pdf-agent-n8n/es/docs/summary',
-                component: ComponentCreator('/multimodal-pdf-agent-n8n/es/docs/summary', '011'),
+                path: '/multimodal-pdf-agent-n8n/docs/summary',
+                component: ComponentCreator('/multimodal-pdf-agent-n8n/docs/summary', '6fa'),
                 exact: true,
                 sidebar: "tutorialSidebar"
               },
               {
-                path: '/multimodal-pdf-agent-n8n/es/docs/upload-interface',
-                component: ComponentCreator('/multimodal-pdf-agent-n8n/es/docs/upload-interface', 'ef3'),
+                path: '/multimodal-pdf-agent-n8n/docs/upload-interface',
+                component: ComponentCreator('/multimodal-pdf-agent-n8n/docs/upload-interface', '8ed'),
                 exact: true,
                 sidebar: "tutorialSidebar"
               },
               {
-                path: '/multimodal-pdf-agent-n8n/es/docs/vector-search-workflow',
-                component: ComponentCreator('/multimodal-pdf-agent-n8n/es/docs/vector-search-workflow', '33a'),
+                path: '/multimodal-pdf-agent-n8n/docs/vector-search-workflow',
+                component: ComponentCreator('/multimodal-pdf-agent-n8n/docs/vector-search-workflow', '5e0'),
                 exact: true,
                 sidebar: "tutorialSidebar"
               },
               {
-                path: '/multimodal-pdf-agent-n8n/es/docs/voyage-ai-setup',
-                component: ComponentCreator('/multimodal-pdf-agent-n8n/es/docs/voyage-ai-setup', 'a14'),
+                path: '/multimodal-pdf-agent-n8n/docs/voyage-ai-setup',
+                component: ComponentCreator('/multimodal-pdf-agent-n8n/docs/voyage-ai-setup', '77a'),
                 exact: true,
                 sidebar: "tutorialSidebar"
               }
@@ -128,8 +163,8 @@ export default [
     ]
   },
   {
-    path: '/multimodal-pdf-agent-n8n/es/',
-    component: ComponentCreator('/multimodal-pdf-agent-n8n/es/', '738'),
+    path: '/multimodal-pdf-agent-n8n/',
+    component: ComponentCreator('/multimodal-pdf-agent-n8n/', '7a9'),
     exact: true
   },
   {

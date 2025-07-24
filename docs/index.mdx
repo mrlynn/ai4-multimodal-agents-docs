@@ -8,6 +8,31 @@ title: Workshop Overview
 
 Welcome to the **Build a Multimodal PDF Agent with n8n** workshop! This interactive, hands-on experience will guide you through creating a production-ready AI system that processes PDFs using cutting-edge technologies.
 
+<WorkshopTransition 
+  slideTopics={[
+    "Workshop overview and learning objectives",
+    "Multimodal AI and embedding concepts", 
+    "Architecture: n8n, MongoDB Atlas, Voyage AI",
+    "What we'll build together today"
+  ]}
+  instructor="Workshop Instructor"
+/>
+
+<InstructorNotes 
+  timing="Transition from slides to hands-on content (2-3 minutes)"
+  notes={[
+    "Ensure all attendees can access this documentation URL",
+    "Remind them to bookmark this page for future reference",
+    "Check that Codespaces users have services running",
+    "Ask if anyone needs help with local Docker setup"
+  ]}
+  tips={[
+    "Use screen sharing to show the navigation",
+    "Encourage questions before diving into technical content",
+    "Mention they can return to this overview page anytime"
+  ]}
+/>
+
 <ProgressTracker steps={[
   {
     title: "Environment Setup",
@@ -137,3 +162,26 @@ By the end of this workshop, you'll have created:
 </WorkshopExercise>
 
 [**Start the Workshop →**](/docs/intro)
+
+---
+
+## 📱 Workshop Access & Sharing
+
+<QRCodeAccess 
+  url={typeof window !== 'undefined' ? window.location.origin + '/docs/' : 'https://your-workshop-docs.vercel.app/docs/'}
+  title="Share Workshop Materials"
+/>
+
+<InstructorNotes 
+  timing="End of overview (1 minute)"
+  notes={[
+    "Show attendees how to bookmark this page",
+    "Mention they can scan QR code for mobile access",
+    "Remind them this documentation stays available after workshop"
+  ]}
+  tips={[
+    "Consider sharing the URL in chat for easy copy/paste",
+    "Encourage attendees to take notes directly in their own docs",
+    "Mention the progress tracking will persist in their browser"
+  ]}
+/>

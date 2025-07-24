@@ -1,0 +1,382 @@
+.transition {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  padding: 0;
+  margin: 2rem 0;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 8px 24px rgba(102, 126, 234, 0.3);
+}
+
+.header {
+  padding: 2rem;
+  text-align: center;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+}
+
+.welcome h2 {
+  margin: 0 0 0.5rem 0;
+  font-size: 2.2rem;
+  font-weight: 700;
+}
+
+.instructor {
+  font-size: 1.2rem;
+  opacity: 0.9;
+  margin-bottom: 0.5rem;
+}
+
+.time {
+  font-size: 1rem;
+  opacity: 0.8;
+  font-family: monospace;
+  background: rgba(255, 255, 255, 0.2);
+  padding: 0.5rem 1rem;
+  border-radius: 20px;
+  display: inline-block;
+}
+
+.content {
+  padding: 2rem;
+}
+
+.section {
+  margin-bottom: 2rem;
+}
+
+.section h3 {
+  margin: 0 0 1.5rem 0;
+  font-size: 1.4rem;
+  color: #ffffff;
+}
+
+.slideRecap {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  padding: 1.5rem;
+  backdrop-filter: blur(10px);
+}
+
+.recapHeader {
+  margin-bottom: 1rem;
+}
+
+.recapHeader h4 {
+  margin: 0 0 0.25rem 0;
+  font-size: 1.1rem;
+}
+
+.recapSubtitle {
+  font-size: 0.9rem;
+  opacity: 0.8;
+}
+
+.recapItems {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.recapItem {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  padding: 0.75rem;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 6px;
+}
+
+.checkmark {
+  font-size: 1rem;
+  flex-shrink: 0;
+}
+
+.recapIcon {
+  width: 2rem;
+  height: 2rem;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  font-weight: bold;
+}
+
+.recapContent strong {
+  display: block;
+  margin-bottom: 0.25rem;
+}
+
+.recapContent p {
+  margin: 0;
+  font-size: 0.9rem;
+  opacity: 0.9;
+}
+
+.recapNext {
+  margin-top: 1rem;
+  padding: 0.75rem;
+  background: rgba(59, 130, 246, 0.3);
+  border: 1px solid rgba(59, 130, 246, 0.5);
+  border-radius: 6px;
+  font-size: 0.9rem;
+}
+
+.handsOnInfo {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.5rem;
+}
+
+.infoCard {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  padding: 1.5rem;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  backdrop-filter: blur(10px);
+  transition: transform 0.2s ease;
+}
+
+.infoCard:hover {
+  transform: translateY(-2px);
+}
+
+.cardIcon {
+  font-size: 2rem;
+  flex-shrink: 0;
+}
+
+.cardContent h4 {
+  margin: 0 0 0.5rem 0;
+  font-size: 1.1rem;
+}
+
+.cardContent p {
+  margin: 0;
+  font-size: 0.9rem;
+  line-height: 1.5;
+  opacity: 0.9;
+}
+
+.actionSection {
+  text-align: center;
+  margin-top: 2rem;
+}
+
+.actionCard {
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 12px;
+  padding: 2rem;
+  backdrop-filter: blur(15px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.actionHeader h3 {
+  margin: 0 0 0.5rem 0;
+  font-size: 1.5rem;
+}
+
+.actionHeader p {
+  margin: 0 0 2rem 0;
+  font-size: 1.1rem;
+  opacity: 0.9;
+}
+
+.actionButtons {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.primaryButton {
+  background: linear-gradient(135deg, #10b981, #34d399);
+  color: white;
+  border: none;
+  padding: 1rem 2rem;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 1.1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+}
+
+.primaryButton:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 20px rgba(16, 185, 129, 0.4);
+}
+
+.secondaryButton {
+  background: rgba(255, 255, 255, 0.2);
+  color: white;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  padding: 1rem 2rem;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 1.1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.secondaryButton:hover {
+  background: rgba(255, 255, 255, 0.3);
+  transform: translateY(-2px);
+}
+
+/* Instructor Notes */
+.instructorNotes {
+  background: rgba(255, 193, 7, 0.2);
+  border: 2px solid #ffc107;
+  border-radius: 8px;
+  margin: 1.5rem 0;
+  overflow: hidden;
+}
+
+.notesToggle {
+  width: 100%;
+  background: rgba(255, 193, 7, 0.3);
+  color: #fff;
+  border: none;
+  padding: 0.75rem 1rem;
+  cursor: pointer;
+  font-weight: 600;
+  text-align: left;
+  transition: background-color 0.2s ease;
+}
+
+.notesToggle:hover {
+  background: rgba(255, 193, 7, 0.4);
+}
+
+.notesContent {
+  padding: 1rem;
+  background: rgba(255, 193, 7, 0.1);
+  color: #fff;
+}
+
+.timing {
+  margin-bottom: 1rem;
+  padding: 0.5rem;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 4px;
+  font-family: monospace;
+}
+
+.notesList,
+.tipsList {
+  margin-bottom: 1rem;
+}
+
+.notesList ul,
+.tipsList ul {
+  margin: 0.5rem 0 0 0;
+  padding-left: 1.5rem;
+}
+
+.notesList li,
+.tipsList li {
+  margin-bottom: 0.5rem;
+  line-height: 1.4;
+}
+
+/* QR Code */
+.qrAccess {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  padding: 1.5rem;
+  text-align: center;
+  backdrop-filter: blur(10px);
+}
+
+.qrHeader h4 {
+  margin: 0 0 0.5rem 0;
+  color: #fff;
+}
+
+.qrHeader p {
+  margin: 0 0 1rem 0;
+  opacity: 0.8;
+  font-size: 0.9rem;
+}
+
+.qrContent {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+}
+
+.qrCode {
+  background: white;
+  padding: 1rem;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.qrUrl {
+  font-size: 0.8rem;
+  opacity: 0.8;
+  word-break: break-all;
+}
+
+.qrUrl code {
+  background: rgba(0, 0, 0, 0.3);
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+  font-family: monospace;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .transition {
+    margin: 1rem 0;
+  }
+
+  .header {
+    padding: 1.5rem;
+  }
+
+  .welcome h2 {
+    font-size: 1.8rem;
+  }
+
+  .content {
+    padding: 1.5rem;
+  }
+
+  .handsOnInfo {
+    grid-template-columns: 1fr;
+  }
+
+  .infoCard {
+    padding: 1rem;
+  }
+
+  .actionButtons {
+    flex-direction: column;
+  }
+
+  .primaryButton,
+  .secondaryButton {
+    width: 100%;
+  }
+}
+
+/* Dark mode adjustments */
+[data-theme='dark'] .transition {
+  background: linear-gradient(135deg, #4c51bf 0%, #553c9a 100%);
+}
+
+[data-theme='dark'] .instructorNotes {
+  background: rgba(245, 158, 11, 0.2);
+  border-color: #f59e0b;
+}
+
+[data-theme='dark'] .notesToggle {
+  background: rgba(245, 158, 11, 0.3);
+}

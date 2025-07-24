@@ -7,7 +7,7 @@ export default {
   "title": "Build a Multimodal PDF Agent with n8n",
   "tagline": "Process, encode, and search PDFs using MongoDB Vector Search, Voyage AI, and n8n automation",
   "url": "https://multimodal-pdf-agent-n8n.github.io",
-  "baseUrl": "/multimodal-pdf-agent-n8n/es/",
+  "baseUrl": "/multimodal-pdf-agent-n8n/",
   "projectName": "mongodb-developer.github.io",
   "organizationName": "mongodb-developer",
   "trailingSlash": false,

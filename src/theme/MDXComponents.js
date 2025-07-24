@@ -10,6 +10,7 @@ import InteractiveDemo, { ConfigBuilder, ServiceTester } from "@site/src/compone
 import Quiz, { QuickCheck } from "@site/src/components/Quiz";
 import EmbeddingTester, { EmbeddingVisualizer } from "@site/src/components/EmbeddingTester";
 import QuickEmbeddingTest from "@site/src/components/QuickEmbeddingTest";
+import WorkshopTransition, { SlideRecap, InstructorNotes, QRCodeAccess } from "@site/src/components/WorkshopTransition";
 
 export default {
   // Re-use the default mapping
@@ -30,5 +31,9 @@ export default {
   QuickCheck,
   EmbeddingTester,
   EmbeddingVisualizer,
-  QuickEmbeddingTest
+  QuickEmbeddingTest,
+  WorkshopTransition,
+  SlideRecap,
+  InstructorNotes,
+  QRCodeAccess
 };

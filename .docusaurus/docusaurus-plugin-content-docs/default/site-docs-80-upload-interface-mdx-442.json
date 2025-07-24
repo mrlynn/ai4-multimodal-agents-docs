@@ -5,7 +5,7 @@
   "source": "@site/docs/80-upload-interface.mdx",
   "sourceDirName": ".",
   "slug": "/upload-interface",
-  "permalink": "/multimodal-pdf-agent-n8n/es/docs/upload-interface",
+  "permalink": "/multimodal-pdf-agent-n8n/docs/upload-interface",
   "draft": false,
   "unlisted": false,
   "editUrl": "https://github.com/mongodb-developer/multimodal-pdf-agent-n8n/blob/main/docs/80-upload-interface.mdx",
@@ -18,10 +18,10 @@
   "sidebar": "tutorialSidebar",
   "previous": {
     "title": "Production Vector Search",
-    "permalink": "/multimodal-pdf-agent-n8n/es/docs/mongodb-vector-setup"
+    "permalink": "/multimodal-pdf-agent-n8n/docs/mongodb-vector-setup"
   },
   "next": {
     "title": "Docker Best Practices",
-    "permalink": "/multimodal-pdf-agent-n8n/es/docs/local-setup-tips"
+    "permalink": "/multimodal-pdf-agent-n8n/docs/local-setup-tips"
   }
 }
