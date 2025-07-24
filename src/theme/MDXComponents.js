@@ -8,6 +8,8 @@ import CodeBlock, { TerminalCommand } from "@site/src/components/CodeBlock";
 import ProgressTracker, { StepIndicator } from "@site/src/components/ProgressTracker";
 import InteractiveDemo, { ConfigBuilder, ServiceTester } from "@site/src/components/InteractiveDemo";
 import Quiz, { QuickCheck } from "@site/src/components/Quiz";
+import EmbeddingTester, { EmbeddingVisualizer } from "@site/src/components/EmbeddingTester";
+import QuickEmbeddingTest from "@site/src/components/QuickEmbeddingTest";
 
 export default {
   // Re-use the default mapping
@@ -25,5 +27,8 @@ export default {
   ConfigBuilder,
   ServiceTester,
   Quiz,
-  QuickCheck
+  QuickCheck,
+  EmbeddingTester,
+  EmbeddingVisualizer,
+  QuickEmbeddingTest
 };

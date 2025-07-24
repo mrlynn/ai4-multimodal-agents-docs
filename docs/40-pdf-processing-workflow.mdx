@@ -112,6 +112,13 @@ return items;
 
 ## Step 4: Generate Embeddings
 
+Before building the embedding code, let's verify our API is working:
+
+<QuickEmbeddingTest 
+  text="This is sample PDF content that will be processed by our workflow"
+  label="Test Embedding API"
+/>
+
 ### Add Code Node for Voyage AI
 
 1. Add **Code** node
@@ -135,13 +142,13 @@ for (const item of $input.all()) {
     // Call Workshop Embedding Service
     const response = await $http.request({
       method: 'POST',
-      url: 'https://ai4-workshop-embeddings.vercel.app/api/embed',
+      url: 'https://workshop-embedding-api.vercel.app/api/embed',
       headers: {
         'Content-Type': 'application/json'
       },
       body: {
-        input: input,
-        input_type: 'document'
+        text: input,
+        model: 'voyage-3'
       }
     });
     
@@ -151,7 +158,7 @@ for (const item of $input.all()) {
         filename: $('Webhook').item.json.metadata.filename || 'unknown.pdf',
         page_number: item.json.page_number,
         content_type: item.json.content_type || 'image',
-        embedding: response.embedding,
+        embedding: response.embeddings[0],
         metadata: {
           source_url: $('Webhook').item.json.pdf_url,
           processed_at: new Date().toISOString(),

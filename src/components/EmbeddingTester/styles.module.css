@@ -1,0 +1,380 @@
+.tester {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-radius: 12px;
+  padding: 2rem;
+  margin: 2rem 0;
+  color: white;
+  box-shadow: 0 8px 24px rgba(102, 126, 234, 0.3);
+}
+
+.header {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.header h3 {
+  margin: 0 0 0.5rem 0;
+  font-size: 1.6rem;
+}
+
+.header p {
+  margin: 0;
+  opacity: 0.9;
+}
+
+.form {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  padding: 1.5rem;
+  backdrop-filter: blur(10px);
+}
+
+.formGroup {
+  margin-bottom: 1.5rem;
+}
+
+.formGroup label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+  font-size: 1rem;
+}
+
+.textarea {
+  width: 100%;
+  padding: 0.75rem;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.9);
+  color: #374151;
+  font-size: 1rem;
+  resize: vertical;
+  transition: border-color 0.2s ease;
+}
+
+.textarea:focus {
+  outline: none;
+  border-color: #fff;
+  box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.3);
+}
+
+.examples {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+  margin-top: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.exampleLabel {
+  font-size: 0.9rem;
+  opacity: 0.9;
+}
+
+.exampleButton {
+  background: rgba(255, 255, 255, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  color: white;
+  padding: 0.4rem 0.8rem;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.85rem;
+  transition: all 0.2s ease;
+}
+
+.exampleButton:hover {
+  background: rgba(255, 255, 255, 0.3);
+  transform: translateY(-1px);
+}
+
+.select {
+  width: 100%;
+  padding: 0.75rem;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.9);
+  color: #374151;
+  font-size: 1rem;
+  cursor: pointer;
+}
+
+.select:focus {
+  outline: none;
+  border-color: #fff;
+  box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.3);
+}
+
+.actions {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+}
+
+.submitButton {
+  background: linear-gradient(135deg, #10b981, #34d399);
+  color: white;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 6px;
+  font-weight: 600;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: all 0.2s ease;
+}
+
+.submitButton:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.4);
+}
+
+.submitButton:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.copyButton {
+  background: rgba(255, 255, 255, 0.2);
+  color: white;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  padding: 0.75rem 1.5rem;
+  border-radius: 6px;
+  font-weight: 600;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: all 0.2s ease;
+}
+
+.copyButton:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.3);
+  transform: translateY(-1px);
+}
+
+.copyButton:disabled {
+  background: rgba(40, 167, 69, 0.8);
+  border-color: #28a745;
+}
+
+.error {
+  background: rgba(239, 68, 68, 0.2);
+  border: 2px solid #ef4444;
+  border-radius: 8px;
+  padding: 1rem;
+  margin-top: 1rem;
+  color: #fee2e2;
+}
+
+.result {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  padding: 1.5rem;
+  margin-top: 1.5rem;
+  backdrop-filter: blur(10px);
+}
+
+.result h4 {
+  margin: 0 0 1rem 0;
+  color: #10b981;
+  font-size: 1.2rem;
+}
+
+.resultSection {
+  margin-bottom: 1.5rem;
+}
+
+.resultSection h5 {
+  margin: 0 0 0.5rem 0;
+  opacity: 0.9;
+}
+
+.details {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+}
+
+.detail {
+  background: rgba(255, 255, 255, 0.1);
+  padding: 0.75rem;
+  border-radius: 6px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.detailLabel {
+  font-weight: 600;
+  opacity: 0.9;
+}
+
+.detailValue {
+  font-family: monospace;
+  background: rgba(255, 255, 255, 0.2);
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+}
+
+.embeddingPreview {
+  display: block;
+  background: rgba(0, 0, 0, 0.3);
+  color: #10b981;
+  padding: 1rem;
+  border-radius: 6px;
+  font-family: monospace;
+  font-size: 0.9rem;
+  overflow-x: auto;
+}
+
+.toggleButton {
+  background: rgba(255, 255, 255, 0.2);
+  color: white;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: all 0.2s ease;
+}
+
+.toggleButton:hover {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+.rawEmbedding {
+  margin-top: 1rem;
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+.rawEmbedding pre {
+  background: rgba(0, 0, 0, 0.3);
+  color: #e5e7eb;
+  padding: 1rem;
+  border-radius: 6px;
+  font-size: 0.8rem;
+  margin: 0;
+}
+
+.usage {
+  background: rgba(59, 130, 246, 0.2);
+  border: 2px solid #3b82f6;
+  border-radius: 8px;
+  padding: 1rem;
+  margin-top: 1.5rem;
+}
+
+.usage h5 {
+  margin: 0 0 0.5rem 0;
+  color: #93c5fd;
+}
+
+.usage p {
+  margin: 0 0 0.5rem 0;
+  opacity: 0.9;
+}
+
+.accessCode {
+  display: inline-block;
+  background: rgba(0, 0, 0, 0.3);
+  color: #fbbf24;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  font-family: monospace;
+}
+
+.info {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  padding: 1.5rem;
+  margin-top: 1.5rem;
+}
+
+.info h4 {
+  margin: 0 0 1rem 0;
+  opacity: 0.9;
+}
+
+.info ul {
+  margin: 0;
+  padding-left: 1.5rem;
+}
+
+.info li {
+  margin-bottom: 0.5rem;
+  opacity: 0.9;
+}
+
+/* Visualizer Styles */
+.visualizer {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  padding: 1rem;
+  margin-top: 1rem;
+}
+
+.visualizer h4 {
+  margin: 0 0 1rem 0;
+  font-size: 1rem;
+  opacity: 0.9;
+}
+
+.chart {
+  display: flex;
+  align-items: flex-end;
+  height: 100px;
+  gap: 2px;
+  padding: 0.5rem;
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 4px;
+}
+
+.bar {
+  flex: 1;
+  min-height: 2px;
+  transition: height 0.3s ease;
+  border-radius: 2px 2px 0 0;
+  cursor: pointer;
+}
+
+.bar:hover {
+  opacity: 0.8;
+}
+
+.chartLabels {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 0.5rem;
+  font-size: 0.8rem;
+  opacity: 0.7;
+}
+
+/* Dark mode adjustments */
+[data-theme='dark'] .textarea,
+[data-theme='dark'] .select {
+  background: rgba(31, 41, 55, 0.9);
+  color: #e5e7eb;
+}
+
+[data-theme='dark'] .error {
+  color: #fecaca;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .tester {
+    padding: 1.5rem;
+  }
+
+  .actions {
+    flex-direction: column;
+  }
+
+  .submitButton,
+  .copyButton {
+    width: 100%;
+  }
+
+  .examples {
+    justify-content: center;
+  }
+}
