@@ -17,8 +17,8 @@
   },
   "sidebar": "tutorialSidebar",
   "previous": {
-    "title": "Web Upload Interface",
-    "permalink": "/multimodal-pdf-agent-n8n/docs/upload-interface"
+    "title": "🖼️ Multimodal Image Queries",
+    "permalink": "/multimodal-pdf-agent-n8n/docs/multimodal-image-queries"
   },
   "next": {
     "title": "Troubleshooting Guide",

@@ -1,0 +1,813 @@
+---
+sidebar_position: 68
+---
+
+# 🛠️ Tool Definition & Function Calling Primer
+
+Tools are what transform AI models from conversational interfaces into capable agents that can interact with the world. This section covers how to define, configure, and optimize tools for your multimodal PDF agent.
+
+<InstructorNotes 
+  timing="Tool Definition & Function Calling (25-30 minutes)"
+  notes={[
+    "Tools are the 'hands' of AI agents - crucial concept to emphasize",
+    "Schema definition quality directly impacts agent performance",
+    "Show both n8n visual tools and conceptual @tool decorators",
+    "Common mistake: vague tool descriptions lead to poor tool selection",
+    "Error handling in tools is critical for robust agents"
+  ]}
+  tips={[
+    "Start with simple tools, then show complex examples",
+    "Demonstrate what happens when tool descriptions are poor",
+    "Show the connection between n8n nodes and function calling",
+    "Use real examples from the workshop's PDF processing workflow",
+    "Address security considerations for tool access"
+  ]}
+/>
+
+<SlideRecap 
+  title="From Static to Interactive Agents"
+  items={[
+    {
+      icon: "🛠️",
+      title: "Tool Definition",
+      description: "How to describe functions so AI agents can understand and use them effectively"
+    },
+    {
+      icon: "🔗", 
+      title: "Function Calling",
+      description: "The mechanism that allows agents to execute tools and process results"
+    },
+    {
+      icon: "⚡",
+      title: "n8n Implementation",
+      description: "How visual workflows translate to tool calling in practice"
+    }
+  ]}
+  nextSection="Let's build tools that make agents truly capable!"
+/>
+
+## 🎯 What Are AI Agent Tools?
+
+Tools are functions that AI agents can call to:
+- 🔍 **Retrieve information** (search, databases, APIs)
+- 🔧 **Process data** (calculations, transformations, analysis)
+- 📤 **Take actions** (send emails, create files, trigger workflows)
+- 🧠 **Extend capabilities** (specialized algorithms, external services)
+
+### Tool vs. Simple Function
+
+| Aspect | Simple Function | AI Agent Tool |
+|--------|----------------|---------------|
+| **Caller** | Developer (hardcoded) | AI Agent (dynamic) |
+| **Selection** | Explicit function call | Agent reasoning |
+| **Description** | Comments for humans | Schema for AI |
+| **Error Handling** | Developer responsibility | Must guide agent |
+| **Parameters** | Known at compile time | Dynamically generated |
+
+## 📋 Tool Definition Fundamentals
+
+### The @tool Decorator Concept
+
+While n8n uses visual workflows, understanding the conceptual `@tool` decorator helps design better tools:
+
+```python
+from typing import List, Optional
+from pydantic import BaseModel, Field
+
+@tool
+def search_documents(
+    query: str = Field(..., description="Natural language search query"),
+    limit: int = Field(5, description="Maximum number of results to return"),
+    filters: Optional[dict] = Field(None, description="Additional search filters")
+) -> List[dict]:
+    """
+    Search through PDF documents using vector similarity.
+    
+    This tool finds relevant documents based on semantic similarity
+    to the user's query. Use when you need to find information
+    across multiple documents.
+    
+    Returns a list of matching documents with content and metadata.
+    """
+    # Implementation would go here
+    pass
+```
+
+### Key Components of Tool Definitions
+
+1. **Name**: Clear, descriptive function name
+2. **Description**: What the tool does and when to use it
+3. **Parameters**: Input schema with types and descriptions
+4. **Return Type**: What the tool returns
+5. **Error Conditions**: How failures are communicated
+
+## 🔧 n8n Tool Implementation
+
+### 1. HTTP Request Tools
+
+The most flexible tool type in n8n:
+
+<WorkshopExercise 
+  title="Create a Document Search Tool" 
+  difficulty="intermediate"
+  timeEstimate="15 minutes"
+  objectives={[
+    "Define a search tool using HTTP Request node",
+    "Configure proper tool schema for AI Agent",
+    "Test tool calling with different queries"
+  ]}
+>
+
+<ExerciseStep stepNumber="1" title="Create HTTP Request Tool">
+
+Add an **HTTP Request** node with these settings:
+
+```javascript
+// HTTP Request Configuration
+{
+  "method": "POST",
+  "url": "http://localhost:3001/api/search",
+  "authentication": "none",
+  "sendHeaders": true,
+  "headerParameters": {
+    "parameters": [
+      {
+        "name": "Content-Type",
+        "value": "application/json"
+      }
+    ]
+  },
+  "sendBody": true,
+  "bodyContentType": "json",
+  "jsonParameters": {
+    "parameters": [
+      {
+        "name": "query",
+        "value": "={{ $json.query }}"
+      },
+      {
+        "name": "limit", 
+        "value": "={{ $json.limit || 5 }}"
+      },
+      {
+        "name": "filters",
+        "value": "={{ $json.filters || {} }}"
+      }
+    ]
+  }
+}
+```
+
+</ExerciseStep>
+
+<ExerciseStep stepNumber="2" title="Define Tool Schema for AI Agent">
+
+In your **AI Agent** node, define the tool schema:
+
+```javascript
+// Tool Definition in AI Agent
+{
+  "name": "search_documents",
+  "description": "Search through PDF documents using semantic similarity. Use this when you need to find information across multiple documents or when the user asks questions that require searching through content.",
+  "parameters": {
+    "type": "object",
+    "properties": {
+      "query": {
+        "type": "string",
+        "description": "The search query in natural language. Be specific about what you're looking for."
+      },
+      "limit": {
+        "type": "integer",
+        "description": "Maximum number of documents to return (default: 5, max: 20)",
+        "minimum": 1,
+        "maximum": 20,
+        "default": 5
+      },
+      "filters": {
+        "type": "object",
+        "description": "Optional filters to narrow search results",
+        "properties": {
+          "document_type": {
+            "type": "string",
+            "enum": ["invoice", "contract", "report", "manual"]
+          },
+          "date_range": {
+            "type": "object",
+            "properties": {
+              "start": {"type": "string", "format": "date"},
+              "end": {"type": "string", "format": "date"}
+            }
+          }
+        }
+      }
+    },
+    "required": ["query"]
+  }
+}
+```
+
+</ExerciseStep>
+
+<ExerciseStep stepNumber="3" title="Test Tool Calling">
+
+Test with these queries to see how the agent chooses tools:
+
+1. **Should trigger search**: "What do our financial reports say about Q3 revenue?"
+2. **Should not trigger search**: "What is MongoDB?"
+3. **Should use filters**: "Find invoices from December 2023"
+
+</ExerciseStep>
+
+</WorkshopExercise>
+
+### 2. MongoDB Tools
+
+Direct database operations as tools:
+
+```javascript
+// MongoDB Vector Search Tool
+{
+  "name": "vector_search_documents",
+  "description": "Perform advanced vector search with custom scoring and filtering. Use when you need precise control over search parameters or when semantic search needs fine-tuning.",
+  "parameters": {
+    "type": "object",
+    "properties": {
+      "embedding_vector": {
+        "type": "array",
+        "items": {"type": "number"},
+        "description": "Pre-computed embedding vector for search"
+      },
+      "search_options": {
+        "type": "object",
+        "properties": {
+          "numCandidates": {
+            "type": "integer",
+            "description": "Number of candidate documents for search",
+            "default": 50
+          },
+          "limit": {
+            "type": "integer", 
+            "description": "Final number of results to return",
+            "default": 5
+          },
+          "filter": {
+            "type": "object",
+            "description": "MongoDB query filter"
+          }
+        }
+      }
+    },
+    "required": ["embedding_vector"]
+  }
+}
+
+// MongoDB Insert Tool
+{
+  "name": "store_document_analysis",
+  "description": "Store analysis results or extracted insights for future reference. Use when you've processed a document and want to save the insights.",
+  "parameters": {
+    "type": "object", 
+    "properties": {
+      "document_id": {
+        "type": "string",
+        "description": "ID of the analyzed document"
+      },
+      "analysis": {
+        "type": "object",
+        "properties": {
+          "summary": {"type": "string"},
+          "key_findings": {"type": "array", "items": {"type": "string"}},
+          "metadata": {"type": "object"}
+        }
+      }
+    },
+    "required": ["document_id", "analysis"]
+  }
+}
+```
+
+### 3. Data Processing Tools
+
+Custom processing workflows as tools:
+
+```javascript
+// PDF Analysis Tool
+{
+  "name": "analyze_pdf_structure",
+  "description": "Analyze the structure and content of a PDF document. Use when you need to understand document layout, extract tables, or identify document sections.",
+  "parameters": {
+    "type": "object",
+    "properties": {
+      "document_url": {
+        "type": "string",
+        "format": "uri",  
+        "description": "URL or path to the PDF document"
+      },
+      "analysis_type": {
+        "type": "string",
+        "enum": ["structure", "tables", "images", "text", "full"],
+        "description": "Type of analysis to perform"
+      },
+      "page_range": {
+        "type": "object",
+        "properties": {
+          "start": {"type": "integer", "minimum": 1},
+          "end": {"type": "integer", "minimum": 1}
+        },
+        "description": "Specific page range to analyze (optional)"
+      }
+    },
+    "required": ["document_url", "analysis_type"]
+  }
+}
+
+// Image Analysis Tool  
+{
+  "name": "analyze_document_image",
+  "description": "Analyze images, charts, or diagrams from documents. Use when you need to understand visual content like graphs, diagrams, or photo content in PDFs.",
+  "parameters": {
+    "type": "object",
+    "properties": {
+      "image_url": {
+        "type": "string",
+        "format": "uri",
+        "description": "URL to the image to analyze"
+      },
+      "analysis_focus": {
+        "type": "string",
+        "enum": ["charts", "text_ocr", "objects", "general"],
+        "description": "What to focus on in the image analysis"
+      },
+      "context": {
+        "type": "string",
+        "description": "Additional context about what you're looking for in the image"
+      }
+    },
+    "required": ["image_url"]
+  }
+}
+```
+
+## 🎨 Advanced Tool Patterns
+
+### 1. Conditional Tool Access
+
+```javascript
+// Tool that checks permissions before execution
+{
+  "name": "access_sensitive_document",
+  "description": "Access documents marked as sensitive. Only use when explicitly requested and user has appropriate permissions.",
+  "parameters": {
+    "type": "object",
+    "properties": {
+      "document_id": {
+        "type": "string",
+        "description": "ID of the sensitive document"
+      },
+      "access_reason": {
+        "type": "string", 
+        "description": "Reason for accessing this sensitive document"
+      },
+      "user_confirmation": {
+        "type": "boolean",
+        "description": "Has the user explicitly confirmed they want to access this sensitive document?"
+      }
+    },
+    "required": ["document_id", "access_reason", "user_confirmation"]
+  }
+}
+```
+
+### 2. Multi-Step Tool Workflows
+
+```javascript
+// Tool that orchestrates multiple operations
+{
+  "name": "comprehensive_document_analysis",
+  "description": "Perform a complete analysis of a document including content extraction, entity recognition, and summarization. Use for thorough document review.",
+  "parameters": {
+    "type": "object",
+    "properties": {
+      "document_id": {
+        "type": "string",
+        "description": "Document to analyze completely"
+      },
+      "analysis_depth": {
+        "type": "string",
+        "enum": ["quick", "standard", "comprehensive"],
+        "description": "Depth of analysis to perform"
+      },
+      "include_sections": {
+        "type": "array",
+        "items": {
+          "type": "string",
+          "enum": ["summary", "entities", "sentiment", "topics", "structure"]
+        },
+        "description": "Which analysis sections to include"
+      }
+    },
+    "required": ["document_id"]
+  }
+}
+```
+
+### 3. Error-Resilient Tools
+
+```javascript
+// Tool with comprehensive error handling
+{
+  "name": "robust_document_processor",
+  "description": "Process documents with automatic retry and fallback mechanisms. Use when document processing reliability is critical.",
+  "parameters": {
+    "type": "object",
+    "properties": {
+      "document_source": {
+        "type": "string",
+        "description": "Source of the document (URL, file path, or ID)"
+      },
+      "processing_options": {
+        "type": "object",
+        "properties": {
+          "retry_count": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 3,
+            "default": 1,
+            "description": "Number of retries if processing fails"
+          },
+          "fallback_method": {
+            "type": "string",
+            "enum": ["ocr", "text_only", "metadata_only"],
+            "description": "Fallback method if primary processing fails"
+          },
+          "timeout_seconds": {
+            "type": "integer",
+            "minimum": 10,
+            "maximum": 300,
+            "default": 60,
+            "description": "Maximum time to wait for processing"
+          }
+        }
+      }
+    },
+    "required": ["document_source"]
+  }
+}
+```
+
+## 🧪 Tool Testing & Validation
+
+### 1. Tool Response Validation
+
+```javascript
+// Add validation logic to tool responses
+const validateToolResponse = {
+  systemPrompt: `Always validate tool responses before using them:
+
+  1. Check if the response format matches expectations
+  2. Verify required fields are present  
+  3. Validate data types and ranges
+  4. Look for error indicators in the response
+  
+  If a tool response seems invalid:
+  - Explain what's wrong
+  - Try a different approach or tool
+  - Ask for clarification if needed
+  
+  Tool Response: {{$json.tool_response}}
+  Expected Format: {{$json.expected_format}}`,
+  
+  temperature: 0.2
+};
+```
+
+### 2. Tool Performance Monitoring
+
+<WorkshopExercise 
+  title="Implement Tool Performance Tracking" 
+  difficulty="intermediate"
+  timeEstimate="10 minutes"
+  objectives={[
+    "Add performance metrics to tool calls",
+    "Track success/failure rates",
+    "Identify optimization opportunities"
+  ]}
+>
+
+<ExerciseStep stepNumber="1" title="Add Performance Tracking">
+
+Wrap your tools with performance tracking:
+
+```javascript
+// Before tool execution
+{
+  "startTime": "={{ new Date().toISOString() }}",
+  "toolName": "search_documents",
+  "inputParams": "={{ $json }}"
+}
+
+// After tool execution  
+{
+  "endTime": "={{ new Date().toISOString() }}",
+  "executionTime": "={{ Date.parse($json.endTime) - Date.parse($json.startTime) }}",
+  "success": "={{ $json.error ? false : true }}",
+  "resultCount": "={{ $json.results ? $json.results.length : 0 }}"
+}
+
+// Store metrics in MongoDB
+{
+  "operation": "Insert One",
+  "collection": "tool_performance_metrics",
+  "document": {
+    "tool_name": "={{ $json.toolName }}",
+    "execution_time_ms": "={{ $json.executionTime }}",
+    "success": "={{ $json.success }}",
+    "input_size": "={{ JSON.stringify($json.inputParams).length }}",
+    "output_size": "={{ JSON.stringify($json.results).length }}",
+    "timestamp": "={{ new Date() }}",
+    "session_id": "={{ $json.session_id }}"
+  }
+}
+```
+
+</ExerciseStep>
+
+</WorkshopExercise>
+
+## 🔒 Tool Security & Best Practices
+
+### 1. Access Control
+
+```javascript
+// Implement role-based tool access
+const toolAccessControl = {
+  tools: {
+    "search_documents": {
+      required_roles: ["user", "admin"],
+      rate_limit": "100/hour"
+    },
+    "delete_document": {
+      required_roles: ["admin"],
+      rate_limit": "10/hour",
+      requires_confirmation: true
+    },
+    "access_sensitive_data": {
+      required_roles: ["admin", "analyst"],
+      rate_limit: "20/hour", 
+      audit_log: true,
+      requires_justification: true
+    }
+  }
+};
+```
+
+### 2. Input Sanitization
+
+```javascript
+// Sanitize tool inputs before execution
+const sanitizeInputs = {
+  systemPrompt: `Before calling any tool, validate and sanitize inputs:
+
+  1. Check for injection attempts (SQL, code, etc.)
+  2. Validate data types match schema
+  3. Ensure required parameters are present
+  4. Sanitize string inputs (remove dangerous characters)
+  5. Validate file paths and URLs
+  
+  If inputs seem suspicious, reject the tool call and explain why.`,
+  
+  validationRules: {
+    "no_script_tags": "/<script|javascript:/i",
+    "no_sql_injection": "/union|select|drop|delete|insert/i",
+    "safe_file_paths": "/^[a-zA-Z0-9._/-]+$/",
+    "valid_urls": "https?://"
+  }
+};
+```
+
+### 3. Error Handling Patterns
+
+```javascript
+// Comprehensive error handling for tools
+const toolErrorHandling = {
+  errorTypes: {
+    "network_error": {
+      retry: true,
+      max_retries: 3,
+      backoff: "exponential",
+      user_message: "Network connection issue. Retrying..."
+    },
+    "permission_denied": {
+      retry: false,
+      user_message: "Access denied. Please check permissions.",
+      escalate: true
+    },
+    "invalid_input": {
+      retry: false,
+      user_message: "Invalid input provided. Please check parameters.",
+      suggest_fix: true
+    },
+    "resource_not_found": {
+      retry: false,
+      user_message: "Requested resource not found.",
+      suggest_alternatives: true
+    }
+  }
+};
+```
+
+## 📊 Tool Optimization Strategies
+
+### 1. Tool Selection Optimization
+
+```javascript
+// Improve tool selection through better descriptions
+const optimizedToolDescriptions = {
+  "search_documents": {
+    // ❌ Poor description
+    bad: "Search documents",
+    
+    // ✅ Good description  
+    good: "Search through PDF documents using semantic similarity. Use this when you need to find information across multiple documents, answer questions about document content, or when the user asks about specific topics that might be mentioned in the uploaded documents. This tool works best with specific, detailed queries rather than general questions."
+  },
+  
+  "extract_pdf_text": {
+    // ❌ Poor description
+    bad: "Extract text from PDF",
+    
+    // ✅ Good description
+    good: "Extract raw text content from specific pages of a PDF document. Use this when you need the exact text content from a document, want to analyze specific sections, or need to process text for further analysis. Specify page numbers when possible to get targeted content."
+  }
+};
+```
+
+### 2. Tool Chaining Patterns
+
+```javascript
+// Design tools that work well together
+const toolChaining = {
+  analysis_workflow: [
+    {
+      tool: "search_documents",
+      purpose: "Find relevant documents",
+      output_feeds: ["extract_pdf_text", "analyze_document_image"]
+    },
+    {
+      tool: "extract_pdf_text", 
+      purpose: "Get detailed text content",
+      output_feeds: ["analyze_sentiment", "extract_entities"]
+    },
+    {
+      tool: "analyze_document_image",
+      purpose: "Process visual content",
+      output_feeds: ["ocr_text", "chart_analysis"]
+    },
+    {
+      tool: "synthesize_findings",
+      purpose: "Combine all analysis results",
+      inputs: ["text_analysis", "image_analysis", "entities"]
+    }
+  ]
+};
+```
+
+## 🎯 Tool Design Workshop Challenge
+
+<WorkshopExercise 
+  title="Design Your Own Tool Suite" 
+  difficulty="advanced"
+  timeEstimate="25 minutes"
+  objectives={[
+    "Design a custom tool for your specific use case",
+    "Implement proper schema and error handling",
+    "Test tool integration with AI agent"
+  ]}
+>
+
+Design tools for a specific scenario:
+
+**Scenario**: Legal document review system
+**Required Tools**:
+1. **Contract analyzer** - Find specific clauses
+2. **Risk assessor** - Identify potential legal risks  
+3. **Compliance checker** - Verify regulatory compliance
+4. **Clause extractor** - Extract specific contract terms
+
+For each tool, define:
+- Clear name and description
+- Comprehensive parameter schema
+- Error handling approach
+- Expected output format
+- Integration with other tools
+
+</WorkshopExercise>
+
+## 🎭 Common Tool Design Antipatterns
+
+### ❌ Antipattern 1: Vague Tool Descriptions
+```javascript
+// Bad
+{
+  "name": "process_document",
+  "description": "Does something with documents"
+}
+
+// Good  
+{
+  "name": "extract_financial_data",
+  "description": "Extract financial information (revenue, expenses, profit) from financial documents like income statements, balance sheets, and financial reports. Returns structured data with amounts, dates, and categories."
+}
+```
+
+### ❌ Antipattern 2: Overly Complex Tools
+```javascript
+// Bad - Tool that does everything
+{
+  "name": "analyze_everything",
+  "parameters": {
+    "do_text_analysis": {"type": "boolean"},
+    "do_image_analysis": {"type": "boolean"}, 
+    "extract_entities": {"type": "boolean"},
+    "create_summary": {"type": "boolean"}
+    // ... 20 more parameters
+  }
+}
+
+// Good - Focused, single-purpose tools
+{
+  "name": "extract_document_entities",
+  "description": "Extract named entities (people, organizations, locations, dates) from document text"
+}
+```
+
+### ❌ Antipattern 3: Poor Error Messages
+```javascript
+// Bad
+{
+  "error": "Something went wrong"
+}
+
+// Good
+{
+  "error": "Document not found: The specified document ID 'doc_123' does not exist in the system. Please verify the document ID or search for available documents first.",
+  "error_code": "DOCUMENT_NOT_FOUND",
+  "suggested_action": "Use search_documents tool to find available documents"
+}
+```
+
+## 🚀 Next Steps
+
+With well-designed tools, your AI agents can:
+- 🔍 Search and analyze any type of content
+- 🛠️ Process data with precision and reliability  
+- 🔗 Chain operations for complex workflows
+- 🧠 Learn from tool usage patterns
+- 🔒 Operate securely within defined boundaries
+
+Tools are the bridge between AI reasoning and real-world capabilities. Master tool design, and you'll build agents that can truly act on their insights!
+
+<Quiz 
+  title="Tool Design Mastery Check"
+  passingScore={75}
+  questions={[
+    {
+      question: "What's the most important aspect of a tool description?",
+      options: [
+        "Being as short as possible",
+        "Clearly explaining when and why to use the tool",
+        "Listing all possible parameters",
+        "Including technical implementation details"
+      ],
+      correctAnswer: 1,
+      explanation: "AI agents rely on descriptions to choose the right tool. Clear guidance on when and why to use each tool is crucial for proper tool selection."
+    },
+    {
+      question: "How should you handle tool errors?",
+      options: [
+        "Return generic error messages",
+        "Crash the workflow to alert users",
+        "Provide specific error details and suggested actions",
+        "Ignore errors and continue processing"
+      ],
+      correctAnswer: 2,
+      explanation: "Good error handling provides specific information about what went wrong and guides the agent (or user) on how to resolve the issue."
+    },
+    {
+      question: "What makes a tool 'chainable' with other tools?",
+      options: [
+        "Having many parameters",
+        "Producing output that other tools can consume as input",
+        "Being the fastest tool available",
+        "Having no dependencies"
+      ],
+      correctAnswer: 1,
+      explanation: "Chainable tools produce structured output that can be consumed by other tools, enabling sophisticated multi-step workflows."
+    }
+  ]}
+/>
+
+## 📚 Continue Learning
+
+- [Build Multimodal Image Queries →](./multimodal-image-queries)
+- **Advanced Agent Patterns** - Coming soon!
+- **Production Tool Deployment** - Coming soon!

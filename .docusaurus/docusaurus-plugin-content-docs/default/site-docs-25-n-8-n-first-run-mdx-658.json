@@ -21,7 +21,7 @@
     "permalink": "/multimodal-pdf-agent-n8n/docs/prerequisites"
   },
   "next": {
-    "title": "MongoDB Atlas Setup",
-    "permalink": "/multimodal-pdf-agent-n8n/docs/mongodb-atlas-setup"
+    "title": "🌐 API Gateway Architecture",
+    "permalink": "/multimodal-pdf-agent-n8n/docs/api-architecture"
   }
 }

@@ -74,6 +74,13 @@ a.footer__link-item {
   margin-bottom: 0.5rem;
 }
 
+.sidebar-exercises > .menu__link {
+  background: linear-gradient(135deg, #ff9a56 0%, #ff6b9d 100%);
+  color: white !important;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+
 .sidebar-advanced > .menu__link {
   background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
   color: white !important;
@@ -97,14 +104,28 @@ a.footer__link-item {
   margin-top: 0.75rem;
 }
 
-/* Sidebar category icons */
+/* Sidebar category icons and spacing */
 .menu__link--sublist-caret:after {
   background-size: 1.5rem 1.5rem;
+  margin-left: auto;
+}
+
+/* Ensure category headers have proper spacing for accordion arrow */
+.menu__link--sublist {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-right: 2.5rem; /* Make room for accordion arrow */
 }
 
 /* Active category highlighting */
 .menu__list-item--active > .menu__link--sublist {
   font-weight: 700;
+}
+
+/* Hide checkmark on category headers entirely */
+.menu__link--sublist::before {
+  display: none !important;
 }
 
 /* Better sidebar item styling */
@@ -126,17 +147,18 @@ a.footer__link-item {
   border-left: 2px solid var(--ifm-color-emphasis-300);
 }
 
-/* Progress indicator for completed sections */
-.menu__link--active {
+/* Progress indicator for completed sections - only for document links, not categories */
+.menu__link--active:not(.menu__link--sublist) {
   position: relative;
 }
 
-.menu__link--active::before {
+.menu__link--active:not(.menu__link--sublist)::before {
   content: '✓';
   position: absolute;
   right: 1rem;
   color: var(--ifm-color-success);
   font-weight: bold;
+  font-size: 0.9rem;
 }
 
 /* Workshop progress bar at top of sidebar */
@@ -157,6 +179,7 @@ a.footer__link-item {
 [data-theme='dark'] .sidebar-getting-started > .menu__link,
 [data-theme='dark'] .sidebar-setup > .menu__link,
 [data-theme='dark'] .sidebar-workflows > .menu__link,
+[data-theme='dark'] .sidebar-exercises > .menu__link,
 [data-theme='dark'] .sidebar-advanced > .menu__link,
 [data-theme='dark'] .sidebar-resources > .menu__link {
   color: white !important;

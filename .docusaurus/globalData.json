@@ -11,9 +11,33 @@
           "mainDocId": "index",
           "docs": [
             {
+              "id": "agent-patterns",
+              "path": "/multimodal-pdf-agent-n8n/docs/agent-patterns",
+              "sidebar": "tutorialSidebar"
+            },
+            {
               "id": "ai-agent-workflow",
               "path": "/multimodal-pdf-agent-n8n/docs/ai-agent-workflow",
               "sidebar": "tutorialSidebar"
+            },
+            {
+              "id": "api-architecture",
+              "path": "/multimodal-pdf-agent-n8n/docs/api-architecture",
+              "sidebar": "tutorialSidebar"
+            },
+            {
+              "id": "approach-comparison",
+              "path": "/multimodal-pdf-agent-n8n/docs/approach-comparison",
+              "sidebar": "tutorialSidebar"
+            },
+            {
+              "id": "architecture-overview",
+              "path": "/multimodal-pdf-agent-n8n/docs/architecture-overview",
+              "sidebar": "tutorialSidebar"
+            },
+            {
+              "id": "codebase",
+              "path": "/multimodal-pdf-agent-n8n/docs/codebase"
             },
             {
               "id": "community-resources",
@@ -28,6 +52,21 @@
             {
               "id": "docker-troubleshooting",
               "path": "/multimodal-pdf-agent-n8n/docs/docker-troubleshooting",
+              "sidebar": "tutorialSidebar"
+            },
+            {
+              "id": "exercise-advanced-tools",
+              "path": "/multimodal-pdf-agent-n8n/docs/exercise-advanced-tools",
+              "sidebar": "tutorialSidebar"
+            },
+            {
+              "id": "exercise-memory-context",
+              "path": "/multimodal-pdf-agent-n8n/docs/exercise-memory-context",
+              "sidebar": "tutorialSidebar"
+            },
+            {
+              "id": "exercise-pdf-rag-agent",
+              "path": "/multimodal-pdf-agent-n8n/docs/exercise-pdf-rag-agent",
               "sidebar": "tutorialSidebar"
             },
             {
@@ -51,6 +90,11 @@
               "sidebar": "tutorialSidebar"
             },
             {
+              "id": "memory-context-patterns",
+              "path": "/multimodal-pdf-agent-n8n/docs/memory-context-patterns",
+              "sidebar": "tutorialSidebar"
+            },
+            {
               "id": "mongodb-atlas-setup",
               "path": "/multimodal-pdf-agent-n8n/docs/mongodb-atlas-setup",
               "sidebar": "tutorialSidebar"
@@ -58,6 +102,11 @@
             {
               "id": "mongodb-vector-setup",
               "path": "/multimodal-pdf-agent-n8n/docs/mongodb-vector-setup",
+              "sidebar": "tutorialSidebar"
+            },
+            {
+              "id": "multimodal-image-queries",
+              "path": "/multimodal-pdf-agent-n8n/docs/multimodal-image-queries",
               "sidebar": "tutorialSidebar"
             },
             {
@@ -76,8 +125,23 @@
               "sidebar": "tutorialSidebar"
             },
             {
+              "id": "python-mongodb-approaches",
+              "path": "/multimodal-pdf-agent-n8n/docs/python-mongodb-approaches",
+              "sidebar": "tutorialSidebar"
+            },
+            {
+              "id": "status-badge-usage-guide",
+              "path": "/multimodal-pdf-agent-n8n/docs/status-badge-usage-guide",
+              "sidebar": "tutorialSidebar"
+            },
+            {
               "id": "summary",
               "path": "/multimodal-pdf-agent-n8n/docs/summary",
+              "sidebar": "tutorialSidebar"
+            },
+            {
+              "id": "tool-definition-primer",
+              "path": "/multimodal-pdf-agent-n8n/docs/tool-definition-primer",
               "sidebar": "tutorialSidebar"
             },
             {
@@ -113,8 +177,8 @@
   "docusaurus-lunr-search": {
     "default": {
       "fileNames": {
-        "searchDoc": "search-doc-1753342736376.json",
-        "lunrIndex": "lunr-index-1753342736376.json"
+        "searchDoc": "search-doc-1753374706266.json",
+        "lunrIndex": "lunr-index-1753374706266.json"
       }
     }
   }

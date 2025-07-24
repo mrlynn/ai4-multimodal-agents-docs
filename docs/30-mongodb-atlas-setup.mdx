@@ -2,11 +2,33 @@
 sidebar_position: 30
 ---
 
-# 🗄️ MongoDB Setup: Local Development & Atlas Production
+# 🗄️ MongoDB Atlas Setup for Vector Search
 
-This workshop uses two MongoDB environments:
-- **Local MongoDB** (via Docker) for development and testing
-- **MongoDB Atlas** for production vector search
+This workshop uses MongoDB Atlas for vector search capabilities.
+
+**Note**: MongoDB Vector Search is only available in MongoDB Atlas, not in local MongoDB instances.
+
+<SlideRecap 
+  title="Database Foundation for Vector Search"
+  items={[
+    {
+      icon: "🗄️",
+      title: "MongoDB Atlas Vector Search",
+      description: "Why we chose MongoDB Atlas for production-grade vector similarity search"
+    },
+    {
+      icon: "🔍", 
+      title: "Vector Indexes & Embeddings",
+      description: "How 1024-dimensional vectors enable semantic search across multimodal content"
+    },
+    {
+      icon: "⚡",
+      title: "Scalability & Performance",
+      description: "From prototype to production with MongoDB's managed vector database"
+    }
+  ]}
+  nextSection="Let's set up your vector database now!"
+/>
 
 <InstructorNotes 
   timing="MongoDB Atlas Setup (15-20 minutes)"
@@ -24,31 +46,9 @@ This workshop uses two MongoDB environments:
   ]}
 />
 
-## 🐳 Local MongoDB (Development)
+## ☁️ MongoDB Atlas Setup
 
-Our Docker setup includes a local MongoDB instance that's already configured and running:
-
-### Access Local MongoDB
-
-```bash
-# Check if MongoDB is running
-docker-compose ps mongodb
-
-# Access MongoDB shell
-docker-compose exec mongodb mongosh
-
-# Connection string for n8n
-mongodb://root:workshoppass@mongodb:27017/pdf_workshop?authSource=admin
-```
-
-### MongoDB Express UI
-
-Access the web-based MongoDB admin at http://localhost:8081
-- No authentication required
-- View collections and documents
-- Run queries and manage data
-
-## ☁️ MongoDB Atlas (Production)
+MongoDB Atlas provides managed vector search capabilities that are essential for our multimodal PDF agent.
 
 ## Create Your Vector Database
 
@@ -57,6 +57,11 @@ Access the web-based MongoDB admin at http://localhost:8081
 If you don't have an account yet:
 
 1. Visit [MongoDB Atlas](https://www.mongodb.com/try?utm_campaign=devrel&utm_source=workshop&utm_medium=cta&utm_content=multimodal_pdf_agent_n8n&utm_term=michael.lynn)
+
+<QRCodeAccess 
+  url="https://www.mongodb.com/try?utm_campaign=devrel&utm_source=workshop&utm_medium=cta&utm_content=multimodal_pdf_agent_n8n&utm_term=michael.lynn"
+  title="MongoDB Atlas Signup"
+/>
 2. Sign up with your email
 3. Verify your email address
 4. Complete the onboarding questions

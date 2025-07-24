@@ -17,8 +17,8 @@
   },
   "sidebar": "tutorialSidebar",
   "previous": {
-    "title": "Workshop Introduction",
-    "permalink": "/multimodal-pdf-agent-n8n/docs/intro"
+    "title": "🏗️ Architecture Overview",
+    "permalink": "/multimodal-pdf-agent-n8n/docs/architecture-overview"
   },
   "next": {
     "title": "Prerequisites & Local Setup",

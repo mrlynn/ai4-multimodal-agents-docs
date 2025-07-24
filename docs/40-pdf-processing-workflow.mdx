@@ -6,6 +6,47 @@ sidebar_position: 40
 
 Build your first n8n workflow to process PDFs into searchable multimodal embeddings.
 
+<SlideRecap 
+  title="From Documents to Intelligent Data"
+  items={[
+    {
+      icon: "📄",
+      title: "PDF Ingestion Pipeline",
+      description: "How to automatically process documents and extract both text and visual content"
+    },
+    {
+      icon: "🎨", 
+      title: "Multimodal Understanding",
+      description: "Why processing images and text together creates richer, more accurate search"
+    },
+    {
+      icon: "🔄",
+      title: "n8n Visual Workflows",
+      description: "Building complex data pipelines with visual, no-code automation"
+    }
+  ]}
+  nextSection="Time to build your first multimodal processing pipeline!"
+/>
+
+<InstructorNotes 
+  timing="PDF Processing Workflow (25-30 minutes)"
+  notes={[
+    "This is the heart of the workshop - expect debugging time",
+    "PDF download node often fails due to CORS or authentication issues",
+    "PDF toolkit node can be memory intensive with large files",
+    "Embedding generation is the slowest step - use smaller PDFs for demos",
+    "MongoDB connection issues surface here if Atlas wasn't configured properly"
+  ]}
+  tips={[
+    "Start with a simple 1-2 page PDF for initial testing",
+    "Use the sample PDFs provided in the workshop repo",
+    "Show attendees how to use the debug panel to inspect data flow",
+    "Expect 5-10 minutes for first successful workflow execution",
+    "Have attendees save workflow frequently - crashes can happen",
+    "Demonstrate error handling patterns they'll need later"
+  ]}
+/>
+
 ## Workflow Overview
 
 ```mermaid

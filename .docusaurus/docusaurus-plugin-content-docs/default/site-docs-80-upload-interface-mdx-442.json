@@ -21,7 +21,7 @@
     "permalink": "/multimodal-pdf-agent-n8n/docs/mongodb-vector-setup"
   },
   "next": {
-    "title": "Docker Best Practices",
-    "permalink": "/multimodal-pdf-agent-n8n/docs/local-setup-tips"
+    "title": "🐍 Python Integration Options",
+    "permalink": "/multimodal-pdf-agent-n8n/docs/python-mongodb-approaches"
   }
 }

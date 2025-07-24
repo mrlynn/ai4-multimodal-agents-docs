@@ -11,6 +11,17 @@ import Quiz, { QuickCheck } from "@site/src/components/Quiz";
 import EmbeddingTester, { EmbeddingVisualizer } from "@site/src/components/EmbeddingTester";
 import QuickEmbeddingTest from "@site/src/components/QuickEmbeddingTest";
 import WorkshopTransition, { SlideRecap, InstructorNotes, QRCodeAccess } from "@site/src/components/WorkshopTransition";
+import WorkshopFeedback from "@site/src/components/WorkshopFeedback";
+import WorkshopResources from "@site/src/components/WorkshopResources";
+import LiveStatusBadge, { 
+  StatusDot, 
+  SystemHealthDashboard,
+  CodespaceStatusBadge,
+  DockerServicesStatusBadge,
+  MongoDBAtlasStatusBadge,
+  VoyageAIStatusBadge,
+  WorkflowTestBadge
+} from "@site/src/components/LiveStatusBadge";
 
 export default {
   // Re-use the default mapping
@@ -35,5 +46,15 @@ export default {
   WorkshopTransition,
   SlideRecap,
   InstructorNotes,
-  QRCodeAccess
+  QRCodeAccess,
+  WorkshopFeedback,
+  WorkshopResources,
+  LiveStatusBadge,
+  StatusDot,
+  SystemHealthDashboard,
+  CodespaceStatusBadge,
+  DockerServicesStatusBadge,
+  MongoDBAtlasStatusBadge,
+  VoyageAIStatusBadge,
+  WorkflowTestBadge
 };

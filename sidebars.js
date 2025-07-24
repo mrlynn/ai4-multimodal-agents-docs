@@ -23,7 +23,7 @@ const sidebars = {
     {
       type: 'category',
       label: '🚀 Getting Started',
-      collapsible: false,
+      collapsible: true,
       collapsed: false,
       className: 'sidebar-getting-started',
       description: 'Begin your journey with environment setup and n8n basics',
@@ -32,6 +32,11 @@ const sidebars = {
           type: 'doc',
           id: 'intro',
           label: 'Workshop Introduction'
+        },
+        {
+          type: 'doc',
+          id: 'architecture-overview',
+          label: '🏗️ Architecture Overview'
         },
         {
           type: 'doc',
@@ -58,6 +63,11 @@ const sidebars = {
       className: 'sidebar-setup',
       description: 'Configure MongoDB Atlas and Voyage AI for your agent',
       items: [
+        {
+          type: 'doc',
+          id: 'api-architecture',
+          label: '🌐 API Gateway Architecture'
+        },
         {
           type: 'doc',
           id: 'mongodb-atlas-setup',
@@ -97,6 +107,31 @@ const sidebars = {
     },
     {
       type: 'category',
+      label: '🧪 Hands-On Exercises',
+      collapsible: true,
+      collapsed: false,
+      className: 'sidebar-exercises',
+      description: 'Structured exercises to build complete AI agents',
+      items: [
+        {
+          type: 'doc',
+          id: 'exercise-pdf-rag-agent',
+          label: '🧪 Exercise: Build a PDF RAG Agent'
+        },
+        {
+          type: 'doc',
+          id: 'exercise-memory-context',
+          label: '🧪 Exercise: Memory & Context'
+        },
+        {
+          type: 'doc',
+          id: 'exercise-advanced-tools',
+          label: '🧪 Exercise: Advanced Tool Calling'
+        }
+      ],
+    },
+    {
+      type: 'category',
       label: '🎯 Advanced Topics',
       collapsible: true,
       collapsed: true,
@@ -117,6 +152,36 @@ const sidebars = {
           type: 'doc',
           id: 'upload-interface',
           label: 'Web Upload Interface'
+        },
+        {
+          type: 'doc',
+          id: 'python-mongodb-approaches',
+          label: '🐍 Python Integration Options'
+        },
+        {
+          type: 'doc',
+          id: 'approach-comparison',
+          label: '⚖️ n8n vs Python Comparison'
+        },
+        {
+          type: 'doc',
+          id: 'agent-patterns',
+          label: '🧠 AI Agent Planning Patterns'
+        },
+        {
+          type: 'doc',
+          id: 'memory-context-patterns',
+          label: '💾 Memory & Context Patterns'
+        },
+        {
+          type: 'doc',
+          id: 'tool-definition-primer',
+          label: '🛠️ Tool Definition & Function Calling'
+        },
+        {
+          type: 'doc',
+          id: 'multimodal-image-queries',
+          label: '🖼️ Multimodal Image Queries'
         }
       ],
     },
@@ -142,6 +207,11 @@ const sidebars = {
           type: 'doc',
           id: 'community-resources',
           label: 'Community Resources'
+        },
+        {
+          type: 'doc',
+          id: 'status-badge-usage-guide',
+          label: 'Status Badge Usage Guide'
         },
         {
           type: 'doc',

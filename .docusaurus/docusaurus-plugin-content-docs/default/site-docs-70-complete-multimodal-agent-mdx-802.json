@@ -17,8 +17,8 @@
   },
   "sidebar": "tutorialSidebar",
   "previous": {
-    "title": "AI Agent with Tool Calling",
-    "permalink": "/multimodal-pdf-agent-n8n/docs/ai-agent-workflow"
+    "title": "🧪 Exercise: Advanced Tool Calling",
+    "permalink": "/multimodal-pdf-agent-n8n/docs/exercise-advanced-tools"
   },
   "next": {
     "title": "Production Vector Search",

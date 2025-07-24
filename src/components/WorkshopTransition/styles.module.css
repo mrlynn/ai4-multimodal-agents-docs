@@ -230,8 +230,8 @@
 
 /* Instructor Notes */
 .instructorNotes {
-  background: rgba(255, 193, 7, 0.2);
-  border: 2px solid #ffc107;
+  background: #fffbeb;
+  border: 2px solid #fbbf24;
   border-radius: 8px;
   margin: 1.5rem 0;
   overflow: hidden;
@@ -239,24 +239,27 @@
 
 .notesToggle {
   width: 100%;
-  background: rgba(255, 193, 7, 0.3);
-  color: #fff;
+  background: #fef3c7;
+  color: #92400e;
   border: none;
   padding: 0.75rem 1rem;
   cursor: pointer;
   font-weight: 600;
   text-align: left;
   transition: background-color 0.2s ease;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
 .notesToggle:hover {
-  background: rgba(255, 193, 7, 0.4);
+  background: #fde68a;
 }
 
 .notesContent {
   padding: 1rem;
-  background: rgba(255, 193, 7, 0.1);
-  color: #fff;
+  background: #fffbeb;
+  color: #451a03;
 }
 
 .timing {
@@ -373,10 +376,20 @@
 }
 
 [data-theme='dark'] .instructorNotes {
-  background: rgba(245, 158, 11, 0.2);
+  background: rgba(251, 191, 36, 0.15);
   border-color: #f59e0b;
 }
 
 [data-theme='dark'] .notesToggle {
-  background: rgba(245, 158, 11, 0.3);
+  background: rgba(251, 191, 36, 0.2);
+  color: #fbbf24;
+}
+
+[data-theme='dark'] .notesToggle:hover {
+  background: rgba(251, 191, 36, 0.3);
+}
+
+[data-theme='dark'] .notesContent {
+  background: rgba(251, 191, 36, 0.1);
+  color: #fde68a;
 }

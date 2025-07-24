@@ -1,7 +1,7 @@
 {
   "id": "mongodb-atlas-setup",
-  "title": "🗄️ MongoDB Setup: Local Development & Atlas Production",
-  "description": "This workshop uses two MongoDB environments:",
+  "title": "🗄️ MongoDB Atlas Setup for Vector Search",
+  "description": "This workshop uses MongoDB Atlas for vector search capabilities.",
   "source": "@site/docs/30-mongodb-atlas-setup.mdx",
   "sourceDirName": ".",
   "slug": "/mongodb-atlas-setup",
@@ -17,8 +17,8 @@
   },
   "sidebar": "tutorialSidebar",
   "previous": {
-    "title": "n8n First Run Experience",
-    "permalink": "/multimodal-pdf-agent-n8n/docs/n8n-first-run"
+    "title": "🌐 API Gateway Architecture",
+    "permalink": "/multimodal-pdf-agent-n8n/docs/api-architecture"
   },
   "next": {
     "title": "Voyage AI Configuration",

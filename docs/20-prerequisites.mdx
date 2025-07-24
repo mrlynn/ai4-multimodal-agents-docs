@@ -9,6 +9,24 @@ import TabItem from '@theme/TabItem';
 
 Before we start building, let's get all the tools and accounts you'll need.
 
+<InstructorNotes 
+  timing="Prerequisites Setup (10-15 minutes)"
+  notes={[
+    "This is where most workshops get derailed - allocate extra time",
+    "Docker Desktop issues are the #1 problem on Windows/Mac",
+    "Have attendees start MongoDB Atlas signup early (email verification takes time)",
+    "Codespaces users often forget to make ports public",
+    "Local setup varies significantly - recommend Codespaces for mixed groups"
+  ]}
+  tips={[
+    "Poll the room: who has Docker already running?",
+    "Share your screen showing successful docker-compose ps output",
+    "Have backup plan ready for attendees with setup issues",
+    "Consider pairing experienced developers with beginners",
+    "Emphasize that Codespaces 'just works' if local setup fails"
+  ]}
+/>
+
 ## 🐳 Docker-Based Workshop Setup
 
 This workshop uses Docker to provide a consistent, pre-configured environment. No need to install n8n or worry about Node.js versions!
@@ -86,7 +104,7 @@ docker-compose up -d
 
 # Services will be available at:
 # n8n: http://localhost:5678
-# MongoDB Express: http://localhost:8081
+# MongoDB Atlas: Ready for vector search
 # Documentation: Run 'npm start' separately
 ```
 
@@ -128,7 +146,7 @@ docker-compose up -d
 
 # Services will be available at:
 # n8n: http://localhost:5678
-# MongoDB Express: http://localhost:8081
+# MongoDB Atlas: Ready for vector search
 # Documentation: Run 'npm start' separately
 ```
 
@@ -191,7 +209,7 @@ docker-compose up -d
 
 # Services will be available at:
 # n8n: http://localhost:5678
-# MongoDB Express: http://localhost:8081
+# MongoDB Atlas: Ready for vector search
 # Documentation: Run 'npm start' separately
 ```
 
@@ -213,15 +231,10 @@ Our workshop uses Docker Compose to manage all services:
    - Connected to MongoDB for data persistence
    - All necessary environment variables set
 
-2. **MongoDB** (port 27017)
-   - Database for storing workflows and vector data
-   - Pre-configured with authentication
-   - Health checks enabled
-
-3. **MongoDB Express** (port 8081)
-   - Web-based MongoDB admin interface
-   - View and manage your data
-   - No authentication required for workshop
+2. **MongoDB Atlas** (cloud database)
+   - Vector database for storing workflows and embeddings
+   - Managed service with built-in security
+   - Vector Search indexes for semantic similarity
 
 ### Starting Services
 
@@ -502,7 +515,7 @@ Complete these BEFORE the workshop:
 - [ ] Clone workshop deployment repository
 - [ ] Copy `.env.example` to `.env`
 - [ ] Run `docker-compose up -d`
-- [ ] Verify services at http://localhost:5678 and http://localhost:8081
+- [ ] Verify n8n service at http://localhost:5678
 - [ ] Create MongoDB Atlas account (free tier)
 - [ ] Have a test PDF ready
 
@@ -519,8 +532,7 @@ Complete these BEFORE the workshop:
 | Service | URL | Purpose |
 |---------|-----|---------|
 | n8n Editor | http://localhost:5678 | Build workflows |
-| MongoDB Express | http://localhost:8081 | Database admin |
 | Documentation | http://localhost:3000 | Workshop guide |
-| MongoDB | mongodb://localhost:27017 | Database connection |
+| MongoDB Atlas | Via connection string | Vector database |
 
 Ready to build your multimodal PDF agent! →

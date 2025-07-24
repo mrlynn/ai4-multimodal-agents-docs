@@ -1,0 +1,289 @@
+---
+sidebar_position: 100
+---
+
+# 📊 Status Badge Usage Guide
+
+This guide shows instructors and content creators how to use the specialized `LiveStatusBadge` components throughout the workshop to provide progressive validation and real-time feedback.
+
+## 🎯 Overview
+
+The LiveStatusBadge system includes several specialized components for different workshop stages:
+
+| Component | When to Use | Purpose |
+|-----------|-------------|---------|
+| `CodespaceStatusBadge` | After Codespace launch | Validate development environment |
+| `DockerServicesStatusBadge` | After `npm run dev` | Check all Docker services |
+| `MongoDBAtlasStatusBadge` | During Atlas setup | Test cloud database connection |
+| `VoyageAIStatusBadge` | Before building workflows | Validate AI service integration |
+| `WorkflowTestBadge` | After workflow creation | Test complete PDF pipeline |
+
+## 📋 Workshop Flow Integration
+
+### Stage 1: Environment Setup
+
+**In your GitHub Codespaces documentation:**
+
+```mdx
+# 🚀 Launch Your Codespace
+
+Follow these steps to get your development environment ready:
+
+1. Click the "Open in GitHub Codespaces" button
+2. Wait for the environment to initialize
+3. Verify your setup with the status check below:
+
+<CodespaceStatusBadge showDetails={true} />
+
+Once all systems show green, you're ready for the next step!
+```
+
+### Stage 2: Docker Services Startup
+
+**In your service startup documentation:**
+
+```mdx
+# 🐳 Start Workshop Services
+
+Run the following command to start all required services:
+
+```bash
+npm run dev
+```
+
+This starts n8n, MongoDB, and other workshop services. Monitor their status:
+
+<DockerServicesStatusBadge showDetails={true} />
+
+**Troubleshooting:** If any service shows red, check the troubleshooting section below.
+```
+
+### Stage 3: MongoDB Atlas Configuration
+
+**In your Atlas setup documentation:**
+
+```mdx
+# ☁️ Configure MongoDB Atlas
+
+Set up your cloud database for production-ready vector search:
+
+<MongoDBAtlasStatusBadge showDetails={true} />
+
+The status badge will guide you through:
+1. Connection string configuration
+2. Vector search index validation  
+3. Database permissions verification
+```
+
+### Stage 4: AI Service Testing
+
+**In your Voyage AI setup documentation:**
+
+```mdx
+# 🧠 Test Voyage AI Integration
+
+Before building workflows, verify your embedding capabilities:
+
+<VoyageAIStatusBadge showDetails={true} />
+
+Click "Run Embedding Test" to validate:
+- Text embedding generation
+- Multimodal (text + image) processing
+- Vector dimensions and format
+```
+
+### Stage 5: End-to-End Workflow Testing
+
+**In your workflow testing documentation:**
+
+```mdx
+# 🔄 Test Your Complete Workflow
+
+Validate your entire PDF processing pipeline:
+
+<WorkflowTestBadge showDetails={true} />
+
+This tests the complete flow:
+1. PDF upload via webhook
+2. Text extraction and processing
+3. Embedding generation with Voyage AI
+4. Storage in MongoDB Atlas
+```
+
+## 🛠️ Advanced Usage
+
+### Custom Configuration
+
+Each component accepts configuration props:
+
+```mdx
+<!-- Faster refresh for critical setup steps -->
+<DockerServicesStatusBadge 
+  showDetails={true} 
+  refreshInterval={5000} 
+/>
+
+<!-- Custom test document for workflow testing -->
+<WorkflowTestBadge 
+  testDocument="https://example.com/your-test.pdf"
+  workflowEndpoint="https://your-codespace-5678.app.github.dev/webhook/custom"
+/>
+
+<!-- Pre-configured Atlas connection -->
+<MongoDBAtlasStatusBadge 
+  connectionString="mongodb+srv://..." 
+/>
+```
+
+### Conditional Display
+
+Show components based on user progress:
+
+```mdx
+import { useState } from 'react';
+
+export function ProgressiveSetup() {
+  const [step, setStep] = useState(1);
+  
+  return (
+    <div>
+      {step === 1 && <CodespaceStatusBadge />}
+      {step === 2 && <DockerServicesStatusBadge />}
+      {step === 3 && <MongoDBAtlasStatusBadge />}
+      
+      <button onClick={() => setStep(step + 1)}>
+        Next Step
+      </button>
+    </div>
+  );
+}
+```
+
+## 🎨 Styling and UX
+
+### Component Features
+
+All status badge components include:
+
+- ✅ **Real-time monitoring** - Automatic status updates
+- 🔧 **Configuration panels** - User-friendly setup forms  
+- 📊 **Test execution** - Interactive validation buttons
+- 🛠️ **Troubleshooting** - Contextual help and commands
+- 📱 **Responsive design** - Works on all screen sizes
+- 🌙 **Dark mode support** - Automatic theme adaptation
+
+### Visual Indicators
+
+| Status | Indicator | Meaning |
+|--------|-----------|---------|
+| 🟢 Online | Green dot | System healthy and responding |
+| 🟡 Degraded | Yellow dot | System accessible but slow |
+| 🔴 Error | Red dot | System unreachable or failing |
+| ⚪ Loading | Gray dot | Checking system status |
+
+## 📚 Best Practices
+
+### 1. Progressive Disclosure
+Start with simple checks and gradually introduce complexity:
+
+```mdx
+<!-- Start simple -->
+<CodespaceStatusBadge />
+
+<!-- Add complexity as workshop progresses -->
+<VoyageAIStatusBadge />
+
+<!-- End with comprehensive testing -->
+<WorkflowTestBadge />
+```
+
+### 2. Clear Success Criteria
+Always explain what success looks like:
+
+```mdx
+<DockerServicesStatusBadge />
+
+**Success Criteria:** All services showing "Online" means you're ready for the next step!
+```
+
+### 3. Contextual Help
+Provide troubleshooting guidance:
+
+```mdx
+<MongoDBAtlasStatusBadge />
+
+**Common Issues:**
+- Connection string format
+- Network access settings
+- Database user permissions
+```
+
+### 4. Instructor Notes
+Include guidance for workshop facilitators:
+
+```mdx
+<InstructorNotes 
+  notes={[
+    "Have attendees wait for all green indicators before proceeding",
+    "Common issue: Codespace port forwarding takes 30-60 seconds",
+    "If many attendees show red, check workshop gateway status"
+  ]}
+/>
+
+<CodespaceStatusBadge />
+```
+
+## 🚀 Implementation Examples
+
+### Example 1: Setup Checklist Page
+
+```mdx
+# 📋 Workshop Setup Checklist
+
+Complete each step and verify with the status indicators:
+
+## Step 1: Launch Environment
+<CodespaceStatusBadge />
+
+## Step 2: Start Services  
+<DockerServicesStatusBadge />
+
+## Step 3: Configure Database
+<MongoDBAtlasStatusBadge />
+
+## Step 4: Test AI Services
+<VoyageAIStatusBadge />
+
+## Step 5: Validate Complete Workflow
+<WorkflowTestBadge />
+```
+
+### Example 2: Debugging Page
+
+```mdx
+# 🔧 Troubleshooting Workshop Issues
+
+Use these diagnostic tools to identify and resolve problems:
+
+## Check Your Environment
+<CodespaceStatusBadge showDetails={true} />
+
+## Verify Service Health
+<DockerServicesStatusBadge showDetails={true} />
+
+## Test External Connections
+<MongoDBAtlasStatusBadge showDetails={true} />
+<VoyageAIStatusBadge showDetails={true} />
+```
+
+## 🎯 Key Benefits
+
+Using these specialized status badges throughout your workshop provides:
+
+1. **Immediate Feedback** - Attendees know exactly when each step is working
+2. **Reduced Support Load** - Self-service diagnostics reduce instructor interruptions  
+3. **Progressive Validation** - Each step builds confidence for the next
+4. **Real-world Skills** - Teaches monitoring and troubleshooting practices
+5. **Workshop Flow** - Keeps all attendees synchronized and progressing together
+
+The status badge system transforms a potentially frustrating setup process into a guided, validated learning experience! 🎉

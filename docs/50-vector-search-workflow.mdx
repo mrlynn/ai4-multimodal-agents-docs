@@ -6,6 +6,25 @@ sidebar_position: 50
 
 Create a search endpoint that uses MongoDB Atlas Vector Search to find relevant PDF content.
 
+<InstructorNotes 
+  timing="Vector Search Implementation (20-25 minutes)"
+  notes={[
+    "Vector search index creation can take 5-10 minutes - start this early",
+    "Common error: querying before index is built ('index not found')",
+    "MongoDB aggregation pipeline syntax trips up SQL developers",
+    "Search quality depends heavily on having enough documents ingested",
+    "Similarity scores need explanation - attendees expect exact matches"
+  ]}
+  tips={[
+    "Create the vector index immediately after PDF ingestion finishes",
+    "Use MongoDB Atlas UI to monitor index building progress",
+    "Test with queries that should return obvious matches first",
+    "Explain that cosine similarity scores range from 0-1 (higher = more similar)",
+    "Have 3-5 test queries ready that demonstrate different search capabilities",
+    "Show attendees how to interpret search results and similarity scores"
+  ]}
+/>
+
 ## Search Workflow Structure
 
 ```mermaid

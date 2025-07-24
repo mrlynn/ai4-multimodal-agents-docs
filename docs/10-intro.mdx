@@ -164,7 +164,7 @@ graph LR
     {
       id: "ports_forwarded", 
       description: "Ports are automatically forwarded (check Ports tab)",
-      hint: "Look for ports 5678, 8081, and 3000 in the Ports panel"
+      hint: "Look for ports 5678 and 3000 in the Ports panel"
     },
     {
       id: "services_healthy",
@@ -226,7 +226,7 @@ docker-compose up -d`}
     },
     {
       id: "mongodb_accessible",
-      description: "MongoDB Express is accessible at http://localhost:8081",
+      description: "MongoDB Atlas is configured and ready for vector search",
       hint: "Open the URL in your browser"
     }
   ]}
@@ -279,6 +279,17 @@ By the end of this workshop, you'll be able to:
 4. **Create AI agents** with tool calling capabilities
 5. **Add memory** to maintain context
 6. **Deploy to production** with confidence
+
+## 🐍 Beyond Visual Workflows
+
+While this workshop focuses on n8n's visual approach, we also cover **Python integration options** for developers who want programmatic control:
+
+- **MongoDB Multimodal Search Library** - High-level Python SDK
+- **Direct PyMongo Integration** - Maximum performance and control  
+- **Hybrid Approaches** - Combine n8n orchestration with Python logic
+- **LangChain Integration** - Advanced RAG patterns
+
+These approaches all use the same MongoDB Atlas and Voyage AI foundation you'll learn about in the visual workflows!
 
 ## 🚦 Ready to Start?
 

@@ -6,6 +6,24 @@ sidebar_position: 15
 
 The **fastest way** to start this workshop - no local setup required!
 
+<InstructorNotes 
+  timing="GitHub Codespaces Setup (5-8 minutes)"
+  notes={[
+    "Codespaces can take 3-5 minutes on first launch - warn attendees",
+    "Free GitHub accounts get 60 hours/month - more than enough for workshop",
+    "Port forwarding is automatic but ports must be made 'Public' for sharing",
+    "Some corporate networks block Codespaces - have local setup as backup",
+    "Attendees often close browser tab accidentally - show how to reconnect"
+  ]}
+  tips={[
+    "Have attendees start Codespace creation at the very beginning",
+    "Show how to check build progress in the terminal",
+    "Demonstrate port visibility settings in the Ports tab",
+    "Explain that Codespaces persists between sessions for 30 days",
+    "Mention Codespaces works on tablets/Chromebooks unlike local setup"
+  ]}
+/>
+
 ## 🚀 What is GitHub Codespaces?
 
 GitHub Codespaces provides a complete, cloud-based development environment that runs in your browser. For this workshop, it means:
@@ -22,6 +40,12 @@ GitHub Codespaces provides a complete, cloud-based development environment that 
 <Screenshot src="/img/codespaces-button.png" alt="GitHub Codespaces Button" />
 
 1. Go to the [workshop deployment repository](https://github.com/mongodb-developer/multimodal-pdf-agent-n8n)
+
+<QRCodeAccess 
+  url="https://github.com/mongodb-developer/multimodal-pdf-agent-n8n"
+  title="Workshop Repository"
+/>
+
 2. Click the green **Code** button
 3. Select **Codespaces** tab
 4. Click **Create codespace on main**
@@ -52,7 +76,6 @@ GitHub Codespaces automatically forwards all ports with secure URLs:
 | Service | Local Port | Codespaces URL | Access |
 |---------|------------|----------------|--------|
 | **n8n Editor** | 5678 | `https://<name>-5678.preview.app.github.dev` | Auto-opens |
-| **MongoDB Express** | 8081 | `https://<name>-8081.preview.app.github.dev` | Click to open |
 | **Documentation** | 3000 | `https://<name>-3000.preview.app.github.dev` | Auto-opens |
 
 ### Finding Your URLs
@@ -168,7 +191,7 @@ docker-compose logs
 By default, ports are private to you. The workshop sets:
 - Documentation (3000): Public
 - n8n (5678): Private
-- MongoDB (8081): Private
+- MongoDB Atlas: Cloud-based
 
 ### Data Security
 
@@ -206,9 +229,8 @@ Our devcontainer automatically:
    - MongoDB tools
 
 2. **Starts Services**
-   - MongoDB with auth
-   - n8n with MongoDB connection
-   - MongoDB Express UI
+   - n8n workflow engine
+   - Documentation site
 
 3. **Configures Environment**
    - Copies `.env.example` to `.env`

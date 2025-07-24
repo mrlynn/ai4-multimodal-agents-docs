@@ -63,7 +63,7 @@ docker-compose logs n8n
    ```bash
    # Restart in correct order
    docker-compose down
-   docker-compose up -d mongodb
+   docker-compose up -d n8n
    sleep 10
    docker-compose up -d n8n
    ```
@@ -91,7 +91,7 @@ docker-compose ps | grep healthy
 ```bash
 # From host
 curl http://localhost:5678
-curl http://localhost:8081
+curl http://localhost:5678
 
 # From inside container
 docker-compose exec n8n wget -O- http://localhost:5678
@@ -131,7 +131,7 @@ exit
 
 **Check MongoDB logs:**
 ```bash
-docker-compose logs mongodb | grep -i error
+docker-compose logs n8n | grep -i error
 ```
 
 ## 🌐 Network Problems
@@ -163,7 +163,7 @@ docker-compose exec n8n nslookup google.com
 environment:
   - HTTP_PROXY=${HTTP_PROXY}
   - HTTPS_PROXY=${HTTPS_PROXY}
-  - NO_PROXY=localhost,mongodb
+  - NO_PROXY=localhost
 ```
 
 ## 🧹 Clean Slate Reset
@@ -235,8 +235,8 @@ services:
 # n8n container
 docker-compose exec n8n sh
 
-# MongoDB container
-docker-compose exec mongodb bash
+# n8n container
+docker-compose exec n8n sh
 ```
 
 ### Export Logs

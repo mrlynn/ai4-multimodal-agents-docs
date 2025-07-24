@@ -6,6 +6,47 @@ sidebar_position: 60
 
 Build an intelligent agent using Gemini 2.0 Flash and n8n's powerful workflow capabilities.
 
+<SlideRecap 
+  title="AI Agents & Intelligent Reasoning"
+  items={[
+    {
+      icon: "🤖",
+      title: "Function Calling & Tool Use",
+      description: "How modern AI agents decide when and how to use external tools for better answers"
+    },
+    {
+      icon: "🧠", 
+      title: "ReAct Pattern",
+      description: "Reasoning and Acting - the industry-standard pattern for intelligent agent behavior"
+    },
+    {
+      icon: "⚡",
+      title: "Gemini 2.0 Integration",
+      description: "Leveraging Google's latest multimodal AI model for sophisticated agent capabilities"
+    }
+  ]}
+  nextSection="Let's build your intelligent agent step by step!"
+/>
+
+<InstructorNotes 
+  timing="AI Agent Creation (30-35 minutes)"
+  notes={[
+    "This is the most complex section - expect questions about function calling",
+    "Gemini API key signup requires Google account (some attendees may not have)",
+    "Function calling syntax in n8n is different from OpenAI - emphasize this",
+    "Tool selection logic often needs multiple iterations to get right",
+    "Response formatting is crucial for good user experience"
+  ]}
+  tips={[
+    "Demo the difference between simple chat and function calling first",
+    "Show how to test function definitions before building full agent",
+    "Use clear, simple test queries that obviously need search",
+    "Explain the ReAct pattern (reason, act, observe) conceptually",
+    "Have backup Gemini API key ready in case attendees hit rate limits",
+    "Demonstrate debugging failed function calls step by step"
+  ]}
+/>
+
 ## Agent Architecture
 
 ```mermaid
@@ -23,6 +64,12 @@ graph TD
 ### 1. Get Gemini API Key
 
 1. Visit [Google AI Studio](https://makersuite.google.com/app/apikey)
+
+<QRCodeAccess 
+  url="https://makersuite.google.com/app/apikey"
+  title="Get Gemini API Key"
+/>
+
 2. Click **"Create API Key"**
 3. Copy the key for n8n
 

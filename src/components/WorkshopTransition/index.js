@@ -81,14 +81,14 @@ export default function WorkshopTransition({
             <div className={styles.actionButtons}>
               <button 
                 className={styles.primaryButton}
-                onClick={() => window.location.href = '/docs/intro'}
+                onClick={() => window.location.href = '/multimodal-pdf-agent-n8n/docs/intro'}
               >
                 Start Workshop →
               </button>
               
               <button 
                 className={styles.secondaryButton}
-                onClick={() => window.open('/docs/', '_blank')}
+                onClick={() => window.open('/multimodal-pdf-agent-n8n/docs/', '_blank')}
               >
                 Open in New Tab
               </button>

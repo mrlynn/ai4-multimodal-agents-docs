@@ -6,6 +6,24 @@ sidebar_position: 45
 
 Based on real-world experience, here's how to optimize your Docker-based n8n development environment.
 
+<InstructorNotes 
+  timing="Docker Best Practices (Optional - 10 minutes)"
+  notes={[
+    "This is reference material - don't spend workshop time here unless issues arise",
+    "Most useful for attendees doing local development vs Codespaces",
+    "Docker memory issues are common on older machines with 8GB RAM",
+    "Volume persistence problems cause workflow loss - emphasize backup",
+    "Network connectivity issues surface with corporate firewalls"
+  ]}
+  tips={[
+    "Point attendees here when they encounter Docker issues during workshop",
+    "Use as troubleshooting reference rather than sequential content",
+    "Emphasize that Codespaces avoids most of these complications",
+    "Have this page bookmarked for quick access during debugging",
+    "Consider this advanced material for post-workshop exploration"
+  ]}
+/>
+
 ## 🐳 Docker Environment Management
 
 ### Project Structure
@@ -134,10 +152,9 @@ mkdir -p "$BACKUP_DIR"
 docker-compose exec n8n n8n export:workflow --all \
   --output=/home/node/backups/workflows_$DATE.json
 
-# Backup MongoDB
-docker-compose exec mongodb mongodump \
-  --uri="mongodb://localhost:27017/pdf_workshop" \
-  --out="/backups/mongodb_$DATE"
+# Backup n8n workflows
+docker-compose exec n8n n8n export:workflow --all \
+  --output=/home/node/backups/workflows_$DATE.json
 
 # Copy files
 cp -r ./volumes/files "$BACKUP_DIR/"
@@ -221,11 +238,8 @@ networks:
 ### External Service Access
 
 ```bash
-# Access MongoDB from host
-mongodb://workshop:password@localhost:27017/pdf_workshop
-
-# Access from n8n container
-mongodb://workshop:password@mongodb:27017/pdf_workshop
+# MongoDB Atlas is accessed via connection string from Atlas UI
+# No local MongoDB instances are used in this workshop
 ```
 
 ## 📊 Monitoring & Logging
@@ -364,7 +378,7 @@ docker-compose up -d
 
 ```bash
 # Test connectivity
-docker-compose exec n8n ping mongodb
+curl http://localhost:5678/healthz
 
 # Check network configuration
 docker network ls
