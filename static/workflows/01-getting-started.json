@@ -1,0 +1,60 @@
+{
+  "name": "Getting Started - Workshop Welcome",
+  "nodes": [
+    {
+      "parameters": {
+        "content": "## Welcome to the Multimodal PDF Workshop! 🎉\n\nThis is your first workflow. Let's get started:\n\n1. **Connect MongoDB Atlas** - Add your connection string\n2. **Upload a PDF** - Try the PDF processing workflow\n3. **Create Embeddings** - Generate multimodal vectors\n4. **Search & Query** - Test vector similarity search\n\n### Next Steps:\n- Import the other sample workflows\n- Configure your MongoDB Atlas connection\n- Start building your AI agent!\n\n*Happy workflow building!* ⚡"
+      },
+      "id": "welcome-note",
+      "name": "Workshop Welcome",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [380, 240]
+    },
+    {
+      "parameters": {
+        "httpMethod": "GET",
+        "path": "workshop-status",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "id": "webhook-start",
+      "name": "Workshop Status Check",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [160, 360],
+      "webhookId": "workshop-status"
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "{\n  \"status\": \"Workshop Ready! 🚀\",\n  \"message\": \"Your n8n environment is working correctly\",\n  \"next_steps\": [\n    \"Connect MongoDB Atlas\",\n    \"Import sample workflows\",\n    \"Start building!\"\n  ],\n  \"timestamp\": \"{{new Date().toISOString()}}\"\n}"
+      },
+      "id": "respond-status",
+      "name": "Return Status",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1,
+      "position": [360, 360]
+    }
+  ],
+  "connections": {
+    "webhook-start": {
+      "main": [
+        [
+          {
+            "node": "respond-status",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "createdAt": "2024-01-01T00:00:00.000Z",
+  "updatedAt": "2024-01-01T00:00:00.000Z",
+  "id": "getting-started"
+}

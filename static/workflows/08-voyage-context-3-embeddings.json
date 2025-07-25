@@ -1,0 +1,157 @@
+{
+  "name": "Enhanced Text Embeddings with Voyage Context-3",
+  "nodes": [ 
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "context-embed",
+        "responseMode": "lastNode",
+        "options": {}
+      },
+      "id": "webhook-context",
+      "name": "Webhook - Context Embeddings",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1.1,
+      "position": [240, 300],
+      "webhookId": "context-embed-webhook"
+    },
+    {
+      "parameters": {
+        "url": "={{ $env.WORKSHOP_EMBEDDING_URL || 'https://workshop-embedding-api.vercel.app/api/embed' }}",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"text\": {{ JSON.stringify($json.input) }},\n  \"model\": \"voyage-context-3\",\n  \"input_type\": {{ JSON.stringify($json.input_type || 'document') }},\n  \"context\": {{ JSON.stringify($json.context || null) }}\n}",
+        "options": {}
+      },
+      "id": "voyage-context-3-request",
+      "name": "Generate Context-3 Embeddings",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [460, 300]
+    },
+    {
+      "parameters": {
+        "values": {
+          "string": [
+            {
+              "name": "embedding_type",
+              "value": "contextualized_chunk_embedding"
+            },
+            {
+              "name": "model_used",
+              "value": "={{ $json.model || 'voyage-context-3' }}"
+            },
+            {
+              "name": "embedding_dimensions",
+              "value": "={{ $json.embeddings[0].length }}"
+            },
+            {
+              "name": "total_tokens",
+              "value": "={{ $json.usage?.total_tokens || 'N/A' }}"
+            }
+          ],
+          "number": [
+            {
+              "name": "embedding_preview_start",
+              "value": "={{ $json.embeddings[0].slice(0, 5) }}"
+            },
+            {
+              "name": "embedding_preview_end",
+              "value": "={{ $json.embeddings[0].slice(-5) }}"
+            }
+          ]
+        }
+      },
+      "id": "format-response",
+      "name": "Format Context Response",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [680, 300]
+    },
+    {
+      "parameters": {
+        "content": "## Voyage Context-3: Advanced Text Understanding for Multimodal Workflows\n\n### Enhancing Your Multimodal Agent with Context-3\n\n**voyage-context-3** is a specialized text embedding model that complements multimodal workflows:\n\n1. **Contextual Text Understanding**: While your multimodal models (voyage-3, voyage-multimodal-3) handle images AND text, context-3 provides superior understanding of text relationships.\n\n2. **Hybrid Approach**: Use BOTH models together:\n   - **voyage-multimodal-3**: For images and general text from PDFs\n   - **voyage-context-3**: For deep text understanding and context\n\n3. **Better Text Retrieval**: When users ask complex questions about document text, context-3 excels at:\n   - Understanding relationships between paragraphs\n   - Maintaining document structure awareness\n   - Legal, technical, and narrative documents\n\n### Combining with Multimodal:\n```json\n// For images + basic text:\n{ \"model\": \"voyage-multimodal-3\", \"input\": \"image_or_text\" }\n\n// For advanced text chunks:\n{ \"model\": \"voyage-context-3\", \"input\": \"text\", \"context\": \"surrounding_text\" }\n```\n\n### Workshop Integration:\n- Extract images → voyage-multimodal-3\n- Extract complex text → voyage-context-3\n- Store both in MongoDB Atlas Vector Search",
+        "height": 520,
+        "width": 400
+      },
+      "id": "context-3-documentation",
+      "name": "Context-3 Documentation",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [240, 580]
+    },
+    {
+      "parameters": {
+        "url": "={{ $env.WORKSHOP_EMBEDDING_URL || 'https://workshop-embedding-api.vercel.app/api/embed' }}",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "action",
+              "value": "search"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"query\": {{ JSON.stringify($json.query) }},\n  \"model\": \"voyage-context-3\",\n  \"top_k\": {{ $json.top_k || 5 }},\n  \"input_type\": \"query\"\n}",
+        "options": {}
+      },
+      "id": "context-retrieval-demo",
+      "name": "Context-Aware Retrieval (Optional)",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [460, 580],
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "content": "## Workshop Integration: Enhancing Multimodal Agents\n\n🚀 **Power Combo**: voyage-multimodal-3 + voyage-context-3\n\n✅ Your multimodal PDF agent becomes even more powerful by:\n1. Using **voyage-multimodal-3** for images and basic text\n2. Using **voyage-context-3** for complex text understanding\n3. Storing both in MongoDB Atlas Vector Search\n\n✅ Example PDF Processing Flow:\n- Page has diagram → voyage-multimodal-3\n- Page has legal text → voyage-context-3\n- User asks about diagram → search multimodal embeddings\n- User asks about contract details → search context embeddings\n\n✅ This gives you the best of both worlds:\n- Visual understanding (multimodal)\n- Deep text comprehension (context-3)",
+        "height": 220,
+        "width": 400,
+        "color": 5
+      },
+      "id": "multimodal-note",
+      "name": "Multimodal Compatibility",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [700, 480]
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Webhook - Context Embeddings": {
+      "main": [
+        [
+          {
+            "node": "Generate Context-3 Embeddings",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Generate Context-3 Embeddings": {
+      "main": [
+        [
+          {
+            "node": "Format Context Response",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "voyage-context-3-v1",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "workshop-instance"
+  },
+  "id": "voyage-context-3-embeddings",
+  "tags": ["embeddings", "voyage-ai", "context-3", "multimodal"]
+}

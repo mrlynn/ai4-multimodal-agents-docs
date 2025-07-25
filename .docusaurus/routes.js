@@ -44,15 +44,15 @@ export default [
   },
   {
     path: '/multimodal-pdf-agent-n8n/docs',
-    component: ComponentCreator('/multimodal-pdf-agent-n8n/docs', 'df9'),
+    component: ComponentCreator('/multimodal-pdf-agent-n8n/docs', 'f93'),
     routes: [
       {
         path: '/multimodal-pdf-agent-n8n/docs',
-        component: ComponentCreator('/multimodal-pdf-agent-n8n/docs', '22a'),
+        component: ComponentCreator('/multimodal-pdf-agent-n8n/docs', 'f3b'),
         routes: [
           {
             path: '/multimodal-pdf-agent-n8n/docs',
-            component: ComponentCreator('/multimodal-pdf-agent-n8n/docs', 'e3c'),
+            component: ComponentCreator('/multimodal-pdf-agent-n8n/docs', '607'),
             routes: [
               {
                 path: '/multimodal-pdf-agent-n8n/docs',
@@ -75,6 +75,12 @@ export default [
               {
                 path: '/multimodal-pdf-agent-n8n/docs/api-architecture',
                 component: ComponentCreator('/multimodal-pdf-agent-n8n/docs/api-architecture', '928'),
+                exact: true,
+                sidebar: "tutorialSidebar"
+              },
+              {
+                path: '/multimodal-pdf-agent-n8n/docs/api-gateway-status',
+                component: ComponentCreator('/multimodal-pdf-agent-n8n/docs/api-gateway-status', '3c1'),
                 exact: true,
                 sidebar: "tutorialSidebar"
               },
@@ -109,7 +115,13 @@ export default [
               },
               {
                 path: '/multimodal-pdf-agent-n8n/docs/docker-troubleshooting',
-                component: ComponentCreator('/multimodal-pdf-agent-n8n/docs/docker-troubleshooting', 'd0c'),
+                component: ComponentCreator('/multimodal-pdf-agent-n8n/docs/docker-troubleshooting', 'e8e'),
+                exact: true,
+                sidebar: "tutorialSidebar"
+              },
+              {
+                path: '/multimodal-pdf-agent-n8n/docs/enhanced-text-context-3',
+                component: ComponentCreator('/multimodal-pdf-agent-n8n/docs/enhanced-text-context-3', '083'),
                 exact: true,
                 sidebar: "tutorialSidebar"
               },
@@ -204,6 +216,12 @@ export default [
                 sidebar: "tutorialSidebar"
               },
               {
+                path: '/multimodal-pdf-agent-n8n/docs/status-monitoring',
+                component: ComponentCreator('/multimodal-pdf-agent-n8n/docs/status-monitoring', 'dca'),
+                exact: true,
+                sidebar: "tutorialSidebar"
+              },
+              {
                 path: '/multimodal-pdf-agent-n8n/docs/summary',
                 component: ComponentCreator('/multimodal-pdf-agent-n8n/docs/summary', '6fa'),
                 exact: true,
@@ -230,6 +248,36 @@ export default [
               {
                 path: '/multimodal-pdf-agent-n8n/docs/voyage-ai-setup',
                 component: ComponentCreator('/multimodal-pdf-agent-n8n/docs/voyage-ai-setup', '77a'),
+                exact: true,
+                sidebar: "tutorialSidebar"
+              },
+              {
+                path: '/multimodal-pdf-agent-n8n/docs/workflow-guide-getting-started',
+                component: ComponentCreator('/multimodal-pdf-agent-n8n/docs/workflow-guide-getting-started', '3ae'),
+                exact: true,
+                sidebar: "tutorialSidebar"
+              },
+              {
+                path: '/multimodal-pdf-agent-n8n/docs/workflow-guide-hybrid-agent',
+                component: ComponentCreator('/multimodal-pdf-agent-n8n/docs/workflow-guide-hybrid-agent', 'e2b'),
+                exact: true,
+                sidebar: "tutorialSidebar"
+              },
+              {
+                path: '/multimodal-pdf-agent-n8n/docs/workflow-integration-guide',
+                component: ComponentCreator('/multimodal-pdf-agent-n8n/docs/workflow-integration-guide', '099'),
+                exact: true,
+                sidebar: "tutorialSidebar"
+              },
+              {
+                path: '/multimodal-pdf-agent-n8n/docs/workflow-reference',
+                component: ComponentCreator('/multimodal-pdf-agent-n8n/docs/workflow-reference', 'f6e'),
+                exact: true,
+                sidebar: "tutorialSidebar"
+              },
+              {
+                path: '/multimodal-pdf-agent-n8n/docs/workflows-library',
+                component: ComponentCreator('/multimodal-pdf-agent-n8n/docs/workflows-library', '7cd'),
                 exact: true,
                 sidebar: "tutorialSidebar"
               }

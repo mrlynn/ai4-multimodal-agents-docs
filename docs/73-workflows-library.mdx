@@ -1,0 +1,169 @@
+---
+sidebar_position: 73
+---
+
+# 📚 Workflows Library
+
+Access all pre-built workshop workflows ready for import into n8n.
+
+## 🚀 Quick Start
+
+### How to Import Workflows
+
+1. **Download** the workflow JSON file
+2. In n8n, go to **Workflows** → **Import**
+3. Select the downloaded JSON file
+4. **Review** the imported workflow
+5. **Update credentials** as needed
+6. **Test** the workflow
+
+## 📋 Available Workflows
+
+### 🎓 Foundation Workflows (01-02)
+
+#### 01 - Getting Started
+- **Download**: [01-getting-started.json](/multimodal-pdf-agent-n8n/workflows/01-getting-started.json)
+- **Purpose**: Test environment and verify setup
+- **Concepts**: Webhooks, basic nodes, response handling
+- **Difficulty**: Beginner
+
+#### 02 - PDF Processor  
+- **Download**: [02-pdf-processor.json](/multimodal-pdf-agent-n8n/workflows/02-pdf-processor.json)
+- **Purpose**: Extract and process PDF content
+- **Concepts**: PDF handling, page extraction, data transformation
+- **Difficulty**: Intermediate
+
+### 🤖 AI Agent Workflows (03-07)
+
+#### 03 - Multimodal Agent
+- **Download**: [03-multimodal-agent.json](/multimodal-pdf-agent-n8n/workflows/03-multimodal-agent.json)
+- **Purpose**: Basic multimodal agent processing
+- **Concepts**: Multimodal embeddings, vector search, AI responses
+- **Difficulty**: Intermediate
+
+#### 04 - Complete Agent (Mock)
+- **Download**: [04-complete-agent-mock.json](/multimodal-pdf-agent-n8n/workflows/04-complete-agent-mock.json)  
+- **Purpose**: Full agent with mock services for testing
+- **Concepts**: Mock testing, agent architecture, error handling
+- **Difficulty**: Intermediate
+
+#### 05 - Real Multimodal Agent
+- **Download**: [05-real-multimodal-agent.json](/multimodal-pdf-agent-n8n/workflows/05-real-multimodal-agent.json)
+- **Purpose**: Production-ready multimodal agent
+- **Concepts**: Production patterns, real APIs, advanced RAG
+- **Difficulty**: Advanced
+
+#### 06 - Real Voyage Multimodal
+- **Download**: [06-real-voyage-multimodal.json](/multimodal-pdf-agent-n8n/workflows/06-real-voyage-multimodal.json)
+- **Purpose**: Advanced Voyage AI multimodal capabilities
+- **Concepts**: Image embeddings, visual search, multimodal RAG
+- **Difficulty**: Advanced
+
+#### 07 - Form-Based Agent  
+- **Download**: [07-form-based-agent.json](/multimodal-pdf-agent-n8n/workflows/07-form-based-agent.json)
+- **Purpose**: Interactive agent with web form interface
+- **Concepts**: Web interface, form handling, user interaction
+- **Difficulty**: Intermediate
+
+### 🚀 Advanced Workflows (08-09)
+
+#### 08 - Voyage Context-3 Embeddings
+- **Download**: [08-voyage-context-3-embeddings.json](/multimodal-pdf-agent-n8n/workflows/08-voyage-context-3-embeddings.json)
+- **Purpose**: Enhanced text understanding with Context-3
+- **Concepts**: Context-3 model, complex text, contextual embeddings
+- **Difficulty**: Advanced
+- **Best for**: Legal documents, technical manuals, research papers
+
+#### 09 - Hybrid Multimodal Context Agent  
+- **Download**: [09-hybrid-multimodal-context-agent.json](/multimodal-pdf-agent-n8n/workflows/09-hybrid-multimodal-context-agent.json)
+- **Purpose**: Ultimate workflow combining multiple models
+- **Concepts**: Hybrid approach, model orchestration, advanced RAG
+- **Difficulty**: Expert
+- **Use cases**: Technical docs with diagrams, legal contracts with exhibits
+
+## 🎯 Workflow Selection Guide
+
+### By Experience Level
+
+#### Beginner
+1. **01 - Getting Started**: Learn n8n basics
+2. **02 - PDF Processor**: Handle document processing
+3. **04 - Complete Agent (Mock)**: Understand agent architecture
+
+#### Intermediate  
+1. **03 - Multimodal Agent**: Real embedding generation
+2. **07 - Form-Based Agent**: Add user interfaces
+3. **05 - Real Multimodal Agent**: Production patterns
+
+#### Advanced
+1. **06 - Real Voyage Multimodal**: Visual content processing
+2. **08 - Context-3 Embeddings**: Enhanced text understanding
+3. **09 - Hybrid Agent**: Complete solution
+
+### By Use Case
+
+| Use Case | Recommended Workflows |
+|----------|---------------------|
+| **Basic PDF Processing** | 02, 03 |
+| **Visual Content** | 06, 09 |
+| **Legal/Technical Documents** | 08, 09 |
+| **Interactive Applications** | 07 |
+| **Production Deployment** | 05, 09 |
+| **Testing/Development** | 04 |
+
+## 📦 Download All Workflows
+
+### Direct Downloads
+- [01-getting-started.json](/multimodal-pdf-agent-n8n/workflows/01-getting-started.json)
+- [02-pdf-processor.json](/multimodal-pdf-agent-n8n/workflows/02-pdf-processor.json)
+- [03-multimodal-agent.json](/multimodal-pdf-agent-n8n/workflows/03-multimodal-agent.json)
+- [04-complete-agent-mock.json](/multimodal-pdf-agent-n8n/workflows/04-complete-agent-mock.json)
+- [05-real-multimodal-agent.json](/multimodal-pdf-agent-n8n/workflows/05-real-multimodal-agent.json)
+- [06-real-voyage-multimodal.json](/multimodal-pdf-agent-n8n/workflows/06-real-voyage-multimodal.json)
+- [07-form-based-agent.json](/multimodal-pdf-agent-n8n/workflows/07-form-based-agent.json)
+- [08-voyage-context-3-embeddings.json](/multimodal-pdf-agent-n8n/workflows/08-voyage-context-3-embeddings.json)
+- [09-hybrid-multimodal-context-agent.json](/multimodal-pdf-agent-n8n/workflows/09-hybrid-multimodal-context-agent.json)
+
+### Terminal Script
+```bash
+# Download all workflows
+for i in {01..09}; do
+  curl -O https://your-workshop-url.com/workflows/${i}-*.json
+done
+```
+
+## 🚨 Troubleshooting
+
+### Common Import Issues
+
+#### Credentials not found
+After importing, you need to:
+1. Go to **Credentials** → **New**
+2. Add MongoDB credentials
+3. Update webhook URLs if needed
+4. Save and test connections
+
+#### Workflow errors on execution
+Check these common issues:
+- API endpoints are accessible
+- MongoDB collection exists
+- Webhook paths are unique
+- All required nodes are connected
+
+#### Version compatibility
+These workflows require:
+- n8n version 1.0.0 or higher
+- MongoDB node v2
+- HTTP Request node v4.1
+
+## 📚 Next Steps
+
+After exploring the workflows:
+
+1. **Start with workflow 01** to verify setup
+2. **Progress through numbered order** for best learning
+3. **Customize workflows** for your use case
+4. **Combine patterns** from different workflows
+5. **Build your own** using these as templates
+
+Ready to import your first workflow? [Start with Getting Started →](/multimodal-pdf-agent-n8n/workflows/01-getting-started.json)

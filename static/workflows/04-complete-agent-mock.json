@@ -1,0 +1,241 @@
+{
+  "name": "Complete Multimodal PDF Agent (Mock)",
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "b7f2b123-4c5d-4e6f-7a8b-9c0d1e2f3a4b",
+      "name": "Manual Trigger",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [240, 300]
+    },
+    {
+      "parameters": {
+        "values": {
+          "string": [
+            {
+              "name": "textContent",
+              "value": "This is a comprehensive guide to artificial intelligence and machine learning. It covers topics including neural networks, deep learning, natural language processing, and computer vision. The document explores how AI systems can understand both text and images through multimodal processing."
+            },
+            {
+              "name": "filename",
+              "value": "ai_guide.pdf"
+            },
+            {
+              "name": "pageNumber",
+              "value": "1"
+            }
+          ]
+        }
+      },
+      "id": "set-test-data",
+      "name": "Set Test PDF Data",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.2,
+      "position": [460, 300]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Mock embedding generator for workshop\n// Generates consistent 1024-dimensional vectors\nconst text = $json.textContent || \"test\";\nconst filename = $json.filename || \"unknown.pdf\";\n\n// Create deterministic embedding based on text\nconst embedding = new Array(1024).fill(0).map((_, i) => {\n  const charSum = text.split('').reduce((sum, char) => sum + char.charCodeAt(0), 0);\n  return Math.sin((charSum + i) * 0.01) * Math.cos(i * 0.1);\n});\n\nreturn [{\n  json: {\n    original: $json,\n    embedding: {\n      embeddings: [embedding],\n      model: \"mock-voyage-3\",\n      usage: { \n        total_tokens: text.split(' ').length \n      }\n    },\n    metadata: {\n      filename: filename,\n      pageNumber: $json.pageNumber,\n      timestamp: new Date().toISOString(),\n      embeddingDimensions: embedding.length\n    }\n  }\n}];"
+      },
+      "id": "generate-mock-embedding",
+      "name": "Generate Mock Embedding",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [680, 300]
+    },
+    {
+      "parameters": {
+        "content": "## Mock MongoDB Storage\n\nIn a real workflow, this would store to MongoDB.\nFor the workshop, we'll simulate the storage.",
+        "height": 80,
+        "width": 250
+      },
+      "id": "note-mongodb",
+      "name": "MongoDB Note",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [860, 220]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Simulate MongoDB storage\n// In production, use actual MongoDB node\n\nconst document = {\n  _id: Math.random().toString(36).substring(7),\n  filename: $json.original.filename,\n  pageNumber: $json.original.pageNumber,\n  textContent: $json.original.textContent,\n  embedding: $json.embedding.embeddings[0],\n  metadata: $json.metadata,\n  createdAt: new Date().toISOString()\n};\n\n// Simulate successful storage\nreturn [{\n  json: {\n    status: \"success\",\n    message: \"Document stored in MongoDB\",\n    documentId: document._id,\n    collection: \"pdf_documents\",\n    document: document\n  }\n}];"
+      },
+      "id": "mock-mongodb-store",
+      "name": "Mock MongoDB Store",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [900, 300]
+    },
+    {
+      "parameters": {
+        "values": {
+          "string": [
+            {
+              "name": "query",
+              "value": "What does this document say about artificial intelligence?"
+            }
+          ]
+        }
+      },
+      "id": "set-user-query",
+      "name": "Set User Query",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.2,
+      "position": [460, 500]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Generate embedding for user query\nconst query = $json.query || \"What does this document say about AI?\";\n\n// Create query embedding (similar to document embedding)\nconst queryEmbedding = new Array(1024).fill(0).map((_, i) => {\n  const charSum = query.split('').reduce((sum, char) => sum + char.charCodeAt(0), 0);\n  return Math.sin((charSum + i) * 0.01) * Math.cos(i * 0.1);\n});\n\nreturn [{\n  json: {\n    query: query,\n    queryEmbedding: queryEmbedding,\n    model: \"mock-voyage-3\"\n  }\n}];"
+      },
+      "id": "embed-query",
+      "name": "Embed Query",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [680, 500]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Simulate MongoDB Vector Search\n// In production, this would use $vectorSearch aggregation\n\n// Get the stored document from earlier in the workflow\nconst storedDoc = $('Mock MongoDB Store').first().json.document;\nconst queryEmbedding = $json.queryEmbedding;\n\n// Calculate mock similarity score\n// In real implementation, MongoDB calculates this\nconst similarity = 0.85 + Math.random() * 0.1; // Mock score between 0.85-0.95\n\nreturn [{\n  json: {\n    searchResults: [{\n      _id: storedDoc._id,\n      filename: storedDoc.filename,\n      pageNumber: storedDoc.pageNumber,\n      textContent: storedDoc.textContent,\n      score: similarity,\n      metadata: storedDoc.metadata\n    }],\n    query: $json.query,\n    totalResults: 1\n  }\n}];"
+      },
+      "id": "mock-vector-search",
+      "name": "Mock Vector Search",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [900, 500]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Build context from search results\nconst searchResults = $json.searchResults || [];\nconst query = $json.query || \"User query\";\n\nif (!searchResults.length) {\n  return [{\n    json: {\n      query: query,\n      context: \"No search results found.\",\n      sources: []\n    }\n  }];\n}\n\nconst context = searchResults\n  .map((doc, idx) => {\n    const content = doc.textContent || \"No content available\";\n    return `[Result ${idx + 1} - Score: ${(doc.score || 0).toFixed(3)}]\\n` +\n           `File: ${doc.filename || \"unknown\"}, Page: ${doc.pageNumber || \"?\"}\\n` +\n           `Content: ${content.substring(0, 200)}...`;\n  })\n  .join('\\n\\n');\n\nreturn [{\n  json: {\n    query: query,\n    context: context,\n    sources: searchResults.map(r => ({\n      filename: r.filename || \"unknown\",\n      page: r.pageNumber || \"?\",\n      score: r.score || 0\n    }))\n  }\n}];"
+      },
+      "id": "build-context",
+      "name": "Build Context",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [1120, 500]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Mock AI Response Generation\n// In production, this would call OpenAI/Gemini/Claude\n\nconst query = $json.query;\nconst context = $json.context;\nconst sources = $json.sources;\n\n// Generate a contextual response\nconst response = `Based on the PDF document, here's what I found about your question: \"${query}\"\\n\\n` +\n  `The document provides comprehensive information about artificial intelligence and machine learning. ` +\n  `It specifically covers neural networks, deep learning, natural language processing, and computer vision. ` +\n  `The document emphasizes how AI systems can process both text and images through multimodal approaches, ` +\n  `which enables more sophisticated understanding and analysis of complex data.\\n\\n` +\n  `This information was found in ${sources[0].filename} (page ${sources[0].page}) with a relevance score of ${sources[0].score.toFixed(3)}.`;\n\nreturn [{\n  json: {\n    response: response,\n    query: query,\n    sources: sources,\n    model: \"mock-gpt-4\",\n    timestamp: new Date().toISOString()\n  }\n}];"
+      },
+      "id": "generate-ai-response",
+      "name": "Generate AI Response",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [1340, 500]
+    },
+    {
+      "parameters": {
+        "content": "## Complete Multimodal PDF Agent Workflow\n\nThis workflow demonstrates:\n1. PDF text processing\n2. Embedding generation\n3. Vector storage (MongoDB)\n4. Query embedding\n5. Vector search\n6. AI response generation\n\nUsing mock components for workshop testing.",
+        "height": 150,
+        "width": 300
+      },
+      "id": "workflow-description",
+      "name": "Workflow Description",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [200, 100]
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Manual Trigger": {
+      "main": [
+        [
+          {
+            "node": "Set Test PDF Data",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Set Test PDF Data": {
+      "main": [
+        [
+          {
+            "node": "Generate Mock Embedding",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Generate Mock Embedding": {
+      "main": [
+        [
+          {
+            "node": "Mock MongoDB Store",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Mock MongoDB Store": {
+      "main": [
+        [
+          {
+            "node": "Set User Query",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Set User Query": {
+      "main": [
+        [
+          {
+            "node": "Embed Query",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Embed Query": {
+      "main": [
+        [
+          {
+            "node": "Mock Vector Search",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Mock Vector Search": {
+      "main": [
+        [
+          {
+            "node": "Build Context",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Build Context": {
+      "main": [
+        [
+          {
+            "node": "Generate AI Response",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "complete-agent-mock-v1",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "workshop-instance"
+  },
+  "id": "complete-multimodal-agent-mock",
+  "tags": ["workshop", "complete", "mock", "multimodal"]
+}

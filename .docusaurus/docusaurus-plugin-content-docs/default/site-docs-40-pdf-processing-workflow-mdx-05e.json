@@ -17,8 +17,8 @@
   },
   "sidebar": "tutorialSidebar",
   "previous": {
-    "title": "Voyage AI Configuration",
-    "permalink": "/multimodal-pdf-agent-n8n/docs/voyage-ai-setup"
+    "title": "🔗 Integration Guide",
+    "permalink": "/multimodal-pdf-agent-n8n/docs/workflow-integration-guide"
   },
   "next": {
     "title": "Vector Search Implementation",

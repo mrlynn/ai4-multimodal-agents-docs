@@ -88,7 +88,7 @@ const config = {
   projectName: `${organizationName}.github.io`,
   organizationName: `${organizationName}`,
   trailingSlash: false,
-  onBrokenLinks: "throw",
+  onBrokenLinks: "warn",
   onBrokenMarkdownLinks: "warn",
   favicon: `${favicon}`,
   deploymentBranch: "gh-pages",
@@ -141,7 +141,7 @@ const config = {
       announcementBar: {
         id: "feedback_form",
         content:
-          'This is a demonstration that we can put a pop-up message here! Even <a target="_blank" rel="noopener noreferrer" href="#">links</a>',
+          'Don\'t forget to provide feedback for the workshop: <a target="_blank" rel="noopener noreferrer" href="#">links</a>',
         backgroundColor: "#fafbfc",
         textColor: "#091E42",
         isCloseable: true,

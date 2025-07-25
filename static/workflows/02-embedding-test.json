@@ -1,0 +1,87 @@
+{
+  "name": "Embedding Test - Voyage AI Multimodal",
+  "nodes": [
+    {
+      "parameters": {
+        "content": "## Embedding Test Workflow 🧠\n\nThis workflow tests the Voyage AI multimodal embedding API.\n\n**What it does:**\n- Takes text input via webhook\n- Sends to Voyage AI embedding endpoint\n- Returns vector embedding results\n\n**API Endpoint:** https://workshop-embedding-api.vercel.app/api/embed\n\n**Test it:**\n1. Execute this workflow\n2. Use the webhook URL with POST request\n3. Send: `{\"input\": \"Your text here\", \"input_type\": \"document\"}`"
+      },
+      "id": "embedding-note",
+      "name": "Embedding Info",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [600, 180]
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "test-embedding",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "id": "webhook-embed",
+      "name": "Embedding Request",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [140, 300],
+      "webhookId": "test-embedding"
+    },
+    {
+      "parameters": {
+        "url": "https://workshop-embedding-api.vercel.app/api/embed",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "{\n  \"input\": \"{{ $json.body.input || 'Sample text for embedding generation' }}\",\n  \"input_type\": \"{{ $json.body.input_type || 'document' }}\"\n}",
+        "options": {
+          "timeout": 30000
+        }
+      },
+      "id": "voyage-api",
+      "name": "Voyage AI Embedding",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [340, 300]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "{\n  \"success\": true,\n  \"embedding_dimensions\": {{ $json.data[0].embedding.length }},\n  \"embedding_preview\": {{ JSON.stringify($json.data[0].embedding.slice(0, 5)) }},\n  \"model\": \"{{ $json.model }}\",\n  \"input_processed\": \"{{ $('Embedding Request').item.json.body.input }}\",\n  \"workshop_status\": \"Embedding generation working! ✅\"\n}"
+      },
+      "id": "respond-embedding",
+      "name": "Return Embedding Result",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1,
+      "position": [540, 300]
+    }
+  ],
+  "connections": {
+    "webhook-embed": {
+      "main": [
+        [
+          {
+            "node": "voyage-api",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "voyage-api": {
+      "main": [
+        [
+          {
+            "node": "respond-embedding",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "createdAt": "2024-01-01T00:00:00.000Z",
+  "updatedAt": "2024-01-01T00:00:00.000Z",
+  "id": "embedding-test"
+}

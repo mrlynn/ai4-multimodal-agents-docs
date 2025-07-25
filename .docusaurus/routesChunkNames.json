@@ -49,17 +49,17 @@
     },
     "config": "config---multimodal-pdf-agent-n-8-n-hello-world-5-e-9-00a"
   },
-  "/multimodal-pdf-agent-n8n/docs-df9": {
+  "/multimodal-pdf-agent-n8n/docs-f93": {
     "__comp": "__comp---theme-docs-root-5-e-9-0b6",
     "__context": {
       "plugin": "plugin---multimodal-pdf-agent-n-8-n-docsaba-485"
     }
   },
-  "/multimodal-pdf-agent-n8n/docs-22a": {
+  "/multimodal-pdf-agent-n8n/docs-f3b": {
     "__comp": "__comp---theme-doc-version-roota-7-b-5de",
     "__props": "__props---multimodal-pdf-agent-n-8-n-docs-2-ee-9f5"
   },
-  "/multimodal-pdf-agent-n8n/docs-e3c": {
+  "/multimodal-pdf-agent-n8n/docs-607": {
     "__comp": "__comp---theme-doc-roota-94-67a"
   },
   "/multimodal-pdf-agent-n8n/docs-248": {
@@ -77,6 +77,10 @@
   "/multimodal-pdf-agent-n8n/docs/api-architecture-928": {
     "__comp": "__comp---theme-doc-item-178-a40",
     "content": "content---multimodal-pdf-agent-n-8-n-docs-api-architecture-137-674"
+  },
+  "/multimodal-pdf-agent-n8n/docs/api-gateway-status-3c1": {
+    "__comp": "__comp---theme-doc-item-178-a40",
+    "content": "content---multimodal-pdf-agent-n-8-n-docs-api-gateway-status-855-552"
   },
   "/multimodal-pdf-agent-n8n/docs/approach-comparison-55c": {
     "__comp": "__comp---theme-doc-item-178-a40",
@@ -98,9 +102,13 @@
     "__comp": "__comp---theme-doc-item-178-a40",
     "content": "content---multimodal-pdf-agent-n-8-n-docs-complete-multimodal-agent-802-85b"
   },
-  "/multimodal-pdf-agent-n8n/docs/docker-troubleshooting-d0c": {
+  "/multimodal-pdf-agent-n8n/docs/docker-troubleshooting-e8e": {
     "__comp": "__comp---theme-doc-item-178-a40",
-    "content": "content---multimodal-pdf-agent-n-8-n-docs-docker-troubleshooting-827-9bb"
+    "content": "content---multimodal-pdf-agent-n-8-n-docs-docker-troubleshooting-568-6a5"
+  },
+  "/multimodal-pdf-agent-n8n/docs/enhanced-text-context-3-083": {
+    "__comp": "__comp---theme-doc-item-178-a40",
+    "content": "content---multimodal-pdf-agent-n-8-n-docs-enhanced-text-context-3-bd-0-064"
   },
   "/multimodal-pdf-agent-n8n/docs/exercise-advanced-tools-52f": {
     "__comp": "__comp---theme-doc-item-178-a40",
@@ -162,6 +170,10 @@
     "__comp": "__comp---theme-doc-item-178-a40",
     "content": "content---multimodal-pdf-agent-n-8-n-docs-status-badge-usage-guide-73-d-8c8"
   },
+  "/multimodal-pdf-agent-n8n/docs/status-monitoring-dca": {
+    "__comp": "__comp---theme-doc-item-178-a40",
+    "content": "content---multimodal-pdf-agent-n-8-n-docs-status-monitoringad-1-409"
+  },
   "/multimodal-pdf-agent-n8n/docs/summary-6fa": {
     "__comp": "__comp---theme-doc-item-178-a40",
     "content": "content---multimodal-pdf-agent-n-8-n-docs-summary-3-aa-d8e"
@@ -181,6 +193,26 @@
   "/multimodal-pdf-agent-n8n/docs/voyage-ai-setup-77a": {
     "__comp": "__comp---theme-doc-item-178-a40",
     "content": "content---multimodal-pdf-agent-n-8-n-docs-voyage-ai-setup-314-16c"
+  },
+  "/multimodal-pdf-agent-n8n/docs/workflow-guide-getting-started-3ae": {
+    "__comp": "__comp---theme-doc-item-178-a40",
+    "content": "content---multimodal-pdf-agent-n-8-n-docs-workflow-guide-getting-started-350-4e5"
+  },
+  "/multimodal-pdf-agent-n8n/docs/workflow-guide-hybrid-agent-e2b": {
+    "__comp": "__comp---theme-doc-item-178-a40",
+    "content": "content---multimodal-pdf-agent-n-8-n-docs-workflow-guide-hybrid-agentc-73-d30"
+  },
+  "/multimodal-pdf-agent-n8n/docs/workflow-integration-guide-099": {
+    "__comp": "__comp---theme-doc-item-178-a40",
+    "content": "content---multimodal-pdf-agent-n-8-n-docs-workflow-integration-guide-87-f-b15"
+  },
+  "/multimodal-pdf-agent-n8n/docs/workflow-reference-f6e": {
+    "__comp": "__comp---theme-doc-item-178-a40",
+    "content": "content---multimodal-pdf-agent-n-8-n-docs-workflow-reference-5-ad-863"
+  },
+  "/multimodal-pdf-agent-n8n/docs/workflows-library-7cd": {
+    "__comp": "__comp---theme-doc-item-178-a40",
+    "content": "content---multimodal-pdf-agent-n-8-n-docs-workflows-library-8-b-1-f50"
   },
   "/multimodal-pdf-agent-n8n/-7a9": {
     "__comp": "__comp---site-src-pages-index-jsc-4-f-f99",

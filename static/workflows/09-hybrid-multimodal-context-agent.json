@@ -1,0 +1,259 @@
+{
+  "name": "Hybrid Multimodal PDF Agent with Context-3 Enhancement",
+  "nodes": [
+    {
+      "parameters": {
+        "path": "pdf-hybrid-upload",
+        "options": {
+          "binaryPropertyName": "data"
+        },
+        "responseMode": "lastNode"
+      },
+      "id": "webhook-pdf-hybrid",
+      "name": "PDF Upload (Hybrid Processing)",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1.1,
+      "position": [240, 300],
+      "webhookId": "pdf-hybrid-upload"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Extract PDF for HYBRID processing (images + contextualized text)\nconst binary = $binary.data;\nif (!binary || !binary.fileName?.toLowerCase().endsWith('.pdf')) {\n  throw new Error('Valid PDF file required');\n}\n\n// Simulate hybrid PDF extraction\nconst pages = [\n  {\n    pageNumber: 1,\n    text: \"Building Multimodal AI Agents with MongoDB and Voyage AI\",\n    context: \"Title page of workshop documentation\",\n    hasImages: true,\n    imageDescription: \"Voyage AI logo and MongoDB logo\"\n  },\n  {\n    pageNumber: 2,\n    text: \"Voyage AI offers both multimodal embeddings for images and contextualized embeddings for advanced text understanding\",\n    context: \"Introduction section following title page\",\n    hasImages: true,\n    imageDescription: \"Architecture diagram showing multimodal pipeline\"\n  },\n  {\n    pageNumber: 3,\n    text: \"Legal disclaimer: This workshop material is provided as-is for educational purposes\",\n    context: \"Legal section requiring deep text understanding\",\n    hasImages: false,\n    imageDescription: null\n  }\n];\n\nreturn pages.map(page => ({\n  json: {\n    filename: binary.fileName,\n    pageNumber: page.pageNumber,\n    textContent: page.text,\n    pageContext: page.context,\n    hasImages: page.hasImages,\n    imageDescription: page.imageDescription,\n    requiresContextualText: page.text.includes('Legal') || page.text.includes('technical'),\n    timestamp: new Date().toISOString()\n  }\n}));"
+      },
+      "id": "extract-hybrid-content",
+      "name": "Extract Hybrid PDF Content",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [460, 300]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "has-images",
+              "leftValue": "={{ $json.hasImages }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "route-by-content",
+      "name": "Route by Content Type",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [680, 300]
+    },
+    {
+      "parameters": {
+        "url": "https://workshop-embedding-api.vercel.app/api/embed",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"text\": {{ JSON.stringify($json.textContent) }},\n  \"model\": \"voyage-multimodal-3\",\n  \"input_type\": \"document\",\n  \"metadata\": {\n    \"page\": {{ $json.pageNumber }},\n    \"has_images\": true,\n    \"image_description\": {{ JSON.stringify($json.imageDescription) }}\n  }\n}",
+        "options": {}
+      },
+      "id": "voyage-multimodal",
+      "name": "Generate Multimodal Embeddings",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [900, 240]
+    },
+    {
+      "parameters": {
+        "url": "https://workshop-embedding-api.vercel.app/api/embed",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"text\": {{ JSON.stringify($json.textContent) }},\n  \"model\": \"voyage-context-3\",\n  \"input_type\": \"document\",\n  \"context\": {{ JSON.stringify($json.pageContext) }},\n  \"metadata\": {\n    \"page\": {{ $json.pageNumber }},\n    \"requires_context\": true\n  }\n}",
+        "options": {}
+      },
+      "id": "voyage-context-3",
+      "name": "Generate Context-3 Embeddings",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [900, 360]
+    },
+    {
+      "parameters": {
+        "mode": "combine",
+        "combineBy": "combineByPosition",
+        "options": {}
+      },
+      "id": "merge-embeddings",
+      "name": "Merge All Embeddings",
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3,
+      "position": [1120, 300]
+    },
+    {
+      "parameters": {
+        "operation": "insert",
+        "collection": "hybrid_pdf_documents",
+        "fields": "={\n  \"filename\": {{ JSON.stringify($('Extract Hybrid PDF Content').item.json.filename) }},\n  \"pageNumber\": {{ $('Extract Hybrid PDF Content').item.json.pageNumber }},\n  \"content\": {\n    \"text\": {{ JSON.stringify($('Extract Hybrid PDF Content').item.json.textContent) }},\n    \"context\": {{ JSON.stringify($('Extract Hybrid PDF Content').item.json.pageContext) }},\n    \"hasImages\": {{ $('Extract Hybrid PDF Content').item.json.hasImages }}\n  },\n  \"embeddings\": {\n    \"multimodal\": {{ $json.hasImages ? JSON.stringify($('Generate Multimodal Embeddings').item.json.embeddings[0]) : null }},\n    \"contextual\": {{ $json.requiresContextualText ? JSON.stringify($('Generate Context-3 Embeddings').item.json.embeddings[0]) : null }}\n  },\n  \"metadata\": {\n    \"models_used\": [\n      {{ $json.hasImages ? '\"voyage-multimodal-3\"' : '' }},\n      {{ $json.requiresContextualText ? '\"voyage-context-3\"' : '' }}\n    ].filter(Boolean),\n    \"timestamp\": {{ JSON.stringify($('Extract Hybrid PDF Content').item.json.timestamp) }}\n  }\n}"
+      },
+      "id": "store-hybrid-embeddings",
+      "name": "Store Hybrid Embeddings",
+      "type": "n8n-nodes-base.mongoDb",
+      "typeVersion": 1.1,
+      "position": [1340, 300],
+      "credentials": {
+        "mongoDb": {
+          "id": "mongodb-atlas",
+          "name": "MongoDB Atlas"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "content": "## 🚀 Hybrid Approach: Best of Both Worlds\n\n### This workflow demonstrates the POWER of combining:\n\n1. **voyage-multimodal-3**: \n   - Handles images, diagrams, charts\n   - Basic text understanding\n   - Cross-modal search (text→image)\n\n2. **voyage-context-3**: \n   - Superior text comprehension\n   - Document structure awareness\n   - Legal/technical text mastery\n\n### Intelligent Routing:\n- Pages with images → Multimodal embeddings\n- Complex text pages → Context-3 embeddings\n- Some pages get BOTH!\n\n### MongoDB Storage:\nStore multiple embedding types per document for ultimate flexibility in search and retrieval.",
+        "height": 420,
+        "width": 400,
+        "color": 4
+      },
+      "id": "hybrid-benefits",
+      "name": "Hybrid Architecture Benefits",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [240, 560]
+    },
+    {
+      "parameters": {
+        "values": {
+          "string": [
+            {
+              "name": "status",
+              "value": "success"
+            },
+            {
+              "name": "message",
+              "value": "=PDF processed with hybrid approach: {{ $('Extract Hybrid PDF Content').first().json.filename }}"
+            }
+          ],
+          "number": [
+            {
+              "name": "pagesProcessed",
+              "value": "={{ $('Extract Hybrid PDF Content').all().length }}"
+            },
+            {
+              "name": "multimodalEmbeddings",
+              "value": "={{ $('Generate Multimodal Embeddings').all().length }}"
+            },
+            {
+              "name": "contextualEmbeddings",
+              "value": "={{ $('Generate Context-3 Embeddings').all().length }}"
+            }
+          ]
+        }
+      },
+      "id": "response-summary",
+      "name": "Response Summary",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [1560, 300]
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "PDF Upload (Hybrid Processing)": {
+      "main": [
+        [
+          {
+            "node": "Extract Hybrid PDF Content",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extract Hybrid PDF Content": {
+      "main": [
+        [
+          {
+            "node": "Route by Content Type",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Route by Content Type": {
+      "main": [
+        [
+          {
+            "node": "Generate Multimodal Embeddings",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Generate Context-3 Embeddings",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Generate Multimodal Embeddings": {
+      "main": [
+        [
+          {
+            "node": "Merge All Embeddings",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Generate Context-3 Embeddings": {
+      "main": [
+        [
+          {
+            "node": "Merge All Embeddings",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Merge All Embeddings": {
+      "main": [
+        [
+          {
+            "node": "Store Hybrid Embeddings",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Store Hybrid Embeddings": {
+      "main": [
+        [
+          {
+            "node": "Response Summary",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "hybrid-multimodal-v1",
+  "id": "hybrid-multimodal-context-agent",
+  "tags": ["multimodal", "hybrid", "pdf", "voyage-context-3", "voyage-multimodal-3", "atlas-vector-search"]
+}

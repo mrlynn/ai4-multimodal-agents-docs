@@ -6,6 +6,12 @@ sidebar_position: 40
 
 Build your first n8n workflow to process PDFs into searchable multimodal embeddings.
 
+:::tip Quick Start with Pre-built Workflow
+Download and import the ready-made workflow: [02-pdf-processor.json](/multimodal-pdf-agent-n8n/workflows/02-pdf-processor.json)
+
+This workflow includes all the steps below, pre-configured and ready to use!
+:::
+
 <SlideRecap 
   title="From Documents to Intelligent Data"
   items={[
@@ -160,6 +166,13 @@ Before building the embedding code, let's verify our API is working:
   label="Test Embedding API"
 />
 
+### Choosing the Right Embedding Model
+
+The workshop now supports three Voyage AI models:
+- **voyage-3**: General purpose, fast and efficient
+- **voyage-multimodal-3**: For content with images, diagrams, or visual elements
+- **voyage-context-3**: For complex text requiring deep understanding (legal, technical)
+
 ### Add Code Node for Voyage AI
 
 1. Add **Code** node
@@ -180,6 +193,9 @@ for (const item of $input.all()) {
       ? `data:image/png;base64,${base64Image}`
       : item.json.text_content;
     
+    // Analyze content to select appropriate model
+    const model = selectEmbeddingModel(item.json);
+    
     // Call Workshop Embedding Service
     const response = await $http.request({
       method: 'POST',
@@ -189,7 +205,10 @@ for (const item of $input.all()) {
       },
       body: {
         text: input,
-        model: 'voyage-3'
+        model: model,
+        input_type: 'document',
+        // Add context for context-3 model
+        context: model === 'voyage-context-3' ? getPageContext(item.json) : undefined
       }
     });
     
@@ -222,6 +241,31 @@ for (const item of $input.all()) {
 }
 
 return items;
+
+// Helper function to select appropriate embedding model
+function selectEmbeddingModel(pageData) {
+  const hasImages = pageData.content_type === 'image';
+  const textLength = pageData.text_content ? pageData.text_content.length : 0;
+  const hasComplexText = textLength > 500 && 
+    (pageData.text_content.includes('whereas') || 
+     pageData.text_content.includes('liability') ||
+     pageData.text_content.includes('pursuant'));
+  
+  // For hybrid approach, you would process twice with different models
+  if (hasImages) {
+    return 'voyage-multimodal-3';
+  } else if (hasComplexText) {
+    return 'voyage-context-3';
+  }
+  
+  return 'voyage-3'; // Default for simple text
+}
+
+// Helper function to get context for context-3 model
+function getPageContext(pageData) {
+  return `Page ${pageData.page_number} of ${pageData.total_pages}. ` +
+         `Document type: ${pageData.metadata?.document_type || 'general'}`;
+}
 ```
 
 ## Step 5: Store in MongoDB
@@ -244,6 +288,35 @@ Your workflow should now look like:
 ```
 [Webhook] → [HTTP Request] → [Extract PDF] → [Generate Embeddings] → [MongoDB]
 ```
+
+### Advanced: Hybrid Approach
+
+For documents with both complex text and images, you can implement a hybrid approach:
+
+```javascript
+// Process the same page with multiple models
+if (hasImages && hasComplexText) {
+  // First pass: Multimodal for visual content
+  const visualEmbedding = await generateEmbedding(input, 'voyage-multimodal-3');
+  
+  // Second pass: Context-3 for text understanding
+  const textEmbedding = await generateEmbedding(
+    item.json.text_content, 
+    'voyage-context-3',
+    { context: getPageContext(item.json) }
+  );
+  
+  // Store both embeddings
+  items.push({
+    ...baseDocument,
+    multimodal_embedding: visualEmbedding,
+    context_embedding: textEmbedding,
+    processing_strategy: 'hybrid'
+  });
+}
+```
+
+This hybrid approach provides the most comprehensive understanding of complex documents by leveraging the strengths of each model.
 
 ## Testing the Workflow
 

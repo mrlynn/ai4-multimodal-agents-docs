@@ -77,6 +77,41 @@ const sidebars = {
           type: 'doc',
           id: 'voyage-ai-setup',
           label: 'Voyage AI Configuration'
+        },
+        {
+          type: 'doc',
+          id: 'status-monitoring',
+          label: '📊 Status Monitoring'
+        },
+        {
+          type: 'doc',
+          id: 'api-gateway-status',
+          label: '🌐 API Gateway Status'
+        }
+      ],
+    },
+    {
+      type: 'category',
+      label: '📚 Workflows Library',
+      collapsible: true,
+      collapsed: false,
+      className: 'sidebar-workflows-library',
+      description: 'Pre-built workflows and guides',
+      items: [
+        {
+          type: 'doc',
+          id: 'workflows-library',
+          label: '📋 All Workflows'
+        },
+        {
+          type: 'doc',
+          id: 'workflow-reference',
+          label: '📚 Workflow Reference'
+        },
+        {
+          type: 'doc',
+          id: 'workflow-integration-guide',
+          label: '🔗 Integration Guide'
         }
       ],
     },
@@ -102,6 +137,11 @@ const sidebars = {
           type: 'doc',
           id: 'ai-agent-workflow',
           label: 'AI Agent with Tool Calling'
+        },
+        {
+          type: 'doc',
+          id: 'enhanced-text-context-3',
+          label: '📚 Enhanced Text with Context-3'
         }
       ],
     },
@@ -182,6 +222,26 @@ const sidebars = {
           type: 'doc',
           id: 'multimodal-image-queries',
           label: '🖼️ Multimodal Image Queries'
+        }
+      ],
+    },
+    {
+      type: 'category',
+      label: '📖 Workflow Guides',
+      collapsible: true,
+      collapsed: true,
+      className: 'sidebar-workflow-guides',
+      description: 'Detailed guides for specific workflows',
+      items: [
+        {
+          type: 'doc',
+          id: 'workflow-guide-getting-started',
+          label: '🎓 Getting Started Workflow'
+        },
+        {
+          type: 'doc',
+          id: 'workflow-guide-hybrid-agent',
+          label: '🚀 Hybrid Agent Workflow'
         }
       ],
     },

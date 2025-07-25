@@ -1,0 +1,157 @@
+---
+sidebar_position: 76
+---
+
+# 🌐 Workshop API Gateway Status
+
+Monitor the health and availability of workshop services in real-time.
+
+<LiveStatusBadge showDetails={true} />
+
+## 🎯 What You're Seeing
+
+The Workshop API Gateway provides essential services for the workshop:
+
+### Core Services
+- **🔗 Embedding Service**: Generates vector embeddings using Voyage AI
+- **🤖 AI Generation**: Provides access to Google Gemini for AI responses
+- **🛡️ Rate Limiting**: Ensures fair usage across all workshop participants
+- **🌐 CORS Support**: Enables browser-based requests from the documentation
+
+### Service Status Indicators
+- **🟢 Available**: Service is fully operational
+- **🔴 Unavailable**: Service is down or not configured
+- **🟡 Partial**: Core functionality works but some features may be limited
+
+## 📊 Understanding the Health Data
+
+When you expand the status details, you'll see:
+
+### Version Information
+- Current API version
+- Last deployment information
+- Feature flags and capabilities
+
+### Service Availability
+Each service shows its current status:
+```json
+{
+  "embedding": {
+    "available": true,
+    "endpoint": "/api/embed", 
+    "provider": "Voyage AI"
+  },
+  "ai_generation": {
+    "available": false,
+    "endpoint": "/api/gemini",
+    "provider": "Google Gemini"
+  }
+}
+```
+
+### Uptime Metrics
+- **Uptime**: How long the service has been running
+- **Response Time**: Current API response latency
+- **System Load**: Overall system health
+
+## 🚨 Common Status Scenarios
+
+### All Services Online ✅
+```
+✅ Workshop API Gateway: Online
+  Services:
+  🟢 embedding: Available (Voyage AI)
+  🟢 ai generation: Available (Google Gemini)
+  Uptime: 123 minutes
+  Version: 1.1.0
+```
+**Meaning**: Everything is working perfectly!
+
+### Partial Services Available 🟡
+```
+🟡 Workshop API Gateway: Partial
+  Services:
+  🟢 embedding: Available (Voyage AI)
+  🔴 ai generation: Unavailable (Google Gemini)
+  Uptime: 45 minutes
+  Version: 1.1.0
+```
+**Meaning**: Embedding generation works, but AI responses may not. You can still complete most workshop exercises.
+
+### Gateway Offline ❌
+```
+❌ Workshop API Gateway: Error
+  Error: Request timeout
+```
+**Meaning**: The workshop services are temporarily unavailable. Try refreshing or wait a few minutes.
+
+## 🔧 Using Status Information
+
+### For Workshop Participants
+- **Green status**: Proceed with all exercises
+- **Yellow status**: Focus on embedding-related exercises first
+- **Red status**: Wait for services to recover or use mock workflows
+
+### For Instructors
+- **Monitor the dashboard** before starting exercises
+- **Have backup plans** when services show partial status
+- **Use the detailed information** to guide troubleshooting
+
+## 🔄 Automatic Monitoring
+
+The status badge automatically:
+- **Refreshes every 30 seconds** to show current status
+- **Shows real-time service availability** for each component
+- **Provides detailed error messages** when services are down
+- **Tracks uptime and performance metrics** for monitoring
+
+## 💡 Tips for Best Experience
+
+1. **Check status before starting** each workshop section
+2. **Refresh manually** if you suspect stale data (🔄 button)
+3. **Expand details** to see which specific services are affected
+4. **Use alternative workflows** when services are partially available
+
+## 🛠️ API Gateway Architecture
+
+The workshop gateway provides:
+
+### Security Layer
+- API key management (no keys needed for participants)
+- Rate limiting (fair usage across all participants)
+- Request validation and sanitization
+
+### Service Orchestration
+- Routes requests to appropriate AI providers
+- Handles authentication with external services
+- Provides unified response format
+
+### Monitoring & Analytics
+- Tracks usage patterns and performance
+- Provides health checks and status reporting
+- Logs errors for troubleshooting
+
+### Cost Management
+- Manages API costs across all workshop participants
+- Provides usage analytics for optimization
+- Implements quotas and fair usage policies
+
+## 📈 Performance Metrics
+
+The gateway tracks:
+- **Request volume**: Number of API calls per minute
+- **Response times**: Average latency for each service
+- **Error rates**: Percentage of failed requests
+- **Service uptime**: Availability over time
+
+This data helps ensure a smooth workshop experience for everyone! 🎉
+
+## 🚀 Next Steps
+
+With the API Gateway monitoring in place:
+1. **Verify all services are online** before starting exercises
+2. **Monitor status during workshop** to catch issues early
+3. **Use the troubleshooting guides** when problems arise
+4. **Focus on available services** when others are down
+
+The real-time status monitoring ensures you always know the health of your workshop environment! 📊✨

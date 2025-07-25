@@ -1,0 +1,168 @@
+{
+  "name": "Multimodal PDF Processor",
+  "nodes": [
+    {
+      "parameters": {
+        "path": "upload-pdf",
+        "options": {
+          "noResponseBody": false
+        },
+        "responseMode": "lastNode"
+      },
+      "id": "webhook-upload",
+      "name": "PDF Upload Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [240, 300]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Validate PDF upload\nconst files = $input.all();\nif (!files.length || !files[0].binary) {\n  throw new Error('No PDF file uploaded');\n}\n\nconst filename = files[0].binary.data.fileName;\nif (!filename.toLowerCase().endsWith('.pdf')) {\n  throw new Error('Only PDF files are supported');\n}\n\nreturn [{\n  json: {\n    filename: filename,\n    fileSize: files[0].binary.data.fileSize,\n    timestamp: new Date().toISOString(),\n    status: 'validated'\n  },\n  binary: files[0].binary\n}];"
+      },
+      "id": "validate-pdf",
+      "name": "Validate PDF",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [460, 300]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Extract text content from PDF\n// This is a simplified version - in production, use PDF parsing libraries\nconst filename = $json.filename;\nconst mockText = `This is extracted text content from ${filename}. \\n\\nIn a real implementation, this would contain the actual text extracted from the PDF using libraries like pdf-parse or pdf2pic.\\n\\nKey topics covered:\\n- Artificial Intelligence\\n- Machine Learning\\n- Vector Databases\\n- Multimodal Processing`;\n\nreturn [{\n  json: {\n    filename: filename,\n    textContent: mockText,\n    wordCount: mockText.split(' ').length,\n    extractedAt: new Date().toISOString()\n  }\n}];"
+      },
+      "id": "extract-text",
+      "name": "Extract Text",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [680, 300]
+    },
+    {
+      "parameters": {
+        "url": "={{ $env.WORKSHOP_EMBEDDING_URL || 'https://workshop-embedding-api.vercel.app/api/embed' }}",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"text\": {{ JSON.stringify($json.textContent) }},\n  \"model\": \"voyage-3\"\n}",
+        "options": {}
+      },
+      "id": "generate-embeddings",
+      "name": "Generate Embeddings",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [900, 300]
+    },
+    {
+      "parameters": {
+        "operation": "insertOne",
+        "collection": "pdf_documents",
+        "fields": "={\n  \"filename\": {{ JSON.stringify($('Extract Text').first().json.filename) }},\n  \"textContent\": {{ JSON.stringify($('Extract Text').first().json.textContent) }},\n  \"embedding\": {{ JSON.stringify($json.embeddings[0]) }},\n  \"metadata\": {\n    \"uploadedAt\": {{ JSON.stringify($('Extract Text').first().json.extractedAt) }},\n    \"wordCount\": {{ $('Extract Text').first().json.wordCount }},\n    \"model\": {{ JSON.stringify($json.model) }}\n  }\n}"
+      },
+      "id": "store-mongodb",
+      "name": "Store in MongoDB",
+      "type": "n8n-nodes-base.mongoDb",
+      "typeVersion": 1,
+      "position": [1120, 300],
+      "credentials": {
+        "mongoDb": {
+          "id": "mongodb-workshop",
+          "name": "MongoDB Workshop"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "values": {
+          "string": [
+            {
+              "name": "status",
+              "value": "success"
+            },
+            {
+              "name": "message",
+              "value": "=PDF {{ $('Extract Text').first().json.filename }} processed successfully"
+            },
+            {
+              "name": "documentsStored",
+              "value": "1"
+            },
+            {
+              "name": "filename",
+              "value": "={{ $('Extract Text').first().json.filename }}"
+            }
+          ]
+        }
+      },
+      "id": "format-response",
+      "name": "Format Response",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.2,
+      "position": [1340, 300]
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "PDF Upload Webhook": {
+      "main": [
+        [
+          {
+            "node": "Validate PDF",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Validate PDF": {
+      "main": [
+        [
+          {
+            "node": "Extract Text",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extract Text": {
+      "main": [
+        [
+          {
+            "node": "Generate Embeddings",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Generate Embeddings": {
+      "main": [
+        [
+          {
+            "node": "Store in MongoDB",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Store in MongoDB": {
+      "main": [
+        [
+          {
+            "node": "Format Response",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "pdf-processor-v1",
+  "meta": {
+    "templateCredsSetupCompleted": false
+  },
+  "id": "multimodal-pdf-processor",
+  "tags": ["workshop", "pdf", "multimodal"]
+}

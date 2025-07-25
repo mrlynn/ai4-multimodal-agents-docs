@@ -1,0 +1,89 @@
+{
+  "name": "Embedding API Test (with Context-3 Support)",
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "b7f2b123-4c5d-4e6f-7a8b-9c0d1e2f3a4b",
+      "name": "When clicking \"Test workflow\"",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [240, 300]
+    },
+    {
+      "parameters": {
+        "url": "={{ $env.WORKSHOP_EMBEDDING_URL || 'https://workshop-embedding-api.vercel.app/api/embed' }}",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "{\n  \"text\": \"This is a test document about artificial intelligence and machine learning.\",\n  \"model\": \"voyage-context-3\",\n  \"input_type\": \"document\",\n  \"context\": \"This text appears in a technical documentation about AI systems.\"\n}",
+        "options": {}
+      },
+      "id": "c8g3c234-5d6e-5f7a-8b9c-0d1e2f3a4b5c",
+      "name": "HTTP Request",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [460, 300]
+    },
+    {
+      "parameters": {
+        "values": {
+          "string": [
+            {
+              "name": "embedding_length",
+              "value": "={{ $json.embeddings[0].length }}"
+            },
+            {
+              "name": "model_used",
+              "value": "={{ $json.model }}"
+            },
+            {
+              "name": "total_tokens",
+              "value": "={{ $json.usage.total_tokens }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "d9h4d345-6e7f-6a8b-9c0d-1e2f3a4b5c6d",
+      "name": "Set Results",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.2,
+      "position": [680, 300]
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "When clicking \"Test workflow\"": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request": {
+      "main": [
+        [
+          {
+            "node": "Set Results",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "00000000-0000-0000-0000-000000000000",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "00000000000000000000000000000000"
+  },
+  "id": "00000000-0000-0000-0000-000000000000",
+  "tags": []
+}

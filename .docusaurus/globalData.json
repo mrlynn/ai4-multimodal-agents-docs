@@ -26,6 +26,11 @@
               "sidebar": "tutorialSidebar"
             },
             {
+              "id": "api-gateway-status",
+              "path": "/multimodal-pdf-agent-n8n/docs/api-gateway-status",
+              "sidebar": "tutorialSidebar"
+            },
+            {
               "id": "approach-comparison",
               "path": "/multimodal-pdf-agent-n8n/docs/approach-comparison",
               "sidebar": "tutorialSidebar"
@@ -52,6 +57,11 @@
             {
               "id": "docker-troubleshooting",
               "path": "/multimodal-pdf-agent-n8n/docs/docker-troubleshooting",
+              "sidebar": "tutorialSidebar"
+            },
+            {
+              "id": "enhanced-text-context-3",
+              "path": "/multimodal-pdf-agent-n8n/docs/enhanced-text-context-3",
               "sidebar": "tutorialSidebar"
             },
             {
@@ -135,6 +145,11 @@
               "sidebar": "tutorialSidebar"
             },
             {
+              "id": "status-monitoring",
+              "path": "/multimodal-pdf-agent-n8n/docs/status-monitoring",
+              "sidebar": "tutorialSidebar"
+            },
+            {
               "id": "summary",
               "path": "/multimodal-pdf-agent-n8n/docs/summary",
               "sidebar": "tutorialSidebar"
@@ -158,6 +173,31 @@
               "id": "voyage-ai-setup",
               "path": "/multimodal-pdf-agent-n8n/docs/voyage-ai-setup",
               "sidebar": "tutorialSidebar"
+            },
+            {
+              "id": "workflow-guide-getting-started",
+              "path": "/multimodal-pdf-agent-n8n/docs/workflow-guide-getting-started",
+              "sidebar": "tutorialSidebar"
+            },
+            {
+              "id": "workflow-guide-hybrid-agent",
+              "path": "/multimodal-pdf-agent-n8n/docs/workflow-guide-hybrid-agent",
+              "sidebar": "tutorialSidebar"
+            },
+            {
+              "id": "workflow-integration-guide",
+              "path": "/multimodal-pdf-agent-n8n/docs/workflow-integration-guide",
+              "sidebar": "tutorialSidebar"
+            },
+            {
+              "id": "workflow-reference",
+              "path": "/multimodal-pdf-agent-n8n/docs/workflow-reference",
+              "sidebar": "tutorialSidebar"
+            },
+            {
+              "id": "workflows-library",
+              "path": "/multimodal-pdf-agent-n8n/docs/workflows-library",
+              "sidebar": "tutorialSidebar"
             }
           ],
           "draftIds": [],
@@ -177,8 +217,8 @@
   "docusaurus-lunr-search": {
     "default": {
       "fileNames": {
-        "searchDoc": "search-doc-1753374706266.json",
-        "lunrIndex": "lunr-index-1753374706266.json"
+        "searchDoc": "search-doc-1753457481023.json",
+        "lunrIndex": "lunr-index-1753457481023.json"
       }
     }
   }

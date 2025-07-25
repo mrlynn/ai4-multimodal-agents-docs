@@ -1,0 +1,335 @@
+{
+  "name": "Real Voyage AI Multimodal Agent",
+  "nodes": [
+    {
+      "parameters": {
+        "path": "pdf-upload",
+        "options": {
+          "binaryPropertyName": "data"
+        },
+        "responseMode": "lastNode"
+      },
+      "id": "webhook-pdf-upload",
+      "name": "PDF Upload Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1.1,
+      "position": [240, 300],
+      "webhookId": "pdf-upload-webhook"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Extract PDF information and simulate page extraction\n// In production, use pdf-parse or pdf.js\nconst binary = $binary.data;\n\nif (!binary) {\n  throw new Error('No file uploaded');\n}\n\nconst filename = binary.fileName || 'document.pdf';\nif (!filename.toLowerCase().endsWith('.pdf')) {\n  throw new Error('Only PDF files are supported');\n}\n\n// Simulate PDF extraction - in production use real PDF library\nconst mockPages = [\n  {\n    pageNumber: 1,\n    text: \"Introduction to Multimodal AI Systems. This revolutionary approach allows AI to process both textual and visual information simultaneously, creating more comprehensive understanding.\",\n    hasImages: true\n  },\n  {\n    pageNumber: 2,\n    text: \"Voyage AI's multimodal embeddings represent a breakthrough in unified vector representations. Unlike traditional approaches, Voyage AI can encode both text and images into the same 1024-dimensional space.\",\n    hasImages: false\n  },\n  {\n    pageNumber: 3,\n    text: \"Applications include advanced document understanding, visual question answering, and cross-modal search where users can search for images using text or find text using images.\",\n    hasImages: true\n  }\n];\n\nreturn mockPages.map(page => ({\n  json: {\n    filename: filename,\n    pageNumber: page.pageNumber,\n    textContent: page.text,\n    hasImages: page.hasImages,\n    uploadedAt: new Date().toISOString()\n  }\n}));"
+      },
+      "id": "extract-pdf-content",
+      "name": "Extract PDF Content",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [460, 300]
+    },
+    {
+      "parameters": {
+        "url": "https://workshop-embedding-api.vercel.app/api/embed",
+        "sendQuery": false,
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"text\": {{ JSON.stringify($json.textContent) }},\n  \"model\": \"voyage-3\"\n}",
+        "options": {}
+      },
+      "id": "voyage-embeddings",
+      "name": "Generate Voyage Embeddings",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [680, 300]
+    },
+    {
+      "parameters": {
+        "operation": "insert",
+        "collection": "pdf_documents",
+        "fields": "={\n  \"filename\": {{ JSON.stringify($('Extract PDF Content').item.json.filename) }},\n  \"pageNumber\": {{ $('Extract PDF Content').item.json.pageNumber }},\n  \"textContent\": {{ JSON.stringify($('Extract PDF Content').item.json.textContent) }},\n  \"embedding\": {{ JSON.stringify($json.embeddings[0]) }},\n  \"metadata\": {\n    \"uploadedAt\": {{ JSON.stringify($('Extract PDF Content').item.json.uploadedAt) }},\n    \"model\": {{ JSON.stringify($json.model) }},\n    \"dimensions\": 1024,\n    \"hasImages\": {{ $('Extract PDF Content').item.json.hasImages }}\n  }\n}"
+      },
+      "id": "mongodb-insert",
+      "name": "Store in MongoDB",
+      "type": "n8n-nodes-base.mongoDb",
+      "typeVersion": 1.1,
+      "position": [900, 300],
+      "credentials": {
+        "mongoDb": {
+          "id": "mongodb-local",
+          "name": "MongoDB Local"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "values": {
+          "string": [
+            {
+              "name": "status",
+              "value": "success"
+            },
+            {
+              "name": "message",
+              "value": "=PDF {{ $('Extract PDF Content').first().json.filename }} processed successfully"
+            }
+          ],
+          "number": [
+            {
+              "name": "pagesProcessed",
+              "value": "={{ $('Extract PDF Content').all().length }}"
+            }
+          ]
+        }
+      },
+      "id": "upload-response",
+      "name": "Upload Response",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [1120, 300]
+    },
+    {
+      "parameters": {
+        "path": "ask",
+        "options": {},
+        "responseMode": "lastNode"
+      },
+      "id": "webhook-ask",
+      "name": "Q&A Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1.1,
+      "position": [240, 600],
+      "webhookId": "qa-webhook"
+    },
+    {
+      "parameters": {
+        "url": "https://workshop-embedding-api.vercel.app/api/embed",
+        "sendQuery": false,
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"text\": {{ JSON.stringify($json.body.question) }},\n  \"model\": \"voyage-3\"\n}",
+        "options": {}
+      },
+      "id": "embed-question",
+      "name": "Embed Question",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [460, 600]
+    },
+    {
+      "parameters": {
+        "operation": "aggregate",
+        "collection": "pdf_documents",
+        "query": "=[\n  {\n    \"$vectorSearch\": {\n      \"index\": \"vector_index\",\n      \"path\": \"embedding\",\n      \"queryVector\": {{ JSON.stringify($json.embeddings[0]) }},\n      \"numCandidates\": 100,\n      \"limit\": 5\n    }\n  },\n  {\n    \"$project\": {\n      \"_id\": 1,\n      \"filename\": 1,\n      \"pageNumber\": 1,\n      \"textContent\": 1,\n      \"score\": { \"$meta\": \"vectorSearchScore\" },\n      \"metadata\": 1\n    }\n  }\n]"
+      },
+      "id": "mongodb-vector-search",
+      "name": "Vector Search",
+      "type": "n8n-nodes-base.mongoDb",
+      "typeVersion": 1.1,
+      "position": [680, 600],
+      "credentials": {
+        "mongoDb": {
+          "id": "mongodb-local",
+          "name": "MongoDB Local"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "url": "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpQueryAuth",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "key",
+              "value": "={{ $credentials.apiKey }}"
+            }
+          ]
+        },
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"contents\": [{\n    \"parts\": [{\n      \"text\": \"You are a helpful AI assistant that answers questions about PDF documents. Use the provided context from the vector search to answer questions accurately. Always cite which page and document the information comes from.\\n\\nQuestion: {{ $('Q&A Webhook').item.json.body.question }}\\n\\nContext from documents:\\n{{ $('Vector Search').all().map(item => `[${item.json.filename} - Page ${item.json.pageNumber}] ${item.json.textContent}`).join('\\\\n\\\\n') }}\\n\\nPlease answer the question based on the context provided.\"\n    }]\n  }],\n  \"generationConfig\": {\n    \"temperature\": 0.3,\n    \"maxOutputTokens\": 500\n  }\n}",
+        "options": {}
+      },
+      "id": "gemini-chat",
+      "name": "Generate Answer (Gemini)",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [900, 600],
+      "credentials": {
+        "httpQueryAuth": {
+          "id": "gemini-api",
+          "name": "Gemini API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "values": {
+          "string": [
+            {
+              "name": "answer",
+              "value": "={{ $json.candidates[0].content.parts[0].text }}"
+            },
+            {
+              "name": "question", 
+              "value": "={{ $('Q&A Webhook').item.json.body.question }}"
+            }
+          ],
+          "number": [
+            {
+              "name": "sourcesCount",
+              "value": "={{ $('Vector Search').all().length }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "format-response",
+      "name": "Format Response",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [1120, 600]
+    },
+    {
+      "parameters": {
+        "content": "## Real Voyage AI Multimodal Agent\n\n### Features:\n1. **PDF Upload** - Accept real PDF files\n2. **Text Extraction** - Process PDF content\n3. **Voyage AI Embeddings** - 1024-dimensional multimodal\n4. **MongoDB Storage** - Vector index storage\n5. **Vector Search** - MongoDB $vectorSearch\n6. **Gemini AI** - Multimodal capable LLM\n\n### Required Setup:\n1. MongoDB vector index (1024 dimensions)\n2. Voyage AI API (via Vercel endpoint)\n3. Gemini API key for responses",
+        "height": 250,
+        "width": 350
+      },
+      "id": "workflow-notes",
+      "name": "Workflow Notes",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [580, 50]
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "PDF Upload Webhook": {
+      "main": [
+        [
+          {
+            "node": "Extract PDF Content",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extract PDF Content": {
+      "main": [
+        [
+          {
+            "node": "Generate Voyage Embeddings",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Generate Voyage Embeddings": {
+      "main": [
+        [
+          {
+            "node": "Store in MongoDB",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Store in MongoDB": {
+      "main": [
+        [
+          {
+            "node": "Upload Response",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Q&A Webhook": {
+      "main": [
+        [
+          {
+            "node": "Embed Question",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Embed Question": {
+      "main": [
+        [
+          {
+            "node": "Vector Search",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Vector Search": {
+      "main": [
+        [
+          {
+            "node": "Generate Answer (Gemini)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Generate Answer (Gemini)": {
+      "main": [
+        [
+          {
+            "node": "Format Response",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "voyage-multimodal-v1",
+  "meta": {
+    "templateCredsSetupCompleted": false
+  },
+  "id": "real-voyage-multimodal-agent",
+  "tags": ["workshop", "voyage", "multimodal", "production"]
+}

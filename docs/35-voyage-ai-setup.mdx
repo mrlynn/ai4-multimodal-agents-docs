@@ -33,9 +33,11 @@ For this workshop, we'll use a pre-configured serverless endpoint that handles V
 **Workshop Embedding Service URL**: `https://workshop-embedding-api.vercel.app/api/embed`
 
 This endpoint provides:
-- ✅ Voyage AI `voyage-3` model access
-- ✅ 1024-dimensional embeddings
-- ✅ Support for text inputs
+- ✅ Voyage AI `voyage-3` model access (general purpose)
+- ✅ Voyage AI `voyage-multimodal-3` model (text + images)
+- ✅ Voyage AI `voyage-context-3` model (enhanced text understanding)
+- ✅ 1024-dimensional embeddings for all models
+- ✅ Support for text, images, and contextual inputs
 - ✅ Rate limiting and error handling
 - ✅ No API key management required
 
@@ -55,6 +57,8 @@ The workshop embedding API is designed to work directly with n8n's **HTTP Reques
 7. **Body Content Type**: `JSON`
 8. **Specify Body**: Select `Using JSON`
 9. **JSON**: Enter this exactly:
+   
+   For general text embeddings:
    ```json
    {
      "text": "actual text to embed here",
@@ -62,11 +66,30 @@ The workshop embedding API is designed to work directly with n8n's **HTTP Reques
    }
    ```
 
+   For multimodal embeddings (text + images):
+   ```json
+   {
+     "text": "description of the image content",
+     "model": "voyage-multimodal-3",
+     "input_type": "document"
+   }
+   ```
+
+   For enhanced text understanding:
+   ```json
+   {
+     "text": "complex legal or technical document text",
+     "model": "voyage-context-3",
+     "input_type": "document",
+     "context": "optional surrounding context"
+   }
+   ```
+
    For dynamic content from previous nodes:
    ```json
    {
      "text": {{ JSON.stringify($json.textContent) }},
-     "model": "voyage-3"
+     "model": "voyage-multimodal-3"
    }
    ```
 
@@ -156,15 +179,24 @@ Using the serverless endpoint means:
 - Built-in rate limiting and error handling
 :::
 
-## Understanding Multimodal Embeddings
+## Understanding Voyage AI Models
+
+### Available Models Comparison
+
+| Model | Best For | Strengths | When to Use |
+|-------|----------|-----------|-------------|
+| **voyage-3** | General text | Fast, reliable, cost-effective | Basic documents, simple queries |
+| **voyage-multimodal-3** | Mixed content | Images + text in same space | PDFs with diagrams, screenshots |
+| **voyage-context-3** | Complex text | Superior comprehension | Legal docs, technical content |
 
 ### What Makes Voyage AI Special?
 
-The `voyage-multimodal-3` model:
-- **Unified Vector Space**: Text and images in the same 1024-dimensional space
-- **Semantic Understanding**: Finds conceptual similarities across modalities
+The Voyage AI models offer:
+- **Unified Vector Space**: All models produce 1024-dimensional embeddings
+- **Semantic Understanding**: Finds conceptual similarities across content types
 - **Optimized for RAG**: Built specifically for retrieval tasks
 - **High Performance**: Fast inference with excellent accuracy
+- **Flexible Model Selection**: Choose the right model for your content
 
 ### API Endpoints
 
@@ -181,22 +213,49 @@ The `voyage-multimodal-3` model:
 
 ### Request Format
 
-The workshop endpoint accepts a simplified format that handles both text and images:
+The workshop endpoint accepts various formats based on the model:
 
-For text embeddings:
+#### Basic Text Embeddings (voyage-3):
 ```json
 {
-  "input": "Your text content here",
-  "input_type": "document"
+  "text": "Your text content here",
+  "model": "voyage-3"
 }
 ```
 
-For image embeddings:
+#### Multimodal Embeddings (voyage-multimodal-3):
 ```json
 {
-  "input": "data:image/png;base64,iVBORw0KGgo...",
-  "input_type": "document"
+  "text": "Text description or content",
+  "model": "voyage-multimodal-3",
+  "input_type": "document",
+  "images": ["base64_encoded_image_data"] // optional
 }
+```
+
+#### Context-Enhanced Embeddings (voyage-context-3):
+```json
+{
+  "text": "Complex document text requiring deep understanding",
+  "model": "voyage-context-3",
+  "input_type": "document",
+  "context": "This text appears in section 5 of the legal agreement regarding liability"
+}
+```
+
+### Model Selection Guide
+
+Use this decision tree to choose the right model:
+
+```mermaid
+graph TD
+    A[Content Type] --> B{Has Images?}
+    B -->|Yes| C[voyage-multimodal-3]
+    B -->|No| D{Complex Text?}
+    D -->|Yes| E{Need Context?}
+    D -->|No| F[voyage-3]
+    E -->|Yes| G[voyage-context-3]
+    E -->|No| H[voyage-3 or context-3]
 ```
 
 For search queries:

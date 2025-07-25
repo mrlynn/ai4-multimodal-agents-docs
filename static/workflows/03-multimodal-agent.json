@@ -1,0 +1,195 @@
+{
+  "name": "Multimodal PDF Agent",
+  "nodes": [
+    {
+      "parameters": {
+        "path": "chat",
+        "options": {
+          "noResponseBody": false
+        },
+        "responseMode": "lastNode"
+      },
+      "id": "chat-webhook",
+      "name": "Chat Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [240, 300]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Validate chat input\nconst data = $json;\n\nif (!data.message || !data.filename) {\n  throw new Error('Message and filename are required');\n}\n\nreturn [{\n  json: {\n    query: data.message,\n    filename: data.filename,\n    conversationId: data.conversation_id || 'default',\n    timestamp: new Date().toISOString()\n  }\n}];"
+      },
+      "id": "validate-input",
+      "name": "Validate Input",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [460, 300]
+    },
+    {
+      "parameters": {
+        "url": "={{ $env.WORKSHOP_EMBEDDING_URL || 'https://workshop-embedding-api.vercel.app/api/embed' }}",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"text\": {{ JSON.stringify($json.query) }},\n  \"model\": \"voyage-3\"\n}",
+        "options": {}
+      },
+      "id": "query-embedding",
+      "name": "Generate Query Embedding",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [680, 300]
+    },
+    {
+      "parameters": {
+        "operation": "aggregate",
+        "collection": "pdf_documents",
+        "query": "=[\n  {\n    \"$vectorSearch\": {\n      \"index\": \"vector_index\",\n      \"path\": \"embedding\",\n      \"queryVector\": {{ JSON.stringify($json.embeddings[0]) }},\n      \"numCandidates\": 50,\n      \"limit\": 5,\n      \"filter\": {\n        \"filename\": {{ JSON.stringify($('Validate Input').first().json.filename) }}\n      }\n    }\n  },\n  {\n    \"$project\": {\n      \"textContent\": 1,\n      \"filename\": 1,\n      \"score\": { \"$meta\": \"vectorSearchScore\" }\n    }\n  }\n]"
+      },
+      "id": "vector-search",
+      "name": "Vector Search",
+      "type": "n8n-nodes-base.mongoDb",
+      "typeVersion": 1,
+      "position": [900, 300],
+      "credentials": {
+        "mongoDb": {
+          "id": "mongodb-workshop",
+          "name": "MongoDB Workshop"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// Build context from search results\nconst searchResults = $input.all();\nconst query = $('Validate Input').first().json.query;\nconst filename = $('Validate Input').first().json.filename;\n\nif (!searchResults.length) {\n  return [{\n    json: {\n      query: query,\n      context: 'No relevant content found in the document.',\n      filename: filename,\n      sources: []\n    }\n  }];\n}\n\nconst context = searchResults\n  .map((result, index) => `Section ${index + 1} (Score: ${result.json.score.toFixed(3)}):\\n${result.json.textContent}`)\n  .join('\\n\\n');\n\nreturn [{\n  json: {\n    query: query,\n    context: context,\n    filename: filename,\n    sources: searchResults.map(r => ({\n      content: r.json.textContent.substring(0, 100) + '...',\n      score: r.json.score\n    }))\n  }\n}];"
+      },
+      "id": "build-context",
+      "name": "Build Context",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [1120, 300]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Generate AI response using the context\n// This is a mock response - in production, call OpenAI/Gemini\nconst query = $json.query;\nconst context = $json.context;\nconst filename = $json.filename;\n\n// Mock AI response generation\nconst response = `Based on the content from ${filename}, here's what I found regarding your question: \"${query}\"\\n\\nFrom the relevant sections in the document:\\n${context.substring(0, 500)}...\\n\\nThis appears to be the most relevant information to answer your question. The document contains detailed information about the topics you're asking about.`;\n\nreturn [{\n  json: {\n    response: response,\n    query: query,\n    filename: filename,\n    sources: $json.sources,\n    timestamp: new Date().toISOString(),\n    model: 'mock-ai-v1'\n  }\n}];"
+      },
+      "id": "generate-response",
+      "name": "Generate AI Response",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [1340, 300]
+    },
+    {
+      "parameters": {
+        "values": {
+          "string": [
+            {
+              "name": "status",
+              "value": "success"
+            },
+            {
+              "name": "response",
+              "value": "={{ $json.response }}"
+            },
+            {
+              "name": "query",
+              "value": "={{ $json.query }}"
+            },
+            {
+              "name": "filename",
+              "value": "={{ $json.filename }}"
+            }
+          ],
+          "object": [
+            {
+              "name": "sources",
+              "value": "={{ $json.sources }}"
+            }
+          ]
+        }
+      },
+      "id": "format-chat-response",
+      "name": "Format Chat Response",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.2,
+      "position": [1560, 300]
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Chat Webhook": {
+      "main": [
+        [
+          {
+            "node": "Validate Input",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Validate Input": {
+      "main": [
+        [
+          {
+            "node": "Generate Query Embedding",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Generate Query Embedding": {
+      "main": [
+        [
+          {
+            "node": "Vector Search",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Vector Search": {
+      "main": [
+        [
+          {
+            "node": "Build Context",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Build Context": {
+      "main": [
+        [
+          {
+            "node": "Generate AI Response",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Generate AI Response": {
+      "main": [
+        [
+          {
+            "node": "Format Chat Response",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "multimodal-agent-v1",
+  "meta": {
+    "templateCredsSetupCompleted": false
+  },
+  "id": "multimodal-pdf-agent",
+  "tags": ["workshop", "agent", "multimodal", "chat"]
+}

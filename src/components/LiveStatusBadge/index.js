@@ -55,7 +55,7 @@ export default function LiveStatusBadge({
   const [config, setConfig] = useState({});
   const [configForm, setConfigForm] = useState({
     n8nUrl: '',
-    mongoDbTestUrl: '',
+    mongoConnectionString: '',
     codespaceId: ''
   });
 
@@ -66,7 +66,7 @@ export default function LiveStatusBadge({
     
     const initialConfig = {
       n8nUrl: savedConfig.n8nUrl || detectedN8nUrl || '',
-      mongoDbTestUrl: savedConfig.mongoDbTestUrl || '',
+      mongoConnectionString: savedConfig.mongoConnectionString || '',
       codespaceId: savedConfig.codespaceId || ''
     };
     
@@ -86,7 +86,9 @@ export default function LiveStatusBadge({
         name: "Workshop API Gateway",
         endpoint: "https://workshop-embedding-api.vercel.app/api/health",
         description: "Embedding and proxy services",
-        configurable: false
+        configurable: false,
+        showDetails: true,
+        critical: true
       }
     ];
 
@@ -101,22 +103,16 @@ export default function LiveStatusBadge({
       });
     }
 
-    // Add MongoDB system - either test endpoint or Atlas check
-    if (config.mongoDbTestUrl) {
-      systemsArray.push({
-        name: "MongoDB Atlas",
-        endpoint: config.mongoDbTestUrl,
-        description: "Vector database and storage",
-        configurable: true
-      });
-    } else {
-      systemsArray.push({
-        name: "MongoDB Atlas",
-        endpoint: "https://workshop-embedding-api.vercel.app/api/check-db",
-        description: "Vector database and storage (generic check)",
-        configurable: false
-      });
-    }
+    // Add MongoDB Atlas system
+    systemsArray.push({
+      name: "MongoDB Atlas",
+      endpoint: "https://workshop-embedding-api.vercel.app/api/check-db",
+      description: config.mongoConnectionString ? 
+        "Vector database (your Atlas instance)" : 
+        "Vector database (generic check)",
+      configurable: true,
+      connectionConfigured: !!config.mongoConnectionString
+    });
 
     return systemsArray;
   };
@@ -129,6 +125,36 @@ export default function LiveStatusBadge({
       const controller = new AbortController();
       const timeoutId = setTimeout(() => controller.abort(), 5000); // 5 second timeout
       
+      // For MongoDB Atlas, if we have a connection string, test it via the workshop API
+      if (system.name === 'MongoDB Atlas' && config.mongoConnectionString) {
+        const response = await fetch('https://workshop-embedding-api.vercel.app/api/check-db', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ connectionString: config.mongoConnectionString }),
+          signal: controller.signal
+        });
+        
+        clearTimeout(timeoutId);
+        
+        if (response.ok) {
+          const data = await response.json();
+          return { 
+            status: 'ok', 
+            responseTime: Date.now(),
+            data: data,
+            message: 'Your Atlas connection is working!'
+          };
+        } else {
+          const errorData = await response.json().catch(() => ({}));
+          return { 
+            status: 'error', 
+            responseTime: Date.now(),
+            error: errorData.error || `HTTP ${response.status}`
+          };
+        }
+      }
+      
+      // Standard health check for other systems
       const response = await fetch(system.endpoint, {
         method: 'GET',
         signal: controller.signal,
@@ -144,10 +170,28 @@ export default function LiveStatusBadge({
       
       if (response.ok) {
         const data = await response.json().catch(() => ({}));
+        
+        // For API Gateway, interpret the status field
+        let interpretedStatus = 'ok';
+        let message = '';
+        
+        if (data.status === 'partial') {
+          // Some services are down but core functionality works
+          interpretedStatus = 'warning';
+          message = data.message || 'Some services unavailable';
+        } else if (data.status === 'error' || data.status === 'degraded') {
+          interpretedStatus = 'error';
+          message = data.message || 'Service degraded';
+        } else if (data.status === 'ok' || data.status === 'healthy') {
+          interpretedStatus = 'ok';
+          message = 'All services operational';
+        }
+        
         return { 
-          status: 'ok', 
+          status: interpretedStatus, 
           responseTime: Date.now(),
-          data: data
+          data: data,
+          message: message
         };
       } else {
         return { 
@@ -194,7 +238,7 @@ export default function LiveStatusBadge({
     const detectedN8nUrl = detectCodespaceN8nUrl();
     const resetConfig = {
       n8nUrl: detectedN8nUrl || '',
-      mongoDbTestUrl: '',
+      mongoConnectionString: '',
       codespaceId: ''
     };
     setConfigForm(resetConfig);
@@ -220,6 +264,7 @@ export default function LiveStatusBadge({
     if (statuses.length === 0) return 'loading';
     if (statuses.every(s => s.status === 'ok')) return 'healthy';
     if (statuses.some(s => s.status === 'error' || s.status === 'timeout')) return 'degraded';
+    if (statuses.some(s => s.status === 'warning')) return 'partial';
     return 'checking';
   };
 
@@ -236,6 +281,7 @@ export default function LiveStatusBadge({
           <span className={styles.statusText}>
             Workshop Systems: {overallStatus === 'healthy' ? 'All Online' : 
                               overallStatus === 'degraded' ? 'Issues Detected' : 
+                              overallStatus === 'partial' ? 'Partially Available' :
                               overallStatus === 'loading' ? 'Checking...' : 'Unknown'}
           </span>
         </div>
@@ -296,17 +342,17 @@ export default function LiveStatusBadge({
             </div>
 
             <div className={styles.configField}>
-              <label htmlFor="mongoDbTestUrl">MongoDB Atlas Test URL (optional):</label>
+              <label htmlFor="mongoConnectionString">MongoDB Atlas Connection String (optional):</label>
               <input
-                type="text"
-                id="mongoDbTestUrl"
-                value={configForm.mongoDbTestUrl}
-                onChange={(e) => setConfigForm({...configForm, mongoDbTestUrl: e.target.value})}
-                placeholder="Custom MongoDB health check endpoint"
+                type="password"
+                id="mongoConnectionString"
+                value={configForm.mongoConnectionString}
+                onChange={(e) => setConfigForm({...configForm, mongoConnectionString: e.target.value})}
+                placeholder="mongodb+srv://username:password@cluster.mongodb.net/database"
                 className={styles.configInput}
               />
               <small className={styles.configHint}>
-                💡 Leave empty to use the generic MongoDB check via workshop gateway
+                💡 Add your Atlas connection string to verify your specific database connection. Leave empty for generic checks.
               </small>
             </div>
 
@@ -344,11 +390,46 @@ export default function LiveStatusBadge({
                   <span className={`${styles.statusLabel} ${styles[status.status]}`}>
                     {status.status === 'ok' ? 'Online' :
                      status.status === 'error' ? 'Error' :
+                     status.status === 'warning' ? 'Partial' :
                      status.status === 'timeout' ? 'Timeout' : 'Checking...'}
                   </span>
                   
                   {status.error && (
                     <div className={styles.errorMessage}>{status.error}</div>
+                  )}
+                  
+                  {status.message && status.status === 'ok' && (
+                    <div className={styles.successMessage}>{status.message}</div>
+                  )}
+                  
+                  {/* Enhanced details for API Gateway */}
+                  {system.showDetails && status.data && status.status === 'ok' && (
+                    <div className={styles.apiDetails}>
+                      {status.data.services && (
+                        <div className={styles.servicesStatus}>
+                          <small><strong>Services:</strong></small>
+                          {Object.entries(status.data.services).map(([service, info]) => (
+                            <div key={service} className={styles.serviceItem}>
+                              <span className={`${styles.serviceDot} ${info.available ? styles.ok : styles.error}`}></span>
+                              <span className={styles.serviceName}>
+                                {service.replace('_', ' ')}: {info.available ? 'Available' : 'Unavailable'}
+                              </span>
+                              {info.provider && <span className={styles.serviceProvider}>({info.provider})</span>}
+                            </div>
+                          ))}
+                        </div>
+                      )}
+                      {status.data.uptime && (
+                        <div className={styles.uptimeInfo}>
+                          <small>Uptime: {Math.floor(status.data.uptime / 60)} minutes</small>
+                        </div>
+                      )}
+                      {status.data.version && (
+                        <div className={styles.versionInfo}>
+                          <small>Version: {status.data.version}</small>
+                        </div>
+                      )}
+                    </div>
                   )}
                   
                   {system.local && status.status !== 'ok' && (
@@ -365,6 +446,8 @@ export default function LiveStatusBadge({
             <div className={styles.helpText}>
               {overallStatus === 'healthy' ? 
                 '✅ All systems operational - ready for workshop exercises!' :
+                overallStatus === 'partial' ?
+                '🟡 Some services partially available - core features should work' :
                 '⚠️ Some systems need attention - check the details above'}
             </div>
             

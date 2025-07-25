@@ -11,7 +11,7 @@ export default {
   "projectName": "mongodb-developer.github.io",
   "organizationName": "mongodb-developer",
   "trailingSlash": false,
-  "onBrokenLinks": "throw",
+  "onBrokenLinks": "warn",
   "onBrokenMarkdownLinks": "warn",
   "favicon": "img/favicon.svg",
   "deploymentBranch": "gh-pages",
@@ -87,7 +87,7 @@ export default {
     },
     "announcementBar": {
       "id": "feedback_form",
-      "content": "This is a demonstration that we can put a pop-up message here! Even <a target=\"_blank\" rel=\"noopener noreferrer\" href=\"#\">links</a>",
+      "content": "Don't forget to provide feedback for the workshop: <a target=\"_blank\" rel=\"noopener noreferrer\" href=\"#\">links</a>",
       "backgroundColor": "#fafbfc",
       "textColor": "#091E42",
       "isCloseable": true

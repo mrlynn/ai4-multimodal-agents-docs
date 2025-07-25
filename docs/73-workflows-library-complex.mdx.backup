@@ -1,0 +1,417 @@
+---
+sidebar_position: 73
+---
+
+# 📚 Workflows Library
+
+Access all pre-built workshop workflows ready for import into n8n. Each workflow demonstrates specific concepts and can be used as templates for your own implementations.
+
+<InstructorNotes 
+  timing="Workflows Library Overview (10-15 minutes)"
+  notes={[
+    "This is where participants can download all workshop workflows",
+    "Each workflow builds on previous concepts progressively",
+    "Workflows can be imported directly into n8n",
+    "Encourage participants to examine the workflow JSON to understand structure",
+    "Remind them to update credentials after importing"
+  ]}
+  tips={[
+    "Demo the import process live with one workflow",
+    "Show how to modify workflows after importing",
+    "Explain the naming convention (01-09)",
+    "Point out the progression from simple to complex",
+    "Mention workflows are also available in the GitHub repo"
+  ]}
+/>
+
+<SlideRecap 
+  title="Pre-Built Workflows for Learning"
+  items={[
+    {
+      icon: "🎯",
+      title: "Progressive Learning", 
+      description: "Workflows increase in complexity from basic to advanced"
+    },
+    {
+      icon: "🔧", 
+      title: "Ready to Import",
+      description: "Download and import directly into your n8n instance"
+    },
+    {
+      icon: "📖",
+      title: "Educational Templates",
+      description: "Each workflow teaches specific concepts and patterns"
+    }
+  ]}
+  nextSection="Download workflows and start building!"
+/>
+
+## 🚀 Quick Start
+
+### How to Import Workflows
+
+1. **Download** the workflow JSON file
+2. In n8n, go to **Workflows** → **Import**
+3. Select the downloaded JSON file
+4. **Review** the imported workflow
+5. **Update credentials** as needed
+6. **Test** the workflow
+
+:::tip Direct Download
+All workflows are available at: `/workflows/`
+
+Or access from GitHub: [Workshop Workflows Repository](https://github.com/mongodb-developer/multimodal-pdf-agent-n8n/tree/main/workflows)
+:::
+
+## 📋 Available Workflows
+
+### 🎓 Foundation Workflows (01-02)
+
+<WorkflowCard
+  number="01"
+  title="Getting Started"
+  description="Your first workflow! Tests the environment and verifies everything is working."
+  concepts={["Webhooks", "Basic nodes", "Response handling"]}
+  difficulty="beginner"
+  downloadUrl="/workflows/01-getting-started.json"
+>
+
+**What it does:**
+- Creates a simple webhook endpoint
+- Returns workshop status information
+- Verifies n8n is configured correctly
+
+**Use this to:**
+- Test your n8n installation
+- Understand basic workflow structure
+- Learn webhook configuration
+
+</WorkflowCard>
+
+<WorkflowCard
+  number="02"
+  title="PDF Processor"
+  description="Extract and process PDF content for embedding generation."
+  concepts={["PDF handling", "Page extraction", "Data transformation"]}
+  difficulty="intermediate"
+  downloadUrl="/workflows/02-pdf-processor.json"
+>
+
+**What it does:**
+- Accepts PDF upload via webhook
+- Extracts pages as images
+- Prepares content for embedding generation
+- Handles errors gracefully
+
+**Use this to:**
+- Process PDF documents
+- Extract text and images
+- Prepare for vector storage
+
+</WorkflowCard>
+
+### 🤖 AI Agent Workflows (03-07)
+
+<WorkflowCard
+  number="03"
+  title="Multimodal Agent"
+  description="Basic multimodal agent that processes both text and images."
+  concepts={["Multimodal embeddings", "Vector search", "AI responses"]}
+  difficulty="intermediate"
+  downloadUrl="/workflows/03-multimodal-agent.json"
+>
+
+**What it does:**
+- Generates multimodal embeddings
+- Stores in MongoDB Atlas
+- Performs vector similarity search
+- Returns AI-powered responses
+
+**Key features:**
+- Voyage AI multimodal-3 integration
+- MongoDB vector search
+- Basic RAG implementation
+
+</WorkflowCard>
+
+<WorkflowCard
+  number="04"
+  title="Complete Agent (Mock)"
+  description="Full agent workflow with mock services for testing without API keys."
+  concepts={["Mock testing", "Agent architecture", "Error handling"]}
+  difficulty="intermediate"
+  downloadUrl="/workflows/04-complete-agent-mock.json"
+>
+
+**What it does:**
+- Complete agent flow with mock embeddings
+- Simulated vector search
+- Mock AI responses
+- Perfect for testing without API costs
+
+**Use this to:**
+- Test agent architecture
+- Develop without API keys
+- Understand the complete flow
+
+</WorkflowCard>
+
+<WorkflowCard
+  number="05"
+  title="Real Multimodal Agent"
+  description="Production-ready multimodal agent with real API integrations."
+  concepts={["Production patterns", "Real APIs", "Advanced RAG"]}
+  difficulty="advanced"
+  downloadUrl="/workflows/05-real-multimodal-agent.json"
+>
+
+**What it does:**
+- Full production workflow
+- Real Voyage AI embeddings
+- MongoDB Atlas vector search
+- Gemini 2.0 AI responses
+- Error handling and retries
+
+**Requirements:**
+- MongoDB Atlas connection
+- Workshop API access
+- Proper credential configuration
+
+</WorkflowCard>
+
+<WorkflowCard
+  number="06"
+  title="Real Voyage Multimodal"
+  description="Advanced workflow showcasing Voyage AI's multimodal capabilities."
+  concepts={["Image embeddings", "Visual search", "Multimodal RAG"]}
+  difficulty="advanced"
+  downloadUrl="/workflows/06-real-voyage-multimodal.json"
+>
+
+**What it does:**
+- Processes images and text separately
+- Creates unified multimodal embeddings
+- Implements visual similarity search
+- Handles mixed content queries
+
+**Best for:**
+- PDFs with diagrams
+- Visual content analysis
+- Image-based queries
+
+</WorkflowCard>
+
+<WorkflowCard
+  number="07"
+  title="Form-Based Agent"
+  description="Interactive agent with web form interface for queries."
+  concepts={["Web interface", "Form handling", "User interaction"]}
+  difficulty="intermediate"
+  downloadUrl="/workflows/07-form-based-agent.json"
+>
+
+**What it does:**
+- Provides web form for queries
+- Handles file uploads
+- Interactive chat interface
+- Session management
+
+**Features:**
+- HTML form integration
+- File upload handling
+- Response formatting
+- User-friendly interface
+
+</WorkflowCard>
+
+### 🚀 Advanced Workflows (08-09)
+
+<WorkflowCard
+  number="08"
+  title="Voyage Context-3 Embeddings"
+  description="Enhanced text understanding with Voyage AI's Context-3 model."
+  concepts={["Context-3 model", "Complex text", "Contextual embeddings"]}
+  difficulty="advanced"
+  downloadUrl="/workflows/08-voyage-context-3-embeddings.json"
+>
+
+**What it does:**
+- Uses voyage-context-3 for deep text understanding
+- Adds contextual information to embeddings
+- Optimized for legal and technical documents
+- Implements intelligent model selection
+
+**Best for:**
+- Legal documents
+- Technical manuals
+- Research papers
+- Complex narratives
+
+</WorkflowCard>
+
+<WorkflowCard
+  number="09"
+  title="Hybrid Multimodal Context Agent"
+  description="The ultimate workflow combining multimodal-3 and context-3 models."
+  concepts={["Hybrid approach", "Model orchestration", "Advanced RAG"]}
+  difficulty="expert"
+  downloadUrl="/workflows/09-hybrid-multimodal-context-agent.json"
+>
+
+**What it does:**
+- Intelligently routes content to appropriate models
+- Uses multimodal-3 for images and diagrams
+- Uses context-3 for complex text
+- Combines results for comprehensive understanding
+- Implements weighted search strategies
+
+**Key features:**
+- Automatic model selection
+- Parallel processing
+- Unified search across embeddings
+- Optimal performance/cost balance
+
+**Use cases:**
+- Technical documentation with diagrams
+- Legal contracts with exhibits
+- Research papers with charts
+- Any complex mixed-content documents
+
+</WorkflowCard>
+
+## 🎯 Workflow Selection Guide
+
+### By Experience Level
+
+<Tabs>
+<TabItem value="beginner" label="Beginner">
+
+Start with these workflows:
+1. **01 - Getting Started**: Learn n8n basics
+2. **02 - PDF Processor**: Handle document processing
+3. **04 - Complete Agent (Mock)**: Understand agent architecture
+
+</TabItem>
+<TabItem value="intermediate" label="Intermediate">
+
+Progress to:
+1. **03 - Multimodal Agent**: Real embedding generation
+2. **07 - Form-Based Agent**: Add user interfaces
+3. **05 - Real Multimodal Agent**: Production patterns
+
+</TabItem>
+<TabItem value="advanced" label="Advanced">
+
+Master these:
+1. **06 - Real Voyage Multimodal**: Visual content processing
+2. **08 - Context-3 Embeddings**: Enhanced text understanding
+3. **09 - Hybrid Agent**: Complete solution
+
+</TabItem>
+</Tabs>
+
+### By Use Case
+
+| Use Case | Recommended Workflows |
+|----------|---------------------|
+| **Basic PDF Processing** | 02, 03 |
+| **Visual Content (Images/Diagrams)** | 06, 09 |
+| **Legal/Technical Documents** | 08, 09 |
+| **Interactive Applications** | 07 |
+| **Production Deployment** | 05, 09 |
+| **Testing/Development** | 04 |
+
+## 🔧 Customization Tips
+
+### After Importing
+
+1. **Update Credentials**
+   - MongoDB connection string
+   - API endpoints (if not using workshop proxy)
+   - Any authentication tokens
+
+2. **Modify for Your Needs**
+   - Change webhook paths
+   - Adjust embedding models
+   - Customize response formats
+   - Add error notifications
+
+3. **Common Customizations**
+   ```javascript
+   // Change embedding model
+   "model": "voyage-context-3"  // Instead of voyage-3
+   
+   // Add metadata
+   "metadata": {
+     "source": "custom_app",
+     "user_id": "{{ $json.user_id }}"
+   }
+   
+   // Adjust search parameters
+   "numCandidates": 100,  // Increase for better recall
+   "limit": 10  // Return more results
+   ```
+
+## 📦 Bulk Download
+
+### Download All Workflows
+Get all 9 workflows at once! Use these direct links:
+
+- [01-getting-started.json](/workflows/01-getting-started.json)
+- [02-pdf-processor.json](/workflows/02-pdf-processor.json)
+- [03-multimodal-agent.json](/workflows/03-multimodal-agent.json)
+- [04-complete-agent-mock.json](/workflows/04-complete-agent-mock.json)
+- [05-real-multimodal-agent.json](/workflows/05-real-multimodal-agent.json)
+- [06-real-voyage-multimodal.json](/workflows/06-real-voyage-multimodal.json)
+- [07-form-based-agent.json](/workflows/07-form-based-agent.json)
+- [08-voyage-context-3-embeddings.json](/workflows/08-voyage-context-3-embeddings.json)
+- [09-hybrid-multimodal-context-agent.json](/workflows/09-hybrid-multimodal-context-agent.json)
+
+Or use this script in your terminal:
+
+```bash
+# Download all workflows
+for i in {01..09}; do
+  curl -O https://your-workshop-url.com/workflows/${i}-*.json
+done
+```
+
+## 🚨 Troubleshooting
+
+### Common Import Issues
+
+#### Credentials not found
+After importing, you need to:
+1. Go to **Credentials** → **New**
+2. Add MongoDB credentials
+3. Update webhook URLs if needed
+4. Save and test connections
+
+#### Workflow errors on execution
+Check these common issues:
+- API endpoints are accessible
+- MongoDB collection exists
+- Webhook paths are unique
+- All required nodes are connected
+
+#### Version compatibility
+These workflows require:
+- n8n version 1.0.0 or higher
+- MongoDB node v2
+- HTTP Request node v4.1
+
+## 📚 Next Steps
+
+After exploring the workflows:
+
+1. **Start with workflow 01** to verify setup
+2. **Progress through numbered order** for best learning
+3. **Customize workflows** for your use case
+4. **Combine patterns** from different workflows
+5. **Build your own** using these as templates
+
+:::tip Pro Tip
+Open workflows in n8n's JSON view to understand the structure and learn how to build your own from scratch!
+:::
+
+Ready to import your first workflow? [Start with Getting Started →](/workflows/01-getting-started.json)

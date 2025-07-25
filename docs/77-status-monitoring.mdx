@@ -1,0 +1,177 @@
+---
+sidebar_position: 75
+---
+
+# 📊 Workshop Status Monitoring
+
+The LiveStatusBadge component helps you monitor the health of your workshop environment in real-time.
+
+## 🎯 What It Monitors
+
+The status badge checks three key systems:
+
+### 1. Workshop API Gateway ✅
+- **What**: The embedding and proxy services
+- **Endpoint**: `https://workshop-embedding-api.vercel.app/api/health`
+- **Purpose**: Ensures you can generate embeddings and access AI services
+- **Always Available**: This is maintained by the workshop organizers
+
+### 2. n8n Workflow Engine 🔧
+- **What**: Your local n8n instance running in Codespace
+- **Endpoint**: `https://your-codespace-5678.app.github.dev/healthz`
+- **Purpose**: Verifies your workflow automation engine is running
+- **Configurable**: You need to set this up based on your Codespace
+
+### 3. MongoDB Atlas 🗄️
+- **What**: Your vector database connection
+- **How it works**: 
+  - If you provide a connection string → Tests your specific Atlas cluster
+  - If no connection string → Shows generic MongoDB service status
+- **Purpose**: Ensures your database is accessible for storing embeddings
+
+## 🔧 Configuration
+
+### Simple Setup (Recommended)
+1. Click the ⚙️ gear icon on any status badge
+2. **n8n URL**: Auto-detected for Codespaces or enter manually
+3. **MongoDB Connection String**: Optional - paste your Atlas connection string
+4. Click "Save Configuration"
+
+### What Each Field Does
+
+#### n8n Workflow Engine URL
+```
+https://your-codespace-5678.app.github.dev/healthz
+```
+- **Purpose**: Check if your n8n instance is running
+- **Auto-detection**: Works automatically in GitHub Codespaces
+- **Manual setup**: Find your Codespace port 5678 URL and add `/healthz`
+
+#### MongoDB Atlas Connection String (Optional)
+```
+mongodb+srv://username:password@cluster.mongodb.net/database
+```
+- **Purpose**: Test your specific MongoDB Atlas connection
+- **Security**: Stored locally in your browser, never sent to servers
+- **Optional**: Leave empty for generic MongoDB service checks
+
+## 🚨 Understanding Status Indicators
+
+### System Status Colors
+- 🟢 **Green (Online)**: System is healthy and responsive
+- 🔴 **Red (Error)**: System is unreachable or returning errors  
+- 🟡 **Yellow (Timeout)**: System is slow or partially responsive
+- ⚪ **Gray (Loading)**: Currently checking system status
+
+### Common Scenarios
+
+#### All Green ✅
+```
+✅ Workshop API Gateway: Online
+✅ n8n Workflow Engine: Online  
+✅ MongoDB Atlas: Online (your Atlas instance)
+```
+**Meaning**: Everything is working perfectly! Ready for all workshop exercises.
+
+#### n8n Issues ⚠️
+```
+✅ Workshop API Gateway: Online
+❌ n8n Workflow Engine: Service not running locally
+✅ MongoDB Atlas: Online
+```
+**Solution**: 
+1. Check if your Codespace is running
+2. Verify n8n is started (`npm run dev`)
+3. Update the n8n URL in configuration
+
+#### MongoDB Issues ⚠️  
+```
+✅ Workshop API Gateway: Online
+✅ n8n Workflow Engine: Online
+❌ MongoDB Atlas: Connection failed
+```
+**Solution**:
+1. Verify your MongoDB Atlas connection string
+2. Check Atlas cluster is running
+3. Ensure network access is configured
+4. Test with workshop exercises that use generic MongoDB checks
+
+## 🔍 Troubleshooting
+
+### Configuration Not Saving
+- **Issue**: Settings reset after page refresh
+- **Solution**: Check browser localStorage permissions
+- **Workaround**: Re-enter settings each session
+
+### Auto-Detection Not Working
+- **Issue**: n8n URL not detected automatically
+- **Solution**: Manually enter your Codespace port 5678 URL
+- **Format**: `https://[codespace-name]-5678.app.github.dev/healthz`
+
+### MongoDB Connection Errors
+- **Issue**: "Connection failed" even with correct string
+- **Solution**: 
+  1. Remove the connection string to use generic checks
+  2. Verify the string includes credentials and database name
+  3. Check Atlas network access settings
+
+### False Positives/Negatives
+- **Issue**: Status shows error but service works fine
+- **Solution**: Network issues or CORS restrictions
+- **Workaround**: Click refresh (🔄) to retry the check
+
+## 💡 Best Practices
+
+### For Workshop Participants
+1. **Check status before starting exercises**
+2. **Configure your specific MongoDB connection** for accurate monitoring
+3. **Use the refresh button** if you see stale status
+4. **Keep the badge expanded** during exercises to monitor issues
+
+### For Instructors
+1. **Monitor the dashboard view** to see participant system health
+2. **Have backup plans** for when services are down
+3. **Show participants how to configure** their status monitoring
+4. **Use status colors** to quickly identify who needs help
+
+## 🎯 Privacy & Security
+
+### Data Handling
+- **Connection strings**: Stored only in your browser's localStorage
+- **Health checks**: Only test connectivity, no data transmission
+- **Privacy**: No personal data sent to workshop servers
+
+### Security Notes
+- Connection strings are masked in the UI (password field)
+- Data never leaves your browser except for health check requests
+- MongoDB connections are tested via workshop proxy for security
+
+## 📚 Integration with Workshop Content  
+
+The status badge appears throughout the documentation to help you:
+- **Verify prerequisites** before starting sections
+- **Debug issues** when exercises don't work
+- **Monitor system health** during complex workflows
+- **Ensure readiness** for production deployment
+
+Look for the status badge on key pages like:
+- MongoDB Atlas setup
+- n8n configuration
+- Workflow testing
+- Production deployment
+
+## 🚀 Advanced Usage
+
+### Custom Endpoints
+You can modify the component to check additional services by editing the configuration or extending the systems array.
+
+### API Integration
+The status checks use standard HTTP health check patterns:
+- `GET /healthz` for service health
+- `POST /api/check-db` for database connectivity
+- Standard HTTP status codes for responses
+
+### Monitoring Dashboard
+For instructors, the expanded view provides a real-time dashboard of all workshop systems, perfect for monitoring during live sessions.
+
+The status monitoring system ensures everyone has a smooth workshop experience by providing immediate feedback on system health! 🎉

@@ -397,6 +397,60 @@ Create a simple HTML interface:
 </html>
 ```
 
+## Best Practices for Model Selection
+
+### Choosing the Right Embedding Model
+
+Use this guide to select the optimal Voyage AI model for your content:
+
+| Content Type | Recommended Model | Why |
+|--------------|------------------|-----|
+| **General PDFs** | voyage-3 | Cost-effective for basic documents |
+| **PDFs with Images** | voyage-multimodal-3 | Handles visual content effectively |
+| **Legal Documents** | voyage-context-3 | Superior understanding of complex language |
+| **Technical Manuals** | voyage-context-3 | Better comprehension of technical terms |
+| **Mixed Content** | Both multimodal-3 + context-3 | Comprehensive understanding |
+
+### Hybrid Processing Strategy
+
+For documents with both complex text and images:
+
+```javascript
+// Hybrid workflow implementation
+const hybridProcessor = {
+  async processDocument(pages) {
+    const results = [];
+    
+    for (const page of pages) {
+      const analysis = analyzeContent(page);
+      
+      if (analysis.hasImages) {
+        // Process with multimodal-3
+        const visualEmbedding = await generateEmbedding({
+          text: page.text + ' ' + page.imageDescriptions.join(' '),
+          model: 'voyage-multimodal-3',
+          images: page.images
+        });
+        results.push({ type: 'visual', embedding: visualEmbedding });
+      }
+      
+      if (analysis.hasComplexText) {
+        // Process with context-3
+        const textEmbedding = await generateEmbedding({
+          text: page.text,
+          model: 'voyage-context-3',
+          context: page.surroundingContext
+        });
+        results.push({ type: 'textual', embedding: textEmbedding });
+      }
+      
+      // Store both embeddings for comprehensive search
+      await storeHybridEmbeddings(page.id, results);
+    }
+  }
+};
+```
+
 ## Success Metrics
 
 Your agent is working when you can:
@@ -405,6 +459,8 @@ Your agent is working when you can:
 - ✅ Get relevant answers with page references
 - ✅ Handle both text and visual content
 - ✅ Maintain conversation context
+- ✅ Choose appropriate models based on content
+- ✅ Process complex documents with hybrid approach
 
 ## Next Steps
 
@@ -412,6 +468,7 @@ Your agent is working when you can:
 2. **Add support for multiple file formats**
 3. **Implement user authentication**
 4. **Add real-time chat interface**
-5. **Deploy to production**
+5. **Deploy to production with model selection logic**
+6. **Optimize costs by choosing models wisely**
 
 Your multimodal PDF agent is now complete and ready for real-world use!
