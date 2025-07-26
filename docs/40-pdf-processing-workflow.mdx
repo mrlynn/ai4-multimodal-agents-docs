@@ -55,13 +55,29 @@ This workflow includes all the steps below, pre-configured and ready to use!
 
 ## Workflow Overview
 
+This workflow creates an intelligent document processing pipeline that:
+1. **Receives** PDF URLs via webhook
+2. **Downloads** the PDF file
+3. **Extracts** each page as an image (preserving visual elements)
+4. **Analyzes** content to select the optimal AI model
+5. **Generates** embeddings using the appropriate Voyage AI model
+6. **Stores** structured documents in MongoDB for vector search
+
 ```mermaid
 graph LR
     A[Webhook Trigger] --> B[Download PDF]
     B --> C[Extract Pages]
-    C --> D[Convert to Images]
+    C --> D[Analyze Content]
     D --> E[Generate Embeddings]
     E --> F[Store in MongoDB]
+    
+    D -.->|Images| G[voyage-multimodal-3]
+    D -.->|Complex Text| H[voyage-context-3]
+    D -.->|Simple Text| I[voyage-3]
+    
+    G --> E
+    H --> E
+    I --> E
 ```
 
 ## Step 1: Create the Webhook Trigger
@@ -105,13 +121,21 @@ In production, use the Production URL instead of Test URL.
 Your webhook should receive:
 ```json
 {
-  "pdf_url": "https://example.com/sample.pdf",
+  "pdf_url": "https://arxiv.org/pdf/2501.12948",
   "metadata": {
     "source": "user_upload",
-    "tags": ["ai", "workshop"]
+    "tags": ["ai", "research", "arxiv"]
   }
 }
 ```
+
+:::tip Workshop Test Document
+We're using [this recent arXiv paper](https://arxiv.org/pdf/2501.12948) as our test document. It's a perfect example for this workshop as it contains:
+- **Complex technical text** (ideal for Context-3 model testing)
+- **Diagrams and figures** (great for multimodal processing)
+- **Research content** (relevant to AI4 conference attendees)
+- **Multiple pages** (demonstrates batch processing)
+:::
 
 ## Step 3: Extract PDF Pages
 
@@ -125,6 +149,14 @@ Your webhook should receive:
    - **Output Format**: Separate Items
    - **Image Format**: PNG
    - **DPI**: 150 (balance quality/size)
+
+:::important Why Extract as Images?
+Even text-only PDFs are extracted as images to:
+- Preserve layout and formatting
+- Capture visual elements (logos, signatures, diagrams)
+- Enable multimodal AI processing
+- Maintain consistency across all document types
+:::
 
 :::info Alternative Approach
 If Read PDF node isn't available, use a Code node with pdf-parse library.
@@ -173,30 +205,42 @@ The workshop now supports three Voyage AI models:
 - **voyage-multimodal-3**: For content with images, diagrams, or visual elements
 - **voyage-context-3**: For complex text requiring deep understanding (legal, technical)
 
-### Add Code Node for Voyage AI
+### Add Code Node for Intelligent Embedding Generation
 
 1. Add **Code** node
 2. Connect to PDF extraction node
-3. Add this code:
+3. Add this code that performs several critical functions:
+
+**What this code does:**
+- **Receives** each PDF page as an image from the previous node
+- **Converts** images to base64 format for API transmission
+- **Analyzes** content to determine the best embedding model
+- **Calls** the workshop embedding API with the selected model
+- **Structures** the response for MongoDB storage
+- **Handles** errors gracefully to process all pages
 
 ```javascript
 const items = [];
 
 for (const item of $input.all()) {
   try {
-    // Get image data
+    // Each 'item' represents one PDF page from the extraction step
+    
+    // Get the page image data (all pages are converted to images)
     const imageBuffer = await item.binary.data.buffer;
     const base64Image = imageBuffer.toString('base64');
     
-    // Prepare input based on content type
+    // Prepare input format for the embedding API
+    // Note: Even text pages are processed as images to preserve layout
     const input = item.json.content_type === 'image' 
-      ? `data:image/png;base64,${base64Image}`
-      : item.json.text_content;
+      ? `data:image/png;base64,${base64Image}`  // Standard base64 image format
+      : item.json.text_content;                 // Pure text (if available)
     
     // Analyze content to select appropriate model
     const model = selectEmbeddingModel(item.json);
     
     // Call Workshop Embedding Service
+    // This API proxies requests to Voyage AI, handling authentication
     const response = await $http.request({
       method: 'POST',
       url: 'https://workshop-embedding-api.vercel.app/api/embed',
@@ -204,28 +248,40 @@ for (const item of $input.all()) {
         'Content-Type': 'application/json'
       },
       body: {
-        text: input,
-        model: model,
-        input_type: 'document',
-        // Add context for context-3 model
+        text: input,              // Base64 image OR text content
+        model: model,             // Selected Voyage AI model
+        input_type: 'document',   // Tells API this is document content
+        // Context-3 model benefits from additional context
         context: model === 'voyage-context-3' ? getPageContext(item.json) : undefined
       }
     });
     
-    // Prepare document for MongoDB
+    // Prepare a structured document for MongoDB
     items.push({
       json: {
+        // Document identification
         filename: $('Webhook').item.json.metadata.filename || 'unknown.pdf',
         page_number: item.json.page_number,
+        
+        // Content classification
         content_type: item.json.content_type || 'image',
+        
+        // The vector embedding (1024 dimensions for multimodal/context-3)
         embedding: response.embeddings[0],
+        
+        // Rich metadata for filtering and context
         metadata: {
           source_url: $('Webhook').item.json.pdf_url,
           processed_at: new Date().toISOString(),
           total_pages: item.json.total_pages,
+          embedding_model: model,  // Track which model was used
           ...$('Webhook').item.json.metadata
         },
+        
+        // Original content (for retrieval and display)
         text_content: item.json.text_content || null,
+        
+        // Image metadata (for rendering and analysis)
         image_data: {
           width: item.json.width || null,
           height: item.json.height || null,
@@ -242,29 +298,40 @@ for (const item of $input.all()) {
 
 return items;
 
-// Helper function to select appropriate embedding model
+// Helper function to intelligently select the optimal embedding model
 function selectEmbeddingModel(pageData) {
+  // Check if this page contains visual content
   const hasImages = pageData.content_type === 'image';
+  
+  // Analyze text complexity
   const textLength = pageData.text_content ? pageData.text_content.length : 0;
   const hasComplexText = textLength > 500 && 
-    (pageData.text_content.includes('whereas') || 
-     pageData.text_content.includes('liability') ||
-     pageData.text_content.includes('pursuant'));
+    (pageData.text_content.includes('whereas') ||    // Legal language
+     pageData.text_content.includes('liability') ||  // Contract terms
+     pageData.text_content.includes('pursuant'));    // Formal documents
   
-  // For hybrid approach, you would process twice with different models
+  // Model selection logic:
   if (hasImages) {
+    // Use multimodal-3 for any visual content (charts, diagrams, scanned pages)
     return 'voyage-multimodal-3';
   } else if (hasComplexText) {
+    // Use context-3 for complex documents requiring deep understanding
     return 'voyage-context-3';
   }
   
-  return 'voyage-3'; // Default for simple text
+  // Use voyage-3 for simple text (fast and efficient)
+  return 'voyage-3';
 }
 
-// Helper function to get context for context-3 model
+// Helper function to provide additional context for the context-3 model
 function getPageContext(pageData) {
+  // Context-3 benefits from knowing the document structure
   return `Page ${pageData.page_number} of ${pageData.total_pages}. ` +
          `Document type: ${pageData.metadata?.document_type || 'general'}`;
+  // This context helps the model understand:
+  // - Where this content appears in the document
+  // - The type of document being processed
+  // - Relationships between pages
 }
 ```
 
@@ -281,13 +348,58 @@ function getPageContext(pageData) {
    - **Options**:
      - **Multiple Documents**: Toggle ON
 
-## Complete Workflow
+## Complete Workflow Architecture
 
-Your workflow should now look like:
+Your workflow creates an intelligent document processing pipeline:
 
 ```
 [Webhook] → [HTTP Request] → [Extract PDF] → [Generate Embeddings] → [MongoDB]
+    ↓             ↓               ↓                    ↓                   ↓
+ Receives     Downloads      Converts to         Analyzes &          Stores with
+ PDF URL      PDF file       PNG images       Generates vectors    vector index
 ```
+
+### Data Flow Through the Pipeline
+
+Understanding how data transforms at each step:
+
+1. **Webhook Input**: 
+   ```json
+   {"pdf_url": "https://arxiv.org/pdf/2501.12948", "metadata": {"filename": "arxiv-paper.pdf"}}
+   ```
+
+2. **After PDF Download**: 
+   ```
+   Binary PDF file (stored in item.binary.data)
+   ```
+
+3. **After Page Extraction**: 
+   ```json
+   [
+     {"binary": {"data": "<page1_image>"}, "json": {"page_number": 1, "total_pages": 5}},
+     {"binary": {"data": "<page2_image>"}, "json": {"page_number": 2, "total_pages": 5}},
+     ...
+   ]
+   ```
+
+4. **After Embedding Generation**: 
+   ```json
+   [
+     {
+       "filename": "contract.pdf",
+       "page_number": 1,
+       "embedding": [0.123, -0.456, 0.789, ...],  // 1024 dimensions
+       "content_type": "image",
+       "metadata": {"source_url": "...", "embedding_model": "voyage-multimodal-3"}
+     }
+   ]
+   ```
+
+5. **Final MongoDB Storage**: 
+   ```
+   Collection: pdf_documents
+   Vector Index: On 'embedding' field for similarity search
+   ```
 
 ### Advanced: Hybrid Approach
 
@@ -332,9 +444,9 @@ Use cURL or Postman:
 curl -X POST http://localhost:5678/webhook-test/process-pdf \
   -H "Content-Type: application/json" \
   -d '{
-    "pdf_url": "https://example.com/sample.pdf",
+    "pdf_url": "https://arxiv.org/pdf/2501.12948",
     "metadata": {
-      "filename": "ai-workshop.pdf",
+      "filename": "arxiv-paper.pdf",
       "source": "workshop_test"
     }
   }'

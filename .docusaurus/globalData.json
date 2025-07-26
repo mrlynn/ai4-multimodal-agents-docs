@@ -55,6 +55,11 @@
               "sidebar": "tutorialSidebar"
             },
             {
+              "id": "cost-optimization",
+              "path": "/multimodal-pdf-agent-n8n/docs/cost-optimization",
+              "sidebar": "tutorialSidebar"
+            },
+            {
               "id": "docker-troubleshooting",
               "path": "/multimodal-pdf-agent-n8n/docs/docker-troubleshooting",
               "sidebar": "tutorialSidebar"
@@ -115,6 +120,11 @@
               "sidebar": "tutorialSidebar"
             },
             {
+              "id": "monitoring-observability",
+              "path": "/multimodal-pdf-agent-n8n/docs/monitoring-observability",
+              "sidebar": "tutorialSidebar"
+            },
+            {
               "id": "multimodal-image-queries",
               "path": "/multimodal-pdf-agent-n8n/docs/multimodal-image-queries",
               "sidebar": "tutorialSidebar"
@@ -132,6 +142,11 @@
             {
               "id": "prerequisites",
               "path": "/multimodal-pdf-agent-n8n/docs/prerequisites",
+              "sidebar": "tutorialSidebar"
+            },
+            {
+              "id": "production-security",
+              "path": "/multimodal-pdf-agent-n8n/docs/production-security",
               "sidebar": "tutorialSidebar"
             },
             {
@@ -157,6 +172,11 @@
             {
               "id": "tool-definition-primer",
               "path": "/multimodal-pdf-agent-n8n/docs/tool-definition-primer",
+              "sidebar": "tutorialSidebar"
+            },
+            {
+              "id": "troubleshooting-guide",
+              "path": "/multimodal-pdf-agent-n8n/docs/troubleshooting-guide",
               "sidebar": "tutorialSidebar"
             },
             {
@@ -217,8 +237,8 @@
   "docusaurus-lunr-search": {
     "default": {
       "fileNames": {
-        "searchDoc": "search-doc-1753459624097.json",
-        "lunrIndex": "lunr-index-1753459624097.json"
+        "searchDoc": "search-doc-1753541744213.json",
+        "lunrIndex": "lunr-index-1753541744213.json"
       }
     }
   }

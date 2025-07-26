@@ -227,6 +227,36 @@ const sidebars = {
     },
     {
       type: 'category',
+      label: '🏭 Production Deployment',
+      collapsible: true,
+      collapsed: true,
+      className: 'sidebar-production',
+      description: 'Enterprise-ready deployment, security, and optimization',
+      items: [
+        {
+          type: 'doc',
+          id: 'production-security',
+          label: '🔒 Security & Compliance'
+        },
+        {
+          type: 'doc',
+          id: 'monitoring-observability',
+          label: '📊 Monitoring & Observability'
+        },
+        {
+          type: 'doc',
+          id: 'cost-optimization',
+          label: '💰 Cost Optimization'
+        },
+        {
+          type: 'doc',
+          id: 'troubleshooting-guide',
+          label: '🔧 Troubleshooting Guide'
+        }
+      ],
+    },
+    {
+      type: 'category',
       label: '📖 Workflow Guides',
       collapsible: true,
       collapsed: true,

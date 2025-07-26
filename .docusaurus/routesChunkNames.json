@@ -49,17 +49,17 @@
     },
     "config": "config---multimodal-pdf-agent-n-8-n-hello-world-5-e-9-00a"
   },
-  "/multimodal-pdf-agent-n8n/docs-f93": {
+  "/multimodal-pdf-agent-n8n/docs-2ab": {
     "__comp": "__comp---theme-docs-root-5-e-9-0b6",
     "__context": {
       "plugin": "plugin---multimodal-pdf-agent-n-8-n-docsaba-485"
     }
   },
-  "/multimodal-pdf-agent-n8n/docs-f3b": {
+  "/multimodal-pdf-agent-n8n/docs-7e9": {
     "__comp": "__comp---theme-doc-version-roota-7-b-5de",
     "__props": "__props---multimodal-pdf-agent-n-8-n-docs-2-ee-9f5"
   },
-  "/multimodal-pdf-agent-n8n/docs-607": {
+  "/multimodal-pdf-agent-n8n/docs-1d6": {
     "__comp": "__comp---theme-doc-roota-94-67a"
   },
   "/multimodal-pdf-agent-n8n/docs-248": {
@@ -101,6 +101,10 @@
   "/multimodal-pdf-agent-n8n/docs/complete-multimodal-agent-4c7": {
     "__comp": "__comp---theme-doc-item-178-a40",
     "content": "content---multimodal-pdf-agent-n-8-n-docs-complete-multimodal-agent-802-85b"
+  },
+  "/multimodal-pdf-agent-n8n/docs/cost-optimization-8c9": {
+    "__comp": "__comp---theme-doc-item-178-a40",
+    "content": "content---multimodal-pdf-agent-n-8-n-docs-cost-optimization-271-31d"
   },
   "/multimodal-pdf-agent-n8n/docs/docker-troubleshooting-e8e": {
     "__comp": "__comp---theme-doc-item-178-a40",
@@ -146,6 +150,10 @@
     "__comp": "__comp---theme-doc-item-178-a40",
     "content": "content---multimodal-pdf-agent-n-8-n-docs-mongodb-vector-setupe-72-fb1"
   },
+  "/multimodal-pdf-agent-n8n/docs/monitoring-observability-131": {
+    "__comp": "__comp---theme-doc-item-178-a40",
+    "content": "content---multimodal-pdf-agent-n-8-n-docs-monitoring-observabilityf-1-f-672"
+  },
   "/multimodal-pdf-agent-n8n/docs/multimodal-image-queries-0d5": {
     "__comp": "__comp---theme-doc-item-178-a40",
     "content": "content---multimodal-pdf-agent-n-8-n-docs-multimodal-image-queries-512-486"
@@ -161,6 +169,10 @@
   "/multimodal-pdf-agent-n8n/docs/prerequisites-88c": {
     "__comp": "__comp---theme-doc-item-178-a40",
     "content": "content---multimodal-pdf-agent-n-8-n-docs-prerequisitesb-49-028"
+  },
+  "/multimodal-pdf-agent-n8n/docs/production-security-f02": {
+    "__comp": "__comp---theme-doc-item-178-a40",
+    "content": "content---multimodal-pdf-agent-n-8-n-docs-production-security-4-ec-ec3"
   },
   "/multimodal-pdf-agent-n8n/docs/python-mongodb-approaches-391": {
     "__comp": "__comp---theme-doc-item-178-a40",
@@ -181,6 +193,10 @@
   "/multimodal-pdf-agent-n8n/docs/tool-definition-primer-3b0": {
     "__comp": "__comp---theme-doc-item-178-a40",
     "content": "content---multimodal-pdf-agent-n-8-n-docs-tool-definition-primerc-74-7e8"
+  },
+  "/multimodal-pdf-agent-n8n/docs/troubleshooting-guide-639": {
+    "__comp": "__comp---theme-doc-item-178-a40",
+    "content": "content---multimodal-pdf-agent-n-8-n-docs-troubleshooting-guide-65-d-c12"
   },
   "/multimodal-pdf-agent-n8n/docs/upload-interface-8ed": {
     "__comp": "__comp---theme-doc-item-178-a40",

@@ -288,7 +288,7 @@ return [{
 ### 1. Upload a PDF
 ```bash
 curl -X POST http://localhost:5678/webhook/upload-pdf \
-  -F "file=@sample.pdf"
+  -F "file=@arxiv-paper.pdf"
 ```
 
 ### 2. Ask Questions
@@ -297,7 +297,7 @@ curl -X POST http://localhost:5678/webhook/chat \
   -H "Content-Type: application/json" \
   -d '{
     "message": "What are the main findings in this research?",
-    "filename": "sample.pdf",
+    "filename": "arxiv-paper.pdf",
     "conversation_id": "test-123"
   }'
 ```

@@ -1,0 +1,687 @@
+---
+sidebar_position: 82
+---
+
+# 🔒 Production Security & Compliance
+
+Deploying AI agents to production requires robust security measures to protect sensitive data, API credentials, and user privacy. This section covers essential security patterns for enterprise deployments.
+
+:::warning Enterprise Security Critical
+The patterns in this section are **mandatory** for production deployments handling sensitive documents or operating in regulated industries.
+:::
+
+## 🎯 Security Threat Model
+
+### Primary Security Concerns
+
+| Threat | Impact | Mitigation Priority |
+|--------|--------|-------------------|
+| **API Key Exposure** | High - Unauthorized AI model access | 🔴 Critical |
+| **Document Data Breach** | High - Sensitive content exposure | 🔴 Critical |
+| **Injection Attacks** | High - System compromise | 🔴 Critical |
+| **Unauthorized Access** | Medium - Data viewing/modification | 🟡 High |
+| **Cost Abuse** | Medium - Financial impact | 🟡 High |
+
+## 🔐 API Key Management
+
+### Environment-Based Configuration
+
+**❌ Never Do This:**
+```javascript
+// Hardcoded credentials - NEVER!
+const voyageApiKey = "pa-1234567890abcdef";
+const mongoUri = "mongodb+srv://user:password@cluster.mongodb.net";
+```
+
+**✅ Secure Approach:**
+```javascript
+// Use environment variables and secret management
+const config = {
+  voyageApiKey: process.env.VOYAGE_API_KEY,
+  mongoUri: process.env.MONGODB_URI,
+  encryptionKey: process.env.DOCUMENT_ENCRYPTION_KEY
+};
+
+// Validate all required secrets are present
+if (!config.voyageApiKey || !config.mongoUri) {
+  throw new Error("Missing required environment variables");
+}
+```
+
+### n8n Credential Security
+
+```javascript
+// In n8n workflows - use credential management
+const credentials = {
+  mongodb: {
+    credential: 'MongoDB Atlas Production',
+    // Never expose connection strings in workflow JSON
+  },
+  voyageAI: {
+    credential: 'Voyage AI Production',
+    // API keys managed through n8n credential store
+  }
+};
+```
+
+### Secret Rotation Strategy
+
+```yaml
+# Example rotation schedule
+secrets_rotation:
+  api_keys:
+    frequency: 90_days
+    automation: true
+    notification: true
+  
+  database_passwords:
+    frequency: 30_days
+    automation: false  # Manual review required
+    notification: true
+    
+  encryption_keys:
+    frequency: 365_days
+    automation: false  # Manual review required
+    backup_previous: true
+```
+
+## 🛡️ Data Encryption
+
+### Encryption at Rest
+
+**MongoDB Atlas Configuration:**
+```javascript
+// Enable encryption at rest in Atlas
+const mongoClient = new MongoClient(uri, {
+  // Atlas handles encryption at rest automatically
+  // Ensure cluster has encryption enabled
+  ssl: true,
+  
+  // Additional client-side field level encryption
+  autoEncryption: {
+    keyVaultNamespace: 'encryption.__keyVault',
+    kmsProviders: {
+      aws: {
+        accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+        secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY
+      }
+    }
+  }
+});
+```
+
+### Document Content Encryption
+
+```javascript
+// Encrypt sensitive document content before storage
+const CryptoJS = require('crypto-js');
+
+class DocumentEncryption {
+  constructor(encryptionKey) {
+    this.key = encryptionKey;
+  }
+  
+  encryptContent(content) {
+    return CryptoJS.AES.encrypt(content, this.key).toString();
+  }
+  
+  decryptContent(encryptedContent) {
+    const bytes = CryptoJS.AES.decrypt(encryptedContent, this.key);
+    return bytes.toString(CryptoJS.enc.Utf8);
+  }
+  
+  // Store document with encryption
+  async storeDocument(document) {
+    const encryptedDoc = {
+      ...document,
+      // Encrypt sensitive fields
+      text_content: this.encryptContent(document.text_content),
+      metadata: {
+        ...document.metadata,
+        // Keep search fields unencrypted for indexing
+        filename: document.metadata.filename,
+        // Encrypt PII
+        user_id: this.encryptContent(document.metadata.user_id)
+      }
+    };
+    
+    return await db.collection('documents').insertOne(encryptedDoc);
+  }
+}
+```
+
+### Encryption in Transit
+
+```javascript
+// Ensure all API calls use HTTPS
+const secureHttpClient = axios.create({
+  httpsAgent: new https.Agent({
+    rejectUnauthorized: true,  // Reject invalid SSL certificates
+    minVersion: 'TLSv1.2'      // Minimum TLS version
+  }),
+  timeout: 30000,
+  headers: {
+    'Strict-Transport-Security': 'max-age=31536000; includeSubDomains',
+    'X-Content-Type-Options': 'nosniff',
+    'X-Frame-Options': 'DENY'
+  }
+});
+```
+
+## 🔑 Authentication & Authorization
+
+### Multi-Level Access Control
+
+```javascript
+// Implement role-based access control
+class AccessControl {
+  constructor() {
+    this.roles = {
+      'admin': ['read', 'write', 'delete', 'manage_users'],
+      'power_user': ['read', 'write', 'upload'],
+      'viewer': ['read'],
+      'guest': ['read_public']
+    };
+  }
+  
+  async authorizeAction(userId, action, resourceId) {
+    const user = await this.getUser(userId);
+    const resource = await this.getResource(resourceId);
+    
+    // Check role permissions
+    if (!this.roles[user.role]?.includes(action)) {
+      throw new Error(`Insufficient permissions for action: ${action}`);
+    }
+    
+    // Check resource ownership
+    if (resource.owner_id !== userId && user.role !== 'admin') {
+      throw new Error('Access denied: Not resource owner');
+    }
+    
+    return true;
+  }
+}
+
+// In n8n workflow - validate user permissions
+const auth = new AccessControl();
+await auth.authorizeAction($json.user_id, 'upload', $json.document_id);
+```
+
+### API Authentication
+
+```javascript
+// Implement API key authentication for workflow triggers
+class APIAuthentication {
+  async validateRequest(req, res, next) {
+    const apiKey = req.headers['x-api-key'];
+    const signature = req.headers['x-signature'];
+    
+    if (!apiKey || !signature) {
+      return res.status(401).json({ error: 'Missing authentication' });
+    }
+    
+    // Validate API key
+    const isValidKey = await this.validateAPIKey(apiKey);
+    if (!isValidKey) {
+      return res.status(401).json({ error: 'Invalid API key' });
+    }
+    
+    // Validate request signature
+    const expectedSignature = this.generateSignature(req.body, apiKey);
+    if (signature !== expectedSignature) {
+      return res.status(401).json({ error: 'Invalid signature' });
+    }
+    
+    next();
+  }
+  
+  generateSignature(payload, secret) {
+    return crypto
+      .createHmac('sha256', secret)
+      .update(JSON.stringify(payload))
+      .digest('hex');
+  }
+}
+```
+
+## 🚫 Input Validation & Sanitization
+
+### PDF Upload Validation
+
+```javascript
+// Comprehensive file validation
+class FileValidator {
+  static async validatePDF(file) {
+    // Size validation
+    const maxSize = 50 * 1024 * 1024; // 50MB
+    if (file.size > maxSize) {
+      throw new Error(`File too large: ${file.size} bytes (max: ${maxSize})`);
+    }
+    
+    // Type validation
+    const allowedTypes = ['application/pdf'];
+    if (!allowedTypes.includes(file.type)) {
+      throw new Error(`Invalid file type: ${file.type}`);
+    }
+    
+    // Content validation
+    const buffer = await file.arrayBuffer();
+    const header = new Uint8Array(buffer.slice(0, 4));
+    
+    // PDF magic number: %PDF
+    if (header[0] !== 0x25 || header[1] !== 0x50 || 
+        header[2] !== 0x44 || header[3] !== 0x46) {
+      throw new Error('Invalid PDF file format');
+    }
+    
+    // Virus scanning (integrate with ClamAV or similar)
+    await this.scanForViruses(buffer);
+    
+    // Check for password protection
+    if (await this.isPasswordProtected(buffer)) {
+      throw new Error('Password-protected PDFs not supported');
+    }
+    
+    return true;
+  }
+  
+  static async scanForViruses(buffer) {
+    // Implementation depends on your virus scanning service
+    // Example using a theoretical virus scanning API
+    const scanResult = await virusScanAPI.scan(buffer);
+    if (!scanResult.clean) {
+      throw new Error(`Security threat detected: ${scanResult.threat}`);
+    }
+  }
+}
+```
+
+### Query Injection Prevention
+
+```javascript
+// Prevent MongoDB injection attacks
+class QuerySanitizer {
+  static sanitizeSearchQuery(query) {
+    // Remove potentially dangerous operators
+    const dangerousOperators = ['$where', '$eval', '$function'];
+    
+    function cleanObject(obj) {
+      if (typeof obj !== 'object' || obj === null) return obj;
+      
+      for (const key in obj) {
+        if (dangerousOperators.includes(key)) {
+          delete obj[key];
+        } else if (typeof obj[key] === 'object') {
+          cleanObject(obj[key]);
+        }
+      }
+      
+      return obj;
+    }
+    
+    return cleanObject({ ...query });
+  }
+  
+  static validateSearchTerms(searchText) {
+    // Limit search term length
+    if (searchText.length > 1000) {
+      throw new Error('Search query too long');
+    }
+    
+    // Remove potential script injection
+    const sanitized = searchText.replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, '');
+    
+    return sanitized.trim();
+  }
+}
+```
+
+## 📊 Audit Logging & Monitoring
+
+### Comprehensive Audit Trail
+
+```javascript
+// Audit all sensitive operations
+class AuditLogger {
+  constructor(mongoClient) {
+    this.db = mongoClient.db('audit');
+    this.collection = this.db.collection('security_events');
+  }
+  
+  async logSecurityEvent(event) {
+    const auditEntry = {
+      timestamp: new Date(),
+      event_type: event.type,
+      user_id: event.userId,
+      ip_address: event.ipAddress,
+      user_agent: event.userAgent,
+      resource_id: event.resourceId,
+      action: event.action,
+      result: event.result,
+      details: event.details,
+      session_id: event.sessionId
+    };
+    
+    await this.collection.insertOne(auditEntry);
+    
+    // Alert on suspicious activities
+    if (this.isSuspiciousActivity(event)) {
+      await this.sendSecurityAlert(auditEntry);
+    }
+  }
+  
+  isSuspiciousActivity(event) {
+    const suspiciousPatterns = [
+      'multiple_failed_auth',
+      'unusual_access_pattern',
+      'large_data_download',
+      'admin_action_non_admin'
+    ];
+    
+    return suspiciousPatterns.includes(event.type);
+  }
+  
+  async sendSecurityAlert(auditEntry) {
+    // Integration with alerting system
+    await alertingService.send({
+      severity: 'high',
+      title: `Security Event: ${auditEntry.event_type}`,
+      description: `User ${auditEntry.user_id} performed ${auditEntry.action}`,
+      metadata: auditEntry
+    });
+  }
+}
+
+// Usage in n8n workflow
+const auditLogger = new AuditLogger(mongoClient);
+await auditLogger.logSecurityEvent({
+  type: 'document_upload',
+  userId: $json.user_id,
+  ipAddress: $json.client_ip,
+  resourceId: $json.document_id,
+  action: 'upload_pdf',
+  result: 'success'
+});
+```
+
+### Real-time Security Monitoring
+
+```javascript
+// Monitor for security anomalies
+class SecurityMonitor {
+  constructor() {
+    this.rateLimits = new Map();
+    this.suspiciousIPs = new Set();
+  }
+  
+  async checkRateLimit(userId, action) {
+    const key = `${userId}:${action}`;
+    const now = Date.now();
+    const window = 60000; // 1 minute
+    const limit = this.getLimitForAction(action);
+    
+    if (!this.rateLimits.has(key)) {
+      this.rateLimits.set(key, []);
+    }
+    
+    const requests = this.rateLimits.get(key);
+    
+    // Remove old requests outside window
+    const recentRequests = requests.filter(time => now - time < window);
+    
+    if (recentRequests.length >= limit) {
+      throw new Error(`Rate limit exceeded for ${action}`);
+    }
+    
+    recentRequests.push(now);
+    this.rateLimits.set(key, recentRequests);
+  }
+  
+  getLimitForAction(action) {
+    const limits = {
+      'upload_pdf': 10,
+      'search_documents': 100,
+      'create_agent': 5,
+      'admin_action': 20
+    };
+    
+    return limits[action] || 50;
+  }
+}
+```
+
+## 🌐 Network Security
+
+### Content Security Policy
+
+```javascript
+// Implement strict CSP headers
+const securityHeaders = {
+  'Content-Security-Policy': [
+    "default-src 'self'",
+    "script-src 'self' 'unsafe-inline' https://workshop-embedding-api.vercel.app",
+    "style-src 'self' 'unsafe-inline'",
+    "img-src 'self' data: https:",
+    "connect-src 'self' https://workshop-embedding-api.vercel.app https://*.mongodb.net",
+    "frame-ancestors 'none'",
+    "base-uri 'self'",
+    "form-action 'self'"
+  ].join('; '),
+  'X-Content-Type-Options': 'nosniff',
+  'X-Frame-Options': 'DENY',
+  'X-XSS-Protection': '1; mode=block',
+  'Strict-Transport-Security': 'max-age=31536000; includeSubDomains; preload',
+  'Referrer-Policy': 'strict-origin-when-cross-origin'
+};
+```
+
+### IP Allowlisting
+
+```javascript
+// Implement IP-based access control
+class IPSecurity {
+  constructor() {
+    this.allowedIPs = new Set([
+      '192.168.1.0/24',    // Internal network
+      '10.0.0.0/8',        // Corporate VPN
+      // Add your trusted IP ranges
+    ]);
+  }
+  
+  isAllowedIP(clientIP) {
+    // For production, implement proper CIDR matching
+    return this.allowedIPs.has(clientIP) || 
+           this.isInAllowedRange(clientIP);
+  }
+  
+  isInAllowedRange(ip) {
+    // Implement CIDR range checking
+    // This is a simplified example
+    for (const range of this.allowedIPs) {
+      if (range.includes('/') && this.ipInRange(ip, range)) {
+        return true;
+      }
+    }
+    return false;
+  }
+}
+```
+
+## 🏥 Compliance & Regulations
+
+### GDPR Compliance
+
+```javascript
+// Implement GDPR data handling
+class GDPRCompliance {
+  async handleDataDeletion(userId) {
+    // Right to be forgotten
+    const collections = ['documents', 'search_history', 'user_sessions'];
+    
+    for (const collection of collections) {
+      await db.collection(collection).deleteMany({ user_id: userId });
+    }
+    
+    // Log deletion for audit
+    await auditLogger.logSecurityEvent({
+      type: 'gdpr_deletion',
+      userId: userId,
+      action: 'delete_all_user_data',
+      result: 'success'
+    });
+  }
+  
+  async exportUserData(userId) {
+    // Data portability
+    const userData = {
+      documents: await db.collection('documents').find({ user_id: userId }).toArray(),
+      search_history: await db.collection('searches').find({ user_id: userId }).toArray(),
+      preferences: await db.collection('user_preferences').findOne({ user_id: userId })
+    };
+    
+    // Remove sensitive internal fields
+    return this.sanitizeExportData(userData);
+  }
+}
+```
+
+### SOC 2 Compliance
+
+```yaml
+# SOC 2 Type II controls implementation
+security_controls:
+  access_control:
+    - multi_factor_authentication: required
+    - role_based_permissions: implemented
+    - regular_access_reviews: quarterly
+    
+  data_protection:
+    - encryption_at_rest: aes_256
+    - encryption_in_transit: tls_1_3
+    - data_classification: implemented
+    
+  monitoring:
+    - continuous_logging: enabled
+    - intrusion_detection: active
+    - vulnerability_scanning: weekly
+    
+  incident_response:
+    - response_plan: documented
+    - notification_procedures: automated
+    - recovery_testing: quarterly
+```
+
+## ⚠️ Security Checklist
+
+### Pre-Deployment Security Review
+
+```markdown
+## Security Checklist for Production Deployment
+
+### Credentials & Secrets
+- [ ] All API keys stored in secure credential management
+- [ ] No hardcoded secrets in code or configuration
+- [ ] Secret rotation schedule implemented
+- [ ] Environment-specific credential isolation
+
+### Data Protection
+- [ ] Encryption at rest enabled (MongoDB Atlas)
+- [ ] Encryption in transit enforced (TLS 1.2+)
+- [ ] Client-side field level encryption for PII
+- [ ] Secure backup and recovery procedures
+
+### Access Control
+- [ ] Role-based access control implemented
+- [ ] Multi-factor authentication required
+- [ ] API authentication and authorization
+- [ ] Regular access reviews scheduled
+
+### Input Validation
+- [ ] File upload validation (size, type, content)
+- [ ] Query injection prevention
+- [ ] XSS protection implemented
+- [ ] Virus scanning integration
+
+### Monitoring & Logging
+- [ ] Comprehensive audit logging
+- [ ] Real-time security monitoring
+- [ ] Intrusion detection system
+- [ ] Automated alerting for suspicious activities
+
+### Network Security
+- [ ] Content Security Policy headers
+- [ ] IP allowlisting configured
+- [ ] Rate limiting implemented
+- [ ] DDoS protection enabled
+
+### Compliance
+- [ ] GDPR compliance measures
+- [ ] SOC 2 controls implementation
+- [ ] Regular security assessments
+- [ ] Incident response procedures
+
+### Testing
+- [ ] Penetration testing completed
+- [ ] Vulnerability scanning regular
+- [ ] Security regression testing
+- [ ] Disaster recovery testing
+```
+
+## 🚨 Incident Response
+
+### Security Incident Playbook
+
+```javascript
+// Automated incident response
+class IncidentResponse {
+  async handleSecurityIncident(incident) {
+    // 1. Immediate containment
+    await this.containThreat(incident);
+    
+    // 2. Assessment and analysis
+    const impact = await this.assessImpact(incident);
+    
+    // 3. Notification
+    await this.notifyStakeholders(incident, impact);
+    
+    // 4. Remediation
+    await this.implementRemediation(incident);
+    
+    // 5. Recovery
+    await this.restoreServices(incident);
+    
+    // 6. Post-incident review
+    await this.schedulePostIncidentReview(incident);
+  }
+  
+  async containThreat(incident) {
+    switch (incident.type) {
+      case 'credential_compromise':
+        await this.revokeCredentials(incident.affected_credentials);
+        break;
+      case 'data_breach':
+        await this.isolateAffectedSystems(incident.affected_systems);
+        break;
+      case 'ddos_attack':
+        await this.enableDDoSProtection(incident.source_ips);
+        break;
+    }
+  }
+}
+```
+
+## 📚 Security Resources
+
+### Additional Reading
+- [OWASP Top 10 Security Risks](https://owasp.org/www-project-top-ten/)
+- [MongoDB Security Checklist](https://docs.mongodb.com/manual/administration/security-checklist/)
+- [n8n Security Best Practices](https://docs.n8n.io/hosting/security/)
+- [NIST Cybersecurity Framework](https://www.nist.gov/cyberframework)
+
+### Security Tools
+- **Vulnerability Scanning**: OWASP ZAP, Nessus
+- **Secret Management**: HashiCorp Vault, AWS Secrets Manager
+- **Monitoring**: Splunk, ELK Stack, Datadog
+- **Testing**: Burp Suite, OWASP WebGoat
+
+Remember: Security is an ongoing process, not a one-time implementation. Regular reviews, updates, and testing are essential for maintaining a secure production environment.

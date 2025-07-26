@@ -44,15 +44,15 @@ export default [
   },
   {
     path: '/multimodal-pdf-agent-n8n/docs',
-    component: ComponentCreator('/multimodal-pdf-agent-n8n/docs', 'f93'),
+    component: ComponentCreator('/multimodal-pdf-agent-n8n/docs', '2ab'),
     routes: [
       {
         path: '/multimodal-pdf-agent-n8n/docs',
-        component: ComponentCreator('/multimodal-pdf-agent-n8n/docs', 'f3b'),
+        component: ComponentCreator('/multimodal-pdf-agent-n8n/docs', '7e9'),
         routes: [
           {
             path: '/multimodal-pdf-agent-n8n/docs',
-            component: ComponentCreator('/multimodal-pdf-agent-n8n/docs', '607'),
+            component: ComponentCreator('/multimodal-pdf-agent-n8n/docs', '1d6'),
             routes: [
               {
                 path: '/multimodal-pdf-agent-n8n/docs',
@@ -110,6 +110,12 @@ export default [
               {
                 path: '/multimodal-pdf-agent-n8n/docs/complete-multimodal-agent',
                 component: ComponentCreator('/multimodal-pdf-agent-n8n/docs/complete-multimodal-agent', '4c7'),
+                exact: true,
+                sidebar: "tutorialSidebar"
+              },
+              {
+                path: '/multimodal-pdf-agent-n8n/docs/cost-optimization',
+                component: ComponentCreator('/multimodal-pdf-agent-n8n/docs/cost-optimization', '8c9'),
                 exact: true,
                 sidebar: "tutorialSidebar"
               },
@@ -180,6 +186,12 @@ export default [
                 sidebar: "tutorialSidebar"
               },
               {
+                path: '/multimodal-pdf-agent-n8n/docs/monitoring-observability',
+                component: ComponentCreator('/multimodal-pdf-agent-n8n/docs/monitoring-observability', '131'),
+                exact: true,
+                sidebar: "tutorialSidebar"
+              },
+              {
                 path: '/multimodal-pdf-agent-n8n/docs/multimodal-image-queries',
                 component: ComponentCreator('/multimodal-pdf-agent-n8n/docs/multimodal-image-queries', '0d5'),
                 exact: true,
@@ -200,6 +212,12 @@ export default [
               {
                 path: '/multimodal-pdf-agent-n8n/docs/prerequisites',
                 component: ComponentCreator('/multimodal-pdf-agent-n8n/docs/prerequisites', '88c'),
+                exact: true,
+                sidebar: "tutorialSidebar"
+              },
+              {
+                path: '/multimodal-pdf-agent-n8n/docs/production-security',
+                component: ComponentCreator('/multimodal-pdf-agent-n8n/docs/production-security', 'f02'),
                 exact: true,
                 sidebar: "tutorialSidebar"
               },
@@ -230,6 +248,12 @@ export default [
               {
                 path: '/multimodal-pdf-agent-n8n/docs/tool-definition-primer',
                 component: ComponentCreator('/multimodal-pdf-agent-n8n/docs/tool-definition-primer', '3b0'),
+                exact: true,
+                sidebar: "tutorialSidebar"
+              },
+              {
+                path: '/multimodal-pdf-agent-n8n/docs/troubleshooting-guide',
+                component: ComponentCreator('/multimodal-pdf-agent-n8n/docs/troubleshooting-guide', '639'),
                 exact: true,
                 sidebar: "tutorialSidebar"
               },

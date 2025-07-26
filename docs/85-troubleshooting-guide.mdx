@@ -1,0 +1,940 @@
+---
+sidebar_position: 85
+---
+
+# 🔧 Comprehensive Troubleshooting Guide
+
+This guide covers common issues, diagnostic techniques, and solutions for multimodal PDF agent systems. Use this reference to quickly identify and resolve problems during development and production.
+
+:::tip Systematic Troubleshooting
+**"Divide and conquer"** - Isolate issues by testing each component separately: PDF processing → Embedding generation → Database storage → AI responses.
+:::
+
+## 🎯 Quick Diagnostic Checklist
+
+### System Health Check (2 minutes)
+
+```bash
+# Run this diagnostic script to quickly identify common issues
+curl -X POST http://localhost:5678/webhook-test/health-check \
+  -H "Content-Type: application/json" \
+  -d '{"test": "system_health"}'
+
+# Expected response: {"status": "healthy", "services": [...]}
+```
+
+| Component | Quick Test | Expected Result | If Failed |
+|-----------|------------|-----------------|-----------|
+| **n8n** | Access http://localhost:5678 | Login page loads | Check Docker container |
+| **MongoDB** | Test connection in n8n | ✅ Connection successful | Check credentials/network |
+| **Voyage AI** | Test embedding API | Returns vector array | Check API key/quota |
+| **Workshop API** | Ping health endpoint | 200 OK response | Check internet connection |
+
+## 🚨 Environment Setup Issues
+
+### GitHub Codespaces Problems
+
+#### Issue: Codespace Won't Start
+```
+Error: "Your codespace encountered an error during creation"
+```
+
+**Diagnostic Steps:**
+1. Check GitHub account permissions
+2. Verify repository access
+3. Check Codespaces billing/quota
+
+**Solutions:**
+```bash
+# Method 1: Restart codespace creation
+# Go to GitHub Codespaces dashboard → Delete failed codespace → Create new one
+
+# Method 2: Use different machine type
+# Select: 4-core • 8 GB RAM • 32 GB storage (instead of 2-core)
+
+# Method 3: Force rebuild
+git clean -fd
+rm -rf .devcontainer/.built
+gh codespace rebuild
+```
+
+#### Issue: Services Not Starting in Codespace
+```
+Error: "Failed to start Docker services"
+```
+
+**Solution:**
+```bash
+# Check if Docker is running
+docker --version
+
+# Start services manually
+npm run workshop:setup
+npm run workshop:start
+
+# Check service status
+docker ps
+docker-compose logs
+```
+
+### Local Development Issues
+
+#### Issue: Port Conflicts
+```
+Error: "Port 5678 is already in use"
+```
+
+**Solution:**
+```bash
+# Find what's using the port
+lsof -i :5678
+netstat -tulpn | grep :5678
+
+# Kill the process
+sudo kill -9 <PID>
+
+# Or use different ports
+export N8N_PORT=5679
+export DOCS_PORT=3001
+npm run dev
+```
+
+#### Issue: Docker Permission Errors
+```
+Error: "Got permission denied while trying to connect to Docker daemon"
+```
+
+**Solution:**
+```bash
+# Add user to docker group
+sudo usermod -aG docker $USER
+
+# Restart docker service
+sudo systemctl restart docker
+
+# Log out and back in, or run:
+newgrp docker
+```
+
+## 🔗 API Connection Issues
+
+### MongoDB Atlas Connection Problems
+
+#### Issue: Authentication Failed
+```
+Error: "Authentication failed for user"
+```
+
+**Diagnostic Steps:**
+```javascript
+// Test connection with detailed error logging
+const { MongoClient } = require('mongodb');
+
+async function testConnection() {
+  try {
+    const client = new MongoClient(process.env.MONGODB_URI, {
+      serverSelectionTimeoutMS: 5000
+    });
+    
+    await client.connect();
+    console.log('✅ MongoDB connection successful');
+    
+    // Test database operations
+    const db = client.db('test');
+    await db.admin().ping();
+    console.log('✅ Database ping successful');
+    
+    await client.close();
+  } catch (error) {
+    console.error('❌ MongoDB connection failed:', error.message);
+    
+    // Detailed error analysis
+    if (error.code === 8000) {
+      console.log('🔍 Authentication issue - check username/password');
+    } else if (error.code === 6) {
+      console.log('🔍 Network issue - check IP allowlist');
+    } else if (error.message.includes('ENOTFOUND')) {
+      console.log('🔍 DNS issue - check connection string');
+    }
+  }
+}
+
+testConnection();
+```
+
+**Common Solutions:**
+```bash
+# 1. Check IP allowlist in MongoDB Atlas
+# Add 0.0.0.0/0 for testing (remove in production!)
+
+# 2. Verify connection string format
+mongodb+srv://<username>:<password>@<cluster>.mongodb.net/<database>?retryWrites=true&w=majority
+
+# 3. URL encode special characters in password
+# @ becomes %40, + becomes %2B, etc.
+
+# 4. Test with MongoDB Compass first
+# Download: https://www.mongodb.com/try/download/compass
+```
+
+#### Issue: Vector Search Index Missing
+```
+Error: "Index not found for $vectorSearch"
+```
+
+**Solution:**
+```javascript
+// Create vector search index programmatically
+async function createVectorIndex() {
+  const collection = db.collection('pdf_documents');
+  
+  const indexDefinition = {
+    name: "vector_index",
+    type: "vectorSearch",
+    definition: {
+      fields: [
+        {
+          type: "vector",
+          path: "embedding",
+          numDimensions: 1024,
+          similarity: "cosine"
+        },
+        {
+          type: "filter",
+          path: "metadata.filename"
+        }
+      ]
+    }
+  };
+  
+  try {
+    await collection.createSearchIndex(indexDefinition);
+    console.log('✅ Vector index created successfully');
+  } catch (error) {
+    console.error('❌ Failed to create vector index:', error);
+  }
+}
+```
+
+### Voyage AI API Issues
+
+#### Issue: API Key Authentication Failed
+```
+Error: "Invalid API key or insufficient permissions"
+```
+
+**Diagnostic Steps:**
+```javascript
+// Test Voyage AI API directly
+async function testVoyageAPI() {
+  const apiKey = process.env.VOYAGE_API_KEY;
+  
+  if (!apiKey) {
+    console.error('❌ VOYAGE_API_KEY environment variable not set');
+    return;
+  }
+  
+  if (!apiKey.startsWith('pa-')) {
+    console.error('❌ Invalid API key format (should start with "pa-")');
+    return;
+  }
+  
+  try {
+    const response = await fetch('https://api.voyageai.com/v1/embeddings', {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${apiKey}`,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        input: ['test message'],
+        model: 'voyage-3'
+      })
+    });
+    
+    if (response.ok) {
+      console.log('✅ Voyage AI API connection successful');
+    } else {
+      const error = await response.json();
+      console.error('❌ API Error:', error);
+    }
+  } catch (error) {
+    console.error('❌ Network error:', error.message);
+  }
+}
+
+testVoyageAPI();
+```
+
+#### Issue: Rate Limit Exceeded
+```
+Error: "Rate limit exceeded. Please retry after X seconds"
+```
+
+**Solution:**
+```javascript
+// Implement exponential backoff retry logic
+class APIClient {
+  async callWithRetry(apiCall, maxRetries = 3) {
+    let lastError;
+    
+    for (let attempt = 0; attempt < maxRetries; attempt++) {
+      try {
+        return await apiCall();
+      } catch (error) {
+        lastError = error;
+        
+        if (error.status === 429) {
+          // Rate limit - wait and retry
+          const waitTime = Math.pow(2, attempt) * 1000; // Exponential backoff
+          console.log(`Rate limited. Waiting ${waitTime}ms before retry ${attempt + 1}/${maxRetries}`);
+          await this.sleep(waitTime);
+        } else {
+          // Other error - don't retry
+          throw error;
+        }
+      }
+    }
+    
+    throw lastError;
+  }
+  
+  sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+  }
+}
+```
+
+## 📄 PDF Processing Issues
+
+### PDF Download Problems
+
+#### Issue: CORS Errors
+```
+Error: "Cross-Origin Request Blocked"
+```
+
+**Solution:**
+```javascript
+// Use server-side download in n8n HTTP Request node
+// Configure as follows:
+{
+  "method": "GET",
+  "url": "{{ $json.pdf_url }}",
+  "responseFormat": "file",
+  "binaryPropertyName": "data",
+  "headers": {
+    "User-Agent": "Mozilla/5.0 (compatible; workshop-bot/1.0)"
+  },
+  "timeout": 30000
+}
+```
+
+#### Issue: Large PDF Memory Issues
+```
+Error: "JavaScript heap out of memory"
+```
+
+**Solutions:**
+```javascript
+// 1. Process PDFs in chunks
+async function processLargePDF(pdfBuffer) {
+  const maxSize = 50 * 1024 * 1024; // 50MB limit
+  
+  if (pdfBuffer.length > maxSize) {
+    throw new Error(`PDF too large: ${pdfBuffer.length} bytes (max: ${maxSize})`);
+  }
+  
+  // Process pages in batches
+  const batchSize = 5;
+  const pages = await extractPages(pdfBuffer);
+  
+  for (let i = 0; i < pages.length; i += batchSize) {
+    const batch = pages.slice(i, i + batchSize);
+    await processBatch(batch);
+    
+    // Force garbage collection between batches
+    if (global.gc) {
+      global.gc();
+    }
+  }
+}
+
+// 2. Increase Node.js memory limit
+// In package.json scripts:
+"scripts": {
+  "start": "node --max-old-space-size=4096 index.js"
+}
+```
+
+### PDF Extraction Issues
+
+#### Issue: Encrypted/Password Protected PDFs
+```
+Error: "PDF is encrypted or password protected"
+```
+
+**Solution:**
+```javascript
+// Detect and handle encrypted PDFs
+async function handleEncryptedPDF(pdfBuffer) {
+  try {
+    const pdfData = await pdf(pdfBuffer);
+    return pdfData;
+  } catch (error) {
+    if (error.message.includes('encrypted')) {
+      // Log the attempt and return user-friendly error
+      console.log('Encrypted PDF detected, skipping processing');
+      return {
+        error: 'PDF_ENCRYPTED',
+        message: 'Password-protected PDFs are not supported',
+        suggestion: 'Please provide an unencrypted version of the PDF'
+      };
+    }
+    throw error;
+  }
+}
+```
+
+#### Issue: Poor Quality OCR Results
+```
+Problem: Extracted text is garbled or incomplete
+```
+
+**Solution:**
+```javascript
+// Improve OCR quality with preprocessing
+const sharp = require('sharp');
+
+async function preprocessForOCR(imageBuffer) {
+  try {
+    // Enhance image for better OCR
+    const enhancedImage = await sharp(imageBuffer)
+      .resize(null, 2000, { 
+        kernel: sharp.kernel.mitchell,
+        withoutEnlargement: false 
+      })
+      .grayscale()
+      .normalize()
+      .sharpen()
+      .toBuffer();
+    
+    return enhancedImage;
+  } catch (error) {
+    console.warn('Image preprocessing failed, using original:', error.message);
+    return imageBuffer;
+  }
+}
+```
+
+## 🤖 AI Model Issues
+
+### Embedding Generation Problems
+
+#### Issue: Model Selection Not Working
+```
+Error: Model returns poor quality embeddings
+```
+
+**Diagnostic Code:**
+```javascript
+// Test model selection logic
+function debugModelSelection(pageData) {
+  console.log('=== Model Selection Debug ===');
+  console.log('Content type:', pageData.content_type);
+  console.log('Text length:', pageData.text_content?.length || 0);
+  console.log('Has images:', pageData.content_type === 'image');
+  
+  const textLength = pageData.text_content ? pageData.text_content.length : 0;
+  const hasComplexText = textLength > 500 && 
+    (pageData.text_content.includes('whereas') || 
+     pageData.text_content.includes('liability') ||
+     pageData.text_content.includes('pursuant'));
+  
+  console.log('Text complexity score:', hasComplexText ? 'HIGH' : 'LOW');
+  
+  const selectedModel = selectEmbeddingModel(pageData);
+  console.log('Selected model:', selectedModel);
+  console.log('============================');
+  
+  return selectedModel;
+}
+```
+
+#### Issue: Context-3 Model Not Improving Results
+```
+Problem: Context-3 model performs worse than expected
+```
+
+**Solution:**
+```javascript
+// Improve context for Context-3 model
+function enhancedGetPageContext(pageData) {
+  const context = [];
+  
+  // Document-level context
+  if (pageData.metadata?.document_type) {
+    context.push(`Document type: ${pageData.metadata.document_type}`);
+  }
+  
+  // Page context
+  context.push(`Page ${pageData.page_number} of ${pageData.total_pages}`);
+  
+  // Content context
+  if (pageData.section_title) {
+    context.push(`Section: ${pageData.section_title}`);
+  }
+  
+  // Previous page context for continuity
+  if (pageData.previous_page_summary) {
+    context.push(`Previous context: ${pageData.previous_page_summary}`);
+  }
+  
+  return context.join('. ');
+}
+```
+
+### Search Quality Issues
+
+#### Issue: Vector Search Returns Irrelevant Results
+```
+Problem: Search results don't match query intent
+```
+
+**Diagnostic Steps:**
+```javascript
+// Debug vector search relevance
+async function debugVectorSearch(query, results) {
+  console.log('=== Vector Search Debug ===');
+  console.log('Query:', query);
+  console.log('Number of results:', results.length);
+  
+  for (let i = 0; i < Math.min(results.length, 3); i++) {
+    const result = results[i];
+    console.log(`\nResult ${i + 1}:`);
+    console.log('Score:', result.score);
+    console.log('Filename:', result.filename);
+    console.log('Page:', result.page_number);
+    console.log('Text preview:', result.text_content?.substring(0, 100) + '...');
+    
+    // Calculate semantic similarity manually
+    const queryEmbedding = await generateEmbedding(query);
+    const similarity = cosineSimilarity(queryEmbedding, result.embedding);
+    console.log('Manual similarity:', similarity);
+  }
+  
+  console.log('============================');
+}
+
+function cosineSimilarity(a, b) {
+  const dotProduct = a.reduce((sum, val, i) => sum + val * b[i], 0);
+  const magnitudeA = Math.sqrt(a.reduce((sum, val) => sum + val * val, 0));
+  const magnitudeB = Math.sqrt(b.reduce((sum, val) => sum + val * val, 0));
+  return dotProduct / (magnitudeA * magnitudeB);
+}
+```
+
+**Solutions:**
+```javascript
+// Improve search with hybrid approach
+async function hybridSearch(query, filters = {}) {
+  // 1. Vector search
+  const vectorResults = await performVectorSearch(query, filters);
+  
+  // 2. Text search for exact matches
+  const textResults = await performTextSearch(query, filters);
+  
+  // 3. Combine and rerank results
+  const combinedResults = combineSearchResults(vectorResults, textResults);
+  
+  // 4. Apply business logic filters
+  return applyBusinessFilters(combinedResults, filters);
+}
+
+function combineSearchResults(vectorResults, textResults) {
+  const combined = new Map();
+  
+  // Add vector results with score boost
+  vectorResults.forEach(result => {
+    combined.set(result._id, {
+      ...result,
+      vector_score: result.score,
+      combined_score: result.score * 0.7 // 70% weight for vector
+    });
+  });
+  
+  // Add text results with score boost
+  textResults.forEach(result => {
+    if (combined.has(result._id)) {
+      // Boost existing result
+      const existing = combined.get(result._id);
+      existing.combined_score += result.score * 0.3; // 30% weight for text
+      existing.text_score = result.score;
+    } else {
+      // Add new result
+      combined.set(result._id, {
+        ...result,
+        text_score: result.score,
+        combined_score: result.score * 0.3
+      });
+    }
+  });
+  
+  // Sort by combined score
+  return Array.from(combined.values())
+    .sort((a, b) => b.combined_score - a.combined_score);
+}
+```
+
+## 🔄 n8n Workflow Issues
+
+### Workflow Execution Problems
+
+#### Issue: Workflow Stops at Random Node
+```
+Error: "Workflow execution stopped unexpectedly"
+```
+
+**Diagnostic Steps:**
+```javascript
+// Add comprehensive error handling to each node
+try {
+  // Your node logic here
+  const result = await processDocument(input);
+  
+  // Add validation
+  if (!result || !result.embedding) {
+    throw new Error('Invalid processing result');
+  }
+  
+  return result;
+} catch (error) {
+  // Log detailed error information
+  console.error('Node execution failed:', {
+    error: error.message,
+    stack: error.stack,
+    input: JSON.stringify(input, null, 2),
+    timestamp: new Date().toISOString(),
+    nodeId: $node.id,
+    workflowId: $workflow.id,
+    executionId: $execution.id
+  });
+  
+  // Return error in format n8n can handle
+  return [{
+    json: {
+      error: true,
+      message: error.message,
+      timestamp: new Date().toISOString()
+    }
+  }];
+}
+```
+
+#### Issue: Memory Leaks in Long-Running Workflows
+```
+Problem: Workflow memory usage increases over time
+```
+
+**Solution:**
+```javascript
+// Implement memory management in Code nodes
+const items = [];
+let processedCount = 0;
+
+for (const item of $input.all()) {
+  try {
+    // Process item
+    const result = await processItem(item);
+    items.push(result);
+    processedCount++;
+    
+    // Force garbage collection every 100 items
+    if (processedCount % 100 === 0) {
+      if (global.gc) {
+        global.gc();
+      }
+      
+      // Log memory usage
+      const memUsage = process.memoryUsage();
+      console.log(`Processed ${processedCount} items. Memory: ${Math.round(memUsage.heapUsed / 1024 / 1024)}MB`);
+    }
+    
+  } catch (error) {
+    console.error(`Failed to process item ${processedCount}:`, error);
+    // Continue with next item rather than failing entire batch
+  }
+}
+
+return items;
+```
+
+### Data Flow Issues
+
+#### Issue: Data Not Passing Between Nodes
+```
+Problem: Next node receives empty or wrong data
+```
+
+**Debug Technique:**
+```javascript
+// Add data validation and logging between nodes
+function validateAndLogData(data, nodeName) {
+  console.log(`=== ${nodeName} Data Validation ===`);
+  console.log('Data type:', typeof data);
+  console.log('Is array:', Array.isArray(data));
+  
+  if (Array.isArray(data)) {
+    console.log('Array length:', data.length);
+    if (data.length > 0) {
+      console.log('First item keys:', Object.keys(data[0]));
+      console.log('First item preview:', JSON.stringify(data[0], null, 2).substring(0, 200));
+    }
+  } else {
+    console.log('Object keys:', Object.keys(data || {}));
+    console.log('Data preview:', JSON.stringify(data, null, 2).substring(0, 200));
+  }
+  
+  console.log('===============================');
+  return data;
+}
+
+// Use in Code nodes:
+const inputData = validateAndLogData($input.all(), 'Current Node Input');
+// ... process data ...
+const outputData = validateAndLogData(processedData, 'Current Node Output');
+return outputData;
+```
+
+## 🔍 Performance Issues
+
+### Slow Response Times
+
+#### Issue: High Latency in Document Processing
+```
+Problem: Processing takes more than 30 seconds per document
+```
+
+**Performance Profiling:**
+```javascript
+// Add detailed timing to identify bottlenecks
+class PerformanceProfiler {
+  constructor() {
+    this.timings = {};
+  }
+  
+  start(operation) {
+    this.timings[operation] = Date.now();
+  }
+  
+  end(operation) {
+    if (this.timings[operation]) {
+      const duration = Date.now() - this.timings[operation];
+      console.log(`⏱️ ${operation}: ${duration}ms`);
+      return duration;
+    }
+  }
+  
+  async profile(operation, asyncFunction) {
+    this.start(operation);
+    try {
+      const result = await asyncFunction();
+      this.end(operation);
+      return result;
+    } catch (error) {
+      this.end(operation);
+      throw error;
+    }
+  }
+}
+
+// Usage in workflow:
+const profiler = new PerformanceProfiler();
+
+const pdfData = await profiler.profile('PDF Download', () =>
+  downloadPDF(url)
+);
+
+const pages = await profiler.profile('Page Extraction', () =>
+  extractPages(pdfData)
+);
+
+const embeddings = await profiler.profile('Embedding Generation', () =>
+  generateEmbeddings(pages)
+);
+```
+
+#### Issue: Database Query Performance
+```
+Problem: MongoDB queries taking too long
+```
+
+**Optimization:**
+```javascript
+// Optimize MongoDB queries
+async function optimizedDocumentSearch(query, options = {}) {
+  const {
+    limit = 10,
+    skip = 0,
+    includeEmbeddings = false
+  } = options;
+  
+  // Use projection to exclude large fields
+  const projection = {
+    filename: 1,
+    page_number: 1,
+    'metadata.processed_at': 1,
+    text_content: 1
+  };
+  
+  // Only include embeddings if needed
+  if (includeEmbeddings) {
+    projection.embedding = 1;
+  }
+  
+  // Use explain() to analyze query performance
+  const explainResult = await collection
+    .find(query)
+    .projection(projection)
+    .limit(limit)
+    .skip(skip)
+    .explain('executionStats');
+  
+  console.log('Query execution stats:', {
+    totalDocsExamined: explainResult.executionStats.totalDocsExamined,
+    totalDocsReturned: explainResult.executionStats.totalDocsReturned,
+    executionTimeMillis: explainResult.executionStats.executionTimeMillis,
+    indexesUsed: explainResult.executionStats.winningPlan.inputStage.indexName
+  });
+  
+  // Execute the actual query
+  return await collection
+    .find(query)
+    .projection(projection)
+    .limit(limit)
+    .skip(skip)
+    .toArray();
+}
+```
+
+## 📋 Error Recovery Strategies
+
+### Automatic Retry Logic
+
+```javascript
+// Implement intelligent retry for transient failures
+class RetryHandler {
+  static async withRetry(operation, options = {}) {
+    const {
+      maxRetries = 3,
+      baseDelay = 1000,
+      maxDelay = 10000,
+      retryableErrors = ['ECONNRESET', 'ETIMEDOUT', 'ENOTFOUND']
+    } = options;
+    
+    let lastError;
+    
+    for (let attempt = 0; attempt < maxRetries; attempt++) {
+      try {
+        return await operation();
+      } catch (error) {
+        lastError = error;
+        
+        // Check if error is retryable
+        const isRetryable = retryableErrors.some(code => 
+          error.code === code || error.message.includes(code)
+        );
+        
+        if (!isRetryable || attempt === maxRetries - 1) {
+          throw error;
+        }
+        
+        // Calculate delay with exponential backoff
+        const delay = Math.min(
+          baseDelay * Math.pow(2, attempt),
+          maxDelay
+        );
+        
+        console.log(`Retry attempt ${attempt + 1}/${maxRetries} after ${delay}ms. Error: ${error.message}`);
+        await new Promise(resolve => setTimeout(resolve, delay));
+      }
+    }
+    
+    throw lastError;
+  }
+}
+
+// Usage:
+const result = await RetryHandler.withRetry(
+  () => generateEmbedding(content),
+  { maxRetries: 3, baseDelay: 2000 }
+);
+```
+
+### Graceful Degradation
+
+```javascript
+// Implement fallback strategies
+class FallbackHandler {
+  static async withFallback(primaryOperation, fallbackOperation, options = {}) {
+    const { logFallback = true } = options;
+    
+    try {
+      return await primaryOperation();
+    } catch (error) {
+      if (logFallback) {
+        console.warn('Primary operation failed, using fallback:', error.message);
+      }
+      
+      try {
+        return await fallbackOperation();
+      } catch (fallbackError) {
+        console.error('Both primary and fallback operations failed:', {
+          primary: error.message,
+          fallback: fallbackError.message
+        });
+        throw fallbackError;
+      }
+    }
+  }
+}
+
+// Example: Fallback to simpler model if multimodal fails
+const embedding = await FallbackHandler.withFallback(
+  () => generateEmbedding(content, 'voyage-multimodal-3'),
+  () => generateEmbedding(content, 'voyage-3')
+);
+```
+
+## 📞 Getting Help
+
+### Support Channels
+
+1. **Workshop Documentation**: Check this guide first
+2. **GitHub Issues**: [Repository Issues](https://github.com/mongodb-developer/multimodal-pdf-agent-n8n/issues)
+3. **MongoDB Community**: [Developer Forums](https://www.mongodb.com/community/forums)
+4. **n8n Community**: [Community Forum](https://community.n8n.io/)
+
+### Collecting Debug Information
+
+When reporting issues, include:
+
+```bash
+# System information
+node --version
+npm --version
+docker --version
+
+# Environment details
+echo "OS: $(uname -a)"
+echo "Memory: $(free -h)"
+echo "Disk: $(df -h)"
+
+# Application logs
+docker-compose logs --tail=100
+
+# Configuration (remove sensitive data)
+cat .env | grep -v -E "(PASSWORD|SECRET|KEY|TOKEN)"
+```
+
+This comprehensive troubleshooting guide should help you quickly identify and resolve most issues you'll encounter while building and deploying multimodal PDF agents.
