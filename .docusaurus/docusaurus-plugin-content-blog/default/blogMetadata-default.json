@@ -1,5 +1,5 @@
 {
-  "blogBasePath": "/multimodal-pdf-agent-n8n/blog",
+  "blogBasePath": "/blog",
   "blogTitle": "Blog",
-  "authorsListPath": "/multimodal-pdf-agent-n8n/blog/authors"
+  "authorsListPath": "/blog/authors"
 }

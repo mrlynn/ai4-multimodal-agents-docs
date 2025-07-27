@@ -5,7 +5,7 @@
   "source": "@site/docs/20-prerequisites.mdx",
   "sourceDirName": ".",
   "slug": "/prerequisites",
-  "permalink": "/multimodal-pdf-agent-n8n/docs/prerequisites",
+  "permalink": "/docs/prerequisites",
   "draft": false,
   "unlisted": false,
   "editUrl": "https://github.com/mongodb-developer/multimodal-pdf-agent-n8n/blob/main/docs/20-prerequisites.mdx",
@@ -18,10 +18,10 @@
   "sidebar": "tutorialSidebar",
   "previous": {
     "title": "GitHub Codespaces Setup",
-    "permalink": "/multimodal-pdf-agent-n8n/docs/github-codespaces"
+    "permalink": "/docs/github-codespaces"
   },
   "next": {
     "title": "n8n First Run Experience",
-    "permalink": "/multimodal-pdf-agent-n8n/docs/n8n-first-run"
+    "permalink": "/docs/n8n-first-run"
   }
 }

@@ -12,6 +12,8 @@ export default function SlideViewer({
   autoplay = false,
   loop = false,
   delayMs = 5000,
+  slideId,
+  slideNumber,
   notesLink,
   fallbackContent,
   loadTimeout = 10000, // 10 seconds default timeout
@@ -23,7 +25,7 @@ export default function SlideViewer({
   const timeoutRef = useRef(null);
   const checkIntervalRef = useRef(null);
 
-  const embedUrl = convertToEmbedUrl(url, { autoplay, loop, delayMs });
+  const embedUrl = convertToEmbedUrl(url, { autoplay, loop, delayMs, slideId, slideNumber });
 
   // Validate URL format
   useEffect(() => {

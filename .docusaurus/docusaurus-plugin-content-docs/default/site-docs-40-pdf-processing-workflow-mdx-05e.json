@@ -5,7 +5,7 @@
   "source": "@site/docs/40-pdf-processing-workflow.mdx",
   "sourceDirName": ".",
   "slug": "/pdf-processing-workflow",
-  "permalink": "/multimodal-pdf-agent-n8n/docs/pdf-processing-workflow",
+  "permalink": "/docs/pdf-processing-workflow",
   "draft": false,
   "unlisted": false,
   "editUrl": "https://github.com/mongodb-developer/multimodal-pdf-agent-n8n/blob/main/docs/40-pdf-processing-workflow.mdx",
@@ -18,10 +18,10 @@
   "sidebar": "tutorialSidebar",
   "previous": {
     "title": "🔗 Integration Guide",
-    "permalink": "/multimodal-pdf-agent-n8n/docs/workflow-integration-guide"
+    "permalink": "/docs/workflow-integration-guide"
   },
   "next": {
     "title": "Vector Search Implementation",
-    "permalink": "/multimodal-pdf-agent-n8n/docs/vector-search-workflow"
+    "permalink": "/docs/vector-search-workflow"
   }
 }

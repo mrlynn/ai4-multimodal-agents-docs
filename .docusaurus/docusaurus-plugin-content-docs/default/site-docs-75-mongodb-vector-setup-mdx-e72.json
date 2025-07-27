@@ -5,7 +5,7 @@
   "source": "@site/docs/75-mongodb-vector-setup.mdx",
   "sourceDirName": ".",
   "slug": "/mongodb-vector-setup",
-  "permalink": "/multimodal-pdf-agent-n8n/docs/mongodb-vector-setup",
+  "permalink": "/docs/mongodb-vector-setup",
   "draft": false,
   "unlisted": false,
   "editUrl": "https://github.com/mongodb-developer/multimodal-pdf-agent-n8n/blob/main/docs/75-mongodb-vector-setup.mdx",
@@ -18,10 +18,10 @@
   "sidebar": "tutorialSidebar",
   "previous": {
     "title": "Complete Multimodal Agent",
-    "permalink": "/multimodal-pdf-agent-n8n/docs/complete-multimodal-agent"
+    "permalink": "/docs/complete-multimodal-agent"
   },
   "next": {
     "title": "Web Upload Interface",
-    "permalink": "/multimodal-pdf-agent-n8n/docs/upload-interface"
+    "permalink": "/docs/upload-interface"
   }
 }

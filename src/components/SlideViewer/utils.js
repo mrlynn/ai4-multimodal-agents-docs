@@ -5,18 +5,21 @@
  * @param {boolean} options.autoplay - Start presentation automatically
  * @param {boolean} options.loop - Loop the presentation
  * @param {number} options.delayMs - Delay between slides in milliseconds
+ * @param {string} options.slideId - Specific slide ID to start on
+ * @param {number} options.slideNumber - Specific slide number to start on (1-based)
  * @returns {string} - Embeddable URL
  */
 export function convertToEmbedUrl(url, options = {}) {
-  const { autoplay = false, loop = false, delayMs = 5000 } = options;
+  const { autoplay = false, loop = false, delayMs = 5000, slideId, slideNumber } = options;
 
   // Handle already embedded URLs
   if (url.includes('/embed')) {
     return url;
   }
 
-  // Extract presentation ID from various Google Slides URL formats
+  // Extract presentation ID and slide ID from various Google Slides URL formats
   let presentationId;
+  let extractedSlideId;
   
   // Format: https://docs.google.com/presentation/d/{id}/edit
   const editMatch = url.match(/\/presentation\/d\/([a-zA-Z0-9-_]+)/);
@@ -35,6 +38,13 @@ export function convertToEmbedUrl(url, options = {}) {
   if (driveMatch) {
     presentationId = driveMatch[1];
   }
+  
+  // Extract slide ID from URL if present
+  // Format: #slide=id.g35df0c0f3b1_0_12007
+  const slideMatch = url.match(/#slide=id\.([a-zA-Z0-9_]+)/);
+  if (slideMatch) {
+    extractedSlideId = slideMatch[1];
+  }
 
   if (!presentationId) {
     // If we can't extract an ID, return the original URL
@@ -44,6 +54,15 @@ export function convertToEmbedUrl(url, options = {}) {
   // Build embed URL with parameters
   let embedUrl = `https://docs.google.com/presentation/d/${presentationId}/embed`;
   const params = [];
+
+  // Handle slide specification
+  const finalSlideId = slideId || extractedSlideId;
+  if (finalSlideId) {
+    params.push(`slide=id.${finalSlideId}`);
+  } else if (slideNumber && slideNumber > 1) {
+    // Google Slides uses 0-based indexing for slide numbers in embed URLs
+    params.push(`slide=${slideNumber - 1}`);
+  }
 
   if (autoplay) {
     params.push('start=true');

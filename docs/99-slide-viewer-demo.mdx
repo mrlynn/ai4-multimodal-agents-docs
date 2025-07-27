@@ -24,14 +24,25 @@ This page demonstrates how to embed Google Slides presentations in your Docusaur
 ## Basic Usage
 
 You can embed a single slide presentation directly:
-```
+
 <SlideViewer 
-  url="https://docs.google.com/presentation/d/YOUR_PRESENTATION_ID/edit"
+  url="https://docs.google.com/presentation/d/1YZJRVyoYe1sAtQXCcTxdjpaIQ84-L57842vydaBjcZk/edit"
   title="Sample Presentation"
   caption="This is a demo presentation"
   height="500px"
 />
-```
+
+## Starting at a Specific Slide
+
+You can start the presentation at a specific slide:
+
+<SlideViewer 
+  url="https://docs.google.com/presentation/d/1YZJRVyoYe1sAtQXCcTxdjpaIQ84-L57842vydaBjcZk/edit"
+  slideNumber={3}
+  title="Starting at Slide 3"
+  caption="This presentation starts at the third slide"
+  height="500px"
+/>
 ## Multiple Slides from Frontmatter
 
 You can also define multiple slides in your page's frontmatter and display them all:
@@ -45,6 +56,7 @@ Here's how to use the SlideViewer component in your MDX files:
 ```jsx
 import SlideViewer from '@site/src/components/SlideViewer';
 
+// Basic usage
 <SlideViewer 
   url="https://docs.google.com/presentation/d/YOUR_ID/edit"
   title="My Workshop Introduction"
@@ -54,6 +66,26 @@ import SlideViewer from '@site/src/components/SlideViewer';
   loop={false}
   delayMs={5000}
   notesLink="/docs/speaker-notes"
+/>
+
+// Start at a specific slide number (1-based)
+<SlideViewer 
+  url="https://docs.google.com/presentation/d/YOUR_ID/edit"
+  slideNumber={5}  // Starts at slide 5
+  title="Architecture Overview"
+/>
+
+// Start at a specific slide using slide ID
+<SlideViewer 
+  url="https://docs.google.com/presentation/d/YOUR_ID/edit"
+  slideId="g35df0c0f3b1_0_12007"  // Specific slide ID
+  title="Key Concepts"
+/>
+
+// Or include the slide ID in the URL (will be auto-extracted)
+<SlideViewer 
+  url="https://docs.google.com/presentation/d/YOUR_ID/edit#slide=id.g35df0c0f3b1_0_12007"
+  title="Direct Link to Slide"
 />
 ```
 
@@ -160,5 +192,34 @@ This component:
 - Attempts to validate presentation access before rendering
 - Provides more specific error messages for permission issues  
 - Shows a "Request Access" button for private presentations
+
+## Finding Slide IDs
+
+To get a specific slide ID from Google Slides:
+
+1. Open your presentation in Google Slides
+2. Navigate to the slide you want
+3. Look at the URL - it will contain `#slide=id.XXXXXXX`
+4. Copy the ID part after `id.` (e.g., `g35df0c0f3b1_0_12007`)
+
+Example URL:
+```
+https://docs.google.com/presentation/d/ABC123/edit#slide=id.g35df0c0f3b1_0_12007
+```
+
+You can then use this ID directly:
+```jsx
+<SlideViewer 
+  url="https://docs.google.com/presentation/d/ABC123/edit"
+  slideId="g35df0c0f3b1_0_12007"
+/>
+```
+
+Or just pass the full URL with the slide hash:
+```jsx
+<SlideViewer 
+  url="https://docs.google.com/presentation/d/ABC123/edit#slide=id.g35df0c0f3b1_0_12007"
+/>
+```
 
 Visit the [Slides Playground](/slides) to test the component with your own presentations!

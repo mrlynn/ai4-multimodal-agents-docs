@@ -5,7 +5,7 @@
   "source": "@site/docs/10-intro.mdx",
   "sourceDirName": ".",
   "slug": "/intro",
-  "permalink": "/multimodal-pdf-agent-n8n/docs/intro",
+  "permalink": "/docs/intro",
   "draft": false,
   "unlisted": false,
   "editUrl": "https://github.com/mongodb-developer/multimodal-pdf-agent-n8n/blob/main/docs/10-intro.mdx",
@@ -18,10 +18,10 @@
   "sidebar": "tutorialSidebar",
   "previous": {
     "title": "🎓 Workshop Overview",
-    "permalink": "/multimodal-pdf-agent-n8n/docs/"
+    "permalink": "/docs/"
   },
   "next": {
     "title": "🏗️ Architecture Overview",
-    "permalink": "/multimodal-pdf-agent-n8n/docs/architecture-overview"
+    "permalink": "/docs/architecture-overview"
   }
 }

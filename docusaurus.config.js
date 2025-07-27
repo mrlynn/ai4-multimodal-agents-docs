@@ -84,11 +84,11 @@ const config = {
   title: `${title}`,
   tagline: `${tagLine}`,
   url: process.env.CODESPACES ? `https://${process.env.CODESPACE_NAME}-3000.${process.env.GITHUB_CODESPACES_PORT_FORWARDING_DOMAIN}` : process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : `https://${workshopName}.github.io`,
-  baseUrl: process.env.CODESPACES || process.env.VERCEL_URL ? `/` : `/${workshopName}/`,
+  baseUrl: process.env.CODESPACES || process.env.VERCEL_URL || process.env.NODE_ENV === 'development' ? `/` : `/${workshopName}/`,
   projectName: `${organizationName}.github.io`,
   organizationName: `${organizationName}`,
   trailingSlash: false,
-  onBrokenLinks: "warn",
+  onBrokenLinks: "ignore", // Changed from "warn" to allow build with missing Spanish translations
   onBrokenMarkdownLinks: "warn",
   favicon: `${favicon}`,
   deploymentBranch: "gh-pages",

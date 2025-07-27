@@ -5,7 +5,7 @@
   "source": "@site/docs/35-voyage-ai-setup.mdx",
   "sourceDirName": ".",
   "slug": "/voyage-ai-setup",
-  "permalink": "/multimodal-pdf-agent-n8n/docs/voyage-ai-setup",
+  "permalink": "/docs/voyage-ai-setup",
   "draft": false,
   "unlisted": false,
   "editUrl": "https://github.com/mongodb-developer/multimodal-pdf-agent-n8n/blob/main/docs/35-voyage-ai-setup.mdx",
@@ -18,10 +18,10 @@
   "sidebar": "tutorialSidebar",
   "previous": {
     "title": "MongoDB Atlas Setup",
-    "permalink": "/multimodal-pdf-agent-n8n/docs/mongodb-atlas-setup"
+    "permalink": "/docs/mongodb-atlas-setup"
   },
   "next": {
     "title": "📊 Status Monitoring",
-    "permalink": "/multimodal-pdf-agent-n8n/docs/status-monitoring"
+    "permalink": "/docs/status-monitoring"
   }
 }

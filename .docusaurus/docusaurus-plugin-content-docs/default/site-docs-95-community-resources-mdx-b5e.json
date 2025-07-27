@@ -5,7 +5,7 @@
   "source": "@site/docs/95-community-resources.mdx",
   "sourceDirName": ".",
   "slug": "/community-resources",
-  "permalink": "/multimodal-pdf-agent-n8n/docs/community-resources",
+  "permalink": "/docs/community-resources",
   "draft": false,
   "unlisted": false,
   "editUrl": "https://github.com/mongodb-developer/multimodal-pdf-agent-n8n/blob/main/docs/95-community-resources.mdx",
@@ -18,10 +18,10 @@
   "sidebar": "tutorialSidebar",
   "previous": {
     "title": "Troubleshooting Guide",
-    "permalink": "/multimodal-pdf-agent-n8n/docs/docker-troubleshooting"
+    "permalink": "/docs/docker-troubleshooting"
   },
   "next": {
     "title": "Status Badge Usage Guide",
-    "permalink": "/multimodal-pdf-agent-n8n/docs/status-badge-usage-guide"
+    "permalink": "/docs/status-badge-usage-guide"
   }
 }
