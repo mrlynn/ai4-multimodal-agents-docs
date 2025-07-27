@@ -1201,7 +1201,7 @@ export default [
 # .docusaurus/docusaurus-plugin-content-docs/default/__mdx-loader-dependency.json
 
 ```json
-{"options":{"sidebarPath":"/Users/michael.lynn/code/ai4/workshop-docs/sidebars.js","editUrl":"https://github.com/mongodb-developer/multimodal-pdf-agent-n8n/blob/main","path":"docs","editCurrentVersion":false,"editLocalizedFiles":false,"routeBasePath":"docs","tagsBasePath":"tags","include":["**/*.{md,mdx}"],"exclude":["**/_*.{js,jsx,ts,tsx,md,mdx}","**/_*/**","**/*.test.{js,jsx,ts,tsx}","**/__tests__/**"],"sidebarCollapsible":true,"sidebarCollapsed":true,"docsRootComponent":"@theme/DocsRoot","docVersionRootComponent":"@theme/DocVersionRoot","docRootComponent":"@theme/DocRoot","docItemComponent":"@theme/DocItem","docTagsListComponent":"@theme/DocTagsListPage","docTagDocListComponent":"@theme/DocTagDocListPage","docCategoryGeneratedIndexComponent":"@theme/DocCategoryGeneratedIndexPage","remarkPlugins":[],"rehypePlugins":[],"recmaPlugins":[],"beforeDefaultRemarkPlugins":[],"beforeDefaultRehypePlugins":[],"admonitions":true,"showLastUpdateTime":false,"showLastUpdateAuthor":false,"includeCurrentVersion":true,"disableVersioning":false,"versions":{},"breadcrumbs":true,"onInlineTags":"warn","id":"default"},"versionsMetadata":[{"versionName":"current","label":"Next","banner":null,"badge":false,"noIndex":false,"className":"docs-version-current","path":"/multimodal-pdf-agent-n8n/docs","tagsPath":"/multimodal-pdf-agent-n8n/docs/tags","editUrl":"https://github.com/mongodb-developer/multimodal-pdf-agent-n8n/blob/main/docs","editUrlLocalized":"https://github.com/mongodb-developer/multimodal-pdf-agent-n8n/blob/main/i18n/en/docusaurus-plugin-content-docs/current","isLast":true,"routePriority":-1,"sidebarFilePath":"/Users/michael.lynn/code/ai4/workshop-docs/sidebars.js","contentPath":"/Users/michael.lynn/code/ai4/workshop-docs/docs","contentPathLocalized":"/Users/michael.lynn/code/ai4/workshop-docs/i18n/en/docusaurus-plugin-content-docs/current"}]}
+{"options":{"sidebarPath":"/Users/michael.lynn/code/ai4/workshop-docs/sidebars.js","editUrl":"https://github.com/mrlynn/ai4-multimodal-agents-n8n/blob/main","path":"docs","editCurrentVersion":false,"editLocalizedFiles":false,"routeBasePath":"docs","tagsBasePath":"tags","include":["**/*.{md,mdx}"],"exclude":["**/_*.{js,jsx,ts,tsx,md,mdx}","**/_*/**","**/*.test.{js,jsx,ts,tsx}","**/__tests__/**"],"sidebarCollapsible":true,"sidebarCollapsed":true,"docsRootComponent":"@theme/DocsRoot","docVersionRootComponent":"@theme/DocVersionRoot","docRootComponent":"@theme/DocRoot","docItemComponent":"@theme/DocItem","docTagsListComponent":"@theme/DocTagsListPage","docTagDocListComponent":"@theme/DocTagDocListPage","docCategoryGeneratedIndexComponent":"@theme/DocCategoryGeneratedIndexPage","remarkPlugins":[],"rehypePlugins":[],"recmaPlugins":[],"beforeDefaultRemarkPlugins":[],"beforeDefaultRehypePlugins":[],"admonitions":true,"showLastUpdateTime":false,"showLastUpdateAuthor":false,"includeCurrentVersion":true,"disableVersioning":false,"versions":{},"breadcrumbs":true,"onInlineTags":"warn","id":"default"},"versionsMetadata":[{"versionName":"current","label":"Next","banner":null,"badge":false,"noIndex":false,"className":"docs-version-current","path":"/multimodal-pdf-agent-n8n/docs","tagsPath":"/multimodal-pdf-agent-n8n/docs/tags","editUrl":"https://github.com/mrlynn/ai4-multimodal-agents-n8n/blob/main/docs","editUrlLocalized":"https://github.com/mrlynn/ai4-multimodal-agents-n8n/blob/main/i18n/en/docusaurus-plugin-content-docs/current","isLast":true,"routePriority":-1,"sidebarFilePath":"/Users/michael.lynn/code/ai4/workshop-docs/sidebars.js","contentPath":"/Users/michael.lynn/code/ai4/workshop-docs/docs","contentPathLocalized":"/Users/michael.lynn/code/ai4/workshop-docs/i18n/en/docusaurus-plugin-content-docs/current"}]}
 ```
 
 # .docusaurus/docusaurus-plugin-content-docs/default/__plugin.json
@@ -1238,7 +1238,7 @@ export default [
   "permalink": "/multimodal-pdf-agent-n8n/docs/architecture-overview",
   "draft": false,
   "unlisted": false,
-  "editUrl": "https://github.com/mongodb-developer/multimodal-pdf-agent-n8n/blob/main/docs/00-architecture-overview.mdx",
+  "editUrl": "https://github.com/mrlynn/ai4-multimodal-agents-n8n/blob/main/docs/00-architecture-overview.mdx",
   "tags": [],
   "version": "current",
   "sidebarPosition": 0,
@@ -1261,7 +1261,7 @@ export default [
   "permalink": "/multimodal-pdf-agent-n8n/docs/intro",
   "draft": false,
   "unlisted": false,
-  "editUrl": "https://github.com/mongodb-developer/multimodal-pdf-agent-n8n/blob/main/docs/10-intro.mdx",
+  "editUrl": "https://github.com/mrlynn/ai4-multimodal-agents-n8n/blob/main/docs/10-intro.mdx",
   "tags": [],
   "version": "current",
   "sidebarPosition": 10,
@@ -1293,7 +1293,7 @@ export default [
   "permalink": "/multimodal-pdf-agent-n8n/docs/github-codespaces",
   "draft": false,
   "unlisted": false,
-  "editUrl": "https://github.com/mongodb-developer/multimodal-pdf-agent-n8n/blob/main/docs/15-github-codespaces.mdx",
+  "editUrl": "https://github.com/mrlynn/ai4-multimodal-agents-n8n/blob/main/docs/15-github-codespaces.mdx",
   "tags": [],
   "version": "current",
   "sidebarPosition": 15,
@@ -1325,7 +1325,7 @@ export default [
   "permalink": "/multimodal-pdf-agent-n8n/docs/api-architecture",
   "draft": false,
   "unlisted": false,
-  "editUrl": "https://github.com/mongodb-developer/multimodal-pdf-agent-n8n/blob/main/docs/20-api-architecture.mdx",
+  "editUrl": "https://github.com/mrlynn/ai4-multimodal-agents-n8n/blob/main/docs/20-api-architecture.mdx",
   "tags": [],
   "version": "current",
   "sidebarPosition": 20,
@@ -1348,7 +1348,7 @@ export default [
   "permalink": "/multimodal-pdf-agent-n8n/docs/prerequisites",
   "draft": false,
   "unlisted": false,
-  "editUrl": "https://github.com/mongodb-developer/multimodal-pdf-agent-n8n/blob/main/docs/20-prerequisites.mdx",
+  "editUrl": "https://github.com/mrlynn/ai4-multimodal-agents-n8n/blob/main/docs/20-prerequisites.mdx",
   "tags": [],
   "version": "current",
   "sidebarPosition": 20,
@@ -1380,7 +1380,7 @@ export default [
   "permalink": "/multimodal-pdf-agent-n8n/docs/n8n-first-run",
   "draft": false,
   "unlisted": false,
-  "editUrl": "https://github.com/mongodb-developer/multimodal-pdf-agent-n8n/blob/main/docs/25-n8n-first-run.mdx",
+  "editUrl": "https://github.com/mrlynn/ai4-multimodal-agents-n8n/blob/main/docs/25-n8n-first-run.mdx",
   "tags": [],
   "version": "current",
   "sidebarPosition": 25,
@@ -1412,7 +1412,7 @@ export default [
   "permalink": "/multimodal-pdf-agent-n8n/docs/exercise-pdf-rag-agent",
   "draft": false,
   "unlisted": false,
-  "editUrl": "https://github.com/mongodb-developer/multimodal-pdf-agent-n8n/blob/main/docs/30-exercise-pdf-rag-agent.mdx",
+  "editUrl": "https://github.com/mrlynn/ai4-multimodal-agents-n8n/blob/main/docs/30-exercise-pdf-rag-agent.mdx",
   "tags": [],
   "version": "current",
   "sidebarPosition": 30,
@@ -1435,7 +1435,7 @@ export default [
   "permalink": "/multimodal-pdf-agent-n8n/docs/mongodb-atlas-setup",
   "draft": false,
   "unlisted": false,
-  "editUrl": "https://github.com/mongodb-developer/multimodal-pdf-agent-n8n/blob/main/docs/30-mongodb-atlas-setup.mdx",
+  "editUrl": "https://github.com/mrlynn/ai4-multimodal-agents-n8n/blob/main/docs/30-mongodb-atlas-setup.mdx",
   "tags": [],
   "version": "current",
   "sidebarPosition": 30,
@@ -1467,7 +1467,7 @@ export default [
   "permalink": "/multimodal-pdf-agent-n8n/docs/exercise-memory-context",
   "draft": false,
   "unlisted": false,
-  "editUrl": "https://github.com/mongodb-developer/multimodal-pdf-agent-n8n/blob/main/docs/31-exercise-memory-context.mdx",
+  "editUrl": "https://github.com/mrlynn/ai4-multimodal-agents-n8n/blob/main/docs/31-exercise-memory-context.mdx",
   "tags": [],
   "version": "current",
   "sidebarPosition": 31,
@@ -1490,7 +1490,7 @@ export default [
   "permalink": "/multimodal-pdf-agent-n8n/docs/exercise-advanced-tools",
   "draft": false,
   "unlisted": false,
-  "editUrl": "https://github.com/mongodb-developer/multimodal-pdf-agent-n8n/blob/main/docs/32-exercise-advanced-tools.mdx",
+  "editUrl": "https://github.com/mrlynn/ai4-multimodal-agents-n8n/blob/main/docs/32-exercise-advanced-tools.mdx",
   "tags": [],
   "version": "current",
   "sidebarPosition": 32,
@@ -1513,7 +1513,7 @@ export default [
   "permalink": "/multimodal-pdf-agent-n8n/docs/voyage-ai-setup",
   "draft": false,
   "unlisted": false,
-  "editUrl": "https://github.com/mongodb-developer/multimodal-pdf-agent-n8n/blob/main/docs/35-voyage-ai-setup.mdx",
+  "editUrl": "https://github.com/mrlynn/ai4-multimodal-agents-n8n/blob/main/docs/35-voyage-ai-setup.mdx",
   "tags": [],
   "version": "current",
   "sidebarPosition": 35,
@@ -1545,7 +1545,7 @@ export default [
   "permalink": "/multimodal-pdf-agent-n8n/docs/pdf-processing-workflow",
   "draft": false,
   "unlisted": false,
-  "editUrl": "https://github.com/mongodb-developer/multimodal-pdf-agent-n8n/blob/main/docs/40-pdf-processing-workflow.mdx",
+  "editUrl": "https://github.com/mrlynn/ai4-multimodal-agents-n8n/blob/main/docs/40-pdf-processing-workflow.mdx",
   "tags": [],
   "version": "current",
   "sidebarPosition": 40,
@@ -1577,7 +1577,7 @@ export default [
   "permalink": "/multimodal-pdf-agent-n8n/docs/local-setup-tips",
   "draft": false,
   "unlisted": false,
-  "editUrl": "https://github.com/mongodb-developer/multimodal-pdf-agent-n8n/blob/main/docs/45-local-setup-tips.mdx",
+  "editUrl": "https://github.com/mrlynn/ai4-multimodal-agents-n8n/blob/main/docs/45-local-setup-tips.mdx",
   "tags": [],
   "version": "current",
   "sidebarPosition": 45,
@@ -1609,7 +1609,7 @@ export default [
   "permalink": "/multimodal-pdf-agent-n8n/docs/vector-search-workflow",
   "draft": false,
   "unlisted": false,
-  "editUrl": "https://github.com/mongodb-developer/multimodal-pdf-agent-n8n/blob/main/docs/50-vector-search-workflow.mdx",
+  "editUrl": "https://github.com/mrlynn/ai4-multimodal-agents-n8n/blob/main/docs/50-vector-search-workflow.mdx",
   "tags": [],
   "version": "current",
   "sidebarPosition": 50,
@@ -1641,7 +1641,7 @@ export default [
   "permalink": "/multimodal-pdf-agent-n8n/docs/ai-agent-workflow",
   "draft": false,
   "unlisted": false,
-  "editUrl": "https://github.com/mongodb-developer/multimodal-pdf-agent-n8n/blob/main/docs/60-ai-agent-workflow.mdx",
+  "editUrl": "https://github.com/mrlynn/ai4-multimodal-agents-n8n/blob/main/docs/60-ai-agent-workflow.mdx",
   "tags": [],
   "version": "current",
   "sidebarPosition": 60,
@@ -1673,7 +1673,7 @@ export default [
   "permalink": "/multimodal-pdf-agent-n8n/docs/agent-patterns",
   "draft": false,
   "unlisted": false,
-  "editUrl": "https://github.com/mongodb-developer/multimodal-pdf-agent-n8n/blob/main/docs/65-agent-patterns.mdx",
+  "editUrl": "https://github.com/mrlynn/ai4-multimodal-agents-n8n/blob/main/docs/65-agent-patterns.mdx",
   "tags": [],
   "version": "current",
   "sidebarPosition": 65,
@@ -1705,7 +1705,7 @@ export default [
   "permalink": "/multimodal-pdf-agent-n8n/docs/memory-context-patterns",
   "draft": false,
   "unlisted": false,
-  "editUrl": "https://github.com/mongodb-developer/multimodal-pdf-agent-n8n/blob/main/docs/67-memory-context-patterns.mdx",
+  "editUrl": "https://github.com/mrlynn/ai4-multimodal-agents-n8n/blob/main/docs/67-memory-context-patterns.mdx",
   "tags": [],
   "version": "current",
   "sidebarPosition": 67,
@@ -1737,7 +1737,7 @@ export default [
   "permalink": "/multimodal-pdf-agent-n8n/docs/tool-definition-primer",
   "draft": false,
   "unlisted": false,
-  "editUrl": "https://github.com/mongodb-developer/multimodal-pdf-agent-n8n/blob/main/docs/68-tool-definition-primer.mdx",
+  "editUrl": "https://github.com/mrlynn/ai4-multimodal-agents-n8n/blob/main/docs/68-tool-definition-primer.mdx",
   "tags": [],
   "version": "current",
   "sidebarPosition": 68,
@@ -1769,7 +1769,7 @@ export default [
   "permalink": "/multimodal-pdf-agent-n8n/docs/multimodal-image-queries",
   "draft": false,
   "unlisted": false,
-  "editUrl": "https://github.com/mongodb-developer/multimodal-pdf-agent-n8n/blob/main/docs/69-multimodal-image-queries.mdx",
+  "editUrl": "https://github.com/mrlynn/ai4-multimodal-agents-n8n/blob/main/docs/69-multimodal-image-queries.mdx",
   "tags": [],
   "version": "current",
   "sidebarPosition": 69,
@@ -1801,7 +1801,7 @@ export default [
   "permalink": "/multimodal-pdf-agent-n8n/docs/complete-multimodal-agent",
   "draft": false,
   "unlisted": false,
-  "editUrl": "https://github.com/mongodb-developer/multimodal-pdf-agent-n8n/blob/main/docs/70-complete-multimodal-agent.mdx",
+  "editUrl": "https://github.com/mrlynn/ai4-multimodal-agents-n8n/blob/main/docs/70-complete-multimodal-agent.mdx",
   "tags": [],
   "version": "current",
   "sidebarPosition": 70,
@@ -1833,7 +1833,7 @@ export default [
   "permalink": "/multimodal-pdf-agent-n8n/docs/mongodb-vector-setup",
   "draft": false,
   "unlisted": false,
-  "editUrl": "https://github.com/mongodb-developer/multimodal-pdf-agent-n8n/blob/main/docs/75-mongodb-vector-setup.mdx",
+  "editUrl": "https://github.com/mrlynn/ai4-multimodal-agents-n8n/blob/main/docs/75-mongodb-vector-setup.mdx",
   "tags": [],
   "version": "current",
   "sidebarPosition": 75,
@@ -1865,7 +1865,7 @@ export default [
   "permalink": "/multimodal-pdf-agent-n8n/docs/upload-interface",
   "draft": false,
   "unlisted": false,
-  "editUrl": "https://github.com/mongodb-developer/multimodal-pdf-agent-n8n/blob/main/docs/80-upload-interface.mdx",
+  "editUrl": "https://github.com/mrlynn/ai4-multimodal-agents-n8n/blob/main/docs/80-upload-interface.mdx",
   "tags": [],
   "version": "current",
   "sidebarPosition": 80,
@@ -1897,7 +1897,7 @@ export default [
   "permalink": "/multimodal-pdf-agent-n8n/docs/python-mongodb-approaches",
   "draft": false,
   "unlisted": false,
-  "editUrl": "https://github.com/mongodb-developer/multimodal-pdf-agent-n8n/blob/main/docs/85-python-mongodb-approaches.mdx",
+  "editUrl": "https://github.com/mrlynn/ai4-multimodal-agents-n8n/blob/main/docs/85-python-mongodb-approaches.mdx",
   "tags": [],
   "version": "current",
   "sidebarPosition": 85,
@@ -1929,7 +1929,7 @@ export default [
   "permalink": "/multimodal-pdf-agent-n8n/docs/approach-comparison",
   "draft": false,
   "unlisted": false,
-  "editUrl": "https://github.com/mongodb-developer/multimodal-pdf-agent-n8n/blob/main/docs/90-approach-comparison.mdx",
+  "editUrl": "https://github.com/mrlynn/ai4-multimodal-agents-n8n/blob/main/docs/90-approach-comparison.mdx",
   "tags": [],
   "version": "current",
   "sidebarPosition": 90,
@@ -1961,7 +1961,7 @@ export default [
   "permalink": "/multimodal-pdf-agent-n8n/docs/community-resources",
   "draft": false,
   "unlisted": false,
-  "editUrl": "https://github.com/mongodb-developer/multimodal-pdf-agent-n8n/blob/main/docs/95-community-resources.mdx",
+  "editUrl": "https://github.com/mrlynn/ai4-multimodal-agents-n8n/blob/main/docs/95-community-resources.mdx",
   "tags": [],
   "version": "current",
   "sidebarPosition": 95,
@@ -1993,7 +1993,7 @@ export default [
   "permalink": "/multimodal-pdf-agent-n8n/docs/docker-troubleshooting",
   "draft": false,
   "unlisted": false,
-  "editUrl": "https://github.com/mongodb-developer/multimodal-pdf-agent-n8n/blob/main/docs/95-docker-troubleshooting.mdx",
+  "editUrl": "https://github.com/mrlynn/ai4-multimodal-agents-n8n/blob/main/docs/95-docker-troubleshooting.mdx",
   "tags": [],
   "version": "current",
   "sidebarPosition": 95,
@@ -2025,7 +2025,7 @@ export default [
   "permalink": "/multimodal-pdf-agent-n8n/docs/api-architecture",
   "draft": false,
   "unlisted": false,
-  "editUrl": "https://github.com/mongodb-developer/multimodal-pdf-agent-n8n/blob/main/docs/api-architecture.mdx",
+  "editUrl": "https://github.com/mrlynn/ai4-multimodal-agents-n8n/blob/main/docs/api-architecture.mdx",
   "tags": [],
   "version": "current",
   "sidebarPosition": 20,
@@ -2057,7 +2057,7 @@ export default [
   "permalink": "/multimodal-pdf-agent-n8n/docs/architecture-overview",
   "draft": false,
   "unlisted": false,
-  "editUrl": "https://github.com/mongodb-developer/multimodal-pdf-agent-n8n/blob/main/docs/architecture-overview.mdx",
+  "editUrl": "https://github.com/mrlynn/ai4-multimodal-agents-n8n/blob/main/docs/architecture-overview.mdx",
   "tags": [],
   "version": "current",
   "sidebarPosition": 0,
@@ -2089,7 +2089,7 @@ export default [
   "permalink": "/multimodal-pdf-agent-n8n/docs/codebase",
   "draft": false,
   "unlisted": false,
-  "editUrl": "https://github.com/mongodb-developer/multimodal-pdf-agent-n8n/blob/main/docs/codebase.md",
+  "editUrl": "https://github.com/mrlynn/ai4-multimodal-agents-n8n/blob/main/docs/codebase.md",
   "tags": [],
   "version": "current",
   "frontMatter": {}
@@ -2109,7 +2109,7 @@ export default [
   "permalink": "/multimodal-pdf-agent-n8n/docs/exercise-advanced-tools",
   "draft": false,
   "unlisted": false,
-  "editUrl": "https://github.com/mongodb-developer/multimodal-pdf-agent-n8n/blob/main/docs/exercise-advanced-tools.mdx",
+  "editUrl": "https://github.com/mrlynn/ai4-multimodal-agents-n8n/blob/main/docs/exercise-advanced-tools.mdx",
   "tags": [],
   "version": "current",
   "sidebarPosition": 32,
@@ -2141,7 +2141,7 @@ export default [
   "permalink": "/multimodal-pdf-agent-n8n/docs/exercise-memory-context",
   "draft": false,
   "unlisted": false,
-  "editUrl": "https://github.com/mongodb-developer/multimodal-pdf-agent-n8n/blob/main/docs/exercise-memory-context.mdx",
+  "editUrl": "https://github.com/mrlynn/ai4-multimodal-agents-n8n/blob/main/docs/exercise-memory-context.mdx",
   "tags": [],
   "version": "current",
   "sidebarPosition": 31,
@@ -2173,7 +2173,7 @@ export default [
   "permalink": "/multimodal-pdf-agent-n8n/docs/exercise-pdf-rag-agent",
   "draft": false,
   "unlisted": false,
-  "editUrl": "https://github.com/mongodb-developer/multimodal-pdf-agent-n8n/blob/main/docs/exercise-pdf-rag-agent.mdx",
+  "editUrl": "https://github.com/mrlynn/ai4-multimodal-agents-n8n/blob/main/docs/exercise-pdf-rag-agent.mdx",
   "tags": [],
   "version": "current",
   "sidebarPosition": 30,
@@ -2205,7 +2205,7 @@ export default [
   "permalink": "/multimodal-pdf-agent-n8n/docs/",
   "draft": false,
   "unlisted": false,
-  "editUrl": "https://github.com/mongodb-developer/multimodal-pdf-agent-n8n/blob/main/docs/index.mdx",
+  "editUrl": "https://github.com/mrlynn/ai4-multimodal-agents-n8n/blob/main/docs/index.mdx",
   "tags": [],
   "version": "current",
   "sidebarPosition": 1,
@@ -2235,7 +2235,7 @@ export default [
   "permalink": "/multimodal-pdf-agent-n8n/docs/status-badge-usage-guide",
   "draft": false,
   "unlisted": false,
-  "editUrl": "https://github.com/mongodb-developer/multimodal-pdf-agent-n8n/blob/main/docs/status-badge-usage-guide.mdx",
+  "editUrl": "https://github.com/mrlynn/ai4-multimodal-agents-n8n/blob/main/docs/status-badge-usage-guide.mdx",
   "tags": [],
   "version": "current",
   "sidebarPosition": 100,
@@ -2267,7 +2267,7 @@ export default [
   "permalink": "/multimodal-pdf-agent-n8n/docs/summary",
   "draft": false,
   "unlisted": false,
-  "editUrl": "https://github.com/mongodb-developer/multimodal-pdf-agent-n8n/blob/main/docs/summary.mdx",
+  "editUrl": "https://github.com/mrlynn/ai4-multimodal-agents-n8n/blob/main/docs/summary.mdx",
   "tags": [],
   "version": "current",
   "sidebarPosition": 100,
@@ -2318,7 +2318,7 @@ export default [
 # .docusaurus/docusaurus-plugin-debug/default/p/multimodal-pdf-agent-n-8-n-docusaurus-debug-content-b60.json
 
 ```json
-{"allContent":{"docusaurus-plugin-css-cascade-layers":{},"docusaurus-plugin-content-docs":{"default":{"loadedVersions":[{"versionName":"current","label":"Next","banner":null,"badge":false,"noIndex":false,"className":"docs-version-current","path":"/multimodal-pdf-agent-n8n/docs","tagsPath":"/multimodal-pdf-agent-n8n/docs/tags","editUrl":"https://github.com/mongodb-developer/multimodal-pdf-agent-n8n/blob/main/docs","editUrlLocalized":"https://github.com/mongodb-developer/multimodal-pdf-agent-n8n/blob/main/i18n/en/docusaurus-plugin-content-docs/current","isLast":true,"routePriority":-1,"sidebarFilePath":"/Users/michael.lynn/code/ai4/workshop-docs/sidebars.js","contentPath":"/Users/michael.lynn/code/ai4/workshop-docs/docs","contentPathLocalized":"/Users/michael.lynn/code/ai4/workshop-docs/i18n/en/docusaurus-plugin-content-docs/current","docs":[{"id":"agent-patterns","title":"🧠 AI Agent Planning Patterns","description":"Understanding how AI agents reason, plan, and act is crucial for building effective multimodal systems. This section covers the key planning patterns that power modern AI agents.","source":"@site/docs/65-agent-patterns.mdx","sourceDirName":".","slug":"/agent-patterns","permalink":"/multimodal-pdf-agent-n8n/docs/agent-patterns","draft":false,"unlisted":false,"editUrl":"https://github.com/mongodb-developer/multimodal-pdf-agent-n8n/blob/main/docs/65-agent-patterns.mdx","tags":[],"version":"current","sidebarPosition":65,"frontMatter":{"sidebar_position":65},"sidebar":"tutorialSidebar","previous":{"title":"⚖️ n8n vs Python Comparison","permalink":"/multimodal-pdf-agent-n8n/docs/approach-comparison"},"next":{"title":"💾 Memory & Context Patterns","permalink":"/multimodal-pdf-agent-n8n/docs/memory-context-patterns"}},{"id":"ai-agent-workflow","title":"🤖 AI Agent with Function Calling","description":"Build an intelligent agent using Gemini 2.0 Flash and n8n's powerful workflow capabilities.","source":"@site/docs/60-ai-agent-workflow.mdx","sourceDirName":".","slug":"/ai-agent-workflow","permalink":"/multimodal-pdf-agent-n8n/docs/ai-agent-workflow","draft":false,"unlisted":false,"editUrl":"https://github.com/mongodb-developer/multimodal-pdf-agent-n8n/blob/main/docs/60-ai-agent-workflow.mdx","tags":[],"version":"current","sidebarPosition":60,"frontMatter":{"sidebar_position":60},"sidebar":"tutorialSidebar","previous":{"title":"Vector Search Implementation","permalink":"/multimodal-pdf-agent-n8n/docs/vector-search-workflow"},"next":{"title":"🧪 Exercise: Build a PDF RAG Agent","permalink":"/multimodal-pdf-agent-n8n/docs/exercise-pdf-rag-agent"}},{"id":"api-architecture","title":"🌐 API Gateway Architecture: The Workshop Proxy System","description":"The workshop API gateway serves as both an educational tool and practical infrastructure. Let's explore why it exists, how it works, and how it compares to production systems.","source":"@site/docs/api-architecture.mdx","sourceDirName":".","slug":"/api-architecture","permalink":"/multimodal-pdf-agent-n8n/docs/api-architecture","draft":false,"unlisted":false,"editUrl":"https://github.com/mongodb-developer/multimodal-pdf-agent-n8n/blob/main/docs/api-architecture.mdx","tags":[],"version":"current","sidebarPosition":20,"frontMatter":{"sidebar_position":20},"sidebar":"tutorialSidebar","previous":{"title":"n8n First Run Experience","permalink":"/multimodal-pdf-agent-n8n/docs/n8n-first-run"},"next":{"title":"MongoDB Atlas Setup","permalink":"/multimodal-pdf-agent-n8n/docs/mongodb-atlas-setup"}},{"id":"approach-comparison","title":"⚖️ n8n vs Python: Choosing Your Development Approach","description":"Now that you've seen both visual workflows and programmatic approaches, let's dive deep into when and why to choose each method for your multimodal PDF agent projects.","source":"@site/docs/90-approach-comparison.mdx","sourceDirName":".","slug":"/approach-comparison","permalink":"/multimodal-pdf-agent-n8n/docs/approach-comparison","draft":false,"unlisted":false,"editUrl":"https://github.com/mongodb-developer/multimodal-pdf-agent-n8n/blob/main/docs/90-approach-comparison.mdx","tags":[],"version":"current","sidebarPosition":90,"frontMatter":{"sidebar_position":90},"sidebar":"tutorialSidebar","previous":{"title":"🐍 Python Integration Options","permalink":"/multimodal-pdf-agent-n8n/docs/python-mongodb-approaches"},"next":{"title":"🧠 AI Agent Planning Patterns","permalink":"/multimodal-pdf-agent-n8n/docs/agent-patterns"}},{"id":"architecture-overview","title":"🏗️ Architecture Overview: Multimodal AI Agent Workshop","description":"Understanding the complete system architecture helps you see how all components work together to create intelligent, multimodal AI agents. Let's explore the full stack from your browser to the AI models.","source":"@site/docs/architecture-overview.mdx","sourceDirName":".","slug":"/architecture-overview","permalink":"/multimodal-pdf-agent-n8n/docs/architecture-overview","draft":false,"unlisted":false,"editUrl":"https://github.com/mongodb-developer/multimodal-pdf-agent-n8n/blob/main/docs/architecture-overview.mdx","tags":[],"version":"current","sidebarPosition":0,"frontMatter":{"sidebar_position":0},"sidebar":"tutorialSidebar","previous":{"title":"Workshop Introduction","permalink":"/multimodal-pdf-agent-n8n/docs/intro"},"next":{"title":"GitHub Codespaces Setup","permalink":"/multimodal-pdf-agent-n8n/docs/github-codespaces"}},{"id":"codebase","title":"10-intro.mdx","description":"","source":"@site/docs/codebase.md","sourceDirName":".","slug":"/codebase","permalink":"/multimodal-pdf-agent-n8n/docs/codebase","draft":false,"unlisted":false,"editUrl":"https://github.com/mongodb-developer/multimodal-pdf-agent-n8n/blob/main/docs/codebase.md","tags":[],"version":"current","frontMatter":{}},{"id":"community-resources","title":"🌐 Community Nodes & Extensions","description":"Extend your PDF analysis system with community contributions!","source":"@site/docs/95-community-resources.mdx","sourceDirName":".","slug":"/community-resources","permalink":"/multimodal-pdf-agent-n8n/docs/community-resources","draft":false,"unlisted":false,"editUrl":"https://github.com/mongodb-developer/multimodal-pdf-agent-n8n/blob/main/docs/95-community-resources.mdx","tags":[],"version":"current","sidebarPosition":95,"frontMatter":{"sidebar_position":95},"sidebar":"tutorialSidebar","previous":{"title":"Troubleshooting Guide","permalink":"/multimodal-pdf-agent-n8n/docs/docker-troubleshooting"},"next":{"title":"Status Badge Usage Guide","permalink":"/multimodal-pdf-agent-n8n/docs/status-badge-usage-guide"}},{"id":"complete-multimodal-agent","title":"🧠 Complete Multimodal PDF Agent","description":"Build a complete multimodal AI agent that can process PDFs, understand both text and images, and answer questions using MongoDB Vector Search and Voyage AI.","source":"@site/docs/70-complete-multimodal-agent.mdx","sourceDirName":".","slug":"/complete-multimodal-agent","permalink":"/multimodal-pdf-agent-n8n/docs/complete-multimodal-agent","draft":false,"unlisted":false,"editUrl":"https://github.com/mongodb-developer/multimodal-pdf-agent-n8n/blob/main/docs/70-complete-multimodal-agent.mdx","tags":[],"version":"current","sidebarPosition":70,"frontMatter":{"sidebar_position":70},"sidebar":"tutorialSidebar","previous":{"title":"🧪 Exercise: Advanced Tool Calling","permalink":"/multimodal-pdf-agent-n8n/docs/exercise-advanced-tools"},"next":{"title":"Production Vector Search","permalink":"/multimodal-pdf-agent-n8n/docs/mongodb-vector-setup"}},{"id":"docker-troubleshooting","title":"🐳 Docker Troubleshooting Guide","description":"Common issues and solutions when running the workshop with Docker.","source":"@site/docs/95-docker-troubleshooting.mdx","sourceDirName":".","slug":"/docker-troubleshooting","permalink":"/multimodal-pdf-agent-n8n/docs/docker-troubleshooting","draft":false,"unlisted":false,"editUrl":"https://github.com/mongodb-developer/multimodal-pdf-agent-n8n/blob/main/docs/95-docker-troubleshooting.mdx","tags":[],"version":"current","sidebarPosition":95,"frontMatter":{"sidebar_position":95},"sidebar":"tutorialSidebar","previous":{"title":"Docker Best Practices","permalink":"/multimodal-pdf-agent-n8n/docs/local-setup-tips"},"next":{"title":"Community Resources","permalink":"/multimodal-pdf-agent-n8n/docs/community-resources"}},{"id":"exercise-advanced-tools","title":"🧪 Exercise: Advanced Tool Calling & Function Integration","description":"<InstructorNotes","source":"@site/docs/exercise-advanced-tools.mdx","sourceDirName":".","slug":"/exercise-advanced-tools","permalink":"/multimodal-pdf-agent-n8n/docs/exercise-advanced-tools","draft":false,"unlisted":false,"editUrl":"https://github.com/mongodb-developer/multimodal-pdf-agent-n8n/blob/main/docs/exercise-advanced-tools.mdx","tags":[],"version":"current","sidebarPosition":32,"frontMatter":{"sidebar_position":32},"sidebar":"tutorialSidebar","previous":{"title":"🧪 Exercise: Memory & Context","permalink":"/multimodal-pdf-agent-n8n/docs/exercise-memory-context"},"next":{"title":"Complete Multimodal Agent","permalink":"/multimodal-pdf-agent-n8n/docs/complete-multimodal-agent"}},{"id":"exercise-memory-context","title":"🧪 Exercise: Memory & Context Management","description":"<InstructorNotes","source":"@site/docs/exercise-memory-context.mdx","sourceDirName":".","slug":"/exercise-memory-context","permalink":"/multimodal-pdf-agent-n8n/docs/exercise-memory-context","draft":false,"unlisted":false,"editUrl":"https://github.com/mongodb-developer/multimodal-pdf-agent-n8n/blob/main/docs/exercise-memory-context.mdx","tags":[],"version":"current","sidebarPosition":31,"frontMatter":{"sidebar_position":31},"sidebar":"tutorialSidebar","previous":{"title":"🧪 Exercise: Build a PDF RAG Agent","permalink":"/multimodal-pdf-agent-n8n/docs/exercise-pdf-rag-agent"},"next":{"title":"🧪 Exercise: Advanced Tool Calling","permalink":"/multimodal-pdf-agent-n8n/docs/exercise-advanced-tools"}},{"id":"exercise-pdf-rag-agent","title":"🧪 Exercise: Build a PDF RAG Agent","description":"<InstructorNotes","source":"@site/docs/exercise-pdf-rag-agent.mdx","sourceDirName":".","slug":"/exercise-pdf-rag-agent","permalink":"/multimodal-pdf-agent-n8n/docs/exercise-pdf-rag-agent","draft":false,"unlisted":false,"editUrl":"https://github.com/mongodb-developer/multimodal-pdf-agent-n8n/blob/main/docs/exercise-pdf-rag-agent.mdx","tags":[],"version":"current","sidebarPosition":30,"frontMatter":{"sidebar_position":30},"sidebar":"tutorialSidebar","previous":{"title":"AI Agent with Tool Calling","permalink":"/multimodal-pdf-agent-n8n/docs/ai-agent-workflow"},"next":{"title":"🧪 Exercise: Memory & Context","permalink":"/multimodal-pdf-agent-n8n/docs/exercise-memory-context"}},{"id":"github-codespaces","title":"🌐 GitHub Codespaces: Zero-Install Workshop","description":"The fastest way to start this workshop - no local setup required!","source":"@site/docs/15-github-codespaces.mdx","sourceDirName":".","slug":"/github-codespaces","permalink":"/multimodal-pdf-agent-n8n/docs/github-codespaces","draft":false,"unlisted":false,"editUrl":"https://github.com/mongodb-developer/multimodal-pdf-agent-n8n/blob/main/docs/15-github-codespaces.mdx","tags":[],"version":"current","sidebarPosition":15,"frontMatter":{"sidebar_position":15},"sidebar":"tutorialSidebar","previous":{"title":"🏗️ Architecture Overview","permalink":"/multimodal-pdf-agent-n8n/docs/architecture-overview"},"next":{"title":"Prerequisites & Local Setup","permalink":"/multimodal-pdf-agent-n8n/docs/prerequisites"}},{"id":"index","title":"Workshop Overview","description":"Welcome to the Build a Multimodal PDF Agent with n8n workshop! This interactive, hands-on experience will guide you through creating a production-ready AI system that processes PDFs using cutting-edge technologies.","source":"@site/docs/index.mdx","sourceDirName":".","slug":"/","permalink":"/multimodal-pdf-agent-n8n/docs/","draft":false,"unlisted":false,"editUrl":"https://github.com/mongodb-developer/multimodal-pdf-agent-n8n/blob/main/docs/index.mdx","tags":[],"version":"current","sidebarPosition":1,"frontMatter":{"sidebar_position":1,"slug":"/","title":"Workshop Overview"},"sidebar":"tutorialSidebar","next":{"title":"Workshop Introduction","permalink":"/multimodal-pdf-agent-n8n/docs/intro"}},{"id":"intro","title":"📘 Introduction to Multimodal PDF Agents with n8n","description":"|Workshop goals|Build a multimodal AI agent that processes PDFs using n8n, MongoDB Atlas, and Voyage AI|","source":"@site/docs/10-intro.mdx","sourceDirName":".","slug":"/intro","permalink":"/multimodal-pdf-agent-n8n/docs/intro","draft":false,"unlisted":false,"editUrl":"https://github.com/mongodb-developer/multimodal-pdf-agent-n8n/blob/main/docs/10-intro.mdx","tags":[],"version":"current","sidebarPosition":10,"frontMatter":{"sidebar_position":10},"sidebar":"tutorialSidebar","previous":{"title":"🎓 Workshop Overview","permalink":"/multimodal-pdf-agent-n8n/docs/"},"next":{"title":"🏗️ Architecture Overview","permalink":"/multimodal-pdf-agent-n8n/docs/architecture-overview"}},{"id":"local-setup-tips","title":"💻 Docker Development Best Practices","description":"Based on real-world experience, here's how to optimize your Docker-based n8n development environment.","source":"@site/docs/45-local-setup-tips.mdx","sourceDirName":".","slug":"/local-setup-tips","permalink":"/multimodal-pdf-agent-n8n/docs/local-setup-tips","draft":false,"unlisted":false,"editUrl":"https://github.com/mongodb-developer/multimodal-pdf-agent-n8n/blob/main/docs/45-local-setup-tips.mdx","tags":[],"version":"current","sidebarPosition":45,"frontMatter":{"sidebar_position":45},"sidebar":"tutorialSidebar","previous":{"title":"🖼️ Multimodal Image Queries","permalink":"/multimodal-pdf-agent-n8n/docs/multimodal-image-queries"},"next":{"title":"Troubleshooting Guide","permalink":"/multimodal-pdf-agent-n8n/docs/docker-troubleshooting"}},{"id":"memory-context-patterns","title":"🧠 Memory & Context Patterns","description":"Real AI agents need memory to maintain context across conversations and learn from interactions. This section shows how to implement different memory patterns using MongoDB and n8n workflows.","source":"@site/docs/67-memory-context-patterns.mdx","sourceDirName":".","slug":"/memory-context-patterns","permalink":"/multimodal-pdf-agent-n8n/docs/memory-context-patterns","draft":false,"unlisted":false,"editUrl":"https://github.com/mongodb-developer/multimodal-pdf-agent-n8n/blob/main/docs/67-memory-context-patterns.mdx","tags":[],"version":"current","sidebarPosition":67,"frontMatter":{"sidebar_position":67},"sidebar":"tutorialSidebar","previous":{"title":"🧠 AI Agent Planning Patterns","permalink":"/multimodal-pdf-agent-n8n/docs/agent-patterns"},"next":{"title":"🛠️ Tool Definition & Function Calling","permalink":"/multimodal-pdf-agent-n8n/docs/tool-definition-primer"}},{"id":"mongodb-atlas-setup","title":"🗄️ MongoDB Atlas Setup for Vector Search","description":"This workshop uses MongoDB Atlas for vector search capabilities.","source":"@site/docs/30-mongodb-atlas-setup.mdx","sourceDirName":".","slug":"/mongodb-atlas-setup","permalink":"/multimodal-pdf-agent-n8n/docs/mongodb-atlas-setup","draft":false,"unlisted":false,"editUrl":"https://github.com/mongodb-developer/multimodal-pdf-agent-n8n/blob/main/docs/30-mongodb-atlas-setup.mdx","tags":[],"version":"current","sidebarPosition":30,"frontMatter":{"sidebar_position":30},"sidebar":"tutorialSidebar","previous":{"title":"🌐 API Gateway Architecture","permalink":"/multimodal-pdf-agent-n8n/docs/api-architecture"},"next":{"title":"Voyage AI Configuration","permalink":"/multimodal-pdf-agent-n8n/docs/voyage-ai-setup"}},{"id":"mongodb-vector-setup","title":"🗄️ MongoDB Vector Search Setup","description":"Configure MongoDB for real vector search capabilities in your multimodal PDF agent.","source":"@site/docs/75-mongodb-vector-setup.mdx","sourceDirName":".","slug":"/mongodb-vector-setup","permalink":"/multimodal-pdf-agent-n8n/docs/mongodb-vector-setup","draft":false,"unlisted":false,"editUrl":"https://github.com/mongodb-developer/multimodal-pdf-agent-n8n/blob/main/docs/75-mongodb-vector-setup.mdx","tags":[],"version":"current","sidebarPosition":75,"frontMatter":{"sidebar_position":75},"sidebar":"tutorialSidebar","previous":{"title":"Complete Multimodal Agent","permalink":"/multimodal-pdf-agent-n8n/docs/complete-multimodal-agent"},"next":{"title":"Web Upload Interface","permalink":"/multimodal-pdf-agent-n8n/docs/upload-interface"}},{"id":"multimodal-image-queries","title":"🖼️ Multimodal Image Queries & Visual Understanding","description":"\"Screenshots are all you need\" - this powerful concept from multimodal AI means agents can understand and analyze visual content just as well as text. Let's build workflows that handle image queries and visual document analysis.","source":"@site/docs/69-multimodal-image-queries.mdx","sourceDirName":".","slug":"/multimodal-image-queries","permalink":"/multimodal-pdf-agent-n8n/docs/multimodal-image-queries","draft":false,"unlisted":false,"editUrl":"https://github.com/mongodb-developer/multimodal-pdf-agent-n8n/blob/main/docs/69-multimodal-image-queries.mdx","tags":[],"version":"current","sidebarPosition":69,"frontMatter":{"sidebar_position":69},"sidebar":"tutorialSidebar","previous":{"title":"🛠️ Tool Definition & Function Calling","permalink":"/multimodal-pdf-agent-n8n/docs/tool-definition-primer"},"next":{"title":"Docker Best Practices","permalink":"/multimodal-pdf-agent-n8n/docs/local-setup-tips"}},{"id":"n8n-first-run","title":"🚀 n8n First Run Experience","description":"<StepIndicator current= total={6} titles={[","source":"@site/docs/25-n8n-first-run.mdx","sourceDirName":".","slug":"/n8n-first-run","permalink":"/multimodal-pdf-agent-n8n/docs/n8n-first-run","draft":false,"unlisted":false,"editUrl":"https://github.com/mongodb-developer/multimodal-pdf-agent-n8n/blob/main/docs/25-n8n-first-run.mdx","tags":[],"version":"current","sidebarPosition":25,"frontMatter":{"sidebar_position":25},"sidebar":"tutorialSidebar","previous":{"title":"Prerequisites & Local Setup","permalink":"/multimodal-pdf-agent-n8n/docs/prerequisites"},"next":{"title":"🌐 API Gateway Architecture","permalink":"/multimodal-pdf-agent-n8n/docs/api-architecture"}},{"id":"pdf-processing-workflow","title":"📄 PDF Processing Workflow","description":"Build your first n8n workflow to process PDFs into searchable multimodal embeddings.","source":"@site/docs/40-pdf-processing-workflow.mdx","sourceDirName":".","slug":"/pdf-processing-workflow","permalink":"/multimodal-pdf-agent-n8n/docs/pdf-processing-workflow","draft":false,"unlisted":false,"editUrl":"https://github.com/mongodb-developer/multimodal-pdf-agent-n8n/blob/main/docs/40-pdf-processing-workflow.mdx","tags":[],"version":"current","sidebarPosition":40,"frontMatter":{"sidebar_position":40},"sidebar":"tutorialSidebar","previous":{"title":"Voyage AI Configuration","permalink":"/multimodal-pdf-agent-n8n/docs/voyage-ai-setup"},"next":{"title":"Vector Search Implementation","permalink":"/multimodal-pdf-agent-n8n/docs/vector-search-workflow"}},{"id":"prerequisites","title":"🛠️ Prerequisites & Setup","description":"Before we start building, let's get all the tools and accounts you'll need.","source":"@site/docs/20-prerequisites.mdx","sourceDirName":".","slug":"/prerequisites","permalink":"/multimodal-pdf-agent-n8n/docs/prerequisites","draft":false,"unlisted":false,"editUrl":"https://github.com/mongodb-developer/multimodal-pdf-agent-n8n/blob/main/docs/20-prerequisites.mdx","tags":[],"version":"current","sidebarPosition":20,"frontMatter":{"sidebar_position":20},"sidebar":"tutorialSidebar","previous":{"title":"GitHub Codespaces Setup","permalink":"/multimodal-pdf-agent-n8n/docs/github-codespaces"},"next":{"title":"n8n First Run Experience","permalink":"/multimodal-pdf-agent-n8n/docs/n8n-first-run"}},{"id":"python-mongodb-approaches","title":"🐍 Python Approaches to MongoDB Vector Search","description":"While n8n provides an excellent visual workflow approach, developers often need programmatic control. Let's explore different ways to interact with MongoDB vector search and Voyage AI using Python.","source":"@site/docs/85-python-mongodb-approaches.mdx","sourceDirName":".","slug":"/python-mongodb-approaches","permalink":"/multimodal-pdf-agent-n8n/docs/python-mongodb-approaches","draft":false,"unlisted":false,"editUrl":"https://github.com/mongodb-developer/multimodal-pdf-agent-n8n/blob/main/docs/85-python-mongodb-approaches.mdx","tags":[],"version":"current","sidebarPosition":85,"frontMatter":{"sidebar_position":85},"sidebar":"tutorialSidebar","previous":{"title":"Web Upload Interface","permalink":"/multimodal-pdf-agent-n8n/docs/upload-interface"},"next":{"title":"⚖️ n8n vs Python Comparison","permalink":"/multimodal-pdf-agent-n8n/docs/approach-comparison"}},{"id":"status-badge-usage-guide","title":"📊 Status Badge Usage Guide","description":"This guide shows instructors and content creators how to use the specialized LiveStatusBadge components throughout the workshop to provide progressive validation and real-time feedback.","source":"@site/docs/status-badge-usage-guide.mdx","sourceDirName":".","slug":"/status-badge-usage-guide","permalink":"/multimodal-pdf-agent-n8n/docs/status-badge-usage-guide","draft":false,"unlisted":false,"editUrl":"https://github.com/mongodb-developer/multimodal-pdf-agent-n8n/blob/main/docs/status-badge-usage-guide.mdx","tags":[],"version":"current","sidebarPosition":100,"frontMatter":{"sidebar_position":100},"sidebar":"tutorialSidebar","previous":{"title":"Community Resources","permalink":"/multimodal-pdf-agent-n8n/docs/community-resources"},"next":{"title":"🎉 Workshop Summary","permalink":"/multimodal-pdf-agent-n8n/docs/summary"}},{"id":"summary","title":"🎯 Workshop Summary","description":"Congratulations! Following this tutorial, you have successfully:","source":"@site/docs/summary.mdx","sourceDirName":".","slug":"/summary","permalink":"/multimodal-pdf-agent-n8n/docs/summary","draft":false,"unlisted":false,"editUrl":"https://github.com/mongodb-developer/multimodal-pdf-agent-n8n/blob/main/docs/summary.mdx","tags":[],"version":"current","sidebarPosition":100,"frontMatter":{"sidebar_position":100},"sidebar":"tutorialSidebar","previous":{"title":"Status Badge Usage Guide","permalink":"/multimodal-pdf-agent-n8n/docs/status-badge-usage-guide"}},{"id":"tool-definition-primer","title":"🛠️ Tool Definition & Function Calling Primer","description":"Tools are what transform AI models from conversational interfaces into capable agents that can interact with the world. This section covers how to define, configure, and optimize tools for your multimodal PDF agent.","source":"@site/docs/68-tool-definition-primer.mdx","sourceDirName":".","slug":"/tool-definition-primer","permalink":"/multimodal-pdf-agent-n8n/docs/tool-definition-primer","draft":false,"unlisted":false,"editUrl":"https://github.com/mongodb-developer/multimodal-pdf-agent-n8n/blob/main/docs/68-tool-definition-primer.mdx","tags":[],"version":"current","sidebarPosition":68,"frontMatter":{"sidebar_position":68},"sidebar":"tutorialSidebar","previous":{"title":"💾 Memory & Context Patterns","permalink":"/multimodal-pdf-agent-n8n/docs/memory-context-patterns"},"next":{"title":"🖼️ Multimodal Image Queries","permalink":"/multimodal-pdf-agent-n8n/docs/multimodal-image-queries"}},{"id":"upload-interface","title":"🌐 Web Upload Interface","description":"A complete web interface for uploading PDFs and chatting with your multimodal agent.","source":"@site/docs/80-upload-interface.mdx","sourceDirName":".","slug":"/upload-interface","permalink":"/multimodal-pdf-agent-n8n/docs/upload-interface","draft":false,"unlisted":false,"editUrl":"https://github.com/mongodb-developer/multimodal-pdf-agent-n8n/blob/main/docs/80-upload-interface.mdx","tags":[],"version":"current","sidebarPosition":80,"frontMatter":{"sidebar_position":80},"sidebar":"tutorialSidebar","previous":{"title":"Production Vector Search","permalink":"/multimodal-pdf-agent-n8n/docs/mongodb-vector-setup"},"next":{"title":"🐍 Python Integration Options","permalink":"/multimodal-pdf-agent-n8n/docs/python-mongodb-approaches"}},{"id":"vector-search-workflow","title":"🔍 Vector Search Workflow","description":"Create a search endpoint that uses MongoDB Atlas Vector Search to find relevant PDF content.","source":"@site/docs/50-vector-search-workflow.mdx","sourceDirName":".","slug":"/vector-search-workflow","permalink":"/multimodal-pdf-agent-n8n/docs/vector-search-workflow","draft":false,"unlisted":false,"editUrl":"https://github.com/mongodb-developer/multimodal-pdf-agent-n8n/blob/main/docs/50-vector-search-workflow.mdx","tags":[],"version":"current","sidebarPosition":50,"frontMatter":{"sidebar_position":50},"sidebar":"tutorialSidebar","previous":{"title":"PDF Processing Workflow","permalink":"/multimodal-pdf-agent-n8n/docs/pdf-processing-workflow"},"next":{"title":"AI Agent with Tool Calling","permalink":"/multimodal-pdf-agent-n8n/docs/ai-agent-workflow"}},{"id":"voyage-ai-setup","title":"🚢 Voyage AI Embedding Service Setup","description":"Configure access to multimodal embeddings that process both text and images using our workshop serverless endpoint.","source":"@site/docs/35-voyage-ai-setup.mdx","sourceDirName":".","slug":"/voyage-ai-setup","permalink":"/multimodal-pdf-agent-n8n/docs/voyage-ai-setup","draft":false,"unlisted":false,"editUrl":"https://github.com/mongodb-developer/multimodal-pdf-agent-n8n/blob/main/docs/35-voyage-ai-setup.mdx","tags":[],"version":"current","sidebarPosition":35,"frontMatter":{"sidebar_position":35},"sidebar":"tutorialSidebar","previous":{"title":"MongoDB Atlas Setup","permalink":"/multimodal-pdf-agent-n8n/docs/mongodb-atlas-setup"},"next":{"title":"PDF Processing Workflow","permalink":"/multimodal-pdf-agent-n8n/docs/pdf-processing-workflow"}}],"drafts":[],"sidebars":{"tutorialSidebar":[{"type":"doc","id":"index","label":"🎓 Workshop Overview","translatable":true},{"type":"category","label":"🚀 Getting Started","collapsible":true,"collapsed":false,"className":"sidebar-getting-started","description":"Begin your journey with environment setup and n8n basics","items":[{"type":"doc","id":"intro","label":"Workshop Introduction","translatable":true},{"type":"doc","id":"architecture-overview","label":"🏗️ Architecture Overview","translatable":true},{"type":"doc","id":"github-codespaces","label":"GitHub Codespaces Setup","translatable":true},{"type":"doc","id":"prerequisites","label":"Prerequisites & Local Setup","translatable":true},{"type":"doc","id":"n8n-first-run","label":"n8n First Run Experience","translatable":true}]},{"type":"category","label":"⚙️ Setup & Configuration","collapsible":true,"collapsed":false,"className":"sidebar-setup","description":"Configure MongoDB Atlas and Voyage AI for your agent","items":[{"type":"doc","id":"api-architecture","label":"🌐 API Gateway Architecture","translatable":true},{"type":"doc","id":"mongodb-atlas-setup","label":"MongoDB Atlas Setup","translatable":true},{"type":"doc","id":"voyage-ai-setup","label":"Voyage AI Configuration","translatable":true}]},{"type":"category","label":"🔧 Building Workflows","collapsible":true,"collapsed":false,"className":"sidebar-workflows","description":"Create powerful automation workflows step by step","items":[{"type":"doc","id":"pdf-processing-workflow","label":"PDF Processing Workflow","translatable":true},{"type":"doc","id":"vector-search-workflow","label":"Vector Search Implementation","translatable":true},{"type":"doc","id":"ai-agent-workflow","label":"AI Agent with Tool Calling","translatable":true}]},{"type":"category","label":"🧪 Hands-On Exercises","collapsible":true,"collapsed":false,"className":"sidebar-exercises","description":"Structured exercises to build complete AI agents","items":[{"type":"doc","id":"exercise-pdf-rag-agent","label":"🧪 Exercise: Build a PDF RAG Agent","translatable":true},{"type":"doc","id":"exercise-memory-context","label":"🧪 Exercise: Memory & Context","translatable":true},{"type":"doc","id":"exercise-advanced-tools","label":"🧪 Exercise: Advanced Tool Calling","translatable":true}]},{"type":"category","label":"🎯 Advanced Topics","collapsible":true,"collapsed":true,"className":"sidebar-advanced","description":"Take your agent to production with advanced features","items":[{"type":"doc","id":"complete-multimodal-agent","label":"Complete Multimodal Agent","translatable":true},{"type":"doc","id":"mongodb-vector-setup","label":"Production Vector Search","translatable":true},{"type":"doc","id":"upload-interface","label":"Web Upload Interface","translatable":true},{"type":"doc","id":"python-mongodb-approaches","label":"🐍 Python Integration Options","translatable":true},{"type":"doc","id":"approach-comparison","label":"⚖️ n8n vs Python Comparison","translatable":true},{"type":"doc","id":"agent-patterns","label":"🧠 AI Agent Planning Patterns","translatable":true},{"type":"doc","id":"memory-context-patterns","label":"💾 Memory & Context Patterns","translatable":true},{"type":"doc","id":"tool-definition-primer","label":"🛠️ Tool Definition & Function Calling","translatable":true},{"type":"doc","id":"multimodal-image-queries","label":"🖼️ Multimodal Image Queries","translatable":true}]},{"type":"category","label":"📚 Resources & Support","collapsible":true,"collapsed":true,"className":"sidebar-resources","description":"Additional resources, troubleshooting, and community","items":[{"type":"doc","id":"local-setup-tips","label":"Docker Best Practices","translatable":true},{"type":"doc","id":"docker-troubleshooting","label":"Troubleshooting Guide","translatable":true},{"type":"doc","id":"community-resources","label":"Community Resources","translatable":true},{"type":"doc","id":"status-badge-usage-guide","label":"Status Badge Usage Guide","translatable":true},{"type":"doc","id":"summary","label":"🎉 Workshop Summary","translatable":true}]}]}}]}},"docusaurus-plugin-content-blog":{"default":{"blogSidebarTitle":"Recent posts","blogPosts":[],"blogListPaginated":[],"blogTags":{},"blogTagsListPath":"/multimodal-pdf-agent-n8n/blog/tags"}},"docusaurus-plugin-content-pages":{"default":[{"type":"jsx","permalink":"/multimodal-pdf-agent-n8n/helloWorld","source":"@site/src/pages/helloWorld.js"},{"type":"jsx","permalink":"/multimodal-pdf-agent-n8n/","source":"@site/src/pages/index.js"}]},"docusaurus-plugin-debug":{},"docusaurus-plugin-svgr":{},"docusaurus-theme-classic":{},"docusaurus-lunr-search":{},"docusaurus-theme-mermaid":{},"docusaurus-bootstrap-plugin":{},"docusaurus-mdx-fallback-plugin":{}}}
+{"allContent":{"docusaurus-plugin-css-cascade-layers":{},"docusaurus-plugin-content-docs":{"default":{"loadedVersions":[{"versionName":"current","label":"Next","banner":null,"badge":false,"noIndex":false,"className":"docs-version-current","path":"/multimodal-pdf-agent-n8n/docs","tagsPath":"/multimodal-pdf-agent-n8n/docs/tags","editUrl":"https://github.com/mrlynn/ai4-multimodal-agents-n8n/blob/main/docs","editUrlLocalized":"https://github.com/mrlynn/ai4-multimodal-agents-n8n/blob/main/i18n/en/docusaurus-plugin-content-docs/current","isLast":true,"routePriority":-1,"sidebarFilePath":"/Users/michael.lynn/code/ai4/workshop-docs/sidebars.js","contentPath":"/Users/michael.lynn/code/ai4/workshop-docs/docs","contentPathLocalized":"/Users/michael.lynn/code/ai4/workshop-docs/i18n/en/docusaurus-plugin-content-docs/current","docs":[{"id":"agent-patterns","title":"🧠 AI Agent Planning Patterns","description":"Understanding how AI agents reason, plan, and act is crucial for building effective multimodal systems. This section covers the key planning patterns that power modern AI agents.","source":"@site/docs/65-agent-patterns.mdx","sourceDirName":".","slug":"/agent-patterns","permalink":"/multimodal-pdf-agent-n8n/docs/agent-patterns","draft":false,"unlisted":false,"editUrl":"https://github.com/mrlynn/ai4-multimodal-agents-n8n/blob/main/docs/65-agent-patterns.mdx","tags":[],"version":"current","sidebarPosition":65,"frontMatter":{"sidebar_position":65},"sidebar":"tutorialSidebar","previous":{"title":"⚖️ n8n vs Python Comparison","permalink":"/multimodal-pdf-agent-n8n/docs/approach-comparison"},"next":{"title":"💾 Memory & Context Patterns","permalink":"/multimodal-pdf-agent-n8n/docs/memory-context-patterns"}},{"id":"ai-agent-workflow","title":"🤖 AI Agent with Function Calling","description":"Build an intelligent agent using Gemini 2.0 Flash and n8n's powerful workflow capabilities.","source":"@site/docs/60-ai-agent-workflow.mdx","sourceDirName":".","slug":"/ai-agent-workflow","permalink":"/multimodal-pdf-agent-n8n/docs/ai-agent-workflow","draft":false,"unlisted":false,"editUrl":"https://github.com/mrlynn/ai4-multimodal-agents-n8n/blob/main/docs/60-ai-agent-workflow.mdx","tags":[],"version":"current","sidebarPosition":60,"frontMatter":{"sidebar_position":60},"sidebar":"tutorialSidebar","previous":{"title":"Vector Search Implementation","permalink":"/multimodal-pdf-agent-n8n/docs/vector-search-workflow"},"next":{"title":"🧪 Exercise: Build a PDF RAG Agent","permalink":"/multimodal-pdf-agent-n8n/docs/exercise-pdf-rag-agent"}},{"id":"api-architecture","title":"🌐 API Gateway Architecture: The Workshop Proxy System","description":"The workshop API gateway serves as both an educational tool and practical infrastructure. Let's explore why it exists, how it works, and how it compares to production systems.","source":"@site/docs/api-architecture.mdx","sourceDirName":".","slug":"/api-architecture","permalink":"/multimodal-pdf-agent-n8n/docs/api-architecture","draft":false,"unlisted":false,"editUrl":"https://github.com/mrlynn/ai4-multimodal-agents-n8n/blob/main/docs/api-architecture.mdx","tags":[],"version":"current","sidebarPosition":20,"frontMatter":{"sidebar_position":20},"sidebar":"tutorialSidebar","previous":{"title":"n8n First Run Experience","permalink":"/multimodal-pdf-agent-n8n/docs/n8n-first-run"},"next":{"title":"MongoDB Atlas Setup","permalink":"/multimodal-pdf-agent-n8n/docs/mongodb-atlas-setup"}},{"id":"approach-comparison","title":"⚖️ n8n vs Python: Choosing Your Development Approach","description":"Now that you've seen both visual workflows and programmatic approaches, let's dive deep into when and why to choose each method for your multimodal PDF agent projects.","source":"@site/docs/90-approach-comparison.mdx","sourceDirName":".","slug":"/approach-comparison","permalink":"/multimodal-pdf-agent-n8n/docs/approach-comparison","draft":false,"unlisted":false,"editUrl":"https://github.com/mrlynn/ai4-multimodal-agents-n8n/blob/main/docs/90-approach-comparison.mdx","tags":[],"version":"current","sidebarPosition":90,"frontMatter":{"sidebar_position":90},"sidebar":"tutorialSidebar","previous":{"title":"🐍 Python Integration Options","permalink":"/multimodal-pdf-agent-n8n/docs/python-mongodb-approaches"},"next":{"title":"🧠 AI Agent Planning Patterns","permalink":"/multimodal-pdf-agent-n8n/docs/agent-patterns"}},{"id":"architecture-overview","title":"🏗️ Architecture Overview: Multimodal AI Agent Workshop","description":"Understanding the complete system architecture helps you see how all components work together to create intelligent, multimodal AI agents. Let's explore the full stack from your browser to the AI models.","source":"@site/docs/architecture-overview.mdx","sourceDirName":".","slug":"/architecture-overview","permalink":"/multimodal-pdf-agent-n8n/docs/architecture-overview","draft":false,"unlisted":false,"editUrl":"https://github.com/mrlynn/ai4-multimodal-agents-n8n/blob/main/docs/architecture-overview.mdx","tags":[],"version":"current","sidebarPosition":0,"frontMatter":{"sidebar_position":0},"sidebar":"tutorialSidebar","previous":{"title":"Workshop Introduction","permalink":"/multimodal-pdf-agent-n8n/docs/intro"},"next":{"title":"GitHub Codespaces Setup","permalink":"/multimodal-pdf-agent-n8n/docs/github-codespaces"}},{"id":"codebase","title":"10-intro.mdx","description":"","source":"@site/docs/codebase.md","sourceDirName":".","slug":"/codebase","permalink":"/multimodal-pdf-agent-n8n/docs/codebase","draft":false,"unlisted":false,"editUrl":"https://github.com/mrlynn/ai4-multimodal-agents-n8n/blob/main/docs/codebase.md","tags":[],"version":"current","frontMatter":{}},{"id":"community-resources","title":"🌐 Community Nodes & Extensions","description":"Extend your PDF analysis system with community contributions!","source":"@site/docs/95-community-resources.mdx","sourceDirName":".","slug":"/community-resources","permalink":"/multimodal-pdf-agent-n8n/docs/community-resources","draft":false,"unlisted":false,"editUrl":"https://github.com/mrlynn/ai4-multimodal-agents-n8n/blob/main/docs/95-community-resources.mdx","tags":[],"version":"current","sidebarPosition":95,"frontMatter":{"sidebar_position":95},"sidebar":"tutorialSidebar","previous":{"title":"Troubleshooting Guide","permalink":"/multimodal-pdf-agent-n8n/docs/docker-troubleshooting"},"next":{"title":"Status Badge Usage Guide","permalink":"/multimodal-pdf-agent-n8n/docs/status-badge-usage-guide"}},{"id":"complete-multimodal-agent","title":"🧠 Complete Multimodal PDF Agent","description":"Build a complete multimodal AI agent that can process PDFs, understand both text and images, and answer questions using MongoDB Vector Search and Voyage AI.","source":"@site/docs/70-complete-multimodal-agent.mdx","sourceDirName":".","slug":"/complete-multimodal-agent","permalink":"/multimodal-pdf-agent-n8n/docs/complete-multimodal-agent","draft":false,"unlisted":false,"editUrl":"https://github.com/mrlynn/ai4-multimodal-agents-n8n/blob/main/docs/70-complete-multimodal-agent.mdx","tags":[],"version":"current","sidebarPosition":70,"frontMatter":{"sidebar_position":70},"sidebar":"tutorialSidebar","previous":{"title":"🧪 Exercise: Advanced Tool Calling","permalink":"/multimodal-pdf-agent-n8n/docs/exercise-advanced-tools"},"next":{"title":"Production Vector Search","permalink":"/multimodal-pdf-agent-n8n/docs/mongodb-vector-setup"}},{"id":"docker-troubleshooting","title":"🐳 Docker Troubleshooting Guide","description":"Common issues and solutions when running the workshop with Docker.","source":"@site/docs/95-docker-troubleshooting.mdx","sourceDirName":".","slug":"/docker-troubleshooting","permalink":"/multimodal-pdf-agent-n8n/docs/docker-troubleshooting","draft":false,"unlisted":false,"editUrl":"https://github.com/mrlynn/ai4-multimodal-agents-n8n/blob/main/docs/95-docker-troubleshooting.mdx","tags":[],"version":"current","sidebarPosition":95,"frontMatter":{"sidebar_position":95},"sidebar":"tutorialSidebar","previous":{"title":"Docker Best Practices","permalink":"/multimodal-pdf-agent-n8n/docs/local-setup-tips"},"next":{"title":"Community Resources","permalink":"/multimodal-pdf-agent-n8n/docs/community-resources"}},{"id":"exercise-advanced-tools","title":"🧪 Exercise: Advanced Tool Calling & Function Integration","description":"<InstructorNotes","source":"@site/docs/exercise-advanced-tools.mdx","sourceDirName":".","slug":"/exercise-advanced-tools","permalink":"/multimodal-pdf-agent-n8n/docs/exercise-advanced-tools","draft":false,"unlisted":false,"editUrl":"https://github.com/mrlynn/ai4-multimodal-agents-n8n/blob/main/docs/exercise-advanced-tools.mdx","tags":[],"version":"current","sidebarPosition":32,"frontMatter":{"sidebar_position":32},"sidebar":"tutorialSidebar","previous":{"title":"🧪 Exercise: Memory & Context","permalink":"/multimodal-pdf-agent-n8n/docs/exercise-memory-context"},"next":{"title":"Complete Multimodal Agent","permalink":"/multimodal-pdf-agent-n8n/docs/complete-multimodal-agent"}},{"id":"exercise-memory-context","title":"🧪 Exercise: Memory & Context Management","description":"<InstructorNotes","source":"@site/docs/exercise-memory-context.mdx","sourceDirName":".","slug":"/exercise-memory-context","permalink":"/multimodal-pdf-agent-n8n/docs/exercise-memory-context","draft":false,"unlisted":false,"editUrl":"https://github.com/mrlynn/ai4-multimodal-agents-n8n/blob/main/docs/exercise-memory-context.mdx","tags":[],"version":"current","sidebarPosition":31,"frontMatter":{"sidebar_position":31},"sidebar":"tutorialSidebar","previous":{"title":"🧪 Exercise: Build a PDF RAG Agent","permalink":"/multimodal-pdf-agent-n8n/docs/exercise-pdf-rag-agent"},"next":{"title":"🧪 Exercise: Advanced Tool Calling","permalink":"/multimodal-pdf-agent-n8n/docs/exercise-advanced-tools"}},{"id":"exercise-pdf-rag-agent","title":"🧪 Exercise: Build a PDF RAG Agent","description":"<InstructorNotes","source":"@site/docs/exercise-pdf-rag-agent.mdx","sourceDirName":".","slug":"/exercise-pdf-rag-agent","permalink":"/multimodal-pdf-agent-n8n/docs/exercise-pdf-rag-agent","draft":false,"unlisted":false,"editUrl":"https://github.com/mrlynn/ai4-multimodal-agents-n8n/blob/main/docs/exercise-pdf-rag-agent.mdx","tags":[],"version":"current","sidebarPosition":30,"frontMatter":{"sidebar_position":30},"sidebar":"tutorialSidebar","previous":{"title":"AI Agent with Tool Calling","permalink":"/multimodal-pdf-agent-n8n/docs/ai-agent-workflow"},"next":{"title":"🧪 Exercise: Memory & Context","permalink":"/multimodal-pdf-agent-n8n/docs/exercise-memory-context"}},{"id":"github-codespaces","title":"🌐 GitHub Codespaces: Zero-Install Workshop","description":"The fastest way to start this workshop - no local setup required!","source":"@site/docs/15-github-codespaces.mdx","sourceDirName":".","slug":"/github-codespaces","permalink":"/multimodal-pdf-agent-n8n/docs/github-codespaces","draft":false,"unlisted":false,"editUrl":"https://github.com/mrlynn/ai4-multimodal-agents-n8n/blob/main/docs/15-github-codespaces.mdx","tags":[],"version":"current","sidebarPosition":15,"frontMatter":{"sidebar_position":15},"sidebar":"tutorialSidebar","previous":{"title":"🏗️ Architecture Overview","permalink":"/multimodal-pdf-agent-n8n/docs/architecture-overview"},"next":{"title":"Prerequisites & Local Setup","permalink":"/multimodal-pdf-agent-n8n/docs/prerequisites"}},{"id":"index","title":"Workshop Overview","description":"Welcome to the Build a Multimodal PDF Agent with n8n workshop! This interactive, hands-on experience will guide you through creating a production-ready AI system that processes PDFs using cutting-edge technologies.","source":"@site/docs/index.mdx","sourceDirName":".","slug":"/","permalink":"/multimodal-pdf-agent-n8n/docs/","draft":false,"unlisted":false,"editUrl":"https://github.com/mrlynn/ai4-multimodal-agents-n8n/blob/main/docs/index.mdx","tags":[],"version":"current","sidebarPosition":1,"frontMatter":{"sidebar_position":1,"slug":"/","title":"Workshop Overview"},"sidebar":"tutorialSidebar","next":{"title":"Workshop Introduction","permalink":"/multimodal-pdf-agent-n8n/docs/intro"}},{"id":"intro","title":"📘 Introduction to Multimodal PDF Agents with n8n","description":"|Workshop goals|Build a multimodal AI agent that processes PDFs using n8n, MongoDB Atlas, and Voyage AI|","source":"@site/docs/10-intro.mdx","sourceDirName":".","slug":"/intro","permalink":"/multimodal-pdf-agent-n8n/docs/intro","draft":false,"unlisted":false,"editUrl":"https://github.com/mrlynn/ai4-multimodal-agents-n8n/blob/main/docs/10-intro.mdx","tags":[],"version":"current","sidebarPosition":10,"frontMatter":{"sidebar_position":10},"sidebar":"tutorialSidebar","previous":{"title":"🎓 Workshop Overview","permalink":"/multimodal-pdf-agent-n8n/docs/"},"next":{"title":"🏗️ Architecture Overview","permalink":"/multimodal-pdf-agent-n8n/docs/architecture-overview"}},{"id":"local-setup-tips","title":"💻 Docker Development Best Practices","description":"Based on real-world experience, here's how to optimize your Docker-based n8n development environment.","source":"@site/docs/45-local-setup-tips.mdx","sourceDirName":".","slug":"/local-setup-tips","permalink":"/multimodal-pdf-agent-n8n/docs/local-setup-tips","draft":false,"unlisted":false,"editUrl":"https://github.com/mrlynn/ai4-multimodal-agents-n8n/blob/main/docs/45-local-setup-tips.mdx","tags":[],"version":"current","sidebarPosition":45,"frontMatter":{"sidebar_position":45},"sidebar":"tutorialSidebar","previous":{"title":"🖼️ Multimodal Image Queries","permalink":"/multimodal-pdf-agent-n8n/docs/multimodal-image-queries"},"next":{"title":"Troubleshooting Guide","permalink":"/multimodal-pdf-agent-n8n/docs/docker-troubleshooting"}},{"id":"memory-context-patterns","title":"🧠 Memory & Context Patterns","description":"Real AI agents need memory to maintain context across conversations and learn from interactions. This section shows how to implement different memory patterns using MongoDB and n8n workflows.","source":"@site/docs/67-memory-context-patterns.mdx","sourceDirName":".","slug":"/memory-context-patterns","permalink":"/multimodal-pdf-agent-n8n/docs/memory-context-patterns","draft":false,"unlisted":false,"editUrl":"https://github.com/mrlynn/ai4-multimodal-agents-n8n/blob/main/docs/67-memory-context-patterns.mdx","tags":[],"version":"current","sidebarPosition":67,"frontMatter":{"sidebar_position":67},"sidebar":"tutorialSidebar","previous":{"title":"🧠 AI Agent Planning Patterns","permalink":"/multimodal-pdf-agent-n8n/docs/agent-patterns"},"next":{"title":"🛠️ Tool Definition & Function Calling","permalink":"/multimodal-pdf-agent-n8n/docs/tool-definition-primer"}},{"id":"mongodb-atlas-setup","title":"🗄️ MongoDB Atlas Setup for Vector Search","description":"This workshop uses MongoDB Atlas for vector search capabilities.","source":"@site/docs/30-mongodb-atlas-setup.mdx","sourceDirName":".","slug":"/mongodb-atlas-setup","permalink":"/multimodal-pdf-agent-n8n/docs/mongodb-atlas-setup","draft":false,"unlisted":false,"editUrl":"https://github.com/mrlynn/ai4-multimodal-agents-n8n/blob/main/docs/30-mongodb-atlas-setup.mdx","tags":[],"version":"current","sidebarPosition":30,"frontMatter":{"sidebar_position":30},"sidebar":"tutorialSidebar","previous":{"title":"🌐 API Gateway Architecture","permalink":"/multimodal-pdf-agent-n8n/docs/api-architecture"},"next":{"title":"Voyage AI Configuration","permalink":"/multimodal-pdf-agent-n8n/docs/voyage-ai-setup"}},{"id":"mongodb-vector-setup","title":"🗄️ MongoDB Vector Search Setup","description":"Configure MongoDB for real vector search capabilities in your multimodal PDF agent.","source":"@site/docs/75-mongodb-vector-setup.mdx","sourceDirName":".","slug":"/mongodb-vector-setup","permalink":"/multimodal-pdf-agent-n8n/docs/mongodb-vector-setup","draft":false,"unlisted":false,"editUrl":"https://github.com/mrlynn/ai4-multimodal-agents-n8n/blob/main/docs/75-mongodb-vector-setup.mdx","tags":[],"version":"current","sidebarPosition":75,"frontMatter":{"sidebar_position":75},"sidebar":"tutorialSidebar","previous":{"title":"Complete Multimodal Agent","permalink":"/multimodal-pdf-agent-n8n/docs/complete-multimodal-agent"},"next":{"title":"Web Upload Interface","permalink":"/multimodal-pdf-agent-n8n/docs/upload-interface"}},{"id":"multimodal-image-queries","title":"🖼️ Multimodal Image Queries & Visual Understanding","description":"\"Screenshots are all you need\" - this powerful concept from multimodal AI means agents can understand and analyze visual content just as well as text. Let's build workflows that handle image queries and visual document analysis.","source":"@site/docs/69-multimodal-image-queries.mdx","sourceDirName":".","slug":"/multimodal-image-queries","permalink":"/multimodal-pdf-agent-n8n/docs/multimodal-image-queries","draft":false,"unlisted":false,"editUrl":"https://github.com/mrlynn/ai4-multimodal-agents-n8n/blob/main/docs/69-multimodal-image-queries.mdx","tags":[],"version":"current","sidebarPosition":69,"frontMatter":{"sidebar_position":69},"sidebar":"tutorialSidebar","previous":{"title":"🛠️ Tool Definition & Function Calling","permalink":"/multimodal-pdf-agent-n8n/docs/tool-definition-primer"},"next":{"title":"Docker Best Practices","permalink":"/multimodal-pdf-agent-n8n/docs/local-setup-tips"}},{"id":"n8n-first-run","title":"🚀 n8n First Run Experience","description":"<StepIndicator current= total={6} titles={[","source":"@site/docs/25-n8n-first-run.mdx","sourceDirName":".","slug":"/n8n-first-run","permalink":"/multimodal-pdf-agent-n8n/docs/n8n-first-run","draft":false,"unlisted":false,"editUrl":"https://github.com/mrlynn/ai4-multimodal-agents-n8n/blob/main/docs/25-n8n-first-run.mdx","tags":[],"version":"current","sidebarPosition":25,"frontMatter":{"sidebar_position":25},"sidebar":"tutorialSidebar","previous":{"title":"Prerequisites & Local Setup","permalink":"/multimodal-pdf-agent-n8n/docs/prerequisites"},"next":{"title":"🌐 API Gateway Architecture","permalink":"/multimodal-pdf-agent-n8n/docs/api-architecture"}},{"id":"pdf-processing-workflow","title":"📄 PDF Processing Workflow","description":"Build your first n8n workflow to process PDFs into searchable multimodal embeddings.","source":"@site/docs/40-pdf-processing-workflow.mdx","sourceDirName":".","slug":"/pdf-processing-workflow","permalink":"/multimodal-pdf-agent-n8n/docs/pdf-processing-workflow","draft":false,"unlisted":false,"editUrl":"https://github.com/mrlynn/ai4-multimodal-agents-n8n/blob/main/docs/40-pdf-processing-workflow.mdx","tags":[],"version":"current","sidebarPosition":40,"frontMatter":{"sidebar_position":40},"sidebar":"tutorialSidebar","previous":{"title":"Voyage AI Configuration","permalink":"/multimodal-pdf-agent-n8n/docs/voyage-ai-setup"},"next":{"title":"Vector Search Implementation","permalink":"/multimodal-pdf-agent-n8n/docs/vector-search-workflow"}},{"id":"prerequisites","title":"🛠️ Prerequisites & Setup","description":"Before we start building, let's get all the tools and accounts you'll need.","source":"@site/docs/20-prerequisites.mdx","sourceDirName":".","slug":"/prerequisites","permalink":"/multimodal-pdf-agent-n8n/docs/prerequisites","draft":false,"unlisted":false,"editUrl":"https://github.com/mrlynn/ai4-multimodal-agents-n8n/blob/main/docs/20-prerequisites.mdx","tags":[],"version":"current","sidebarPosition":20,"frontMatter":{"sidebar_position":20},"sidebar":"tutorialSidebar","previous":{"title":"GitHub Codespaces Setup","permalink":"/multimodal-pdf-agent-n8n/docs/github-codespaces"},"next":{"title":"n8n First Run Experience","permalink":"/multimodal-pdf-agent-n8n/docs/n8n-first-run"}},{"id":"python-mongodb-approaches","title":"🐍 Python Approaches to MongoDB Vector Search","description":"While n8n provides an excellent visual workflow approach, developers often need programmatic control. Let's explore different ways to interact with MongoDB vector search and Voyage AI using Python.","source":"@site/docs/85-python-mongodb-approaches.mdx","sourceDirName":".","slug":"/python-mongodb-approaches","permalink":"/multimodal-pdf-agent-n8n/docs/python-mongodb-approaches","draft":false,"unlisted":false,"editUrl":"https://github.com/mrlynn/ai4-multimodal-agents-n8n/blob/main/docs/85-python-mongodb-approaches.mdx","tags":[],"version":"current","sidebarPosition":85,"frontMatter":{"sidebar_position":85},"sidebar":"tutorialSidebar","previous":{"title":"Web Upload Interface","permalink":"/multimodal-pdf-agent-n8n/docs/upload-interface"},"next":{"title":"⚖️ n8n vs Python Comparison","permalink":"/multimodal-pdf-agent-n8n/docs/approach-comparison"}},{"id":"status-badge-usage-guide","title":"📊 Status Badge Usage Guide","description":"This guide shows instructors and content creators how to use the specialized LiveStatusBadge components throughout the workshop to provide progressive validation and real-time feedback.","source":"@site/docs/status-badge-usage-guide.mdx","sourceDirName":".","slug":"/status-badge-usage-guide","permalink":"/multimodal-pdf-agent-n8n/docs/status-badge-usage-guide","draft":false,"unlisted":false,"editUrl":"https://github.com/mrlynn/ai4-multimodal-agents-n8n/blob/main/docs/status-badge-usage-guide.mdx","tags":[],"version":"current","sidebarPosition":100,"frontMatter":{"sidebar_position":100},"sidebar":"tutorialSidebar","previous":{"title":"Community Resources","permalink":"/multimodal-pdf-agent-n8n/docs/community-resources"},"next":{"title":"🎉 Workshop Summary","permalink":"/multimodal-pdf-agent-n8n/docs/summary"}},{"id":"summary","title":"🎯 Workshop Summary","description":"Congratulations! Following this tutorial, you have successfully:","source":"@site/docs/summary.mdx","sourceDirName":".","slug":"/summary","permalink":"/multimodal-pdf-agent-n8n/docs/summary","draft":false,"unlisted":false,"editUrl":"https://github.com/mrlynn/ai4-multimodal-agents-n8n/blob/main/docs/summary.mdx","tags":[],"version":"current","sidebarPosition":100,"frontMatter":{"sidebar_position":100},"sidebar":"tutorialSidebar","previous":{"title":"Status Badge Usage Guide","permalink":"/multimodal-pdf-agent-n8n/docs/status-badge-usage-guide"}},{"id":"tool-definition-primer","title":"🛠️ Tool Definition & Function Calling Primer","description":"Tools are what transform AI models from conversational interfaces into capable agents that can interact with the world. This section covers how to define, configure, and optimize tools for your multimodal PDF agent.","source":"@site/docs/68-tool-definition-primer.mdx","sourceDirName":".","slug":"/tool-definition-primer","permalink":"/multimodal-pdf-agent-n8n/docs/tool-definition-primer","draft":false,"unlisted":false,"editUrl":"https://github.com/mrlynn/ai4-multimodal-agents-n8n/blob/main/docs/68-tool-definition-primer.mdx","tags":[],"version":"current","sidebarPosition":68,"frontMatter":{"sidebar_position":68},"sidebar":"tutorialSidebar","previous":{"title":"💾 Memory & Context Patterns","permalink":"/multimodal-pdf-agent-n8n/docs/memory-context-patterns"},"next":{"title":"🖼️ Multimodal Image Queries","permalink":"/multimodal-pdf-agent-n8n/docs/multimodal-image-queries"}},{"id":"upload-interface","title":"🌐 Web Upload Interface","description":"A complete web interface for uploading PDFs and chatting with your multimodal agent.","source":"@site/docs/80-upload-interface.mdx","sourceDirName":".","slug":"/upload-interface","permalink":"/multimodal-pdf-agent-n8n/docs/upload-interface","draft":false,"unlisted":false,"editUrl":"https://github.com/mrlynn/ai4-multimodal-agents-n8n/blob/main/docs/80-upload-interface.mdx","tags":[],"version":"current","sidebarPosition":80,"frontMatter":{"sidebar_position":80},"sidebar":"tutorialSidebar","previous":{"title":"Production Vector Search","permalink":"/multimodal-pdf-agent-n8n/docs/mongodb-vector-setup"},"next":{"title":"🐍 Python Integration Options","permalink":"/multimodal-pdf-agent-n8n/docs/python-mongodb-approaches"}},{"id":"vector-search-workflow","title":"🔍 Vector Search Workflow","description":"Create a search endpoint that uses MongoDB Atlas Vector Search to find relevant PDF content.","source":"@site/docs/50-vector-search-workflow.mdx","sourceDirName":".","slug":"/vector-search-workflow","permalink":"/multimodal-pdf-agent-n8n/docs/vector-search-workflow","draft":false,"unlisted":false,"editUrl":"https://github.com/mrlynn/ai4-multimodal-agents-n8n/blob/main/docs/50-vector-search-workflow.mdx","tags":[],"version":"current","sidebarPosition":50,"frontMatter":{"sidebar_position":50},"sidebar":"tutorialSidebar","previous":{"title":"PDF Processing Workflow","permalink":"/multimodal-pdf-agent-n8n/docs/pdf-processing-workflow"},"next":{"title":"AI Agent with Tool Calling","permalink":"/multimodal-pdf-agent-n8n/docs/ai-agent-workflow"}},{"id":"voyage-ai-setup","title":"🚢 Voyage AI Embedding Service Setup","description":"Configure access to multimodal embeddings that process both text and images using our workshop serverless endpoint.","source":"@site/docs/35-voyage-ai-setup.mdx","sourceDirName":".","slug":"/voyage-ai-setup","permalink":"/multimodal-pdf-agent-n8n/docs/voyage-ai-setup","draft":false,"unlisted":false,"editUrl":"https://github.com/mrlynn/ai4-multimodal-agents-n8n/blob/main/docs/35-voyage-ai-setup.mdx","tags":[],"version":"current","sidebarPosition":35,"frontMatter":{"sidebar_position":35},"sidebar":"tutorialSidebar","previous":{"title":"MongoDB Atlas Setup","permalink":"/multimodal-pdf-agent-n8n/docs/mongodb-atlas-setup"},"next":{"title":"PDF Processing Workflow","permalink":"/multimodal-pdf-agent-n8n/docs/pdf-processing-workflow"}}],"drafts":[],"sidebars":{"tutorialSidebar":[{"type":"doc","id":"index","label":"🎓 Workshop Overview","translatable":true},{"type":"category","label":"🚀 Getting Started","collapsible":true,"collapsed":false,"className":"sidebar-getting-started","description":"Begin your journey with environment setup and n8n basics","items":[{"type":"doc","id":"intro","label":"Workshop Introduction","translatable":true},{"type":"doc","id":"architecture-overview","label":"🏗️ Architecture Overview","translatable":true},{"type":"doc","id":"github-codespaces","label":"GitHub Codespaces Setup","translatable":true},{"type":"doc","id":"prerequisites","label":"Prerequisites & Local Setup","translatable":true},{"type":"doc","id":"n8n-first-run","label":"n8n First Run Experience","translatable":true}]},{"type":"category","label":"⚙️ Setup & Configuration","collapsible":true,"collapsed":false,"className":"sidebar-setup","description":"Configure MongoDB Atlas and Voyage AI for your agent","items":[{"type":"doc","id":"api-architecture","label":"🌐 API Gateway Architecture","translatable":true},{"type":"doc","id":"mongodb-atlas-setup","label":"MongoDB Atlas Setup","translatable":true},{"type":"doc","id":"voyage-ai-setup","label":"Voyage AI Configuration","translatable":true}]},{"type":"category","label":"🔧 Building Workflows","collapsible":true,"collapsed":false,"className":"sidebar-workflows","description":"Create powerful automation workflows step by step","items":[{"type":"doc","id":"pdf-processing-workflow","label":"PDF Processing Workflow","translatable":true},{"type":"doc","id":"vector-search-workflow","label":"Vector Search Implementation","translatable":true},{"type":"doc","id":"ai-agent-workflow","label":"AI Agent with Tool Calling","translatable":true}]},{"type":"category","label":"🧪 Hands-On Exercises","collapsible":true,"collapsed":false,"className":"sidebar-exercises","description":"Structured exercises to build complete AI agents","items":[{"type":"doc","id":"exercise-pdf-rag-agent","label":"🧪 Exercise: Build a PDF RAG Agent","translatable":true},{"type":"doc","id":"exercise-memory-context","label":"🧪 Exercise: Memory & Context","translatable":true},{"type":"doc","id":"exercise-advanced-tools","label":"🧪 Exercise: Advanced Tool Calling","translatable":true}]},{"type":"category","label":"🎯 Advanced Topics","collapsible":true,"collapsed":true,"className":"sidebar-advanced","description":"Take your agent to production with advanced features","items":[{"type":"doc","id":"complete-multimodal-agent","label":"Complete Multimodal Agent","translatable":true},{"type":"doc","id":"mongodb-vector-setup","label":"Production Vector Search","translatable":true},{"type":"doc","id":"upload-interface","label":"Web Upload Interface","translatable":true},{"type":"doc","id":"python-mongodb-approaches","label":"🐍 Python Integration Options","translatable":true},{"type":"doc","id":"approach-comparison","label":"⚖️ n8n vs Python Comparison","translatable":true},{"type":"doc","id":"agent-patterns","label":"🧠 AI Agent Planning Patterns","translatable":true},{"type":"doc","id":"memory-context-patterns","label":"💾 Memory & Context Patterns","translatable":true},{"type":"doc","id":"tool-definition-primer","label":"🛠️ Tool Definition & Function Calling","translatable":true},{"type":"doc","id":"multimodal-image-queries","label":"🖼️ Multimodal Image Queries","translatable":true}]},{"type":"category","label":"📚 Resources & Support","collapsible":true,"collapsed":true,"className":"sidebar-resources","description":"Additional resources, troubleshooting, and community","items":[{"type":"doc","id":"local-setup-tips","label":"Docker Best Practices","translatable":true},{"type":"doc","id":"docker-troubleshooting","label":"Troubleshooting Guide","translatable":true},{"type":"doc","id":"community-resources","label":"Community Resources","translatable":true},{"type":"doc","id":"status-badge-usage-guide","label":"Status Badge Usage Guide","translatable":true},{"type":"doc","id":"summary","label":"🎉 Workshop Summary","translatable":true}]}]}}]}},"docusaurus-plugin-content-blog":{"default":{"blogSidebarTitle":"Recent posts","blogPosts":[],"blogListPaginated":[],"blogTags":{},"blogTagsListPath":"/multimodal-pdf-agent-n8n/blog/tags"}},"docusaurus-plugin-content-pages":{"default":[{"type":"jsx","permalink":"/multimodal-pdf-agent-n8n/helloWorld","source":"@site/src/pages/helloWorld.js"},{"type":"jsx","permalink":"/multimodal-pdf-agent-n8n/","source":"@site/src/pages/index.js"}]},"docusaurus-plugin-debug":{},"docusaurus-plugin-svgr":{},"docusaurus-theme-classic":{},"docusaurus-lunr-search":{},"docusaurus-theme-mermaid":{},"docusaurus-bootstrap-plugin":{},"docusaurus-mdx-fallback-plugin":{}}}
 ```
 
 # .docusaurus/docusaurus-plugin-google-gtag/default/__plugin.json
@@ -2389,7 +2389,7 @@ export default {
       {
         "docs": {
           "sidebarPath": "/Users/michael.lynn/code/ai4/workshop-docs/sidebars.js",
-          "editUrl": "https://github.com/mongodb-developer/multimodal-pdf-agent-n8n/blob/main"
+          "editUrl": "https://github.com/mrlynn/ai4-multimodal-agents-n8n/blob/main"
         },
         "theme": {
           "customCss": "/Users/michael.lynn/code/ai4/workshop-docs/src/css/custom.css"
@@ -2467,7 +2467,7 @@ export default {
           "href": "https://learn.mongodb.com?utm_campaign=devrel&utm_source=workshop&utm_medium=cta&utm_content=multimodal_pdf_agent_n8n&utm_term=michael.lynn"
         },
         {
-          "href": "https://github.com/mongodb-developer/multimodal-pdf-agent-n8n",
+          "href": "https://github.com/mrlynn/ai4-multimodal-agents-n8n",
           "label": "Workshop GitHub (Deployment)"
         }
       ],
@@ -4000,10 +4000,10 @@ graph LR
 
 <TerminalCommand 
   command="# Navigate to deployment repository"
-  output="Opening: https://github.com/mongodb-developer/multimodal-pdf-agent-n8n"
+  output="Opening: https://github.com/mrlynn/ai4-multimodal-agents-n8n"
 />
 
-1. Go to [deployment repository](https://github.com/mongodb-developer/multimodal-pdf-agent-n8n)
+1. Go to [deployment repository](https://github.com/mrlynn/ai4-multimodal-agents-n8n)
 2. Click **Code** → **Codespaces** → **Create codespace**  
 3. Wait for automatic setup (3-5 minutes first time)
 4. All services start automatically
@@ -4047,7 +4047,7 @@ graph LR
 
 <CodeBlock language="bash" title="Local Setup Commands">
 {`# Clone workshop deployment repo
-git clone https://github.com/mongodb-developer/multimodal-pdf-agent-n8n.git
+git clone https://github.com/mrlynn/ai4-multimodal-agents-n8n.git
 cd multimodal-pdf-agent-n8n
 
 # Start services
@@ -4204,10 +4204,10 @@ GitHub Codespaces provides a complete, cloud-based development environment that 
 
 <Screenshot src="/img/codespaces-button.png" alt="GitHub Codespaces Button" />
 
-1. Go to the [workshop deployment repository](https://github.com/mongodb-developer/multimodal-pdf-agent-n8n)
+1. Go to the [workshop deployment repository](https://github.com/mrlynn/ai4-multimodal-agents-n8n)
 
 <QRCodeAccess 
-  url="https://github.com/mongodb-developer/multimodal-pdf-agent-n8n"
+  url="https://github.com/mrlynn/ai4-multimodal-agents-n8n"
   title="Workshop Repository"
 />
 
@@ -4384,7 +4384,7 @@ docker-compose exec n8n n8n export:workflow --all
 
 ## 🎓 Workshop-Specific Setup
 
-**Important**: Launch Codespaces from the [deployment repository](https://github.com/mongodb-developer/multimodal-pdf-agent-n8n), not this documentation site!
+**Important**: Launch Codespaces from the [deployment repository](https://github.com/mrlynn/ai4-multimodal-agents-n8n), not this documentation site!
 
 Our devcontainer automatically:
 
@@ -4412,7 +4412,7 @@ With Codespaces, you can:
 
 ### Next Steps
 
-1. ✅ Launch Codespace from [deployment repository](https://github.com/mongodb-developer/multimodal-pdf-agent-n8n)
+1. ✅ Launch Codespace from [deployment repository](https://github.com/mrlynn/ai4-multimodal-agents-n8n)
 2. ✅ Services are accessible
 3. ✅ Ready to build workflows
 
@@ -4517,7 +4517,7 @@ docker-compose --version
 
 \`\`\`bash
 # Clone the workshop deployment repository
-git clone https://github.com/mongodb-developer/multimodal-pdf-agent-n8n.git
+git clone https://github.com/mrlynn/ai4-multimodal-agents-n8n.git
 cd multimodal-pdf-agent-n8n
 
 # Copy environment template
@@ -4559,7 +4559,7 @@ docker-compose --version
 
 \`\`\`powershell
 # Clone the workshop deployment repository
-git clone https://github.com/mongodb-developer/multimodal-pdf-agent-n8n.git
+git clone https://github.com/mrlynn/ai4-multimodal-agents-n8n.git
 cd multimodal-pdf-agent-n8n
 
 # Copy environment template
@@ -4622,7 +4622,7 @@ sudo usermod -aG docker $USER
 
 \`\`\`bash
 # Clone the workshop deployment repository
-git clone https://github.com/mongodb-developer/multimodal-pdf-agent-n8n.git
+git clone https://github.com/mrlynn/ai4-multimodal-agents-n8n.git
 cd multimodal-pdf-agent-n8n
 
 # Copy environment template
@@ -11958,13 +11958,13 @@ def enhance_results(results):
 All Python examples from this section are available in the workshop repository:
 
 <QRCodeAccess 
-  url="https://github.com/mongodb-developer/multimodal-pdf-agent-n8n/tree/main/python-examples"
+  url="https://github.com/mrlynn/ai4-multimodal-agents-n8n/tree/main/python-examples"
   title="Python Examples Repository"
 />
 
 \`\`\`bash
 # Clone and explore Python examples
-git clone https://github.com/mongodb-developer/multimodal-pdf-agent-n8n.git
+git clone https://github.com/mrlynn/ai4-multimodal-agents-n8n.git
 cd multimodal-pdf-agent-n8n/python-examples
 
 # Install dependencies
@@ -12031,7 +12031,7 @@ The power of MongoDB vector search is that it works seamlessly across all these 
     "Development Tools": [
       {
         title: "Jupyter Notebooks Examples",
-        url: "https://github.com/mongodb-developer/vector-search-examples",
+        url: "https://github.com/mrlynn/vector-search-examples",
         description: "Interactive Python examples and tutorials",
         icon: "📓"
       },
@@ -16768,7 +16768,7 @@ Keep building, keep learning, and keep innovating! 🚀
 
 ---
 
-**Workshop Repository**: [GitHub - Multimodal PDF Agent with n8n](https://github.com/mongodb-developer/multimodal-pdf-agent-n8n)
+**Workshop Repository**: [GitHub - Multimodal PDF Agent with n8n](https://github.com/mrlynn/ai4-multimodal-agents-n8n)
 
 **Feedback**: We value your input! Please share your workshop experience and suggestions for improvement.
 
@@ -17406,7 +17406,7 @@ npm run serve
 
 Once deployed: https://your-workshop-docs.vercel.app
 
-This documentation is accessed by workshop participants while they work in their Codespaces with the actual n8n workflows from the [deployment repository](https://github.com/mongodb-developer/multimodal-pdf-agent-n8n).
+This documentation is accessed by workshop participants while they work in their Codespaces with the actual n8n workflows from the [deployment repository](https://github.com/mrlynn/ai4-multimodal-agents-n8n).
 ```
 
 # sidebars.js
@@ -23774,7 +23774,7 @@ export default function WorkshopResources({
       },
       {
         title: "Workshop GitHub Issues",
-        url: "https://github.com/mongodb-developer/multimodal-pdf-agent-n8n/issues",
+        url: "https://github.com/mrlynn/ai4-multimodal-agents-n8n/issues",
         description: "Report issues or ask questions",
         icon: "🐛"
       }
@@ -23794,7 +23794,7 @@ export default function WorkshopResources({
       },
       {
         title: "Vector Search Examples",
-        url: "https://github.com/mongodb-developer/vector-search-examples",
+        url: "https://github.com/mrlynn/vector-search-examples",
         description: "Example implementations and patterns",
         icon: "💡"
       }
@@ -23862,7 +23862,7 @@ export default function WorkshopResources({
         <div className={styles.quickAccess}>
           <h4>🔗 Quick Access</h4>
           <div className={styles.quickLinks}>
-            <button onClick={() => openLink('https://github.com/mongodb-developer/multimodal-pdf-agent-n8n')} className={styles.quickLink}>
+            <button onClick={() => openLink('https://github.com/mrlynn/ai4-multimodal-agents-n8n')} className={styles.quickLink}>
               📁 Workshop Repo
             </button>
             <button onClick={() => openLink('https://www.mongodb.com/try')} className={styles.quickLink}>

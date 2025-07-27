@@ -60,7 +60,7 @@ Access all pre-built workshop workflows ready for import into n8n. Each workflow
 :::tip Direct Download
 All workflows are available at: `/workflows/`
 
-Or access from GitHub: [Workshop Workflows Repository](https://github.com/mongodb-developer/multimodal-pdf-agent-n8n/tree/main/workflows)
+Or access from GitHub: [Workshop Workflows Repository](https://github.com/mrlynn/ai4-multimodal-agents-n8n/tree/main/workflows)
 :::
 
 ## 📋 Available Workflows

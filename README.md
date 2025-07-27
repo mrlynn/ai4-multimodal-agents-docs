@@ -52,7 +52,7 @@ Perfect for the conference - no local setup required!
 ### Option 2: Local Development
 ```bash
 # Clone the workshop
-git clone https://github.com/mongodb-developer/multimodal-pdf-agent-n8n.git
+git clone https://github.com/mrlynn/ai4-multimodal-agents-n8n.git
 cd multimodal-pdf-agent-n8n
 
 # Start all services
@@ -244,7 +244,7 @@ This workshop is continuously improved based on participant feedback and emergin
 
 ## 📞 Support & Community
 
-- **Workshop Issues**: [GitHub Issues](https://github.com/mongodb-developer/multimodal-pdf-agent-n8n/issues)
+- **Workshop Issues**: [GitHub Issues](https://github.com/mrlynn/ai4-multimodal-agents-n8n/issues)
 - **MongoDB Community**: [Developer Forums](https://www.mongodb.com/community/forums)
 - **n8n Community**: [Community Forum](https://community.n8n.io/)
 - **Voyage AI Documentation**: [API Reference](https://docs.voyageai.com/)

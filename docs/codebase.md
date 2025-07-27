@@ -141,10 +141,10 @@ graph LR
 
 <TerminalCommand 
   command="# Navigate to deployment repository"
-  output="Opening: https://github.com/mongodb-developer/multimodal-pdf-agent-n8n"
+  output="Opening: https://github.com/mrlynn/ai4-multimodal-agents-n8n"
 />
 
-1. Go to [deployment repository](https://github.com/mongodb-developer/multimodal-pdf-agent-n8n)
+1. Go to [deployment repository](https://github.com/mrlynn/ai4-multimodal-agents-n8n)
 2. Click **Code** → **Codespaces** → **Create codespace**  
 3. Wait for automatic setup (3-5 minutes first time)
 4. All services start automatically
@@ -188,7 +188,7 @@ graph LR
 
 <CodeBlock language="bash" title="Local Setup Commands">
 {`# Clone workshop deployment repo
-git clone https://github.com/mongodb-developer/multimodal-pdf-agent-n8n.git
+git clone https://github.com/mrlynn/ai4-multimodal-agents-n8n.git
 cd multimodal-pdf-agent-n8n
 
 # Start services
@@ -345,10 +345,10 @@ GitHub Codespaces provides a complete, cloud-based development environment that 
 
 <Screenshot src="/img/codespaces-button.png" alt="GitHub Codespaces Button" />
 
-1. Go to the [workshop deployment repository](https://github.com/mongodb-developer/multimodal-pdf-agent-n8n)
+1. Go to the [workshop deployment repository](https://github.com/mrlynn/ai4-multimodal-agents-n8n)
 
 <QRCodeAccess 
-  url="https://github.com/mongodb-developer/multimodal-pdf-agent-n8n"
+  url="https://github.com/mrlynn/ai4-multimodal-agents-n8n"
   title="Workshop Repository"
 />
 
@@ -526,7 +526,7 @@ docker-compose exec n8n n8n export:workflow --all
 
 ## 🎓 Workshop-Specific Setup
 
-**Important**: Launch Codespaces from the [deployment repository](https://github.com/mongodb-developer/multimodal-pdf-agent-n8n), not this documentation site!
+**Important**: Launch Codespaces from the [deployment repository](https://github.com/mrlynn/ai4-multimodal-agents-n8n), not this documentation site!
 
 Our devcontainer automatically:
 
@@ -555,7 +555,7 @@ With Codespaces, you can:
 
 ### Next Steps
 
-1. ✅ Launch Codespace from [deployment repository](https://github.com/mongodb-developer/multimodal-pdf-agent-n8n)
+1. ✅ Launch Codespace from [deployment repository](https://github.com/mrlynn/ai4-multimodal-agents-n8n)
 2. ✅ Services are accessible
 3. ✅ Ready to build workflows
 
@@ -660,7 +660,7 @@ docker-compose --version
 
 \`\`\`bash
 # Clone the workshop deployment repository
-git clone https://github.com/mongodb-developer/multimodal-pdf-agent-n8n.git
+git clone https://github.com/mrlynn/ai4-multimodal-agents-n8n.git
 cd multimodal-pdf-agent-n8n
 
 # Copy environment template
@@ -702,7 +702,7 @@ docker-compose --version
 
 \`\`\`powershell
 # Clone the workshop deployment repository
-git clone https://github.com/mongodb-developer/multimodal-pdf-agent-n8n.git
+git clone https://github.com/mrlynn/ai4-multimodal-agents-n8n.git
 cd multimodal-pdf-agent-n8n
 
 # Copy environment template
@@ -765,7 +765,7 @@ sudo usermod -aG docker $USER
 
 \`\`\`bash
 # Clone the workshop deployment repository
-git clone https://github.com/mongodb-developer/multimodal-pdf-agent-n8n.git
+git clone https://github.com/mrlynn/ai4-multimodal-agents-n8n.git
 cd multimodal-pdf-agent-n8n
 
 # Copy environment template
@@ -5089,13 +5089,13 @@ def enhance_results(results):
 All Python examples from this section are available in the workshop repository:
 
 <QRCodeAccess 
-  url="https://github.com/mongodb-developer/multimodal-pdf-agent-n8n/tree/main/python-examples"
+  url="https://github.com/mrlynn/ai4-multimodal-agents-n8n/tree/main/python-examples"
   title="Python Examples Repository"
 />
 
 \`\`\`bash
 # Clone and explore Python examples
-git clone https://github.com/mongodb-developer/multimodal-pdf-agent-n8n.git
+git clone https://github.com/mrlynn/ai4-multimodal-agents-n8n.git
 cd multimodal-pdf-agent-n8n/python-examples
 
 # Install dependencies
@@ -5162,7 +5162,7 @@ The power of MongoDB vector search is that it works seamlessly across all these 
     "Development Tools": [
       {
         title: "Jupyter Notebooks Examples",
-        url: "https://github.com/mongodb-developer/vector-search-examples",
+        url: "https://github.com/mrlynn/vector-search-examples",
         description: "Interactive Python examples and tutorials",
         icon: "📓"
       },
@@ -6539,7 +6539,7 @@ Keep building, keep learning, and keep innovating! 🚀
 
 ---
 
-**Workshop Repository**: [GitHub - Multimodal PDF Agent with n8n](https://github.com/mongodb-developer/multimodal-pdf-agent-n8n)
+**Workshop Repository**: [GitHub - Multimodal PDF Agent with n8n](https://github.com/mrlynn/ai4-multimodal-agents-n8n)
 
 **Feedback**: We value your input! Please share your workshop experience and suggestions for improvement.
 

@@ -39,7 +39,7 @@ export default function WorkshopResources({
       },
       {
         title: "Workshop GitHub Issues",
-        url: "https://github.com/mongodb-developer/multimodal-pdf-agent-n8n/issues",
+        url: "https://github.com/mrlynn/ai4-multimodal-agents-n8n/issues",
         description: "Report issues or ask questions",
         icon: "🐛"
       }
@@ -59,7 +59,7 @@ export default function WorkshopResources({
       },
       {
         title: "Vector Search Examples",
-        url: "https://github.com/mongodb-developer/vector-search-examples",
+        url: "https://github.com/mrlynn/vector-search-examples",
         description: "Example implementations and patterns",
         icon: "💡"
       }
@@ -127,7 +127,7 @@ export default function WorkshopResources({
         <div className={styles.quickAccess}>
           <h4>🔗 Quick Access</h4>
           <div className={styles.quickLinks}>
-            <button onClick={() => openLink('https://github.com/mongodb-developer/multimodal-pdf-agent-n8n')} className={styles.quickLink}>
+            <button onClick={() => openLink('https://github.com/mrlynn/ai4-multimodal-agents-n8n')} className={styles.quickLink}>
               📁 Workshop Repo
             </button>
             <button onClick={() => openLink('https://www.mongodb.com/try')} className={styles.quickLink}>

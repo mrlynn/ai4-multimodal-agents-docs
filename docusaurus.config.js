@@ -18,21 +18,21 @@ const favicon = "img/favicon.svg"
 const featureList = [
   {
     title: 'Visual Workflow Building',
-    illustration: 'img/n8n-workflow.png',
+    illustration: 'img/index-1.png',
     description: `
         Build complex AI agents using n8n's visual interface - no coding required!
     `,
   },
   {
     title: 'Multimodal Processing',
-    illustration: 'img/multimodal.png',
+    illustration: 'img/index-2.png',
     description: `
         Process both text and images from PDFs using Voyage AI's multimodal embeddings.
     `,
   },
   {
     title: 'Production-Ready',
-    illustration: 'img/mongodb-atlas.png',
+    illustration: 'img/index-3.png',
     description: `
         Deploy scalable vector search with MongoDB Atlas and n8n's robust automation.
     `,
