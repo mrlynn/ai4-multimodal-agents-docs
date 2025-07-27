@@ -19,5 +19,9 @@
   "previous": {
     "title": "Status Badge Usage Guide",
     "permalink": "/multimodal-pdf-agent-n8n/docs/status-badge-usage-guide"
+  },
+  "next": {
+    "title": "Slide Viewer Demo",
+    "permalink": "/multimodal-pdf-agent-n8n/docs/slide-viewer-demo"
   }
 }

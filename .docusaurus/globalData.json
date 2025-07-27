@@ -155,6 +155,11 @@
               "sidebar": "tutorialSidebar"
             },
             {
+              "id": "slide-viewer-demo",
+              "path": "/multimodal-pdf-agent-n8n/docs/slide-viewer-demo",
+              "sidebar": "tutorialSidebar"
+            },
+            {
               "id": "status-badge-usage-guide",
               "path": "/multimodal-pdf-agent-n8n/docs/status-badge-usage-guide",
               "sidebar": "tutorialSidebar"
@@ -237,8 +242,8 @@
   "docusaurus-lunr-search": {
     "default": {
       "fileNames": {
-        "searchDoc": "search-doc-1753608868753.json",
-        "lunrIndex": "lunr-index-1753608868753.json"
+        "searchDoc": "search-doc-1753617380874.json",
+        "lunrIndex": "lunr-index-1753617380874.json"
       }
     }
   }

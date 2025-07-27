@@ -1,0 +1,164 @@
+---
+sidebar_position: 99
+title: Slide Viewer Demo
+description: Example of embedding Google Slides in documentation
+slides:
+  - title: "Welcome to the Workshop"
+    url: "https://docs.google.com/presentation/d/1YZJRVyoYe1sAtQXCcTxdjpaIQ84-L57842vydaBjcZk/edit?usp=sharing"
+    caption: "Introduction to building multimodal PDF agents"
+    autoplay: true
+    notesLink: "/docs/intro"
+  - title: "Architecture Overview"
+    url: "https://docs.google.com/presentation/d/1YZJRVyoYe1sAtQXCcTxdjpaIQ84-L57842vydaBjcZk/edit?usp=sharing"
+    caption: "System architecture and components"
+---
+
+import SlideViewer from '@site/src/components/SlideViewer';
+import SlideViewerWithCheck from '@site/src/components/SlideViewer/SlideViewerWithCheck';
+import { MultiSlideViewer } from '@site/src/components/SlideViewer/SlideViewerFromConfig';
+
+# Slide Viewer Demo
+
+This page demonstrates how to embed Google Slides presentations in your Docusaurus documentation.
+
+## Basic Usage
+
+You can embed a single slide presentation directly:
+```
+<SlideViewer 
+  url="https://docs.google.com/presentation/d/YOUR_PRESENTATION_ID/edit"
+  title="Sample Presentation"
+  caption="This is a demo presentation"
+  height="500px"
+/>
+```
+## Multiple Slides from Frontmatter
+
+You can also define multiple slides in your page's frontmatter and display them all:
+
+<MultiSlideViewer slides={frontMatter.slides} />
+
+## Code Example
+
+Here's how to use the SlideViewer component in your MDX files:
+
+```jsx
+import SlideViewer from '@site/src/components/SlideViewer';
+
+<SlideViewer 
+  url="https://docs.google.com/presentation/d/YOUR_ID/edit"
+  title="My Workshop Introduction"
+  caption="Getting started with our workshop"
+  height="600px"
+  autoplay={true}
+  loop={false}
+  delayMs={5000}
+  notesLink="/docs/speaker-notes"
+/>
+```
+
+## Frontmatter Configuration
+
+You can configure slides in your MDX frontmatter:
+
+```yaml
+---
+slides:
+  - title: "Presentation Title"
+    url: "https://docs.google.com/presentation/d/YOUR_ID/edit"
+    caption: "Description of the presentation"
+    autoplay: true
+    loop: true
+    notesLink: "/docs/notes"
+---
+```
+
+## Error Handling Demo
+
+The SlideViewer component now includes enhanced error detection:
+
+### Private Presentation Example
+This example shows how the component handles a private presentation:
+
+<SlideViewer 
+  url="https://docs.google.com/presentation/d/1_PRIVATE_EXAMPLE_ID/edit"
+  title="Private Presentation (Will Show Error)"
+  caption="This demonstrates the permission error handling"
+  height="400px"
+/>
+
+### With Pre-Check
+You can use `SlideViewerWithCheck` for enhanced permission checking:
+
+<SlideViewerWithCheck 
+  url="https://docs.google.com/presentation/d/1_PRIVATE_EXAMPLE_ID/edit"
+  title="Private Presentation with Pre-Check"
+  caption="This version checks permissions before loading"
+  height="400px"
+/>
+
+## Features
+
+- **Automatic URL Conversion**: Handles various Google Slides URL formats
+- **Responsive Design**: Adapts to different screen sizes
+- **Dark Mode Support**: Automatically adjusts to theme
+- **Loading States**: Shows spinner while loading
+- **Enhanced Error Handling**: 
+  - Detects permission issues (🔒)
+  - Handles 404/deleted presentations
+  - Shows specific error messages
+  - Timeout detection with retry option
+  - Invalid URL format detection
+- **Pre-flight Checks**: Optional permission checking before load
+- **Customizable**: Height, width, captions, and more
+
+## Supported URL Formats
+
+The component supports these Google Slides URL formats:
+- `https://docs.google.com/presentation/d/{id}/edit`
+- `https://docs.google.com/presentation/d/{id}/view`
+- `https://drive.google.com/file/d/{id}/view`
+- Already embedded URLs (`/embed`)
+
+## Error Handling
+
+The SlideViewer component provides comprehensive error handling:
+
+### Error Types
+1. **Permission Errors** (🔒): Shown when the presentation requires authentication
+2. **Invalid URL**: Displayed for malformed Google Slides URLs  
+3. **Timeout Errors**: Triggered after 10 seconds (configurable)
+4. **Load Errors**: Generic errors during iframe loading
+
+### Configuration Options
+```jsx
+<SlideViewer 
+  url="..."
+  loadTimeout={15000}  // Custom timeout in milliseconds
+  fallbackContent={    // Custom error content
+    <div>
+      <p>Custom error message</p>
+      <a href="/alternative">Alternative link</a>
+    </div>
+  }
+/>
+```
+
+### Using SlideViewerWithCheck
+For critical presentations, use the enhanced version that pre-validates access:
+
+```jsx
+import SlideViewerWithCheck from '@site/src/components/SlideViewer/SlideViewerWithCheck';
+
+<SlideViewerWithCheck 
+  url="https://docs.google.com/presentation/d/YOUR_ID/edit"
+  title="Important Presentation"
+/>
+```
+
+This component:
+- Attempts to validate presentation access before rendering
+- Provides more specific error messages for permission issues  
+- Shows a "Request Access" button for private presentations
+
+Visit the [Slides Playground](/slides) to test the component with your own presentations!

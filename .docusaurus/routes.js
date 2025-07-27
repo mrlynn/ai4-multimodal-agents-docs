@@ -43,16 +43,21 @@ export default [
     exact: true
   },
   {
+    path: '/multimodal-pdf-agent-n8n/slides',
+    component: ComponentCreator('/multimodal-pdf-agent-n8n/slides', '0ef'),
+    exact: true
+  },
+  {
     path: '/multimodal-pdf-agent-n8n/docs',
-    component: ComponentCreator('/multimodal-pdf-agent-n8n/docs', '2ab'),
+    component: ComponentCreator('/multimodal-pdf-agent-n8n/docs', 'b9d'),
     routes: [
       {
         path: '/multimodal-pdf-agent-n8n/docs',
-        component: ComponentCreator('/multimodal-pdf-agent-n8n/docs', '7e9'),
+        component: ComponentCreator('/multimodal-pdf-agent-n8n/docs', 'fc8'),
         routes: [
           {
             path: '/multimodal-pdf-agent-n8n/docs',
-            component: ComponentCreator('/multimodal-pdf-agent-n8n/docs', '1d6'),
+            component: ComponentCreator('/multimodal-pdf-agent-n8n/docs', '2cc'),
             routes: [
               {
                 path: '/multimodal-pdf-agent-n8n/docs',
@@ -224,6 +229,12 @@ export default [
               {
                 path: '/multimodal-pdf-agent-n8n/docs/python-mongodb-approaches',
                 component: ComponentCreator('/multimodal-pdf-agent-n8n/docs/python-mongodb-approaches', '391'),
+                exact: true,
+                sidebar: "tutorialSidebar"
+              },
+              {
+                path: '/multimodal-pdf-agent-n8n/docs/slide-viewer-demo',
+                component: ComponentCreator('/multimodal-pdf-agent-n8n/docs/slide-viewer-demo', '7b5'),
                 exact: true,
                 sidebar: "tutorialSidebar"
               },

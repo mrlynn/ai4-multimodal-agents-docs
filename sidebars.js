@@ -307,6 +307,11 @@ const sidebars = {
           type: 'doc',
           id: 'summary',
           label: '🎉 Workshop Summary'
+        },
+        {
+          type: 'doc',
+          id: 'slide-viewer-demo',
+          label: 'Slide Viewer Demo'
         }
       ],
     },
