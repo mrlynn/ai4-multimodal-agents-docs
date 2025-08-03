@@ -1,0 +1,144 @@
+---
+id: voyage-ai-setup
+title: 🚀 Voyage AI API Key Setup
+sidebar_label: 🚀 Voyage AI Setup
+sidebar_position: 2
+---
+
+# 🚀 Voyage AI API Key Setup
+
+## Why You Need a Voyage AI API Key
+
+Voyage AI provides state-of-the-art embedding models that power the multimodal search capabilities in our workshop. Your API key authenticates your requests to Voyage AI's services, allowing you to:
+- Generate high-quality multimodal embeddings for text and images
+- Access production-ready embedding models optimized for retrieval
+- Utilize the official Python client for seamless integration
+
+---
+
+## Step-by-Step API Key Creation
+
+Follow these steps to create your Voyage AI API key:
+
+### Step 1: Access the Voyage AI Dashboard
+
+Navigate to [https://dashboard.voyageai.com](https://dashboard.voyageai.com) and sign in to your account. If you don't have an account yet, you'll need to create one first.
+
+![Voyage AI Dashboard](/img/voyage-1.webp)
+
+### Step 2: Navigate to API Keys Section
+
+Once logged in, locate the left sidebar navigation. Click on **Organization**, then select **API keys** from the submenu.
+
+![Navigate to API Keys](/img/voyage-2.png)
+
+### Step 3: Create a New Secret Key
+
+Click the **"Create new secret key"** button to initiate the API key creation process.
+
+![Create New Key Button](/img/voyage-3.png)
+
+### Step 4: Configure Your API Key
+
+In the dialog box that appears:
+1. **Name your key**: Choose a descriptive name (e.g., "workshop-multimodal-agent")
+2. **Select a project**: Choose the appropriate project or use the default
+3. Click **"Create secret key"** to generate your key
+
+![Configure API Key](/img/voyage-4.png)
+
+### Step 5: Copy and Save Your API Key
+
+Your new API key will be displayed on the screen. This is crucial:
+
+⚠️ **IMPORTANT**: This is the **only time** you'll be able to see the full API key. Make sure to:
+- Click the copy button to copy the key to your clipboard
+- Store it securely in your `.env` file
+- Never commit API keys to version control
+
+![Copy API Key](/img/voyage-6.png)
+
+---
+
+## API Key Permissions
+
+Your Voyage AI key comes with the following permissions:
+- ✅ **Read API resources**: Access to retrieve embeddings and model information
+- ✅ **Write API resources**: Ability to generate new embeddings
+- ✅ **Full access to embedding models**: Including multimodal models
+
+---
+
+## Setting Up Your Environment
+
+### Add to .env File
+
+Create or update your `.env` file with your Voyage AI API key:
+
+```bash
+# Voyage AI Configuration
+VOYAGE_API_KEY="voy_your_api_key_here"
+```
+
+### Verify Your Setup
+
+Test your API key with this Python code:
+
+```python
+import voyageai
+import os
+
+# Initialize the client with your API key
+voyage_client = voyageai.Client(api_key=os.getenv("VOYAGE_API_KEY"))
+
+# Test with a simple embedding
+try:
+    response = voyage_client.embed(
+        texts=["Hello, Voyage AI!"],
+        model="voyage-2",
+        input_type="document"
+    )
+    print("✅ API key verified! Ready to generate embeddings.")
+    print(f"Embedding dimensions: {len(response.embeddings[0])}")
+except Exception as e:
+    print(f"❌ API key verification failed: {e}")
+```
+
+---
+
+## Best Practices for API Key Management
+
+1. **Environment Variables**: Always store your API key in environment variables
+2. **Never Share Your Key**: Treat your API key like a password
+3. **Use .env Files**: For local development, add `.env` to your `.gitignore`
+4. **Rotate Keys Regularly**: For production applications, rotate keys periodically
+5. **Monitor Usage**: Check your dashboard regularly for usage and unusual activity
+
+---
+
+## Troubleshooting
+
+### Common Issues
+
+**Invalid API Key Error**
+- Double-check that you've copied the entire key correctly
+- Ensure there are no extra spaces or characters
+
+**Rate Limiting**
+- Free tier accounts may have rate limits
+- Check your dashboard for usage limits and upgrade if needed
+
+**Permission Denied**
+- Verify your key has access to the models you're trying to use
+- Check that the key hasn't been revoked or expired
+
+### Getting Help
+
+If you encounter issues:
+- Check the [Voyage AI Documentation](https://docs.voyageai.com/)
+- Review your dashboard for error messages
+- Ensure you're using the correct model names
+
+---
+
+**[← Back to Prerequisites Overview](./prerequisites)** | **[Next: Gemini Setup →](./gemini-setup)**

@@ -1,0 +1,324 @@
+---
+id: atlas-setup
+title: 🍃 MongoDB Atlas Cluster Setup
+sidebar_label: 🍃 Atlas Setup
+sidebar_position: 4
+---
+
+import ClickableImage from '@site/src/components/ClickableImage';
+
+# 🍃 MongoDB Atlas Cluster Setup
+
+## Why MongoDB Atlas?
+
+MongoDB Atlas provides:
+- **Native vector search** with HNSW algorithms for fast similarity matching
+- **Flexible document storage** for mixed data types
+- **Free tier** perfect for development and learning
+- **Built-in vector indexing** without additional infrastructure
+
+---
+
+## Step-by-Step Atlas Deployment
+
+### Step 1: Create MongoDB Atlas Account
+
+Navigate to [MongoDB Atlas](https://www.mongodb.com/cloud/atlas/register) and create your free account:
+
+<ClickableImage 
+  src="/img/atlas-1-signup.png" 
+  alt="MongoDB Atlas Signup Page"
+  caption="Fill in your account details and click 'Create your Atlas account'"
+/>
+
+Fill in your account details and click **"Create your Atlas account"**.
+
+### Step 2: Verify Your Email Address
+
+Check your email inbox for a verification message from MongoDB Atlas:
+
+<ClickableImage 
+  src="/img/atlas-2-verify-email.png" 
+  alt="Email verification message from MongoDB Atlas"
+  caption="Check your email for the verification message"
+/>
+
+Click the verification link in the email to activate your account:
+
+<ClickableImage 
+  src="/img/atlas-3-verify-email.png" 
+  alt="Email verification confirmation page"
+  caption="Click the verification link in your email"
+/>
+
+Complete the email verification process:
+
+<ClickableImage 
+  src="/img/atlas-4-verify-email.png" 
+  alt="Email verification completion"
+  caption="Complete the email verification process"
+/>
+
+### Step 3: Complete Initial Setup
+
+You may be prompted to complete a personalization questionnaire. Fill it out based on your preferences:
+
+![Personalization Survey](/img/atlas-5-personalization.png)
+
+### Step 4: Deploy Your Free Cluster
+
+When prompted to create your first database deployment, select the **"M0"** free tier option:
+
+![Select Free Tier](/img/atlas-6-select-free.png)
+
+Choose your preferred:
+- **Cloud Provider**: AWS, Google Cloud, or Azure (any will work)
+- **Region**: Select one closest to your location for better performance
+- **Cluster Name**: You can keep the default or use "workshop-cluster"
+
+Click **"Create Deployment"** to proceed.
+
+### Step 5: Create Database User
+
+Set up a database user with the following credentials:
+
+![Create Database User](/img/atlas-7-username.png)
+
+1. **Username**: Enter `workshop` (or your preference)
+2. **Password**: Use the auto-generated password or create your own secure password
+3. **Important**: Copy and save these credentials - you'll need them for your connection string
+4. Click **"Create Database User"**
+
+### Step 6: Configure Network Access
+
+For this workshop, we'll allow access from anywhere for simplicity:
+
+![Network Access Configuration](/img/atlas-11-network.png)
+
+Set up network access:
+
+![Allow Access from Anywhere](/img/atlas-12-anywhere.png)
+
+1. The system may automatically configure network access
+2. If prompted, select **"Add My Current IP Address"** or **"Allow Access from Anywhere"**
+3. For workshop purposes, "Allow Access from Anywhere" (0.0.0.0/0) is acceptable
+
+   ⚠️ **Production Note**: In production environments, always restrict access to specific IP addresses for security.
+
+### Step 7: Choose Connection Method
+
+Once your cluster is deployed, click **"Connect"** to access connection options:
+
+![Choose Connection Method](/img/atlas-8-choose-connection.png)
+
+Select **"Drivers"** to get the connection string for Python applications.
+
+### Step 8: Get Your Connection String
+
+Choose your driver and version:
+
+![Select Python Driver](/img/atlas-9-drivers.png)
+
+1. Select **"Python"** as your driver
+2. Choose version **"3.6 or later"** (our workshop uses Python 3.8+)
+3. Copy the provided connection string
+
+![Copy Connection String](/img/atlas-10-copy-connection-string.png)
+
+Your connection string will look like:
+```
+mongodb+srv://workshop:<password>@cluster0.xxxxx.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0
+```
+
+**Important**: Replace `<password>` with the actual password you created for your database user.
+
+---
+
+## Setting Up Your Environment
+
+### Add to .env File
+
+Add your MongoDB connection string to your `.env` file:
+
+```bash
+# MongoDB Atlas Configuration
+MONGODB_URI="mongodb+srv://workshop:your_password@cluster0.xxxxx.mongodb.net/"
+```
+
+### Install Required Packages
+
+Make sure you have PyMongo installed:
+
+```bash
+pip install pymongo
+```
+
+### Verify Your Connection
+
+Test your MongoDB connection:
+
+```python
+from pymongo import MongoClient
+import os
+
+# Replace with your connection string
+MONGODB_URI = os.getenv("MONGODB_URI")
+
+try:
+    client = MongoClient(MONGODB_URI)
+    # Test the connection
+    result = client.admin.command("ping")
+    if result.get("ok") == 1:
+        print("✅ MongoDB Atlas connected successfully!")
+        
+        # List available databases
+        print("Available databases:", client.list_database_names())
+    else:
+        print("❌ Connection failed")
+except Exception as e:
+    print(f"❌ MongoDB connection failed: {e}")
+```
+
+---
+
+## Understanding Atlas Features
+
+### Vector Search Capabilities
+
+MongoDB Atlas includes native vector search with:
+- **HNSW Algorithm**: Hierarchical Navigable Small World for fast approximate nearest neighbor search
+- **Multiple Distance Metrics**: Cosine, Euclidean, and dot product similarity
+- **Filtering**: Combine vector similarity with traditional MongoDB queries
+- **Real-time Updates**: Vector indexes update automatically as data changes
+
+### Document Storage
+
+Atlas stores documents in BSON format, allowing:
+- **Mixed Data Types**: Store text, numbers, arrays, and embedded documents
+- **Flexible Schema**: No need to define schema upfront
+- **Rich Queries**: Complex aggregation pipelines for data processing
+- **Scalability**: Automatic scaling as your data grows
+
+### Performance Optimization
+
+For vector search workloads:
+- **Index Configuration**: Optimize for your embedding dimensions and similarity metric
+- **Candidate Selection**: Balance between speed and accuracy with `numCandidates`
+- **Filtering**: Pre-filter documents before vector search for better performance
+- **Batch Operations**: Use bulk operations for efficient data loading
+
+---
+
+## Workshop Database Structure
+
+We'll be using the following database structure:
+
+```javascript
+// Database: mongodb_aiewf
+// Collection: multimodal_workshop_voyageai
+
+// Sample document structure:
+{
+  "_id": ObjectId("..."),
+  "key": "data/images/1.png",           // Path to the image file
+  "page_number": 1,                     // PDF page number
+  "width": 2100,                        // Image width in pixels
+  "height": 2970,                       // Image height in pixels
+  "embedding": [0.1, 0.2, ...],        // 1024-dimensional vector from VoyageAI
+}
+```
+
+### Vector Search Index
+
+We'll create a vector search index with these specifications:
+
+```javascript
+{
+  "name": "vector_index_voyageai",
+  "type": "vectorSearch",
+  "definition": {
+    "fields": [
+      {
+        "type": "vector",
+        "path": "embedding",
+        "numDimensions": 1024,          // VoyageAI multimodal embeddings
+        "similarity": "cosine"          // Cosine similarity metric
+      }
+    ]
+  }
+}
+```
+
+---
+
+## Troubleshooting
+
+### Common Connection Issues
+
+**Authentication Failed**
+- Verify your username and password are correct
+- Ensure you've replaced `<password>` in the connection string
+- Check that your database user has the necessary permissions
+
+**Network Access Denied**
+- Verify your IP address is whitelisted
+- For workshop purposes, ensure "Allow Access from Anywhere" is enabled
+- Check your network's firewall settings
+
+**DNS Resolution Issues**
+- Try using `mongodb://` instead of `mongodb+srv://` 
+- Check your internet connection
+- Verify the cluster hostname is correct
+
+### Performance Considerations
+
+**Slow Vector Search**
+- Ensure your vector index is built and ready (status: "READY")
+- Optimize `numCandidates` parameter (typically 10-20x your `limit`)
+- Consider using pre-filtering to reduce search space
+
+**Memory Issues**
+- Free tier clusters have memory limitations
+- Monitor your cluster metrics in the Atlas dashboard
+- Consider upgrading if you hit limits
+
+### Getting Help
+
+If you encounter issues:
+- Check the [MongoDB Atlas Documentation](https://www.mongodb.com/docs/atlas/)
+- Review your cluster logs in the Atlas dashboard
+- Use the Atlas support chat for technical assistance
+- Visit the [MongoDB Community Forums](https://www.mongodb.com/community/forums/)
+
+---
+
+## Security Best Practices
+
+### Production Recommendations
+
+1. **Network Security**
+   - Use specific IP address allowlists instead of "Allow Access from Anywhere"
+   - Implement VPC peering for cloud-based applications
+   - Use private endpoints when available
+
+2. **Authentication & Authorization**
+   - Create database users with minimal required permissions
+   - Use strong, unique passwords
+   - Enable two-factor authentication on your Atlas account
+   - Regularly rotate database user passwords
+
+3. **Monitoring & Alerting**
+   - Set up alerts for unusual connection patterns
+   - Monitor query performance and resource usage
+   - Enable audit logging for compliance requirements
+   - Review access logs regularly
+
+4. **Data Protection**
+   - Enable encryption at rest (available on M10+ clusters)
+   - Use TLS/SSL for all connections (enabled by default)
+   - Implement proper backup and disaster recovery strategies
+   - Follow data residency requirements if applicable
+
+---
+
+**[← Back to Prerequisites Overview](./prerequisites)** | **[Next: Start Workshop →](./python-exercise-1)**

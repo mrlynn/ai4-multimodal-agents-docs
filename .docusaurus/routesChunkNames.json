@@ -70,22 +70,26 @@
     },
     "config": "config---assistant-5-e-9-186"
   },
-  "/docs-002": {
+  "/docs-9f1": {
     "__comp": "__comp---theme-docs-root-5-e-9-0b6",
     "__context": {
       "plugin": "plugin---docsaba-d7c"
     }
   },
-  "/docs-b04": {
+  "/docs-9b9": {
     "__comp": "__comp---theme-doc-version-roota-7-b-5de",
     "__props": "__props---docs-005-788"
   },
-  "/docs-113": {
+  "/docs-e8e": {
     "__comp": "__comp---theme-doc-roota-94-67a"
   },
-  "/docs-9b9": {
+  "/docs-341": {
     "__comp": "__comp---theme-doc-item-178-a40",
     "content": "content---docs-4-ed-8a2"
+  },
+  "/docs/atlas-setup-bfb": {
+    "__comp": "__comp---theme-doc-item-178-a40",
+    "content": "content---docs-atlas-setupe-2-b-89b"
   },
   "/docs/codebase-b75": {
     "__comp": "__comp---theme-doc-item-178-a40",
@@ -94,6 +98,10 @@
   "/docs/content-organization-guide-b6f": {
     "__comp": "__comp---theme-doc-item-178-a40",
     "content": "content---docs-content-organization-guide-8-d-9-74b"
+  },
+  "/docs/gemini-setup-914": {
+    "__comp": "__comp---theme-doc-item-178-a40",
+    "content": "content---docs-gemini-setup-767-1dd"
   },
   "/docs/objectives-overview-b0b": {
     "__comp": "__comp---theme-doc-item-178-a40",
@@ -118,6 +126,10 @@
   "/docs/python-exercise-4-e2e": {
     "__comp": "__comp---theme-doc-item-178-a40",
     "content": "content---docs-python-exercise-4-e-94-3fb"
+  },
+  "/docs/voyage-ai-setup-fe7": {
+    "__comp": "__comp---theme-doc-item-178-a40",
+    "content": "content---docs-voyage-ai-setup-418-50c"
   },
   "/docs/workshop-alignment-assessment-9ba": {
     "__comp": "__comp---theme-doc-item-178-a40",

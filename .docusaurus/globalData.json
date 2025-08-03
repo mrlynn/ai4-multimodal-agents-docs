@@ -11,12 +11,22 @@
           "mainDocId": "index",
           "docs": [
             {
+              "id": "atlas-setup",
+              "path": "/docs/atlas-setup",
+              "sidebar": "tutorialSidebar"
+            },
+            {
               "id": "codebase",
               "path": "/docs/codebase"
             },
             {
               "id": "content-organization-guide",
               "path": "/docs/content-organization-guide"
+            },
+            {
+              "id": "gemini-setup",
+              "path": "/docs/gemini-setup",
+              "sidebar": "tutorialSidebar"
             },
             {
               "id": "index",
@@ -54,6 +64,11 @@
               "sidebar": "tutorialSidebar"
             },
             {
+              "id": "voyage-ai-setup",
+              "path": "/docs/voyage-ai-setup",
+              "sidebar": "tutorialSidebar"
+            },
+            {
               "id": "workshop-alignment-assessment",
               "path": "/docs/workshop-alignment-assessment"
             },
@@ -80,8 +95,8 @@
   "docusaurus-lunr-search": {
     "default": {
       "fileNames": {
-        "searchDoc": "search-doc-1754239321729.json",
-        "lunrIndex": "lunr-index-1754239321729.json"
+        "searchDoc": "search-doc-1754241416004.json",
+        "lunrIndex": "lunr-index-1754241416004.json"
       }
     }
   }

@@ -31,9 +31,32 @@ const sidebars = {
       label: '🎯 Workshop Objectives'
     },
     {
-      type: 'doc',
-      id: 'prerequisites',
-      label: '📋 Prerequisites & Setup'
+      type: 'category',
+      label: '📋 Prerequisites & Setup',
+      collapsible: true,
+      collapsed: false,
+      items: [
+        {
+          type: 'doc',
+          id: 'prerequisites',
+          label: '🛠️ Setup Wizard'
+        },
+        {
+          type: 'doc',
+          id: 'voyage-ai-setup',
+          label: '🚀 Voyage AI Setup'
+        },
+        {
+          type: 'doc',
+          id: 'gemini-setup',
+          label: '🤖 Gemini Setup'
+        },
+        {
+          type: 'doc',
+          id: 'atlas-setup',
+          label: '🍃 Atlas Setup'
+        }
+      ]
     },
     {
       type: 'category',

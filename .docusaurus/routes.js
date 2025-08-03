@@ -59,19 +59,25 @@ export default [
   },
   {
     path: '/docs',
-    component: ComponentCreator('/docs', '002'),
+    component: ComponentCreator('/docs', '9f1'),
     routes: [
       {
         path: '/docs',
-        component: ComponentCreator('/docs', 'b04'),
+        component: ComponentCreator('/docs', '9b9'),
         routes: [
           {
             path: '/docs',
-            component: ComponentCreator('/docs', '113'),
+            component: ComponentCreator('/docs', 'e8e'),
             routes: [
               {
                 path: '/docs',
-                component: ComponentCreator('/docs', '9b9'),
+                component: ComponentCreator('/docs', '341'),
+                exact: true,
+                sidebar: "tutorialSidebar"
+              },
+              {
+                path: '/docs/atlas-setup',
+                component: ComponentCreator('/docs/atlas-setup', 'bfb'),
                 exact: true,
                 sidebar: "tutorialSidebar"
               },
@@ -84,6 +90,12 @@ export default [
                 path: '/docs/content-organization-guide',
                 component: ComponentCreator('/docs/content-organization-guide', 'b6f'),
                 exact: true
+              },
+              {
+                path: '/docs/gemini-setup',
+                component: ComponentCreator('/docs/gemini-setup', '914'),
+                exact: true,
+                sidebar: "tutorialSidebar"
               },
               {
                 path: '/docs/objectives-overview',
@@ -118,6 +130,12 @@ export default [
               {
                 path: '/docs/python-exercise-4',
                 component: ComponentCreator('/docs/python-exercise-4', 'e2e'),
+                exact: true,
+                sidebar: "tutorialSidebar"
+              },
+              {
+                path: '/docs/voyage-ai-setup',
+                component: ComponentCreator('/docs/voyage-ai-setup', 'fe7'),
                 exact: true,
                 sidebar: "tutorialSidebar"
               },
