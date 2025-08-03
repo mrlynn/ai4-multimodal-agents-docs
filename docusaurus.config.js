@@ -4,23 +4,23 @@
 // Change here to customise config
 
 // Name of the Github Repo, it's also teh baseUrl
-const workshopName = 'multimodal-pdf-agent-n8n';
+const workshopName = 'multimodal-pdf-agent-workshop';
 // Change this if hosting outside mongodb-developer
 const organizationName = "mongodb-developer";
 
 // Main page config
-const title = "Build a Multimodal PDF Agent with n8n";
-const tagLine = "Process, encode, and search PDFs using MongoDB Vector Search, Voyage AI, and n8n automation";
+const title = "Workshop";
+const tagLine = "Build multimodal AI agents with MongoDB Vector Search, Voyage AI, and Python";
 const startButtonTitle = "Start Building";
 const favicon = "img/favicon.svg"
 
 // Main Page Features
 const featureList = [
   {
-    title: 'Visual Workflow Building',
+    title: 'Python & Jupyter Development',
     illustration: 'img/index-1.png',
     description: `
-        Build complex AI agents using n8n's visual interface - no coding required!
+        Build sophisticated AI agents with Python, Jupyter notebooks, and production-ready patterns.
     `,
   },
   {
@@ -31,10 +31,10 @@ const featureList = [
     `,
   },
   {
-    title: 'Production-Ready',
+    title: 'Production-Ready Code',
     illustration: 'img/index-3.png',
     description: `
-        Deploy scalable vector search with MongoDB Atlas and n8n's robust automation.
+        Deploy scalable vector search with MongoDB Atlas and ReAct agent architecture.
     `,
   },
 ];
@@ -42,7 +42,7 @@ const featureList = [
 // UTM stuff
 
 const utmAdvocateName = `michael.lynn`;
-const utmWorkshopName = 'multimodal_pdf_agent_n8n'
+const utmWorkshopName = 'multimodal_pdf_agent_workshop'
 
 const utmParams = `utm_campaign=devrel&utm_source=workshop&utm_medium=cta&utm_content=${utmWorkshopName}&utm_term=${utmAdvocateName}`;
 
@@ -125,7 +125,7 @@ const config = {
     [
       require.resolve("docusaurus-lunr-search"),
       {
-        languages: ["es", "en"], // language codes
+        languages: ["en"], // language codes
       },
     ],
   ],
@@ -141,7 +141,7 @@ const config = {
       announcementBar: {
         id: "feedback_form",
         content:
-          'Don\'t forget to provide feedback for the workshop: <a target="_blank" rel="noopener noreferrer" href="#">links</a>',
+          'Don\'t forget to provide feedback for the workshop: <a target="_blank" rel="noopener noreferrer" href="https://forms.gle/RBGw1zY9FxL8N5fP7">Click here for Survey</a>',
         backgroundColor: "#fafbfc",
         textColor: "#091E42",
         isCloseable: true,
@@ -157,6 +157,21 @@ const config = {
           height: "100%",
         },
         items: [
+          {
+            to: "/slides",
+            label: "Slides",
+            position: "left",
+          },
+          // {
+          //   to: "/upload",
+          //   label: "PDF Tester",
+          //   position: "left",
+          // },
+          // {
+          //   to: "/assistant",
+          //   label: "Lab Assistant",
+          //   position: "left",
+          // },
           {
             type: "localeDropdown",
             position: "right",

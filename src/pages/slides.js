@@ -40,17 +40,17 @@ export default function SlidesPlayground() {
 
   return (
     <Layout
-      title="Slides Viewer Playground"
+      title="Welcome to AI4 - Building a Multimodal PDF Agent"
       description="Test and preview slide presentations">
       <div style={{ padding: '2rem' }}>
         <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
-          <h1>Slides Viewer Playground</h1>
+          <h1>Welcome to AI4 - Building a Multimodal PDF Agent</h1>
           <p style={{ fontSize: '1.1rem', marginBottom: '2rem' }}>
-            Test the SlideViewer component with different Google Slides presentations.
+            
           </p>
 
           <div style={{ marginBottom: '2rem' }}>
-            <h3>Workshop Slides</h3>
+            <h3>Sections</h3>
             <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap', marginBottom: '1rem' }}>
               {demoSlides.map((slide) => (
                 <button
@@ -74,43 +74,7 @@ export default function SlidesPlayground() {
               ))}
             </div>
 
-            <div style={{ marginTop: '2rem' }}>
-              <h3>Custom URL</h3>
-              <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
-                <input
-                  type="text"
-                  placeholder="Paste a Google Slides URL..."
-                  value={customUrl}
-                  onChange={(e) => setCustomUrl(e.target.value)}
-                  style={{
-                    flex: 1,
-                    padding: '0.5rem 1rem',
-                    border: '1px solid var(--ifm-color-emphasis-300)',
-                    borderRadius: '4px',
-                    fontSize: '1rem',
-                  }}
-                />
-                <button
-                  onClick={() => {
-                    if (customUrl) {
-                      setShowCustom(true);
-                    }
-                  }}
-                  disabled={!customUrl}
-                  style={{
-                    padding: '0.5rem 1.5rem',
-                    background: customUrl ? 'var(--ifm-color-primary)' : 'var(--ifm-color-emphasis-200)',
-                    color: customUrl ? 'white' : 'var(--ifm-color-emphasis-600)',
-                    border: 'none',
-                    borderRadius: '4px',
-                    cursor: customUrl ? 'pointer' : 'not-allowed',
-                    fontSize: '1rem',
-                    fontWeight: '500',
-                  }}>
-                  Load
-                </button>
-              </div>
-            </div>
+            
           </div>
 
           <div style={{ marginTop: '3rem' }}>

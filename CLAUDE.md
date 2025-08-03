@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Overview
 
-This is a Docusaurus-based documentation site for a workshop on building multimodal PDF agents with n8n, MongoDB Atlas, and Voyage AI. The site serves as educational content for workshop participants working in GitHub Codespaces.
+This is a Docusaurus-based documentation site for a workshop on building multimodal PDF agents with Python, MongoDB Atlas, and Voyage AI. The site serves as educational content for workshop participants working with Jupyter notebooks. The workshop teaches how to build production-ready AI agents using the VoyageAI Python client, MongoDB Atlas vector search, and Google Gemini 2.0 Flash with function calling capabilities.
 
 ## Development Commands
 
@@ -26,6 +26,24 @@ npm run workshop:logs     # View Docker service logs
 npm run workshop:reset    # Reset Docker services (removes volumes)
 npm run dev               # Start both docs site and Docker services
 npm run test:services     # Test workshop services
+```
+
+### Python Notebook Commands
+```bash
+# Navigate to original notebook
+cd static/notebooks/multimodal_agents_lab_original
+
+# Start MongoDB Atlas Local and Jupyter
+docker-compose up -d
+
+# Access Jupyter Lab
+open http://localhost:8888
+
+# Stop services  
+docker-compose down
+
+# Reset with volume cleanup
+docker-compose down -v
 ```
 
 ### Other Commands

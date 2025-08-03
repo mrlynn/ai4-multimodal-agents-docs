@@ -4,9 +4,9 @@
  * Modify the docusaurus.config.js file at your site's root instead.
  */
 export default {
-  "title": "Build a Multimodal PDF Agent with n8n",
-  "tagline": "Process, encode, and search PDFs using MongoDB Vector Search, Voyage AI, and n8n automation",
-  "url": "https://multimodal-pdf-agent-n8n.github.io",
+  "title": "Workshop",
+  "tagline": "Build multimodal AI agents with MongoDB Vector Search, Voyage AI, and Python",
+  "url": "https://multimodal-pdf-agent-workshop.github.io",
   "baseUrl": "/",
   "projectName": "mongodb-developer.github.io",
   "organizationName": "mongodb-developer",
@@ -31,9 +31,9 @@ export default {
     "startButtonTitle": "Start Building",
     "featureList": [
       {
-        "title": "Visual Workflow Building",
+        "title": "Python & Jupyter Development",
         "illustration": "img/index-1.png",
-        "description": "\n        Build complex AI agents using n8n's visual interface - no coding required!\n    "
+        "description": "\n        Build sophisticated AI agents with Python, Jupyter notebooks, and production-ready patterns.\n    "
       },
       {
         "title": "Multimodal Processing",
@@ -41,12 +41,12 @@ export default {
         "description": "\n        Process both text and images from PDFs using Voyage AI's multimodal embeddings.\n    "
       },
       {
-        "title": "Production-Ready",
+        "title": "Production-Ready Code",
         "illustration": "img/index-3.png",
-        "description": "\n        Deploy scalable vector search with MongoDB Atlas and n8n's robust automation.\n    "
+        "description": "\n        Deploy scalable vector search with MongoDB Atlas and ReAct agent architecture.\n    "
       }
     ],
-    "utmParams": "utm_campaign=devrel&utm_source=workshop&utm_medium=cta&utm_content=multimodal_pdf_agent_n8n&utm_term=michael.lynn"
+    "utmParams": "utm_campaign=devrel&utm_source=workshop&utm_medium=cta&utm_content=multimodal_pdf_agent_workshop&utm_term=michael.lynn"
   },
   "presets": [
     [
@@ -54,7 +54,7 @@ export default {
       {
         "docs": {
           "sidebarPath": "/Users/michael.lynn/code/ai4/workshop-docs/sidebars.js",
-          "editUrl": "https://github.com/mongodb-developer/multimodal-pdf-agent-n8n/blob/main"
+          "editUrl": "https://github.com/mongodb-developer/multimodal-pdf-agent-workshop/blob/main"
         },
         "theme": {
           "customCss": "/Users/michael.lynn/code/ai4/workshop-docs/src/css/custom.css"
@@ -71,7 +71,6 @@ export default {
       "/Users/michael.lynn/code/ai4/workshop-docs/node_modules/docusaurus-lunr-search/src/index.js",
       {
         "languages": [
-          "es",
           "en"
         ]
       }
@@ -87,13 +86,13 @@ export default {
     },
     "announcementBar": {
       "id": "feedback_form",
-      "content": "Don't forget to provide feedback for the workshop: <a target=\"_blank\" rel=\"noopener noreferrer\" href=\"#\">links</a>",
+      "content": "Don't forget to provide feedback for the workshop: <a target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://forms.gle/RBGw1zY9FxL8N5fP7\">Click here for Survey</a>",
       "backgroundColor": "#fafbfc",
       "textColor": "#091E42",
       "isCloseable": true
     },
     "navbar": {
-      "title": "Build a Multimodal PDF Agent with n8n",
+      "title": "Workshop",
       "logo": {
         "alt": "MongoDB Logo",
         "src": "img/logo.svg",
@@ -103,6 +102,11 @@ export default {
         "height": "100%"
       },
       "items": [
+        {
+          "to": "/slides",
+          "label": "Slides",
+          "position": "left"
+        },
         {
           "type": "localeDropdown",
           "position": "right",
@@ -117,22 +121,22 @@ export default {
       "links": [
         {
           "label": "Try MongoDB Atlas",
-          "href": "https://www.mongodb.com/try?utm_campaign=devrel&utm_source=workshop&utm_medium=cta&utm_content=multimodal_pdf_agent_n8n&utm_term=michael.lynn"
+          "href": "https://www.mongodb.com/try?utm_campaign=devrel&utm_source=workshop&utm_medium=cta&utm_content=multimodal_pdf_agent_workshop&utm_term=michael.lynn"
         },
         {
           "label": "Forums",
-          "href": "https://www.mongodb.com/community/forums?utm_campaign=devrel&utm_source=workshop&utm_medium=cta&utm_content=multimodal_pdf_agent_n8n&utm_term=michael.lynn"
+          "href": "https://www.mongodb.com/community/forums?utm_campaign=devrel&utm_source=workshop&utm_medium=cta&utm_content=multimodal_pdf_agent_workshop&utm_term=michael.lynn"
         },
         {
           "label": "Developer Center",
-          "href": "https://www.mongodb.com/developer?utm_campaign=devrel&utm_source=workshop&utm_medium=cta&utm_content=multimodal_pdf_agent_n8n&utm_term=michael.lynn"
+          "href": "https://www.mongodb.com/developer?utm_campaign=devrel&utm_source=workshop&utm_medium=cta&utm_content=multimodal_pdf_agent_workshop&utm_term=michael.lynn"
         },
         {
           "label": "MongoDB University",
-          "href": "https://learn.mongodb.com?utm_campaign=devrel&utm_source=workshop&utm_medium=cta&utm_content=multimodal_pdf_agent_n8n&utm_term=michael.lynn"
+          "href": "https://learn.mongodb.com?utm_campaign=devrel&utm_source=workshop&utm_medium=cta&utm_content=multimodal_pdf_agent_workshop&utm_term=michael.lynn"
         },
         {
-          "href": "https://github.com/mongodb-developer/multimodal-pdf-agent-n8n",
+          "href": "https://github.com/mongodb-developer/multimodal-pdf-agent-workshop",
           "label": "Workshop GitHub (Deployment)"
         }
       ],

@@ -1,0 +1,377 @@
+{
+  "name": "ReAct Multimodal Chat Agent",
+  "nodes": [
+    {
+      "parameters": {
+        "path": "chat-agent",
+        "options": {
+          "noResponseBody": false
+        },
+        "responseMode": "lastNode"
+      },
+      "id": "chat-webhook",
+      "name": "Chat Agent Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [240, 300]
+    },
+    {
+      "parameters": {
+        "jsCode": "// ReAct Chat Agent - Reasoning Phase\n// Analyzes user questions and plans the best response strategy\n\nconst input = $input.all()[0];\nconst message = input.json.message || input.json.query || input.json.question;\nconst filename = input.json.filename;\nconst conversationId = input.json.conversation_id || 'default';\n\n// Agent's reasoning process\nlet reasoning = \"Analyzing user query...\\n\";\nlet queryType = 'general';\nlet plannedActions = [];\nlet confidence = 0.7;\n\nif (!message) {\n  reasoning += \"- No message provided\\n\";\n  reasoning += \"- Will request clarification\\n\";\n  queryType = 'error';\n  plannedActions = ['error_response'];\n  confidence = 0.9;\n} else {\n  reasoning += `- User question: \"${message}\"\\n`;\n  \n  // Analyze query intent\n  const lowerMessage = message.toLowerCase();\n  \n  if (lowerMessage.includes('summarize') || lowerMessage.includes('summary')) {\n    reasoning += \"- Query type: Document summarization\\n\";\n    reasoning += \"- Strategy: Retrieve broader context, synthesize overview\\n\";\n    queryType = 'summarization';\n    plannedActions = ['broad_search', 'synthesize_summary', 'respond'];\n    confidence = 0.85;\n  } else if (lowerMessage.includes('compare') || lowerMessage.includes('difference')) {\n    reasoning += \"- Query type: Comparison analysis\\n\";\n    reasoning += \"- Strategy: Search multiple topics, contrast findings\\n\";\n    queryType = 'comparison';\n    plannedActions = ['multi_search', 'compare_results', 'respond'];\n    confidence = 0.8;\n  } else if (lowerMessage.includes('explain') || lowerMessage.includes('how') || lowerMessage.includes('why')) {\n    reasoning += \"- Query type: Explanation request\\n\";\n    reasoning += \"- Strategy: Find relevant context, provide detailed explanation\\n\";\n    queryType = 'explanation';\n    plannedActions = ['semantic_search', 'detailed_explanation', 'respond'];\n    confidence = 0.9;\n  } else if (lowerMessage.includes('find') || lowerMessage.includes('search') || lowerMessage.includes('look for')) {\n    reasoning += \"- Query type: Information retrieval\\n\";\n    reasoning += \"- Strategy: Precise vector search, return specific information\\n\";\n    queryType = 'retrieval';\n    plannedActions = ['precise_search', 'extract_info', 'respond'];\n    confidence = 0.85;\n  } else {\n    reasoning += \"- Query type: General question answering\\n\";\n    reasoning += \"- Strategy: Semantic search with contextual response\\n\";\n    queryType = 'qa';\n    plannedActions = ['semantic_search', 'contextual_response', 'respond'];\n    confidence = 0.75;\n  }\n  \n  if (filename) {\n    reasoning += `- Target document: ${filename}\\n`;\n    reasoning += \"- Will scope search to specific document\\n\";\n  } else {\n    reasoning += \"- No specific document specified\\n\";\n    reasoning += \"- Will search across all available documents\\n\";\n  }\n}\n\n// Agent state for this conversation turn\nconst agentState = {\n  conversation_id: conversationId,\n  user_message: message,\n  target_filename: filename,\n  query_type: queryType,\n  reasoning: reasoning,\n  planned_actions: plannedActions,\n  confidence: confidence,\n  timestamp: new Date().toISOString(),\n  context: {\n    has_message: !!message,\n    has_filename: !!filename,\n    query_length: message ? message.length : 0\n  },\n  next_action: plannedActions[0] || 'error_response'\n};\n\nconsole.log('🤖 Chat Agent Reasoning:', agentState);\n\nreturn [{\n  json: agentState,\n  binary: input.binary || {}\n}];"
+      },
+      "id": "agent-reasoning",
+      "name": "Agent Reasoning",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [460, 300]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "error",
+              "leftValue": "={{ $json.query_type }}",
+              "rightValue": "error",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            },
+            {
+              "id": "summarization",
+              "leftValue": "={{ $json.query_type }}",
+              "rightValue": "summarization",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            },
+            {
+              "id": "comparison",
+              "leftValue": "={{ $json.query_type }}",
+              "rightValue": "comparison",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            },
+            {
+              "id": "needs_search",
+              "leftValue": "={{ ['explanation', 'retrieval', 'qa'].includes($json.query_type) }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "true"
+              }
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "agent-router",
+      "name": "Agent Action Router",
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3,
+      "position": [680, 300]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Tool: Query Embedding Generator\n// Generates embeddings for semantic search\n\nconst agentContext = $json;\nconst message = agentContext.user_message;\n\nif (!message) {\n  return [{\n    json: {\n      ...agentContext,\n      tool_result: {\n        success: false,\n        error: 'No message to embed',\n        tool_used: 'embedding_generator'\n      }\n    }\n  }];\n}\n\n// Prepare embedding request\nconst embeddingRequest = {\n  text: message,\n  model: \"voyage-multimodal-3\",\n  input_type: \"query\"\n};\n\nreturn [{\n  json: {\n    ...agentContext,\n    embedding_request: embeddingRequest,\n    current_step: 'generating_embedding'\n  }\n}];"
+      },
+      "id": "tool-embedding-generator",
+      "name": "Tool: Embedding Generator",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [900, 400]
+    },
+    {
+      "parameters": {
+        "url": "={{ $env.VOYAGE_API_URL || 'https://api.voyageai.com/v1/embeddings' }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "Bearer {{ $env.VOYAGE_API_KEY }}"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify($json.embedding_request) }}",
+        "options": {}
+      },
+      "id": "voyage-embedding-api",
+      "name": "Voyage Embedding API",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [1120, 400]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Tool: Intelligent Vector Search Agent\n// Performs context-aware vector search based on query type\n\nconst agentContext = $json;\nconst queryType = agentContext.query_type;\nconst filename = agentContext.target_filename;\nconst embedding = $json.data[0].embedding;\n\n// Agent decides search parameters based on query type\nlet searchConfig = {\n  numCandidates: 50,\n  limit: 5,\n  filter: {}\n};\n\n// Intelligent search configuration\nif (queryType === 'summarization') {\n  searchConfig.limit = 8; // Need more context for summaries\n  searchConfig.numCandidates = 100;\n} else if (queryType === 'comparison') {\n  searchConfig.limit = 10; // Need multiple perspectives\n  searchConfig.numCandidates = 150;\n} else if (queryType === 'explanation') {\n  searchConfig.limit = 6; // Detailed context needed\n  searchConfig.numCandidates = 75;\n} else if (queryType === 'retrieval') {\n  searchConfig.limit = 3; // Precise, focused results\n  searchConfig.numCandidates = 30;\n}\n\n// Apply filename filter if specified\nif (filename) {\n  searchConfig.filter.filename = filename;\n}\n\n// Build MongoDB aggregation pipeline\nconst searchPipeline = [\n  {\n    \"$vectorSearch\": {\n      \"index\": \"vector_index\",\n      \"path\": \"embedding\",\n      \"queryVector\": embedding,\n      \"numCandidates\": searchConfig.numCandidates,\n      \"limit\": searchConfig.limit,\n      \"filter\": searchConfig.filter\n    }\n  },\n  {\n    \"$project\": {\n      \"filename\": 1,\n      \"text_content\": 1,\n      \"images_detected\": 1,\n      \"metadata\": 1,\n      \"score\": { \"$meta\": \"vectorSearchScore\" }\n    }\n  }\n];\n\nreturn [{\n  json: {\n    ...agentContext,\n    search_config: searchConfig,\n    search_pipeline: searchPipeline,\n    current_step: 'executing_search'\n  }\n}];"
+      },
+      "id": "tool-intelligent-search",
+      "name": "Tool: Intelligent Search",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [1340, 400]
+    },
+    {
+      "parameters": {
+        "operation": "aggregate",
+        "collection": "pdf_documents",
+        "query": "={{ JSON.stringify($json.search_pipeline) }}"
+      },
+      "id": "mongodb-vector-search",
+      "name": "MongoDB Vector Search",  
+      "type": "n8n-nodes-base.mongoDb",
+      "typeVersion": 1,
+      "position": [1560, 400],
+      "credentials": {
+        "mongoDb": {
+          "id": "mongodb-workshop",
+          "name": "MongoDB Workshop"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// Tool: Context Synthesis Agent\n// Intelligently processes search results based on query type\n\nconst agentContext = $input.all()[0].json;\nconst searchResults = $input.all().slice(1); // Skip the first item (context)\nconst queryType = agentContext.query_type;\nconst userMessage = agentContext.user_message;\n\nif (!searchResults.length) {\n  return [{\n    json: {\n      ...agentContext,\n      tool_result: {\n        success: false,\n        message: 'No relevant content found',\n        context: '',\n        sources: [],\n        tool_used: 'context_synthesizer'\n      }\n    }\n  }];\n}\n\n// Agent synthesizes context based on query type\nlet synthesizedContext = '';\nlet sources = [];\n\nif (queryType === 'summarization') {\n  synthesizedContext = `DOCUMENT SUMMARY CONTEXT:\\n`;\n  synthesizedContext += searchResults\n    .map((result, idx) => `\\n[Section ${idx + 1}] (Relevance: ${result.json.score.toFixed(3)})\\n${result.json.text_content}\\n`)\n    .join('\\n---\\n');\n    \n} else if (queryType === 'comparison') {\n  synthesizedContext = `COMPARISON ANALYSIS CONTEXT:\\n`;\n  synthesizedContext += `User wants to compare/analyze: \"${userMessage}\"\\n\\n`;\n  synthesizedContext += searchResults\n    .map((result, idx) => `\\n[Perspective ${idx + 1}] (Score: ${result.json.score.toFixed(3)})\\nFrom: ${result.json.filename}\\n${result.json.text_content}\\n`)\n    .join('\\n---\\n');\n    \n} else if (queryType === 'explanation') {\n  synthesizedContext = `DETAILED EXPLANATION CONTEXT:\\n`;\n  synthesizedContext += `User needs explanation for: \"${userMessage}\"\\n\\n`;\n  synthesizedContext += `RELEVANT INFORMATION:\\n`;\n  synthesizedContext += searchResults\n    .map((result, idx) => `\\n${idx + 1}. ${result.json.text_content} (Relevance: ${result.json.score.toFixed(3)})\\n`)\n    .join('\\n');\n    \n} else {\n  // General QA or retrieval\n  synthesizedContext = `CONTEXTUAL INFORMATION:\\n`;\n  synthesizedContext += `Question: \"${userMessage}\"\\n\\n`;\n  synthesizedContext += `RELEVANT CONTENT:\\n`;\n  synthesizedContext += searchResults\n    .map((result, idx) => `${idx + 1}. ${result.json.text_content}\\n   (Source: ${result.json.filename}, Score: ${result.json.score.toFixed(3)})\\n`)\n    .join('\\n');\n}\n\n// Prepare sources array\nsources = searchResults.map((result, idx) => ({\n  id: idx + 1,\n  filename: result.json.filename,\n  content_preview: result.json.text_content.substring(0, 150) + '...',\n  relevance_score: result.json.score,\n  has_images: result.json.images_detected && result.json.images_detected.length > 0\n}));\n\nreturn [{\n  json: {\n    ...agentContext,\n    tool_result: {\n      success: true,\n      context: synthesizedContext,\n      sources: sources,\n      context_length: synthesizedContext.length,\n      num_sources: sources.length,\n      tool_used: 'context_synthesizer'\n    },\n    current_step: 'context_synthesized',\n    next_action: 'generate_response'\n  }\n}];"
+      },
+      "id": "tool-context-synthesizer",
+      "name": "Tool: Context Synthesizer",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [1780, 400]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Tool: Response Generation Agent\n// Uses Google Gemini to generate intelligent responses\n\nconst agentContext = $json;\nconst queryType = agentContext.query_type;\nconst userMessage = agentContext.user_message;\nconst contextData = agentContext.tool_result;\n\n// Agent crafts specialized prompts based on query type\nlet systemPrompt = '';\nlet userPrompt = '';\n\nif (queryType === 'summarization') {\n  systemPrompt = `You are an expert document analyst. Create comprehensive, well-structured summaries of document content. Focus on key insights, main themes, and important details.`;\n  userPrompt = `Please provide a comprehensive summary based on this context:\\n\\n${contextData.context}\\n\\nUser's request: \"${userMessage}\"`;\n  \n} else if (queryType === 'comparison') {\n  systemPrompt = `You are an analytical AI that excels at comparing and contrasting information. Identify similarities, differences, and provide balanced analysis.`;\n  userPrompt = `Analyze and compare the information in this context to answer the user's question:\\n\\n${contextData.context}\\n\\nUser's question: \"${userMessage}\"`;\n  \n} else if (queryType === 'explanation') {\n  systemPrompt = `You are a knowledgeable teacher who excels at explaining complex topics clearly and thoroughly. Break down concepts step-by-step.`;\n  userPrompt = `Provide a detailed explanation based on this context:\\n\\n${contextData.context}\\n\\nUser wants to understand: \"${userMessage}\"`;\n  \n} else {\n  // General QA\n  systemPrompt = `You are a helpful AI assistant that provides accurate, contextual answers based on provided document content. Be specific and cite sources when relevant.`;\n  userPrompt = `Answer the user's question using this context:\\n\\n${contextData.context}\\n\\nUser's question: \"${userMessage}\"`;\n}\n\n// Prepare Gemini API request\nconst geminiRequest = {\n  contents: [\n    {\n      parts: [\n        {\n          text: `${systemPrompt}\\n\\n${userPrompt}`\n        }\n      ]\n    }\n  ],\n  generationConfig: {\n    temperature: queryType === 'summarization' ? 0.3 : 0.7,\n    topK: 40,\n    topP: 0.95,\n    maxOutputTokens: queryType === 'summarization' ? 1024 : 512\n  },\n  safetySettings: [\n    {\n      category: \"HARM_CATEGORY_HARASSMENT\",\n      threshold: \"BLOCK_MEDIUM_AND_ABOVE\"\n    }\n  ]\n};\n\nreturn [{\n  json: {\n    ...agentContext,\n    gemini_request: geminiRequest,\n    current_step: 'generating_response'\n  }\n}];"
+      },
+      "id": "tool-response-generator",
+      "name": "Tool: Response Generator",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [2000, 400]
+    },
+    {
+      "parameters": {
+        "url": "={{ $env.GEMINI_API_URL || 'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash-exp:generateContent' }}?key={{ $env.GEMINI_API_KEY }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify($json.gemini_request) }}",
+        "options": {}
+      },
+      "id": "gemini-api",
+      "name": "Google Gemini API",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [2220, 400]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Agent Response Finalizer\n// Formats and packages the final response\n\nconst agentContext = $json;\nconst geminiResponse = $json.candidates?.[0]?.content?.parts?.[0]?.text;\nconst queryType = agentContext.query_type;\nconst userMessage = agentContext.user_message;\nconst sources = agentContext.tool_result?.sources || [];\n\nlet finalResponse = {\n  success: true,\n  message: geminiResponse || 'I apologize, but I couldn\\'t generate a response at this time.',\n  query: userMessage,\n  query_type: queryType,\n  confidence: agentContext.confidence,\n  sources: sources,\n  agent_info: {\n    reasoning: agentContext.reasoning,\n    actions_taken: agentContext.planned_actions,\n    processing_time: new Date().toISOString(),\n    model_used: 'gemini-2.0-flash-exp',\n    num_sources: sources.length\n  },\n  conversation_id: agentContext.conversation_id,\n  timestamp: new Date().toISOString()\n};\n\n// Add query-type specific metadata\nif (queryType === 'summarization') {\n  finalResponse.response_type = 'document_summary';\n} else if (queryType === 'comparison') {\n  finalResponse.response_type = 'comparative_analysis';\n} else if (queryType === 'explanation') {\n  finalResponse.response_type = 'detailed_explanation';\n} else {\n  finalResponse.response_type = 'question_answer';\n}\n\nreturn [{ json: finalResponse }];"
+      },
+      "id": "agent-response-finalizer",
+      "name": "Agent Response Finalizer",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [2440, 400]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Tool: Error Handler\n// Generates helpful error responses\n\nconst agentContext = $json;\n\nlet errorResponse = {\n  success: false,\n  message: '❌ I need more information to help you.',\n  error: 'Missing required information',\n  agent_info: {\n    reasoning: agentContext.reasoning,\n    suggestion: 'Please provide both a question/message and specify a document filename if you want to search a specific document.',\n    capabilities: [\n      'Answer questions about uploaded PDF documents',\n      'Provide document summaries and explanations',\n      'Compare information across different sections',\n      'Find specific information within documents'\n    ]\n  },\n  conversation_id: agentContext.conversation_id,\n  timestamp: new Date().toISOString()\n};\n\nreturn [{ json: errorResponse }];"
+      },
+      "id": "tool-error-handler",
+      "name": "Tool: Error Handler",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [900, 200]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Tool: Summarization Agent\n// Handles document summarization requests\n\nconst agentContext = $json;\nconst userMessage = agentContext.user_message;\nconst filename = agentContext.target_filename;\n\n// Generate summary-optimized embedding query\nlet summaryQuery = userMessage;\nif (!summaryQuery.toLowerCase().includes('summary') && !summaryQuery.toLowerCase().includes('summarize')) {\n  summaryQuery = `Provide a comprehensive summary of: ${userMessage}`;\n}\n\nconst embeddingRequest = {\n  text: summaryQuery,\n  model: \"voyage-multimodal-3\",\n  input_type: \"query\"\n};\n\nreturn [{\n  json: {\n    ...agentContext,\n    embedding_request: embeddingRequest,\n    current_step: 'summarization_embedding'\n  }\n}];"
+      },
+      "id": "tool-summarization-agent",
+      "name": "Tool: Summarization Agent",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [900, 100]
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Chat Agent Webhook": {
+      "main": [
+        [
+          {
+            "node": "Agent Reasoning",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Agent Reasoning": {
+      "main": [
+        [
+          {
+            "node": "Agent Action Router",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Agent Action Router": {
+      "main": [
+        [
+          {
+            "node": "Tool: Error Handler",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Tool: Summarization Agent",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Tool: Summarization Agent",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Tool: Embedding Generator",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Tool: Embedding Generator": {
+      "main": [
+        [
+          {
+            "node": "Voyage Embedding API",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Tool: Summarization Agent": {
+      "main": [
+        [
+          {
+            "node": "Voyage Embedding API",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Voyage Embedding API": {
+      "main": [
+        [
+          {
+            "node": "Tool: Intelligent Search",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Tool: Intelligent Search": {
+      "main": [
+        [
+          {
+            "node": "MongoDB Vector Search",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "MongoDB Vector Search": {
+      "main": [
+        [
+          {
+            "node": "Tool: Context Synthesizer",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Tool: Context Synthesizer": {
+      "main": [
+        [
+          {
+            "node": "Tool: Response Generator",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Tool: Response Generator": {
+      "main": [
+        [
+          {
+            "node": "Google Gemini API",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini API": {
+      "main": [
+        [
+          {
+            "node": "Agent Response Finalizer",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "react-multimodal-chat-agent-v1",
+  "meta": {
+    "templateCredsSetupCompleted": false
+  },
+  "id": "react-multimodal-chat-agent",
+  "tags": ["workshop", "agent", "react", "multimodal", "chat", "gemini"]
+}

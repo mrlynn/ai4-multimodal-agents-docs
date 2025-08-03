@@ -1,0 +1,207 @@
+{
+  "name": "Multimodal Chat Agent",
+  "nodes": [
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chatTrigger",
+      "typeVersion": 1.1,
+      "position": [240, 300],
+      "id": "chat-trigger",
+      "name": "When chat message received",
+      "webhookId": "multimodal-chat-agent"
+    },
+    {
+      "parameters": {
+        "systemPromptTemplate": "You are an intelligent multimodal AI assistant that can help users understand PDF documents. You have access to a MongoDB vector database containing document embeddings and can search for relevant information to answer questions.\n\nWhen users ask questions:\n1. Search the vector database for relevant document sections\n2. Provide accurate, helpful answers based on the retrieved context\n3. If you find charts, diagrams, or images mentioned in the context, explain their significance\n4. Always cite your sources when possible\n5. If you cannot find relevant information, say so clearly\n\nBe conversational, helpful, and thorough in your responses.",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2.1,
+      "position": [460, 300],
+      "id": "multimodal-agent",
+      "name": "Multimodal AI Agent"
+    },
+    {
+      "parameters": {
+        "model": "gemini-2.0-flash-exp",
+        "options": {
+          "temperature": 0.7,
+          "maxOutputTokens": 1024
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [240, 480],
+      "id": "gemini-model",
+      "name": "Google Gemini Chat Model",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "workshop-gemini-api",
+          "name": "Workshop Gemini API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "databaseName": "multimodal_workshop",
+        "collectionName": "chat_sessions"
+      },
+      "type": "@n8n/n8n-nodes-langchain.memoryMongoDbChat",
+      "typeVersion": 1,
+      "position": [680, 480],
+      "id": "mongodb-memory",
+      "name": "MongoDB Chat Memory",
+      "credentials": {
+        "mongoDb": {
+          "id": "mongodb-workshop",
+          "name": "MongoDB Workshop"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "connectionString": "={{ $env.MONGODB_CONNECTION_STRING }}",
+        "databaseName": "multimodal_workshop",
+        "collectionName": "pdf_documents",
+        "indexName": "vector_index",
+        "embeddingDimensions": 1024,
+        "textKey": "text_content",
+        "topK": 5
+      },
+      "type": "@n8n/n8n-nodes-langchain.vectorStoreMongoDb",
+      "typeVersion": 1,
+      "position": [460, 480],
+      "id": "mongodb-vectorstore",
+      "name": "MongoDB Vector Store",
+      "credentials": {
+        "mongoDb": {
+          "id": "mongodb-workshop",
+          "name": "MongoDB Workshop"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "model": "voyage-multimodal-3",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.embeddingsVoyageAI",
+      "typeVersion": 1,
+      "position": [240, 640],
+      "id": "voyage-embeddings",
+      "name": "Voyage AI Embeddings",
+      "credentials": {
+        "voyageAiApi": {
+          "id": "workshop-voyage-api",
+          "name": "Workshop Voyage API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "name": "search_documents",
+        "description": "Search through uploaded PDF documents to find relevant information. Use this tool when users ask questions about document content.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "query": {
+              "type": "string",
+              "description": "The search query to find relevant document sections"
+            },
+            "filename": {
+              "type": "string", 
+              "description": "Optional: specific filename to search within"
+            }
+          },
+          "required": ["query"]
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.toolVectorStore",
+      "typeVersion": 1,
+      "position": [680, 300],
+      "id": "document-search-tool",
+      "name": "Document Search Tool"
+    }
+  ],
+  "connections": {
+    "When chat message received": {
+      "main": [
+        [
+          {
+            "node": "Multimodal AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Multimodal AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "MongoDB Chat Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "Multimodal AI Agent",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "MongoDB Vector Store": {
+      "ai_vectorStore": [
+        [
+          {
+            "node": "Document Search Tool",
+            "type": "ai_vectorStore",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Voyage AI Embeddings": {
+      "ai_embedding": [
+        [
+          {
+            "node": "MongoDB Vector Store",
+            "type": "ai_embedding",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Document Search Tool": {
+      "ai_tool": [
+        [
+          {
+            "node": "Multimodal AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "pinData": {},
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "multimodal-chat-agent-v1",
+  "meta": {
+    "templateCredsSetupCompleted": false
+  },
+  "id": "multimodal-chat-agent",
+  "tags": ["workshop", "agent", "langchain", "multimodal", "chat"]
+}

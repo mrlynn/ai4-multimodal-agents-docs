@@ -7,3 +7,4 @@ dist
 .docusaurus/*
 .vercel
 DOCUMENTATION-UPDATE-PROMPT.md
+_old

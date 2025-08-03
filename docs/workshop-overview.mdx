@@ -31,7 +31,7 @@ Use these integrated slides for your presentation without switching between appl
 - Workshop objectives and outcomes
 - Technology stack overview
 - What attendees will build
-- Two distinct learning paths available
+- Python-based implementation with Jupyter notebooks
 
 ---
 
@@ -86,25 +86,19 @@ Use these integrated slides for your presentation without switching between appl
 
 ---
 
-## 🛤️ **DECISION POINT: Choose Your Learning Path**
+## 🐍 **Implementation Approach: Python & Jupyter**
 
-**After this overview, attendees will choose between two comprehensive implementation approaches:**
+**This workshop uses a comprehensive code-first approach:**
 
-### Path A: Visual No-Code Development
-- ⚡ **n8n Workflows** - Drag-and-drop agent building
-- 🎯 **Target Audience** - Business analysts, citizen developers, visual learners
-- ⏱️ **Time Investment** - Focus on logic and integration
-- 🚀 **Outcome** - Production-ready workflows
-
-### Path B: Code-First Development  
-- 🐍 **Python & Jupyter** - Direct programming approach
-- 🎯 **Target Audience** - Developers, data scientists, code-first learners
-- ⏱️ **Time Investment** - Focus on AI libraries and algorithms
-- 🚀 **Outcome** - Customizable code foundation
+### Development Environment  
+- 🐍 **Python & Jupyter Notebooks** - Hands-on programming
+- 🎯 **Target Audience** - Developers, data scientists, AI engineers
+- ⏱️ **Learning Focus** - AI libraries, vector search, and agent patterns
+- 🚀 **Outcome** - Production-ready, customizable AI agent code
 
 ---
 
-## 📊 What You'll Build (Both Paths)
+## 📊 What You'll Build
 
 By the end of this workshop, you'll have created:
 
@@ -152,15 +146,16 @@ By the end of this workshop, you'll have created:
 
 ## 🛠️ Technology Stack
 
-### Core Technologies (Both Paths)
+### Core Technologies
 - **MongoDB Atlas** - Vector database and document storage
-- **Voyage AI** - Advanced multimodal embedding models
-- **Google Gemini** - Large language model with function calling
+- **Voyage AI** - Advanced multimodal embedding models with Python client
+- **Google Gemini 2.0 Flash** - Large language model with function calling
 - **Vector Search** - Semantic similarity and retrieval
 
-### Path-Specific Tools
-- **n8n Path** - Visual workflow automation platform
-- **Python Path** - Jupyter notebooks with AI libraries
+### Development Tools
+- **Jupyter Notebooks** - Interactive development environment
+- **Python Libraries** - pymongo, voyageai, google-genai, PIL
+- **Docker** - Local MongoDB Atlas for development
 
 ---
 
@@ -176,12 +171,12 @@ Before we begin implementation, ensure you have:
 ### Technical Setup
 - [ ] **GitHub Codespaces** access (recommended) OR
 - [ ] **Local Docker** environment OR  
-- [ ] **Python 3.8+** with Jupyter (for Python path)
+- [ ] **Python 3.8+** with Jupyter
 
 ### Optional but Helpful
 - [ ] Basic understanding of APIs
 - [ ] Familiarity with JSON data structures
-- [ ] Experience with either visual workflows OR Python
+- [ ] Basic Python programming experience
 
 ---
 
@@ -202,14 +197,14 @@ Before we begin implementation, ensure you have:
 ### 🔗 Quick Links
 - [GitHub Repository](https://github.com/mongodb-developer/multimodal-pdf-agent-n8n)
 - [Workshop Slides](/slides) - Interactive slide playground
-- [Pre-built Workflows](https://github.com/mongodb-developer/multimodal-pdf-agent-n8n/tree/main/workflows) - Ready-to-import n8n flows
-- [Python Notebook](https://github.com/mongodb-developer/multimodal-pdf-agent-n8n/blob/main/notebooks/notebook.ipynb) - Complete code implementation
+- [Python Notebook](/static/notebooks/multimodal_agents_lab_voyageai.ipynb) - Complete workshop notebook
+- [Example PDFs](/static/pdf/) - Sample documents for testing
 
 ### 📖 Reference Materials
 - [MongoDB Vector Search Documentation](https://www.mongodb.com/docs/atlas/atlas-vector-search/)
 - [Voyage AI Models Guide](https://docs.voyageai.com/docs/embeddings)
 - [Google Gemini API Reference](https://ai.google.dev/docs)
-- [n8n Documentation](https://docs.n8n.io/) (for no-code path)
+- [Python SDK Documentation](https://docs.voyageai.com/docs/python-sdk)
 
 ---
 
@@ -217,10 +212,10 @@ Before we begin implementation, ensure you have:
 
 **Next Steps:**
 1. **Complete Prerequisites** - Set up your accounts and API keys
-2. **Choose Your Path** - Select either n8n (visual) or Python (code) approach  
+2. **Open Jupyter Notebook** - Navigate to the workshop notebook  
 3. **Start Building** - Follow your chosen path's guided tutorials
 4. **Experiment & Extend** - Customize and enhance your agent
 
 **Let's build something amazing together!** 🚀
 
-[**→ Choose Your Learning Path**](./01-path-selection)
+[**→ Start Python Workshop**](./python-exercise-1)

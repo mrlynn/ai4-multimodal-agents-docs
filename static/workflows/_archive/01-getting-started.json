@@ -28,7 +28,7 @@
     {
       "parameters": {
         "respondWith": "json",
-        "responseBody": "{\n  \"status\": \"Workshop Ready! 🚀\",\n  \"message\": \"Your n8n environment is working correctly\",\n  \"next_steps\": [\n    \"Connect MongoDB Atlas\",\n    \"Import sample workflows\",\n    \"Start building!\"\n  ],\n  \"timestamp\": \"{{new Date().toISOString()}}\"\n}"
+        "responseBody": "{\n  \"status\": \"Workshop Ready! 🚀\",\n  \"message\": \"Your n8n environment is working correctly\",\n  \"next_steps\": [\n    \"Connect MongoDB Atlas\",\n    \"Import sample workflows\",\n    \"Start building!\"\n  ],\n  \"timestamp\": \"{{ new Date().toISOString() }}\",\n  \"webhook_url\": \"{{ $json.webhook_url }}\"\n}"
       },
       "id": "respond-status",
       "name": "Return Status",

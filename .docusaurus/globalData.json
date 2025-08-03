@@ -11,87 +11,12 @@
           "mainDocId": "index",
           "docs": [
             {
-              "id": "agent-patterns",
-              "path": "/docs/agent-patterns",
-              "sidebar": "tutorialSidebar"
-            },
-            {
-              "id": "ai-agent-workflow",
-              "path": "/docs/ai-agent-workflow",
-              "sidebar": "tutorialSidebar"
-            },
-            {
-              "id": "api-architecture",
-              "path": "/docs/api-architecture",
-              "sidebar": "tutorialSidebar"
-            },
-            {
-              "id": "api-gateway-status",
-              "path": "/docs/api-gateway-status",
-              "sidebar": "tutorialSidebar"
-            },
-            {
-              "id": "approach-comparison",
-              "path": "/docs/approach-comparison",
-              "sidebar": "tutorialSidebar"
-            },
-            {
-              "id": "architecture-overview",
-              "path": "/docs/architecture-overview",
-              "sidebar": "tutorialSidebar"
-            },
-            {
               "id": "codebase",
               "path": "/docs/codebase"
             },
             {
-              "id": "community-resources",
-              "path": "/docs/community-resources",
-              "sidebar": "tutorialSidebar"
-            },
-            {
-              "id": "complete-multimodal-agent",
-              "path": "/docs/complete-multimodal-agent",
-              "sidebar": "tutorialSidebar"
-            },
-            {
               "id": "content-organization-guide",
               "path": "/docs/content-organization-guide"
-            },
-            {
-              "id": "cost-optimization",
-              "path": "/docs/cost-optimization",
-              "sidebar": "tutorialSidebar"
-            },
-            {
-              "id": "docker-troubleshooting",
-              "path": "/docs/docker-troubleshooting",
-              "sidebar": "tutorialSidebar"
-            },
-            {
-              "id": "enhanced-text-context-3",
-              "path": "/docs/enhanced-text-context-3",
-              "sidebar": "tutorialSidebar"
-            },
-            {
-              "id": "exercise-advanced-tools",
-              "path": "/docs/exercise-advanced-tools",
-              "sidebar": "tutorialSidebar"
-            },
-            {
-              "id": "exercise-memory-context",
-              "path": "/docs/exercise-memory-context",
-              "sidebar": "tutorialSidebar"
-            },
-            {
-              "id": "exercise-pdf-rag-agent",
-              "path": "/docs/exercise-pdf-rag-agent",
-              "sidebar": "tutorialSidebar"
-            },
-            {
-              "id": "github-codespaces",
-              "path": "/docs/github-codespaces",
-              "sidebar": "tutorialSidebar"
             },
             {
               "id": "index",
@@ -99,60 +24,8 @@
               "sidebar": "tutorialSidebar"
             },
             {
-              "id": "intro",
-              "path": "/docs/intro",
-              "sidebar": "tutorialSidebar"
-            },
-            {
-              "id": "local-setup-tips",
-              "path": "/docs/local-setup-tips",
-              "sidebar": "tutorialSidebar"
-            },
-            {
-              "id": "memory-context-patterns",
-              "path": "/docs/memory-context-patterns",
-              "sidebar": "tutorialSidebar"
-            },
-            {
-              "id": "mongodb-atlas-setup",
-              "path": "/docs/mongodb-atlas-setup",
-              "sidebar": "tutorialSidebar"
-            },
-            {
-              "id": "mongodb-vector-setup",
-              "path": "/docs/mongodb-vector-setup",
-              "sidebar": "tutorialSidebar"
-            },
-            {
-              "id": "monitoring-observability",
-              "path": "/docs/monitoring-observability",
-              "sidebar": "tutorialSidebar"
-            },
-            {
-              "id": "multimodal-image-queries",
-              "path": "/docs/multimodal-image-queries",
-              "sidebar": "tutorialSidebar"
-            },
-            {
-              "id": "n8n-first-run",
-              "path": "/docs/n8n-first-run",
-              "sidebar": "tutorialSidebar"
-            },
-            {
-              "id": "path-a-n8n-overview",
-              "path": "/docs/path-a-n8n-overview"
-            },
-            {
-              "id": "path-b-python-overview",
-              "path": "/docs/path-b-python-overview"
-            },
-            {
-              "id": "path-selection",
-              "path": "/docs/path-selection"
-            },
-            {
-              "id": "pdf-processing-workflow",
-              "path": "/docs/pdf-processing-workflow",
+              "id": "objectives-overview",
+              "path": "/docs/objectives-overview",
               "sidebar": "tutorialSidebar"
             },
             {
@@ -161,83 +34,23 @@
               "sidebar": "tutorialSidebar"
             },
             {
-              "id": "production-security",
-              "path": "/docs/production-security",
+              "id": "python-exercise-1",
+              "path": "/docs/python-exercise-1",
               "sidebar": "tutorialSidebar"
             },
             {
-              "id": "python-mongodb-approaches",
-              "path": "/docs/python-mongodb-approaches",
+              "id": "python-exercise-2",
+              "path": "/docs/python-exercise-2",
               "sidebar": "tutorialSidebar"
             },
             {
-              "id": "slide-viewer-demo",
-              "path": "/docs/slide-viewer-demo",
+              "id": "python-exercise-3",
+              "path": "/docs/python-exercise-3",
               "sidebar": "tutorialSidebar"
             },
             {
-              "id": "status-badge-usage-guide",
-              "path": "/docs/status-badge-usage-guide",
-              "sidebar": "tutorialSidebar"
-            },
-            {
-              "id": "status-monitoring",
-              "path": "/docs/status-monitoring",
-              "sidebar": "tutorialSidebar"
-            },
-            {
-              "id": "summary",
-              "path": "/docs/summary",
-              "sidebar": "tutorialSidebar"
-            },
-            {
-              "id": "tool-definition-primer",
-              "path": "/docs/tool-definition-primer",
-              "sidebar": "tutorialSidebar"
-            },
-            {
-              "id": "troubleshooting-guide",
-              "path": "/docs/troubleshooting-guide",
-              "sidebar": "tutorialSidebar"
-            },
-            {
-              "id": "upload-interface",
-              "path": "/docs/upload-interface",
-              "sidebar": "tutorialSidebar"
-            },
-            {
-              "id": "vector-search-workflow",
-              "path": "/docs/vector-search-workflow",
-              "sidebar": "tutorialSidebar"
-            },
-            {
-              "id": "voyage-ai-setup",
-              "path": "/docs/voyage-ai-setup",
-              "sidebar": "tutorialSidebar"
-            },
-            {
-              "id": "workflow-guide-getting-started",
-              "path": "/docs/workflow-guide-getting-started",
-              "sidebar": "tutorialSidebar"
-            },
-            {
-              "id": "workflow-guide-hybrid-agent",
-              "path": "/docs/workflow-guide-hybrid-agent",
-              "sidebar": "tutorialSidebar"
-            },
-            {
-              "id": "workflow-integration-guide",
-              "path": "/docs/workflow-integration-guide",
-              "sidebar": "tutorialSidebar"
-            },
-            {
-              "id": "workflow-reference",
-              "path": "/docs/workflow-reference",
-              "sidebar": "tutorialSidebar"
-            },
-            {
-              "id": "workflows-library",
-              "path": "/docs/workflows-library",
+              "id": "python-exercise-4",
+              "path": "/docs/python-exercise-4",
               "sidebar": "tutorialSidebar"
             },
             {
@@ -246,7 +59,8 @@
             },
             {
               "id": "workshop-overview",
-              "path": "/docs/workshop-overview"
+              "path": "/docs/workshop-overview",
+              "sidebar": "tutorialSidebar"
             }
           ],
           "draftIds": [],
@@ -254,7 +68,7 @@
             "tutorialSidebar": {
               "link": {
                 "path": "/docs/",
-                "label": "🎓 Workshop Overview"
+                "label": "🎓 Workshop Home"
               }
             }
           }
@@ -266,8 +80,8 @@
   "docusaurus-lunr-search": {
     "default": {
       "fileNames": {
-        "searchDoc": "search-doc-1753633344602.json",
-        "lunrIndex": "lunr-index-1753633344602.json"
+        "searchDoc": "search-doc-1754239321729.json",
+        "lunrIndex": "lunr-index-1754239321729.json"
       }
     }
   }

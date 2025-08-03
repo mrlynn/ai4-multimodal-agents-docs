@@ -11,7 +11,7 @@ sidebar_position: 25
   "PDF Processing", 
   "Vector Search", 
   "AI Agent"
-]} />
+]} compact={true} />
 
 Let's walk through your first n8n experience and set up the foundation for our multimodal PDF agent.
 
@@ -277,6 +277,54 @@ n8n
 - Click the link in email (don't copy/paste)
 - Check spam folder
 - Request new key if needed
+
+## 🔧 Troubleshooting Common Issues
+
+### Webhook URL Problems
+
+**Issue:** When importing workflows, webhook URLs show as `http://0.0.0.0:5678/webhook-test/...` and are read-only/not editable.
+
+**Solution:** The webhook URL is automatically generated based on your n8n instance. Here's how to fix it:
+
+1. **Delete and recreate the webhook node:**
+   - Select the webhook node that has the wrong URL
+   - Press Delete or right-click → Delete
+   - Click the **+** button to add a new node
+   - Search for "Webhook" and add it
+   - Set the same path (e.g., `workshop-status`)
+   - Reconnect it to the other nodes
+
+2. **Alternative: Copy the correct URL from the node**
+   - Even though you can't edit it, you can copy the Test URL
+   - Use this URL in your browser: replace `0.0.0.0` with `localhost`
+   - Example: If it shows `http://0.0.0.0:5678/webhook-test/workshop-status`
+   - Use: `http://localhost:5678/webhook-test/workshop-status`
+
+3. **Make sure n8n is accessible:**
+   - Check your browser address bar - what URL is n8n running on?
+   - Use that same hostname/port for the webhook URL
+
+**Pro Tip:** If you're running n8n with Docker or in a specific environment, you might need to set the `WEBHOOK_URL` environment variable to fix this permanently:
+```bash
+export WEBHOOK_URL=http://localhost:5678
+# or in your docker-compose.yml:
+# WEBHOOK_URL: http://localhost:5678
+```
+
+### "Site Can't Be Reached" Errors
+
+If `http://localhost:5678` doesn't work, try:
+- `http://127.0.0.1:5678`
+- Check if n8n is running: `docker ps` or `npm list -g n8n`
+- Restart n8n if needed
+
+### License Activation Issues
+
+- **Email in spam folder**: Check spam/junk mail for activation link
+- **Link expired**: Request a new license from Settings → Usage and Plan
+- **Still having issues**: You can use n8n without the license for this workshop
+
+---
 
 ## Next Steps
 

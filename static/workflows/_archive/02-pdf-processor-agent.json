@@ -1,0 +1,266 @@
+{
+  "name": "ReAct PDF Processing Agent",
+  "nodes": [
+    {
+      "parameters": {
+        "path": "multimodal-demo",
+        "options": {
+          "noResponseBody": false
+        },
+        "responseMode": "lastNode"
+      },
+      "id": "webhook-upload",
+      "name": "PDF Upload Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [240, 300]
+    },
+    {
+      "parameters": {
+        "jsCode": "// ReAct Agent - Reasoning Phase\n// Analyze the incoming request and determine what actions to take\n\nconst input = $input.all()[0];\nconst hasFile = input.binary && input.binary.data;\nconst hasQuery = input.json.query || input.json.question;\nconst hasAction = input.json.action;\n\n// Agent's reasoning process\nlet reasoning = \"Analyzing incoming request...\\n\";\nlet plannedActions = [];\nlet confidence = 0.8;\n\nif (hasFile) {\n  reasoning += \"- File detected: \" + (input.binary.data.fileName || 'unknown') + \"\\n\";\n  reasoning += \"- File type check needed\\n\";\n  reasoning += \"- If PDF: extract text and images, generate embeddings, store in vector DB\\n\";\n  plannedActions = ['validate_file', 'extract_content', 'generate_embeddings', 'store_vectors', 'respond'];\n  confidence = 0.9;\n} else if (hasQuery) {\n  reasoning += \"- Query detected: \" + hasQuery + \"\\n\";\n  reasoning += \"- Vector search needed to find relevant documents\\n\";\n  reasoning += \"- Generate response using retrieved context\\n\";\n  plannedActions = ['process_query', 'vector_search', 'generate_response'];\n  confidence = 0.85;\n} else {\n  reasoning += \"- No clear file or query detected\\n\";\n  reasoning += \"- Will attempt general processing\\n\";\n  plannedActions = ['general_help'];\n  confidence = 0.3;\n}\n\n// Agent decision\nconst agentState = {\n  task_type: hasFile ? 'file_processing' : hasQuery ? 'query_processing' : 'general',\n  reasoning: reasoning,\n  planned_actions: plannedActions,\n  confidence: confidence,\n  timestamp: new Date().toISOString(),\n  context: {\n    has_file: hasFile,\n    has_query: !!hasQuery,\n    has_action: !!hasAction\n  },\n  next_action: plannedActions[0] || 'general_help'\n};\n\nconsole.log('🤖 Agent Reasoning:', agentState);\n\nreturn [{\n  json: agentState,\n  binary: input.binary || {}\n}];"
+      },
+      "id": "agent-reasoning",
+      "name": "Agent Reasoning",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [460, 300]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "file_processing",
+              "leftValue": "={{ $json.task_type }}",
+              "rightValue": "file_processing",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            },
+            {
+              "id": "query_processing", 
+              "leftValue": "={{ $json.task_type }}",
+              "rightValue": "query_processing",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "agent-router",
+      "name": "Agent Action Router",
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3,
+      "position": [680, 300]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Tool: File Validation Agent\n// This tool validates uploaded files and decides next steps\n\nconst agentContext = $json;\nconst binary = $binary;\n\nif (!binary || !binary.data) {\n  return [{\n    json: {\n      ...agentContext,\n      tool_result: {\n        success: false,\n        error: 'No file provided',\n        tool_used: 'file_validator',\n        next_action: 'error_response'\n      }\n    }\n  }];\n}\n\nconst filename = binary.data.fileName || 'unknown';\nconst fileSize = binary.data.fileSize || 0;\n\n// Agent decision logic for file validation\nlet validation = {\n  filename: filename,\n  size: fileSize,\n  is_pdf: filename.toLowerCase().endsWith('.pdf'),\n  size_ok: fileSize < 50 * 1024 * 1024, // 50MB limit\n  tool_used: 'file_validator'\n};\n\nif (!validation.is_pdf) {\n  validation.success = false;\n  validation.error = 'Only PDF files are supported';\n  validation.next_action = 'error_response';\n} else if (!validation.size_ok) {\n  validation.success = false;\n  validation.error = 'File too large (max 50MB)';\n  validation.next_action = 'error_response';\n} else {\n  validation.success = true;\n  validation.message = `PDF validated: ${filename} (${Math.round(fileSize/1024)}KB)`;\n  validation.next_action = 'extract_content';\n}\n\nreturn [{\n  json: {\n    ...agentContext,\n    tool_result: validation,\n    current_step: 'file_validated'\n  },\n  binary: binary\n}];"
+      },
+      "id": "tool-file-validator",
+      "name": "Tool: File Validator",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [900, 200]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Tool: Content Extraction Agent\n// Intelligently extracts text and identifies images from PDFs\n\nconst agentContext = $json;\nconst filename = agentContext.tool_result?.filename || 'document.pdf';\n\n// Simulate advanced PDF processing\n// In production, this would use pdf-parse, pdf2pic, or similar libraries\nconst extractedContent = {\n  filename: filename,\n  text_content: `Extracted text from ${filename}:\\n\\nExecutive Summary:\\nThis document covers advanced artificial intelligence concepts, including:\\n- Multimodal learning and cross-modal understanding\\n- Vector embeddings and semantic search\\n- Large language models and their applications\\n- Machine learning pipeline architecture\\n\\nKey Findings:\\n- Multimodal AI systems show 34% improvement in understanding\\n- Vector databases enable sub-second search across millions of documents\\n- Proper chunking strategies improve retrieval accuracy by 28%\\n\\nTechnical Details:\\nThe implementation uses MongoDB Atlas Vector Search with 1024-dimensional embeddings generated by Voyage AI's multimodal-3 model. The system processes both textual content and visual elements like charts, diagrams, and tables.\\n\\nConclusion:\\nMultimodal approaches represent the future of AI systems, enabling more comprehensive understanding of complex documents.\",\n  \n  // Simulate image detection\n  images_detected: [\n    {\n      page: 1,\n      type: 'chart',\n      description: 'Performance comparison chart showing AI model accuracy metrics'\n    },\n    {\n      page: 3, \n      type: 'diagram',\n      description: 'System architecture diagram illustrating data flow'\n    },\n    {\n      page: 5,\n      type: 'table', \n      description: 'Results table with numerical performance data'\n    }\n  ],\n  \n  word_count: 234,\n  pages: 8,\n  has_images: true,\n  extracted_at: new Date().toISOString(),\n  tool_used: 'content_extractor'\n};\n\n// Agent decides next action based on content\nlet nextAction = 'generate_embeddings';\nif (extractedContent.has_images) {\n  nextAction = 'multimodal_embeddings';\n}\n\nreturn [{\n  json: {\n    ...agentContext,\n    tool_result: {\n      ...agentContext.tool_result,\n      content: extractedContent,\n      next_action: nextAction\n    },\n    current_step: 'content_extracted'\n  },\n  binary: $binary\n}];"
+      },
+      "id": "tool-content-extractor",
+      "name": "Tool: Content Extractor", 
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [1120, 200]
+    },
+    {
+      "parameters": {
+        "url": "={{ $env.VOYAGE_API_URL || 'https://api.voyageai.com/v1/embeddings' }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "Bearer {{ $env.VOYAGE_API_KEY }}"
+            },
+            {
+              "name": "Content-Type", 
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"input\": {{ JSON.stringify($json.tool_result.content.text_content) }},\n  \"model\": \"voyage-multimodal-3\",\n  \"input_type\": \"document\"\n}",
+        "options": {}
+      },
+      "id": "tool-embedding-generator",
+      "name": "Tool: Embedding Generator",
+      "type": "n8n-nodes-base.httpRequest", 
+      "typeVersion": 4.1,
+      "position": [1340, 200]
+    },
+    {
+      "parameters": {
+        "operation": "insertOne",
+        "collection": "pdf_documents", 
+        "fields": "={\n  \"filename\": {{ JSON.stringify($json.tool_result.content.filename) }},\n  \"text_content\": {{ JSON.stringify($json.tool_result.content.text_content) }},\n  \"embedding\": {{ JSON.stringify($json.data[0].embedding) }},\n  \"images\": {{ JSON.stringify($json.tool_result.content.images_detected) }},\n  \"metadata\": {\n    \"word_count\": {{ $json.tool_result.content.word_count }},\n    \"pages\": {{ $json.tool_result.content.pages }},\n    \"has_images\": {{ $json.tool_result.content.has_images }},\n    \"processed_at\": {{ JSON.stringify($json.tool_result.content.extracted_at) }},\n    \"model\": \"voyage-multimodal-3\",\n    \"agent_processed\": true\n  }\n}"
+      },
+      "id": "tool-vector-storage",
+      "name": "Tool: Vector Storage",
+      "type": "n8n-nodes-base.mongoDb",
+      "typeVersion": 1,
+      "position": [1560, 200],
+      "credentials": {
+        "mongoDb": {
+          "id": "mongodb-workshop",
+          "name": "MongoDB Workshop"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// Tool: Query Processing Agent\n// Handles question answering and document search\n\nconst agentContext = $json;\nconst query = $input.all()[0].json.query || $input.all()[0].json.question || '';\n\nif (!query.trim()) {\n  return [{\n    json: {\n      ...agentContext,\n      tool_result: {\n        success: false,\n        error: 'No query provided',\n        tool_used: 'query_processor',\n        next_action: 'error_response'\n      }\n    }\n  }];\n}\n\n// Agent analyzes query type and determines search strategy\nconst queryAnalysis = {\n  original_query: query,\n  query_type: 'semantic_search', // Could be: semantic_search, factual_lookup, comparison, summary\n  requires_context: true,\n  search_terms: query.toLowerCase().split(' ').filter(word => word.length > 3),\n  confidence: 0.8,\n  tool_used: 'query_processor'\n};\n\n// Determine search strategy\nif (query.toLowerCase().includes('compare') || query.toLowerCase().includes('difference')) {\n  queryAnalysis.query_type = 'comparison';\n  queryAnalysis.requires_multiple_docs = true;\n} else if (query.toLowerCase().includes('summarize') || query.toLowerCase().includes('summary')) {\n  queryAnalysis.query_type = 'summary';\n  queryAnalysis.requires_full_context = true;\n}\n\nreturn [{\n  json: {\n    ...agentContext,\n    tool_result: queryAnalysis,\n    current_step: 'query_analyzed',\n    next_action: 'vector_search'\n  }\n}];"
+      },
+      "id": "tool-query-processor",
+      "name": "Tool: Query Processor",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2, 
+      "position": [900, 400]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Agent Response Generator\n// Synthesizes results from all tools and generates final response\n\nconst agentContext = $json;\nconst taskType = agentContext.task_type;\nconst toolResult = agentContext.tool_result;\n\nlet response = {\n  success: false,\n  message: '',\n  details: {},\n  agent_info: {\n    reasoning: agentContext.reasoning,\n    actions_taken: agentContext.planned_actions,\n    confidence: agentContext.confidence,\n    processing_time: new Date().toISOString()\n  }\n};\n\nif (taskType === 'file_processing') {\n  if (toolResult.success) {\n    response.success = true;\n    response.message = `✅ Successfully processed PDF: ${toolResult.content?.filename || 'document'}`;\n    response.details = {\n      filename: toolResult.content?.filename,\n      pages: toolResult.content?.pages,\n      word_count: toolResult.content?.word_count,\n      has_images: toolResult.content?.has_images,\n      images_detected: toolResult.content?.images_detected?.length || 0,\n      stored_in_database: true,\n      next_steps: 'You can now ask questions about this document using the chat interface'\n    };\n  } else {\n    response.message = `❌ Failed to process file: ${toolResult.error}`;\n    response.details = { error: toolResult.error };\n  }\n} else if (taskType === 'query_processing') {\n  response.success = true;\n  response.message = `🤖 Agent processed your query: \"${toolResult.original_query}\"`;\n  response.details = {\n    query_type: toolResult.query_type,\n    search_strategy: toolResult.requires_context ? 'semantic_search' : 'direct_answer',\n    next_steps: 'Vector search would be performed next to find relevant documents'\n  };\n} else {\n  response.message = '👋 Hello! I can help you process PDFs or answer questions about documents.';\n  response.details = {\n    capabilities: [\n      'Upload and process PDF documents',\n      'Extract text and identify images',\n      'Generate multimodal embeddings', \n      'Store documents in vector database',\n      'Answer questions about uploaded documents'\n    ]\n  };\n}\n\nreturn [{ json: response }];"
+      },
+      "id": "agent-response-generator",
+      "name": "Agent Response Generator",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [1780, 300]
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "PDF Upload Webhook": {
+      "main": [
+        [
+          {
+            "node": "Agent Reasoning",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Agent Reasoning": {
+      "main": [
+        [
+          {
+            "node": "Agent Action Router",
+            "type": "main", 
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Agent Action Router": {
+      "main": [
+        [
+          {
+            "node": "Tool: File Validator",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Tool: Query Processor", 
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Agent Response Generator",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Tool: File Validator": {
+      "main": [
+        [
+          {
+            "node": "Tool: Content Extractor",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Tool: Content Extractor": {
+      "main": [
+        [
+          {
+            "node": "Tool: Embedding Generator", 
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Tool: Embedding Generator": {
+      "main": [
+        [
+          {
+            "node": "Tool: Vector Storage",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Tool: Vector Storage": {
+      "main": [
+        [
+          {
+            "node": "Agent Response Generator",
+            "type": "main", 
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Tool: Query Processor": {
+      "main": [
+        [
+          {
+            "node": "Agent Response Generator",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "react-pdf-agent-v1",
+  "meta": {
+    "templateCredsSetupCompleted": false
+  },
+  "id": "react-pdf-processing-agent",
+  "tags": ["workshop", "agent", "react", "multimodal"]
+}

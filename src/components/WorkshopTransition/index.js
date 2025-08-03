@@ -185,8 +185,8 @@ export function QRCodeAccess({ url, title = "Access Workshop Materials" }) {
   return (
     <div className={styles.qrAccess}>
       <div className={styles.qrHeader}>
-        <h4>📱 {title}</h4>
-        <p>Scan to access on mobile device</p>
+        {/* <h4>📱 {title}</h4> */}
+        
       </div>
       
       <div className={styles.qrContent}>
@@ -195,9 +195,9 @@ export function QRCodeAccess({ url, title = "Access Workshop Materials" }) {
           alt="QR Code for workshop access"
           className={styles.qrCode}
         />
-        <div className={styles.qrUrl}>
+        {/* <div className={styles.qrUrl}>
           <strong>URL:</strong> <code>{url}</code>
-        </div>
+        </div> */}
       </div>
     </div>
   );

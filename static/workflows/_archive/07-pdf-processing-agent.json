@@ -1,0 +1,237 @@
+{
+  "name": "PDF Processing Agent with LangChain",
+  "nodes": [
+    {
+      "parameters": {
+        "path": "process-pdf",
+        "options": {
+          "noResponseBody": false
+        },
+        "responseMode": "lastNode"
+      },
+      "id": "pdf-webhook",
+      "name": "PDF Upload Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [240, 300]
+    },
+    {
+      "parameters": {
+        "systemPromptTemplate": "You are a PDF processing agent. Your job is to:\n1. Validate uploaded PDF files\n2. Extract text and identify visual elements\n3. Generate multimodal embeddings\n4. Store processed content in MongoDB\n5. Provide a summary of the processing results\n\nAlways be thorough in your analysis and provide clear feedback about what was processed.",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2.1,
+      "position": [680, 300],
+      "id": "processing-agent",
+      "name": "PDF Processing Agent"
+    },
+    {
+      "parameters": {
+        "model": "gemini-2.0-flash-exp",
+        "options": {
+          "temperature": 0.2,
+          "maxOutputTokens": 1024
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [460, 500],
+      "id": "gemini-processor",
+      "name": "Gemini Processing Model",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "workshop-gemini-api",
+          "name": "Workshop Gemini API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "connectionString": "={{ $env.MONGODB_CONNECTION_STRING }}",
+        "databaseName": "multimodal_workshop",
+        "collectionName": "pdf_documents",
+        "indexName": "vector_index",
+        "embeddingDimensions": 1024,
+        "textKey": "text_content"
+      },
+      "type": "@n8n/n8n-nodes-langchain.vectorStoreMongoDb",
+      "typeVersion": 1,
+      "position": [680, 500],
+      "id": "mongodb-storage",
+      "name": "MongoDB Document Store",
+      "credentials": {
+        "mongoDb": {
+          "id": "mongodb-workshop",
+          "name": "MongoDB Workshop"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "model": "voyage-multimodal-3",
+        "options": {
+          "inputType": "document"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.embeddingsVoyageAI",
+      "typeVersion": 1,
+      "position": [460, 700],
+      "id": "voyage-processor",
+      "name": "Voyage Multimodal Embeddings",
+      "credentials": {
+        "voyageAiApi": {
+          "id": "workshop-voyage-api",
+          "name": "Workshop Voyage API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// PDF File Validation and Processing Preparation\nconst items = $input.all();\n\nif (!items.length) {\n  throw new Error('No input received');\n}\n\nconst item = items[0];\nconst binary = item.binary;\n\nif (!binary || !binary.data) {\n  throw new Error('No file uploaded');\n}\n\nconst filename = binary.data.fileName || 'unknown.pdf';\nconst fileSize = binary.data.fileSize || 0;\nconst mimeType = binary.data.mimeType || '';\n\n// Validate PDF\nif (!filename.toLowerCase().endsWith('.pdf')) {\n  throw new Error('Only PDF files are supported');\n}\n\nif (fileSize > 50 * 1024 * 1024) { // 50MB limit\n  throw new Error('File too large. Maximum size is 50MB');\n}\n\n// Prepare processing context\nconst processingContext = {\n  filename: filename,\n  fileSize: fileSize,\n  sizeMB: (fileSize / (1024 * 1024)).toFixed(2),\n  mimeType: mimeType,\n  uploadedAt: new Date().toISOString(),\n  status: 'validated',\n  processingId: `proc_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`\n};\n\nconsole.log('📄 PDF Validation Complete:', processingContext);\n\nreturn [{\n  json: {\n    message: `PDF file validated successfully: ${filename} (${processingContext.sizeMB}MB)`,\n    context: processingContext,\n    readyForProcessing: true\n  },\n  binary: binary\n}];"
+      },
+      "id": "validate-pdf",
+      "name": "Validate PDF File",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [460, 300]
+    },
+    {
+      "parameters": {
+        "name": "extract_pdf_content",
+        "description": "Extract text content and identify visual elements from the uploaded PDF file. This tool processes the PDF and prepares it for embedding generation.",
+        "jsCode": "const context = $json.context;\nconst filename = context.filename;\n\n// Simulate advanced PDF content extraction\n// In production, this would use libraries like pdf-parse, pdf2pic, or pymupdf\n\nconst extractedContent = {\n  filename: filename,\n  text_content: `EXTRACTED CONTENT FROM: ${filename}\\n\\n` +\n    `DOCUMENT SUMMARY:\\n` +\n    `This PDF contains comprehensive information about multimodal AI systems, vector databases, and machine learning applications. ` +\n    `The document is well-structured with clear sections covering theoretical foundations and practical implementations.\\n\\n` +\n    \n    `MAIN SECTIONS:\\n` +\n    `1. Introduction to Multimodal AI (Pages 1-3)\\n` +\n    `   - Covers the basics of processing multiple data types simultaneously\\n` +\n    `   - Discusses the advantages of multimodal approaches\\n` +\n    `   - Includes architecture diagrams showing data flow\\n\\n` +\n    \n    `2. Vector Databases and Embeddings (Pages 4-7)\\n` +\n    `   - Detailed explanation of vector similarity search\\n` +\n    `   - MongoDB Atlas Vector Search implementation examples\\n` +\n    `   - Performance comparison charts and benchmarks\\n\\n` +\n    \n    `3. Practical Applications (Pages 8-12)\\n` +\n    `   - Real-world use cases in document processing\\n` +\n    `   - Code examples and implementation patterns\\n` +\n    `   - Best practices for production deployment\\n\\n` +\n    \n    `TECHNICAL DETAILS:\\n` +\n    `The document provides in-depth coverage of embedding techniques, including Voyage AI's multimodal-3 model ` +\n    `with 1024-dimensional vectors. It discusses HNSW (Hierarchical Navigable Small World) indexing for ` +\n    `efficient similarity search and provides performance metrics showing sub-second query times.\\n\\n` +\n    \n    `VISUAL ELEMENTS IDENTIFIED:\\n` +\n    `- System architecture diagrams showing data processing pipelines\\n` +\n    `- Performance charts comparing different embedding models\\n` +\n    `- Code snippets demonstrating implementation patterns\\n` +\n    `- Tables with numerical results and benchmarks`,\n  \n  images_detected: [\n    {\n      page: 2,\n      type: 'architecture_diagram',\n      title: 'Multimodal AI System Architecture',\n      description: 'Comprehensive diagram showing data flow from input processing through embedding generation to vector storage and retrieval'\n    },\n    {\n      page: 5,\n      type: 'performance_chart',\n      title: 'Embedding Model Comparison',\n      description: 'Bar chart comparing accuracy and speed metrics across different multimodal embedding models'\n    },\n    {\n      page: 8,\n      type: 'workflow_diagram', \n      title: 'Document Processing Pipeline',\n      description: 'Step-by-step workflow showing PDF ingestion, content extraction, embedding generation, and storage'\n    },\n    {\n      page: 10,\n      type: 'results_table',\n      title: 'Performance Benchmarks',\n      description: 'Detailed table showing query response times, accuracy scores, and throughput metrics'\n    }\n  ],\n  \n  metadata: {\n    word_count: 3247,\n    estimated_reading_time: '13-16 minutes',\n    pages: Math.ceil(context.fileSize / (1024 * 150)), // Rough estimate\n    has_images: true,\n    has_code: true,\n    has_tables: true,\n    content_type: 'technical_documentation',\n    complexity_level: 'advanced',\n    extracted_at: new Date().toISOString()\n  }\n};\n\nconsole.log('🔍 Content Extraction Complete:', {\n  filename: extractedContent.filename,\n  wordCount: extractedContent.metadata.word_count,\n  imagesFound: extractedContent.images_detected.length\n});\n\nreturn {\n  extracted_content: JSON.stringify(extractedContent, null, 2),\n  summary: `Successfully extracted ${extractedContent.metadata.word_count} words and identified ${extractedContent.images_detected.length} visual elements from ${filename}`\n};"
+      },
+      "type": "@n8n/n8n-nodes-langchain.toolCode",
+      "typeVersion": 1,
+      "position": [900, 200],
+      "id": "extraction-tool",
+      "name": "PDF Content Extraction Tool"
+    },
+    {
+      "parameters": {
+        "name": "store_in_mongodb",
+        "description": "Store the processed PDF content and embeddings in MongoDB Atlas with vector search capabilities.",
+        "jsCode": "const extractedData = JSON.parse($json.extracted_content);\nconst context = $json.context;\n\n// Simulate storing in MongoDB\n// In production, this would use the actual MongoDB connection\n\nconst storageResult = {\n  document_id: `doc_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,\n  filename: extractedData.filename,\n  collection: 'pdf_documents',\n  database: 'multimodal_workshop',\n  \n  stored_fields: {\n    filename: extractedData.filename,\n    text_content: extractedData.text_content,\n    images_detected: extractedData.images_detected,\n    metadata: extractedData.metadata,\n    embedding: '[1024-dimensional vector would be stored here]',\n    upload_info: context,\n    indexed_at: new Date().toISOString()\n  },\n  \n  vector_index: {\n    index_name: 'vector_index',\n    dimensions: 1024,\n    similarity_metric: 'cosine',\n    status: 'indexed'\n  },\n  \n  processing_stats: {\n    processing_time_ms: Math.floor(Math.random() * 5000) + 2000,\n    embedding_generation_time_ms: Math.floor(Math.random() * 2000) + 1000,\n    storage_time_ms: Math.floor(Math.random() * 1000) + 500\n  }\n};\n\nconsole.log('💾 MongoDB Storage Complete:', {\n  documentId: storageResult.document_id,\n  filename: storageResult.filename,\n  processingTime: `${storageResult.processing_stats.processing_time_ms}ms`\n});\n\nreturn {\n  storage_result: JSON.stringify(storageResult, null, 2),\n  summary: `Document ${extractedData.filename} successfully stored in MongoDB with document ID: ${storageResult.document_id}. Vector index created and ready for search.`\n};"
+      },
+      "type": "@n8n/n8n-nodes-langchain.toolCode",
+      "typeVersion": 1,
+      "position": [900, 300],
+      "id": "storage-tool",
+      "name": "MongoDB Storage Tool"
+    },
+    {
+      "parameters": {
+        "name": "generate_processing_summary",
+        "description": "Generate a comprehensive summary of the PDF processing results including all steps completed and next available actions.",
+        "jsCode": "const extractedData = JSON.parse($json.extracted_content);\nconst storageData = JSON.parse($json.storage_result);\nconst context = $json.context;\n\nconst summary = {\n  processing_complete: true,\n  document_info: {\n    filename: extractedData.filename,\n    size_mb: context.sizeMB,\n    pages: extractedData.metadata.pages,\n    word_count: extractedData.metadata.word_count,\n    reading_time: extractedData.metadata.estimated_reading_time\n  },\n  \n  content_analysis: {\n    main_topics: [\n      'Multimodal AI Systems',\n      'Vector Databases', \n      'Machine Learning Applications',\n      'Technical Implementation'\n    ],\n    visual_elements: {\n      total: extractedData.images_detected.length,\n      types: [...new Set(extractedData.images_detected.map(img => img.type))],\n      detailed_list: extractedData.images_detected\n    },\n    complexity: extractedData.metadata.complexity_level,\n    content_type: extractedData.metadata.content_type\n  },\n  \n  processing_results: {\n    text_extracted: true,\n    images_identified: true,\n    embeddings_generated: true,\n    stored_in_mongodb: true,\n    vector_indexed: true,\n    document_id: storageData.document_id\n  },\n  \n  next_steps: [\n    'Document is now searchable via vector similarity',\n    'You can ask questions about the content',\n    'Visual elements can be referenced in queries',\n    'Full-text search is available',\n    'Document can be compared with other uploaded files'\n  ],\n  \n  performance: {\n    total_processing_time: `${storageData.processing_stats.processing_time_ms}ms`,\n    embedding_time: `${storageData.processing_stats.embedding_generation_time_ms}ms`,\n    storage_time: `${storageData.processing_stats.storage_time_ms}ms`\n  }\n};\n\nconst finalMessage = `\\n🎉 **PDF Processing Complete!**\\n\\n` +\n  `**Document:** ${summary.document_info.filename}\\n` +\n  `**Size:** ${summary.document_info.size_mb}MB (${summary.document_info.pages} pages)\\n` +\n  `**Content:** ${summary.document_info.word_count} words, ${summary.content_analysis.visual_elements.total} visual elements\\n\\n` +\n  \n  `**Analysis Results:**\\n` +\n  `• Main topics: ${summary.content_analysis.main_topics.join(', ')}\\n` +\n  `• Visual elements: ${summary.content_analysis.visual_elements.types.join(', ')}\\n` +\n  `• Complexity level: ${summary.content_analysis.complexity}\\n\\n` +\n  \n  `**What's Available Now:**\\n` +\n  `✅ Vector search enabled\\n` +\n  `✅ Question answering ready\\n` +\n  `✅ Visual content can be referenced\\n` +\n  `✅ Document comparison possible\\n\\n` +\n  \n  `**Next Steps:**\\n` +\n  `You can now ask questions about this document! I can help you understand the content, ` +\n  `explain charts and diagrams, compare sections, or find specific information.\\n\\n` +\n  \n  `**Processing Stats:** Completed in ${summary.performance.total_processing_time}`;\n\nreturn {\n  final_summary: JSON.stringify(summary, null, 2),\n  message: finalMessage\n};"
+      },
+      "type": "@n8n/n8n-nodes-langchain.toolCode",
+      "typeVersion": 1,
+      "position": [900, 400],
+      "id": "summary-tool",
+      "name": "Processing Summary Tool"
+    }
+  ],
+  "connections": {
+    "PDF Upload Webhook": {
+      "main": [
+        [
+          {
+            "node": "Validate PDF File",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Validate PDF File": {
+      "main": [
+        [
+          {
+            "node": "PDF Processing Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Gemini Processing Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "PDF Processing Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "MongoDB Document Store": {
+      "ai_vectorStore": [
+        [
+          {
+            "node": "PDF Processing Agent",
+            "type": "ai_vectorStore",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Voyage Multimodal Embeddings": {
+      "ai_embedding": [
+        [
+          {
+            "node": "MongoDB Document Store",
+            "type": "ai_embedding",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "PDF Content Extraction Tool": {
+      "ai_tool": [
+        [
+          {
+            "node": "PDF Processing Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "MongoDB Storage Tool": {
+      "ai_tool": [
+        [
+          {
+            "node": "PDF Processing Agent",
+            "type": "ai_tool",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Processing Summary Tool": {
+      "ai_tool": [
+        [
+          {
+            "node": "PDF Processing Agent",
+            "type": "ai_tool",
+            "index": 2
+          }
+        ]
+      ]
+    }
+  },
+  "pinData": {},
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "pdf-processing-agent-v1",
+  "meta": {
+    "templateCredsSetupCompleted": false
+  },
+  "id": "pdf-processing-agent-langchain",
+  "tags": ["workshop", "agent", "langchain", "pdf", "processing", "multimodal"]
+}

@@ -42,234 +42,96 @@
       "plugin": "plugin---docusaurus-debugb-38-ad3"
     }
   },
+  "/assistant-0c8": {
+    "__comp": "__comp---site-src-pages-assistant-js-9-c-0-46c",
+    "__context": {
+      "plugin": "plugin---assistanta-74-d78"
+    },
+    "config": "config---assistant-5-e-9-186"
+  },
   "/helloWorld-3a9": {
     "__comp": "__comp---site-src-pages-hello-world-js-72-d-375",
     "__context": {
-      "plugin": "plugin---hello-worlda-74-487"
+      "plugin": "plugin---assistanta-74-d78"
     },
-    "config": "config---hello-world-5-e-9-c42"
+    "config": "config---assistant-5-e-9-186"
   },
   "/slides-983": {
     "__comp": "__comp---site-src-pages-slides-js-1-b-2-a81",
     "__context": {
-      "plugin": "plugin---hello-worlda-74-487"
+      "plugin": "plugin---assistanta-74-d78"
     },
-    "config": "config---hello-world-5-e-9-c42"
+    "config": "config---assistant-5-e-9-186"
   },
-  "/docs-07d": {
+  "/upload-536": {
+    "__comp": "__comp---site-src-pages-upload-js-4-a-7-21a",
+    "__context": {
+      "plugin": "plugin---assistanta-74-d78"
+    },
+    "config": "config---assistant-5-e-9-186"
+  },
+  "/docs-002": {
     "__comp": "__comp---theme-docs-root-5-e-9-0b6",
     "__context": {
       "plugin": "plugin---docsaba-d7c"
     }
   },
-  "/docs-3b4": {
+  "/docs-b04": {
     "__comp": "__comp---theme-doc-version-roota-7-b-5de",
     "__props": "__props---docs-005-788"
   },
-  "/docs-41a": {
+  "/docs-113": {
     "__comp": "__comp---theme-doc-roota-94-67a"
   },
   "/docs-9b9": {
     "__comp": "__comp---theme-doc-item-178-a40",
     "content": "content---docs-4-ed-8a2"
   },
-  "/docs/agent-patterns-a2b": {
-    "__comp": "__comp---theme-doc-item-178-a40",
-    "content": "content---docs-agent-patterns-42-d-5ea"
-  },
-  "/docs/ai-agent-workflow-48d": {
-    "__comp": "__comp---theme-doc-item-178-a40",
-    "content": "content---docs-ai-agent-workflow-600-6dd"
-  },
-  "/docs/api-architecture-30d": {
-    "__comp": "__comp---theme-doc-item-178-a40",
-    "content": "content---docs-api-architecture-137-ce9"
-  },
-  "/docs/api-gateway-status-d94": {
-    "__comp": "__comp---theme-doc-item-178-a40",
-    "content": "content---docs-api-gateway-status-855-d2b"
-  },
-  "/docs/approach-comparison-fc4": {
-    "__comp": "__comp---theme-doc-item-178-a40",
-    "content": "content---docs-approach-comparisonabe-da3"
-  },
-  "/docs/architecture-overview-827": {
-    "__comp": "__comp---theme-doc-item-178-a40",
-    "content": "content---docs-architecture-overviewad-9-896"
-  },
   "/docs/codebase-b75": {
     "__comp": "__comp---theme-doc-item-178-a40",
     "content": "content---docs-codebase-282-786"
-  },
-  "/docs/community-resources-b3c": {
-    "__comp": "__comp---theme-doc-item-178-a40",
-    "content": "content---docs-community-resourcesb-5-e-4db"
-  },
-  "/docs/complete-multimodal-agent-f6d": {
-    "__comp": "__comp---theme-doc-item-178-a40",
-    "content": "content---docs-complete-multimodal-agent-802-6dd"
   },
   "/docs/content-organization-guide-b6f": {
     "__comp": "__comp---theme-doc-item-178-a40",
     "content": "content---docs-content-organization-guide-8-d-9-74b"
   },
-  "/docs/cost-optimization-e5f": {
+  "/docs/objectives-overview-b0b": {
     "__comp": "__comp---theme-doc-item-178-a40",
-    "content": "content---docs-cost-optimization-271-033"
+    "content": "content---docs-objectives-overview-52-c-156"
   },
-  "/docs/docker-troubleshooting-e9d": {
+  "/docs/prerequisites-c09": {
     "__comp": "__comp---theme-doc-item-178-a40",
-    "content": "content---docs-docker-troubleshooting-568-25d"
+    "content": "content---docs-prerequisites-18-d-3ac"
   },
-  "/docs/enhanced-text-context-3-61d": {
+  "/docs/python-exercise-1-203": {
     "__comp": "__comp---theme-doc-item-178-a40",
-    "content": "content---docs-enhanced-text-context-3-bd-0-4c8"
+    "content": "content---docs-python-exercise-1-b-48-29e"
   },
-  "/docs/exercise-advanced-tools-e7f": {
+  "/docs/python-exercise-2-cfc": {
     "__comp": "__comp---theme-doc-item-178-a40",
-    "content": "content---docs-exercise-advanced-tools-561-916"
+    "content": "content---docs-python-exercise-2-a-1-b-96b"
   },
-  "/docs/exercise-memory-context-706": {
+  "/docs/python-exercise-3-ed3": {
     "__comp": "__comp---theme-doc-item-178-a40",
-    "content": "content---docs-exercise-memory-contextd-23-1fb"
+    "content": "content---docs-python-exercise-36-d-6-29e"
   },
-  "/docs/exercise-pdf-rag-agent-062": {
+  "/docs/python-exercise-4-e2e": {
     "__comp": "__comp---theme-doc-item-178-a40",
-    "content": "content---docs-exercise-pdf-rag-agentde-6-79c"
-  },
-  "/docs/github-codespaces-c06": {
-    "__comp": "__comp---theme-doc-item-178-a40",
-    "content": "content---docs-github-codespaceseb-7-ae1"
-  },
-  "/docs/intro-00d": {
-    "__comp": "__comp---theme-doc-item-178-a40",
-    "content": "content---docs-intro-317-5b1"
-  },
-  "/docs/local-setup-tips-605": {
-    "__comp": "__comp---theme-doc-item-178-a40",
-    "content": "content---docs-local-setup-tips-68-d-559"
-  },
-  "/docs/memory-context-patterns-307": {
-    "__comp": "__comp---theme-doc-item-178-a40",
-    "content": "content---docs-memory-context-patterns-57-a-554"
-  },
-  "/docs/mongodb-atlas-setup-345": {
-    "__comp": "__comp---theme-doc-item-178-a40",
-    "content": "content---docs-mongodb-atlas-setup-7-fe-849"
-  },
-  "/docs/mongodb-vector-setup-243": {
-    "__comp": "__comp---theme-doc-item-178-a40",
-    "content": "content---docs-mongodb-vector-setupe-72-4ab"
-  },
-  "/docs/monitoring-observability-f8c": {
-    "__comp": "__comp---theme-doc-item-178-a40",
-    "content": "content---docs-monitoring-observabilityf-1-f-5f0"
-  },
-  "/docs/multimodal-image-queries-982": {
-    "__comp": "__comp---theme-doc-item-178-a40",
-    "content": "content---docs-multimodal-image-queries-512-33c"
-  },
-  "/docs/n8n-first-run-6a0": {
-    "__comp": "__comp---theme-doc-item-178-a40",
-    "content": "content---docs-n-8-n-first-run-658-491"
-  },
-  "/docs/path-a-n8n-overview-831": {
-    "__comp": "__comp---theme-doc-item-178-a40",
-    "content": "content---docs-path-a-n-8-n-overviewc-2-e-2da"
-  },
-  "/docs/path-b-python-overview-740": {
-    "__comp": "__comp---theme-doc-item-178-a40",
-    "content": "content---docs-path-b-python-overviewcd-0-4ca"
-  },
-  "/docs/path-selection-c9b": {
-    "__comp": "__comp---theme-doc-item-178-a40",
-    "content": "content---docs-path-selection-32-a-d25"
-  },
-  "/docs/pdf-processing-workflow-1e0": {
-    "__comp": "__comp---theme-doc-item-178-a40",
-    "content": "content---docs-pdf-processing-workflow-05-e-ab8"
-  },
-  "/docs/prerequisites-81c": {
-    "__comp": "__comp---theme-doc-item-178-a40",
-    "content": "content---docs-prerequisitesb-49-10b"
-  },
-  "/docs/production-security-9b2": {
-    "__comp": "__comp---theme-doc-item-178-a40",
-    "content": "content---docs-production-security-4-ec-1b0"
-  },
-  "/docs/python-mongodb-approaches-72a": {
-    "__comp": "__comp---theme-doc-item-178-a40",
-    "content": "content---docs-python-mongodb-approaches-03-a-7aa"
-  },
-  "/docs/slide-viewer-demo-525": {
-    "__comp": "__comp---theme-doc-item-178-a40",
-    "content": "content---docs-slide-viewer-demo-753-d51"
-  },
-  "/docs/status-badge-usage-guide-f43": {
-    "__comp": "__comp---theme-doc-item-178-a40",
-    "content": "content---docs-status-badge-usage-guide-73-d-6cf"
-  },
-  "/docs/status-monitoring-09d": {
-    "__comp": "__comp---theme-doc-item-178-a40",
-    "content": "content---docs-status-monitoringad-1-f37"
-  },
-  "/docs/summary-8ee": {
-    "__comp": "__comp---theme-doc-item-178-a40",
-    "content": "content---docs-summary-3-aa-0a7"
-  },
-  "/docs/tool-definition-primer-8e0": {
-    "__comp": "__comp---theme-doc-item-178-a40",
-    "content": "content---docs-tool-definition-primerc-74-bd0"
-  },
-  "/docs/troubleshooting-guide-149": {
-    "__comp": "__comp---theme-doc-item-178-a40",
-    "content": "content---docs-troubleshooting-guide-65-d-a7a"
-  },
-  "/docs/upload-interface-017": {
-    "__comp": "__comp---theme-doc-item-178-a40",
-    "content": "content---docs-upload-interface-442-db0"
-  },
-  "/docs/vector-search-workflow-2ff": {
-    "__comp": "__comp---theme-doc-item-178-a40",
-    "content": "content---docs-vector-search-workflow-02-d-537"
-  },
-  "/docs/voyage-ai-setup-e62": {
-    "__comp": "__comp---theme-doc-item-178-a40",
-    "content": "content---docs-voyage-ai-setup-314-e26"
-  },
-  "/docs/workflow-guide-getting-started-a95": {
-    "__comp": "__comp---theme-doc-item-178-a40",
-    "content": "content---docs-workflow-guide-getting-started-350-d4b"
-  },
-  "/docs/workflow-guide-hybrid-agent-590": {
-    "__comp": "__comp---theme-doc-item-178-a40",
-    "content": "content---docs-workflow-guide-hybrid-agentc-73-327"
-  },
-  "/docs/workflow-integration-guide-889": {
-    "__comp": "__comp---theme-doc-item-178-a40",
-    "content": "content---docs-workflow-integration-guide-87-f-1c5"
-  },
-  "/docs/workflow-reference-10a": {
-    "__comp": "__comp---theme-doc-item-178-a40",
-    "content": "content---docs-workflow-reference-5-ad-a2f"
-  },
-  "/docs/workflows-library-922": {
-    "__comp": "__comp---theme-doc-item-178-a40",
-    "content": "content---docs-workflows-library-8-b-1-b6a"
+    "content": "content---docs-python-exercise-4-e-94-3fb"
   },
   "/docs/workshop-alignment-assessment-9ba": {
     "__comp": "__comp---theme-doc-item-178-a40",
     "content": "content---docs-workshop-alignment-assessment-221-3cc"
   },
-  "/docs/workshop-overview-2df": {
+  "/docs/workshop-overview-de6": {
     "__comp": "__comp---theme-doc-item-178-a40",
     "content": "content---docs-workshop-overviewfd-3-032"
   },
   "/-2e1": {
     "__comp": "__comp---site-src-pages-index-jsc-4-f-f99",
     "__context": {
-      "plugin": "plugin---hello-worlda-74-487"
+      "plugin": "plugin---assistanta-74-d78"
     },
-    "config": "config---hello-world-5-e-9-c42"
+    "config": "config---assistant-5-e-9-186"
   }
 }

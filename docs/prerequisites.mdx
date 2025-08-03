@@ -1,0 +1,402 @@
+---
+id: prerequisites
+title: 📋 Prerequisites & Setup
+sidebar_label: 📋 Prerequisites
+sidebar_position: 2
+---
+
+# Workshop Prerequisites & Setup
+
+Before diving into building your multimodal AI agent, you'll need to set up a few essential services. This guide will walk you through obtaining API keys and deploying the necessary infrastructure.
+
+## 🎯 What You'll Need
+
+To complete this workshop successfully, you'll need:
+1. **Voyage AI API Key** - For multimodal embeddings
+2. **Google Gemini API Key** - For the LLM with function calling
+3. **MongoDB Atlas Cluster** - For vector storage and search
+4. **Python 3.8+** - With Jupyter notebook support
+
+---
+
+## 🚀 Voyage AI API Key Setup
+
+### Why You Need a Voyage AI API Key
+
+Voyage AI provides state-of-the-art embedding models that power the multimodal search capabilities in our workshop. Your API key authenticates your requests to Voyage AI's services, allowing you to:
+- Generate high-quality multimodal embeddings for text and images
+- Access production-ready embedding models optimized for retrieval
+- Utilize the official Python client for seamless integration
+
+### Step-by-Step API Key Creation
+
+Follow these steps to create your Voyage AI API key:
+
+#### Step 1: Access the Voyage AI Dashboard
+
+Navigate to [https://dashboard.voyageai.com](https://dashboard.voyageai.com) and sign in to your account. If you don't have an account yet, you'll need to create one first.
+
+![Voyage AI Dashboard](/img/voyage-1.webp)
+
+#### Step 2: Navigate to API Keys Section
+
+Once logged in, locate the left sidebar navigation. Click on **Organization**, then select **API keys** from the submenu.
+
+![Navigate to API Keys](/img/voyage-2.png)
+
+#### Step 3: Create a New Secret Key
+
+Click the **"Create new secret key"** button to initiate the API key creation process.
+
+![Create New Key Button](/img/voyage-3.png)
+
+#### Step 4: Configure Your API Key
+
+In the dialog box that appears:
+1. **Name your key**: Choose a descriptive name (e.g., "workshop-multimodal-agent")
+2. **Select a project**: Choose the appropriate project or use the default
+3. Click **"Create secret key"** to generate your key
+
+![Configure API Key](/img/voyage-4.png)
+
+#### Step 5: Copy and Save Your API Key
+
+Your new API key will be displayed on the screen. This is crucial:
+
+⚠️ **IMPORTANT**: This is the **only time** you'll be able to see the full API key. Make sure to:
+- Click the copy button to copy the key to your clipboard
+- Store it securely in your `.env` file
+- Never commit API keys to version control
+
+![Copy API Key](/img/voyage-6.png)
+
+### Verify Your Voyage AI Key
+
+```python
+import voyageai
+voyage_client = voyageai.Client(api_key="your-key-here")
+# Test with a simple embedding
+response = voyage_client.embed(texts=["test"], model="voyage-2")
+print("✅ Voyage AI key verified!")
+```
+
+---
+
+## 🤖 Google Gemini API Key Setup
+
+### Why You Need a Gemini API Key
+
+Google's Gemini 2.0 Flash is our chosen LLM for this workshop because it offers:
+- Advanced function calling capabilities for tool use
+- Multimodal understanding (text and images)
+- Fast response times ideal for interactive agents
+- Generous free tier for development
+
+### Step-by-Step Gemini API Key Creation
+
+#### Step 1: Access Google AI Studio
+
+1. Navigate to [Google AI Studio](https://makersuite.google.com/app/apikey)
+2. Sign in with your Google account
+
+#### Step 2: Create Your API Key
+
+1. Click **"Create API Key"** button
+2. Select your Google Cloud project (or create a new one)
+3. Click **"Create API Key in new project"** if this is your first time
+
+#### Step 3: Copy Your API Key
+
+⚠️ **IMPORTANT**: Save your API key immediately:
+- Copy the generated API key
+- Store it in your `.env` file as `GOOGLE_API_KEY`
+- Keep it secure and never share it publicly
+
+### Verify Your Gemini API Key
+
+```python
+from google import genai
+client = genai.Client(api_key="your-key-here")
+response = client.models.generate_content(
+    model="gemini-2.0-flash",
+    contents="Hello, Gemini!"
+)
+print("✅ Gemini API key verified!")
+```
+
+---
+
+## 🍃 MongoDB Atlas Cluster Setup
+
+### Why MongoDB Atlas?
+
+MongoDB Atlas provides:
+- **Native vector search** with HNSW algorithms for fast similarity matching
+- **Flexible document storage** for mixed data types
+- **Free tier** perfect for development and learning
+- **Built-in vector indexing** without additional infrastructure
+
+### Step-by-Step Atlas Deployment
+
+#### Step 1: Create MongoDB Atlas Account
+
+Navigate to [MongoDB Atlas](https://www.mongodb.com/cloud/atlas/register) and create your free account:
+
+![MongoDB Atlas Signup](/img/atlas-1-signup.png)
+
+Fill in your account details and click **"Create your Atlas account"**.
+
+#### Step 2: Verify Your Email Address
+
+Check your email inbox for a verification message from MongoDB Atlas:
+
+![Email Verification Step 1](/img/atlas-2-verify-email.png)
+
+Click the verification link in the email to activate your account:
+
+![Email Verification Step 2](/img/atlas-3-verify-email.png)
+
+Complete the email verification process:
+
+![Email Verification Step 3](/img/atlas-4-verify-email.png)
+
+#### Step 3: Complete Initial Setup
+
+You may be prompted to complete a personalization questionnaire. Fill it out based on your preferences:
+
+![Personalization Survey](/img/atlas-5-personalization.png)
+
+#### Step 4: Deploy Your Free Cluster
+
+When prompted to create your first database deployment, select the **"M0"** free tier option:
+
+![Select Free Tier](/img/atlas-6-select-free.png)
+
+Choose your preferred:
+- **Cloud Provider**: AWS, Google Cloud, or Azure (any will work)
+- **Region**: Select one closest to your location for better performance
+- **Cluster Name**: You can keep the default or use "workshop-cluster"
+
+Click **"Create Deployment"** to proceed.
+
+#### Step 5: Create Database User
+
+Set up a database user with the following credentials:
+
+![Create Database User](/img/atlas-7-username.png)
+
+1. **Username**: Enter `workshop` (or your preference)
+2. **Password**: Use the auto-generated password or create your own secure password
+3. **Important**: Copy and save these credentials - you'll need them for your connection string
+4. Click **"Create Database User"**
+
+#### Step 6: Configure Network Access
+
+For this workshop, we'll allow access from anywhere for simplicity:
+
+![Network Access Configuration](/img/atlas-11-network.png)
+
+Set up network access:
+
+![Allow Access from Anywhere](/img/atlas-12-anywhere.png)
+
+1. The system may automatically configure network access
+2. If prompted, select **"Add My Current IP Address"** or **"Allow Access from Anywhere"**
+3. For workshop purposes, "Allow Access from Anywhere" (0.0.0.0/0) is acceptable
+
+   ⚠️ **Production Note**: In production environments, always restrict access to specific IP addresses for security.
+
+#### Step 7: Choose Connection Method
+
+Once your cluster is deployed, click **"Connect"** to access connection options:
+
+![Choose Connection Method](/img/atlas-8-choose-connection.png)
+
+Select **"Drivers"** to get the connection string for Python applications.
+
+#### Step 8: Get Your Connection String
+
+Choose your driver and version:
+
+![Select Python Driver](/img/atlas-9-drivers.png)
+
+1. Select **"Python"** as your driver
+2. Choose version **"3.6 or later"** (our workshop uses Python 3.8+)
+3. Copy the provided connection string
+
+![Copy Connection String](/img/atlas-10-copy-connection-string.png)
+
+Your connection string will look like:
+```
+mongodb+srv://workshop:<password>@cluster0.xxxxx.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0
+```
+
+**Important**: Replace `<password>` with the actual password you created for your database user.
+
+### Verify Your MongoDB Connection
+
+```python
+from pymongo import MongoClient
+
+# Replace with your connection string
+MONGODB_URI = "mongodb+srv://workshop:password@cluster0.xxxxx.mongodb.net/"
+
+client = MongoClient(MONGODB_URI)
+# Test the connection
+result = client.admin.command("ping")
+if result.get("ok") == 1:
+    print("✅ MongoDB Atlas connected successfully!")
+```
+
+---
+
+## 🔧 Setting Up Your Environment
+
+### Create Your `.env` File
+
+Create a `.env` file in your project root with all your credentials:
+
+```bash
+# Voyage AI Configuration
+VOYAGE_API_KEY="voy_your_api_key_here"
+
+# Google Gemini Configuration
+GOOGLE_API_KEY="your_gemini_api_key_here"
+
+# MongoDB Atlas Configuration
+MONGODB_URI="mongodb+srv://username:password@cluster.mongodb.net/"
+```
+
+### Install Required Python Packages
+
+```bash
+pip install pymongo voyageai google-genai pymupdf pillow python-dotenv tqdm
+```
+
+### Quick Verification Script
+
+Save this as `verify_setup.py` to test all your configurations:
+
+```python
+import os
+from dotenv import load_dotenv
+import voyageai
+from google import genai
+from pymongo import MongoClient
+
+# Load environment variables
+load_dotenv()
+
+def verify_setup():
+    """Verify all workshop prerequisites are configured correctly."""
+    
+    print("🔍 Verifying Workshop Setup...\n")
+    
+    checks_passed = 0
+    total_checks = 3
+    
+    # Check Voyage AI
+    try:
+        voyage_client = voyageai.Client(api_key=os.getenv("VOYAGE_API_KEY"))
+        response = voyage_client.embed(texts=["test"], model="voyage-2")
+        print("✅ Voyage AI API key verified")
+        checks_passed += 1
+    except Exception as e:
+        print(f"❌ Voyage AI verification failed: {e}")
+    
+    # Check Gemini
+    try:
+        gemini_client = genai.Client(api_key=os.getenv("GOOGLE_API_KEY"))
+        response = gemini_client.models.generate_content(
+            model="gemini-2.0-flash",
+            contents="Test"
+        )
+        print("✅ Google Gemini API key verified")
+        checks_passed += 1
+    except Exception as e:
+        print(f"❌ Gemini verification failed: {e}")
+    
+    # Check MongoDB
+    try:
+        mongodb_client = MongoClient(os.getenv("MONGODB_URI"))
+        result = mongodb_client.admin.command("ping")
+        if result.get("ok") == 1:
+            print("✅ MongoDB Atlas connection verified")
+            checks_passed += 1
+    except Exception as e:
+        print(f"❌ MongoDB connection failed: {e}")
+    
+    # Summary
+    print(f"\n📊 Setup Status: {checks_passed}/{total_checks} checks passed")
+    
+    if checks_passed == total_checks:
+        print("\n🎉 All prerequisites configured successfully!")
+        print("You're ready to start the workshop!")
+        return True
+    else:
+        print("\n⚠️ Some prerequisites are missing.")
+        print("Please review the errors above and check your .env file.")
+        return False
+
+if __name__ == "__main__":
+    verify_setup()
+```
+
+---
+
+## ✅ Prerequisites Checklist
+
+Before proceeding to the exercises, ensure you have:
+
+- [ ] **Voyage AI API Key** saved in `.env` file
+- [ ] **Google Gemini API Key** saved in `.env` file
+- [ ] **MongoDB Atlas Cluster** deployed and connection string saved
+- [ ] **Python 3.8+** installed with Jupyter support
+- [ ] **Required packages** installed via pip
+- [ ] **Verification script** runs successfully
+
+---
+
+## 🚀 Ready to Start!
+
+Once all prerequisites are verified, you're ready to begin building your multimodal AI agent!
+
+**[→ Start Exercise 1: Environment Setup & PDF Processing](./python-exercise-1)**
+
+---
+
+## 🆘 Troubleshooting
+
+### Common Issues and Solutions
+
+**Voyage AI Key Issues:**
+- Ensure you've copied the entire key (it's quite long)
+- Check that you're using the correct model names
+- Verify your account has access to multimodal models
+
+**Gemini API Issues:**
+- Make sure you've enabled the Gemini API in your Google Cloud project
+- Check that your API key has the necessary permissions
+- Try regenerating the key if it's not working
+
+**MongoDB Connection Issues:**
+- Verify your IP address is whitelisted
+- Double-check your username and password
+- Ensure you've replaced `<password>` in the connection string
+- Try using the connection string with `mongodb://` instead of `mongodb+srv://` if DNS issues occur
+
+**Python Environment Issues:**
+- Use Python 3.8 or higher
+- Consider using a virtual environment: `python -m venv workshop_env`
+- If packages fail to install, try upgrading pip: `pip install --upgrade pip`
+
+---
+
+## 📚 Additional Resources
+
+- [Voyage AI Documentation](https://docs.voyageai.com/)
+- [Google Gemini API Docs](https://ai.google.dev/docs)
+- [MongoDB Atlas Documentation](https://www.mongodb.com/docs/atlas/)
+- [Workshop GitHub Repository](https://github.com/mongodb-developer/multimodal-pdf-agent-workshop)
+
+Need help? Check our [troubleshooting guide](./troubleshooting) or ask in the workshop chat!

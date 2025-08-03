@@ -1,4 +1,5 @@
 ---
+id: index
 sidebar_position: 1
 slug: /
 title: Workshop Home
@@ -6,267 +7,165 @@ title: Workshop Home
 
 # 🎓 Multimodal PDF Agent Workshop
 
-**Two Paths, One Amazing Destination: Build Intelligent Document Processing AI**
+**Build Intelligent AI Systems That Understand Both Text and Images**
 
-Welcome to our comprehensive workshop! You'll learn to build sophisticated AI agents that understand both text and visual content in PDFs. Choose your adventure:
-
-<WorkshopTransition 
-  slideTopics={[
-    "Workshop overview and learning objectives",
-    "Multimodal AI and embedding concepts", 
-    "Architecture: n8n, MongoDB Atlas, Voyage AI",
-    "What we'll build together today"
-  ]}
-  instructor="Michael Lynn"
-/>
-
-<InstructorNotes 
-  timing="Transition from slides to hands-on content (2-3 minutes)"
-  notes={[
-    "Ensure all attendees can access this documentation URL",
-    "Remind them to bookmark this page for future reference",
-    "Check that Codespaces users have services running",
-    "Ask if anyone needs help with local Docker setup"
-  ]}
-  tips={[
-    "Use screen sharing to show the navigation",
-    "Encourage questions before diving into technical content",
-    "Mention they can return to this overview page anytime"
-  ]}
-/>
-
-<ProgressTracker steps={[
-  {
-    title: "Environment Setup",
-    description: "Set up Docker, n8n, and MongoDB Atlas",
-    timeEstimate: "15 minutes",
-    difficulty: "beginner"
-  },
-  {
-    title: "PDF Processing Workflow", 
-    description: "Build workflow to extract and process PDF content",
-    timeEstimate: "25 minutes",
-    difficulty: "intermediate"
-  },
-  {
-    title: "Vector Search Implementation",
-    description: "Configure MongoDB Atlas Vector Search",
-    timeEstimate: "20 minutes", 
-    difficulty: "intermediate"
-  },
-  {
-    title: "AI Agent Creation",
-    description: "Build intelligent agent with tool calling",
-    timeEstimate: "30 minutes",
-    difficulty: "advanced"
-  },
-  {
-    title: "Memory & Context",
-    description: "Add conversation history and context management",
-    timeEstimate: "20 minutes",
-    difficulty: "advanced"
-  },
-  {
-    title: "Production Deployment",
-    description: "Deploy and scale your multimodal agent",
-    timeEstimate: "15 minutes",
-    difficulty: "intermediate"
-  }
-]} />
-
-## 🚀 Workshop Flow
-
-### **📋 Start Here: Complete Overview**
-**[Workshop Overview & Slides](/docs/workshop-overview)** - Full presentation materials with integrated slides for instructors
-
-### **🛤️ Decision Point: Choose Your Path**
-**[Path Selection Guide](/docs/path-selection)** - Choose between visual workflows or code-first development
+Welcome to our comprehensive workshop where you'll learn to create sophisticated AI agents that can reason, plan, use tools, and understand multimodal content from PDFs.
 
 ---
 
-## 🎨 **Path A: Visual No-Code Development**
-**[n8n Workflow Path →](/docs/path-a-n8n-overview)**
+## 🧠 What Are We Learning?
 
-Build with drag-and-drop visual workflows. Perfect for:
-- Business analysts and citizen developers
-- Visual learners who prefer flowcharts
-- Teams wanting rapid deployment
-- Production-ready systems from day one
+You're learning what **AI agents** are—systems that don't just answer simple prompts, but can:
 
-**⏱️ Duration**: 2-3 hours  
-**🎯 Audience**: Beginner to Intermediate  
+- **Reason through problems** step-by-step
+- **Plan solutions** across multiple steps  
+- **Use external tools** (vector databases, APIs, search, etc.)
+- **Remember previous conversations** (short- and long-term memory)
+- **Iterate and refine** their answers
 
----
+### 🔍 Key Components You'll Master
 
-## 🐍 **Path B: Code-First Development** 
-**[Python & Jupyter Path →](/docs/path-b-python-overview)**
+**🎯 Perception**: How the agent "sees" and ingests information (text, images, audio, etc.)
 
-Build with Python, Jupyter, and AI libraries. Perfect for:
-- Developers and data scientists  
-- Code-first learners
-- Maximum customization needs
-- Research and experimentation
+**🧩 Planning & Reasoning**: How it decides what to do, possibly in multiple steps
 
-**⏱️ Duration**: 3-4 hours  
-**🎯 Audience**: Intermediate to Advanced
+**🛠️ Tools**: How it interacts with the outside world (searches, code execution, APIs)
 
-## 🎯 What You'll Build
+**💾 Memory**: How it recalls and uses past interactions or data
 
-By the end of this workshop, you'll have created:
-
-- **PDF Ingestion Pipeline**: Automated processing of documents
-- **Multimodal Embeddings**: Text and image understanding with Voyage AI
-- **Vector Search API**: Fast similarity search with MongoDB Atlas
-- **AI Agent**: Intelligent question answering with Gemini 2.0
-- **Production Workflows**: Error handling, monitoring, and scaling
-
-## 🛠️ Technologies Used
-
-<div style={{display: 'flex', gap: '2rem', flexWrap: 'wrap', marginTop: '2rem'}}>
-  <div style={{textAlign: 'center'}}>
-  <img src={require('@site/static/img/n8n-logo.png').default} alt="n8n" width="80" />
-      <p><strong>n8n</strong><br/>Visual Workflow Automation</p>
-  </div>
-  <div style={{textAlign: 'center'}}>
-  <img src={require('@site/static/img/mongodb-logo.png').default} alt="mongodb" width="80" />
-    <p><strong>MongoDB Atlas</strong><br/>Vector Database</p>
-  </div>
-  <div style={{textAlign: 'center'}}>
-  <img src={require('@site/static/img/voyage-logo.png').default} alt="voyage" width="80" />
-    <p><strong>Voyage AI</strong><br/>Multimodal Embeddings</p>
-  </div>
-  <div style={{textAlign: 'center'}}>
-  <img src={require('@site/static/img/gemini-logo.png').default} alt="gemini" width="80" />
-    <p><strong>Gemini 2.0</strong><br/>AI Agent Capabilities</p>
-  </div>
-</div>
-
-## 🏁 Ready to Start?
-
-<WorkshopExercise 
-  title="Pre-Workshop Checklist" 
-  difficulty="beginner"
-  timeEstimate="5 minutes"
-  objectives={[
-    "Verify you have all prerequisites",
-    "Choose your development environment",
-    "Get excited about building!"
-  ]}
->
-
-<ExerciseValidation 
-  title="Before You Begin"
-  checks={[
-    {
-      id: "github_account",
-      description: "I have a GitHub account (for Codespaces) or Docker Desktop installed",
-      hint: "GitHub account is free at github.com, Docker Desktop from docker.com"
-    },
-    {
-      id: "mongodb_ready",
-      description: "I'm ready to create a MongoDB Atlas account (free tier)",
-      hint: "You'll need an email address for signup"
-    },
-    {
-      id: "time_allocated",
-      description: "I have ~2 hours for the complete workshop",
-      hint: "You can also complete it in sections"
-    },
-    {
-      id: "excitement_level",
-      description: "I'm excited to build a multimodal AI agent! 🚀",
-      hint: "This is the most important prerequisite!"
-    }
-  ]}
-/>
-
-</WorkshopExercise>
-
-## 🚀 Ready to Begin?
-
-<div style={{display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '1.5rem', marginTop: '2rem'}}>
-
-<div style={{textAlign: 'center', padding: '1.5rem', background: '#f8fafc', borderRadius: '8px', border: '2px solid #e2e8f0'}}>
-  <h3>📋 Instructor Guide</h3>
-  <p>Complete workshop overview with integrated presentation slides</p>
-  <a 
-    href="/docs/workshop-overview"
-    style={{
-      display: 'inline-block',
-      padding: '0.75rem 1.5rem',
-      background: '#374151',
-      color: 'white',
-      textDecoration: 'none',
-      borderRadius: '6px',
-      fontWeight: 'bold'
-    }}
-  >
-    Workshop Overview →
-  </a>
-</div>
-
-<div style={{textAlign: 'center', padding: '1.5rem', background: '#f0f9ff', borderRadius: '8px', border: '2px solid #00684A'}}>
-  <h3>🎨 Visual No-Code</h3>
-  <p>Build with n8n drag-and-drop workflows</p>
-  <a 
-    href="/docs/path-a-n8n-overview"
-    style={{
-      display: 'inline-block',
-      padding: '0.75rem 1.5rem',
-      background: '#00684A',
-      color: 'white',
-      textDecoration: 'none',
-      borderRadius: '6px',
-      fontWeight: 'bold'
-    }}
-  >
-    Start n8n Path →
-  </a>
-</div>
-
-<div style={{textAlign: 'center', padding: '1.5rem', background: '#fdf4ff', borderRadius: '8px', border: '2px solid #7C3AED'}}>
-  <h3>🐍 Code-First</h3>
-  <p>Build with Python and Jupyter notebooks</p>
-  <a 
-    href="/docs/path-b-python-overview"
-    style={{
-      display: 'inline-block',
-      padding: '0.75rem 1.5rem',
-      background: '#7C3AED',
-      color: 'white',
-      textDecoration: 'none',
-      borderRadius: '6px',
-      fontWeight: 'bold'
-    }}
-  >
-    Start Python Path →
-  </a>
-</div>
-
-</div>
-
-### 🤔 **Not Sure Which Path?**
-**[Take the Path Selection Quiz →](/docs/path-selection)** - We'll help you choose!
+We dive deep into **multimodality**—meaning models that process more than one kind of data. Not just text, but also images, charts, diagrams, and visual elements that contain critical information.
 
 ---
 
-## 📱 Workshop Access & Sharing
+## 🏗️ What Are We Building?
 
-<QRCodeAccess 
-  url={typeof window !== 'undefined' ? window.location.origin + '/docs/' : 'https://your-workshop-docs.vercel.app/docs/'}
-  title="Share Workshop Materials"
-/>
+You're building a **multimodal AI agent from scratch** that can:
 
-<InstructorNotes 
-  timing="End of overview (1 minute)"
-  notes={[
-    "Show attendees how to bookmark this page",
-    "Mention they can scan QR code for mobile access",
-    "Remind them this documentation stays available after workshop"
-  ]}
-  tips={[
-    "Consider sharing the URL in chat for easy copy/paste",
-    "Encourage attendees to take notes directly in their own docs",
-    "Mention the progress tracking will persist in their browser"
-  ]}
-/>
+✅ **Answer questions** about a collection of documents (PDFs, reports, etc.)
+
+✅ **Understand both text and visual elements** (charts, diagrams, tables) inside those documents
+
+✅ **Explain charts, diagrams, and content** across modalities—not just copy text
+
+✅ **Remember conversations** and build context over time
+
+✅ **Use tools intelligently** to search, retrieve, and reason
+
+You'll prepare data for mixed-modal retrieval, feed it into a vector store, and wire up a system that leverages the latest LLMs and multimodal models for robust, intelligent answers.
+
+---
+
+## 🌟 Why Does This Matter?
+
+### 📊 Real-World Data is Multimodal
+Business documents, scientific papers, and reports all have **critical information in images, diagrams, and tables**—not just text. Traditional approaches miss this entirely.
+
+### ❌ Classic AI Falls Short
+- **Text-only models** can't "see" a chart or interpret a figure
+- **Image-only models** can't explain what's written
+- **Simple chatbots** can't reason through complex, multi-step problems
+
+### ✨ Multimodal Agents Bridge the Gap
+Combining LLMs, perception, memory, and external tools to solve **more complex, useful, real-world tasks**. You're not just using AI—you're **engineering it** to reason, search, and respond with context from all types of content.
+
+---
+
+## 🍃 Why MongoDB?
+
+You'll see how **MongoDB's vector search**, document flexibility, and ability to store mixed data types make it a perfect fit for building these next-generation AI agents.
+
+- **Native vector search** with HNSW algorithms for lightning-fast similarity matching
+- **Flexible document storage** that handles text, images, and metadata seamlessly  
+- **Production-ready scaling** that grows with your application
+- **Real tools and code** you can adapt for production systems
+
+---
+
+## 🛤️ Workshop Approach
+
+### 🐍 **Python & Jupyter Notebooks**  
+**Perfect for:** Developers, data scientists, and AI engineers
+
+Build multimodal AI agents with Python:
+- Hands-on coding with Jupyter notebooks
+- VoyageAI embeddings for multimodal search
+- MongoDB Atlas vector search integration
+- ReAct agent architecture implementation
+- Full control over the implementation
+- Production-ready patterns and best practices
+
+**[Start Workshop →](./python-exercise-1)**
+
+---
+
+## 🎯 Big Picture: What You'll Walk Away With
+
+### 🧠 **Deep Understanding**
+- The key patterns for building modern AI agents
+- How to handle and retrieve from mixed-modal data  
+- Where the field is going, and how you can contribute right now
+
+### 🛠️ **Practical Skills**
+- Production-ready code and workflows
+- Experience with cutting-edge AI tools
+- Real systems you can adapt and extend
+
+### 🚀 **Future-Ready Knowledge**
+This workshop is about creating agents that can answer questions about **both the words and the pictures**—true "understanding" at machine scale.
+
+---
+
+## 🚀 Ready to Start Building?
+
+<div style={{
+  textAlign: 'center', 
+  padding: '3rem', 
+  background: 'linear-gradient(135deg, #7C3AED 0%, #A855F7 100%)', 
+  borderRadius: '12px',
+  color: 'white',
+  marginTop: '2rem',
+  marginBottom: '2rem'
+}}>
+  <h3 style={{color: 'white', marginBottom: '1rem', fontSize: '1.8rem'}}>🐍 Build with Python & Jupyter</h3>
+  <p style={{marginBottom: '2rem', fontSize: '1.2rem'}}>Create production-ready multimodal AI agents<br/>with VoyageAI embeddings and MongoDB Atlas</p>
+  <a 
+    href="/docs/python-exercise-1"
+    style={{
+      display: 'inline-block',
+      padding: '1rem 3rem',
+      background: 'white',
+      color: '#7C3AED',
+      textDecoration: 'none',
+      borderRadius: '8px',
+      fontWeight: 'bold',
+      fontSize: '1.2rem',
+      boxShadow: '0 4px 6px rgba(0,0,0,0.1)'
+    }}
+  >
+    Start Workshop →
+  </a>
+</div>
+
+---
+
+## 📚 Additional Resources
+
+- **[Workshop Overview & Slides](./workshop-overview)** - Complete presentation materials
+- **[Workshop Objectives](./objectives-overview)** - Detailed learning outcomes
+- **[PDF Tester](/upload)** - Test your workflows as you build
+
+---
+
+<div style={{
+  marginTop: '3rem',
+  padding: '2rem',
+  background: 'var(--ifm-color-primary-lightest)',
+  borderRadius: '12px',
+  textAlign: 'center'
+}}>
+  <h2>🎉 Let's Build Something Amazing!</h2>
+  <p style={{fontSize: '1.2rem', marginBottom: '0'}}>
+    Ready to create AI agents that understand both words and pictures?<br/>
+    <strong>Let's get started with Python and Jupyter!</strong>
+  </p>
+</div>

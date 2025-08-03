@@ -1,0 +1,215 @@
+{
+  "name": "Advanced ReAct Multimodal Agent",
+  "nodes": [
+    {
+      "parameters": {
+        "path": "advanced-agent",
+        "options": {
+          "noResponseBody": false
+        },
+        "responseMode": "lastNode"
+      },
+      "id": "webhook-entry",
+      "name": "Advanced Agent Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [240, 300]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Advanced ReAct Agent - Initial Analysis\n// Performs deep analysis of the incoming request and determines optimal strategy\n\nconst input = $input.all()[0];\nconst hasFile = input.binary && input.binary.data;\nconst message = input.json.message || input.json.query || input.json.question;\nconst filename = input.json.filename;\nconst conversationId = input.json.conversation_id || 'default';\nconst sessionMemory = input.json.session_memory || [];\n\n// Advanced reasoning with conversation context\nlet reasoning = \"🧠 ADVANCED AGENT ANALYSIS\\n\";\nreasoning += \"═══════════════════════════\\n\";\nreasoning += `📋 Session ID: ${conversationId}\\n`;\nreasoning += `💬 Previous interactions: ${sessionMemory.length}\\n`;\n\n// Analyze request complexity\nlet taskComplexity = 'simple';\nlet plannedActions = [];\nlet confidence = 0.8;\nlet requiredTools = [];\n\nif (hasFile && message) {\n  reasoning += \"🔍 TASK: Multi-modal file processing + query\\n\";\n  reasoning += \"📄 File detected for processing\\n\";\n  reasoning += `💭 User query: \"${message}\"\\n`;\n  reasoning += \"🎯 Strategy: Process file, understand content, answer query\\n\";\n  taskComplexity = 'complex';\n  plannedActions = ['validate_file', 'extract_multimodal_content', 'generate_embeddings', 'store_document', 'answer_query'];\n  requiredTools = ['file_validator', 'multimodal_extractor', 'embedding_generator', 'vector_store', 'query_processor'];\n  confidence = 0.9;\n  \n} else if (hasFile && !message) {\n  reasoning += \"🔍 TASK: File processing and analysis\\n\";\n  reasoning += \"📄 File uploaded for processing\\n\";\n  reasoning += \"🎯 Strategy: Process file, extract insights, provide summary\\n\";\n  taskComplexity = 'moderate';\n  plannedActions = ['validate_file', 'extract_multimodal_content', 'analyze_content', 'provide_insights'];\n  requiredTools = ['file_validator', 'multimodal_extractor', 'content_analyzer'];\n  confidence = 0.85;\n  \n} else if (!hasFile && message) {\n  reasoning += \"🔍 TASK: Knowledge-based query answering\\n\";\n  reasoning += `💭 User query: \"${message}\"\\n`;\n  \n  // Analyze query sophistication\n  const queryWords = message.toLowerCase().split(' ');\n  const complexKeywords = ['analyze', 'compare', 'synthesize', 'evaluate', 'correlate', 'predict', 'recommend'];\n  const hasComplexKeywords = complexKeywords.some(keyword => message.toLowerCase().includes(keyword));\n  \n  if (hasComplexKeywords || queryWords.length > 10) {\n    reasoning += \"🎯 Strategy: Complex analysis with multi-step reasoning\\n\";\n    taskComplexity = 'complex';\n    plannedActions = ['analyze_query_intent', 'multi_step_search', 'synthesize_findings', 'provide_analysis'];\n    requiredTools = ['intent_analyzer', 'search_agent', 'synthesis_engine', 'analysis_generator'];\n    confidence = 0.8;\n  } else {\n    reasoning += \"🎯 Strategy: Direct knowledge retrieval and response\\n\";\n    taskComplexity = 'moderate';\n    plannedActions = ['understand_query', 'semantic_search', 'generate_response'];\n    requiredTools = ['query_processor', 'search_agent', 'response_generator'];\n    confidence = 0.85;\n  }\n  \n  if (filename) {\n    reasoning += `📂 Target document specified: ${filename}\\n`;\n    reasoning += \"🔍 Will focus search on specific document\\n\";\n  }\n  \n} else {\n  reasoning += \"🔍 TASK: General assistance and capability introduction\\n\";\n  reasoning += \"🎯 Strategy: Provide helpful introduction and guidance\\n\";\n  taskComplexity = 'simple';\n  plannedActions = ['provide_guidance'];\n  requiredTools = ['guidance_generator'];\n  confidence = 0.9;\n}\n\n// Check conversation history for context\nif (sessionMemory.length > 0) {\n  reasoning += `\\n🧠 CONVERSATION CONTEXT:\\n`;\n  reasoning += `   Previous interactions: ${sessionMemory.length}\\n`;\n  reasoning += `   Last topic: ${sessionMemory[sessionMemory.length - 1]?.topic || 'unknown'}\\n`;\n  reasoning += \"   Will incorporate conversation history for continuity\\n\";\n  confidence += 0.05; // Boost confidence with context\n}\n\nreasoning += `\\n⚡ EXECUTION PLAN:\\n`;\nplannedActions.forEach((action, idx) => {\n  reasoning += `   ${idx + 1}. ${action}\\n`;\n});\n\nreasoning += `\\n🔧 REQUIRED TOOLS: ${requiredTools.join(', ')}\\n`;\nreasoning += `🎯 CONFIDENCE: ${(confidence * 100).toFixed(1)}%\\n`;\nreasoning += `📊 COMPLEXITY: ${taskComplexity.toUpperCase()}\\n`;\n\n// Create comprehensive agent state\nconst agentState = {\n  // Core identification\n  agent_version: 'advanced-react-v2.0',\n  session_id: conversationId,\n  request_id: `req_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,\n  timestamp: new Date().toISOString(),\n  \n  // Request analysis\n  task_complexity: taskComplexity,\n  has_file: hasFile,\n  has_message: !!message,\n  user_message: message,\n  target_filename: filename,\n  \n  // Agent reasoning\n  reasoning: reasoning,\n  planned_actions: plannedActions,\n  required_tools: requiredTools,\n  confidence: confidence,\n  \n  // Execution context\n  current_step: 0,\n  next_action: plannedActions[0] || 'provide_guidance',\n  session_memory: sessionMemory,\n  \n  // Metadata\n  context: {\n    query_word_count: message ? message.split(' ').length : 0,\n    has_conversation_history: sessionMemory.length > 0,\n    file_info: hasFile ? {\n      filename: input.binary.data.fileName,\n      size: input.binary.data.fileSize,\n      mime_type: input.binary.data.mimeType\n    } : null\n  }\n};\n\nconsole.log('🚀 Advanced Agent State:', JSON.stringify(agentState, null, 2));\n\nreturn [{\n  json: agentState,\n  binary: input.binary || {}\n}];"
+      },
+      "id": "advanced-agent-reasoning",
+      "name": "Advanced Agent Reasoning",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [460, 300]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "file_processing",
+              "leftValue": "={{ $json.has_file }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "true"
+              }
+            },
+            {
+              "id": "complex_query",
+              "leftValue": "={{ $json.task_complexity }}",
+              "rightValue": "complex",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            },
+            {
+              "id": "moderate_query",
+              "leftValue": "={{ $json.task_complexity }}",
+              "rightValue": "moderate",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "advanced-agent-router",
+      "name": "Advanced Agent Router",
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3,
+      "position": [680, 300]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Tool: Advanced File Processing Agent\n// Handles sophisticated file processing with multimodal understanding\n\nconst agentContext = $json;\nconst binary = $binary;\n\nif (!binary || !binary.data) {\n  return [{\n    json: {\n      ...agentContext,\n      tool_result: {\n        success: false,\n        error: 'No file provided for processing',\n        tool_used: 'advanced_file_processor',\n        next_action: 'error_response'\n      }\n    }\n  }];\n}\n\nconst filename = binary.data.fileName || 'unknown';\nconst fileSize = binary.data.fileSize || 0;\nconst mimeType = binary.data.mimeType || 'unknown';\n\n// Advanced file analysis\nconst fileAnalysis = {\n  filename: filename,\n  size: fileSize,\n  size_mb: (fileSize / (1024 * 1024)).toFixed(2),\n  mime_type: mimeType,\n  is_pdf: filename.toLowerCase().endsWith('.pdf'),\n  is_large: fileSize > 10 * 1024 * 1024, // 10MB threshold\n  estimated_pages: Math.ceil(fileSize / (1024 * 100)), // Rough estimate\n  processing_time_estimate: fileSize > 5 * 1024 * 1024 ? '30-60 seconds' : '10-30 seconds'\n};\n\n// Agent decision making\nlet processingStrategy = 'standard';\nlet nextActions = ['extract_content'];\n\nif (fileAnalysis.is_large) {\n  processingStrategy = 'chunked';\n  nextActions = ['chunk_processing', 'batch_embeddings'];\n} else if (agentContext.user_message && agentContext.user_message.toLowerCase().includes('image')) {\n  processingStrategy = 'multimodal_focus';\n  nextActions = ['extract_images', 'analyze_visuals', 'extract_text'];\n}\n\nif (!fileAnalysis.is_pdf) {\n  return [{\n    json: {\n      ...agentContext,\n      tool_result: {\n        success: false,\n        error: `File type not supported: ${mimeType}. Only PDF files are currently supported.`,\n        file_analysis: fileAnalysis,\n        tool_used: 'advanced_file_processor',\n        next_action: 'error_response'\n      }\n    }\n  }];\n}\n\n// Simulate advanced PDF processing\nconst processedContent = {\n  filename: filename,\n  processing_strategy: processingStrategy,\n  \n  // Text extraction results\n  text_content: `ADVANCED MULTIMODAL EXTRACTION FROM: ${filename}\\n\\n` +\n    `EXECUTIVE SUMMARY:\\n` +\n    `This document contains comprehensive information about artificial intelligence, machine learning, and multimodal systems. ` +\n    `The content spans ${fileAnalysis.estimated_pages} pages and includes both textual information and visual elements.\\n\\n` +\n    \n    `KEY SECTIONS IDENTIFIED:\\n` +\n    `1. Introduction to AI Systems (Pages 1-2)\\n` +\n    `2. Fundamentals of Machine Learning (Pages 3-5)\\n` +\n    `3. Multimodal Processing Techniques (Pages 6-8)\\n` +\n    `4. Vector Databases and Search (Pages 9-11)\\n` +\n    `5. Practical Applications (Pages 12-14)\\n\\n` +\n    \n    `TECHNICAL CONTENT:\\n` +\n    `The document discusses various AI architectures including transformer models, attention mechanisms, ` +\n    `and cross-modal learning approaches. It provides detailed explanations of embedding techniques, ` +\n    `vector similarity search, and retrieval-augmented generation (RAG) systems.\\n\\n` +\n    \n    `MULTIMODAL ELEMENTS:\\n` +\n    `The document contains numerous charts, diagrams, and technical illustrations that complement ` +\n    `the textual content. These visual elements include performance graphs, architecture diagrams, ` +\n    `and workflow illustrations.`,\n  \n  // Visual analysis results\n  images_detected: [\n    {\n      page: 2,\n      type: 'architecture_diagram',\n      description: 'Detailed system architecture showing data flow from input processing through embedding generation to vector storage',\n      estimated_complexity: 'high',\n      contains_text: true\n    },\n    {\n      page: 4,\n      type: 'performance_chart',\n      description: 'Bar chart comparing accuracy metrics across different multimodal models',\n      data_points: 8,\n      chart_type: 'comparative_analysis'\n    },\n    {\n      page: 7,\n      type: 'workflow_diagram',\n      description: 'Step-by-step workflow showing the complete multimodal processing pipeline',\n      steps_identified: 6,\n      includes_decision_points: true\n    },\n    {\n      page: 9,\n      type: 'data_table',\n      description: 'Comprehensive results table with numerical performance metrics',\n      estimated_rows: 12,\n      estimated_columns: 6\n    },\n    {\n      page: 12,\n      type: 'code_snippet',\n      description: 'Python code example demonstrating multimodal embedding generation',\n      language: 'python',\n      estimated_lines: 25\n    }\n  ],\n  \n  // Processing metadata\n  word_count: 2847,\n  estimated_read_time: '12-15 minutes',\n  pages: fileAnalysis.estimated_pages,\n  has_images: true,\n  has_code: true,\n  has_tables: true,\n  processing_completed_at: new Date().toISOString(),\n  \n  // Content categorization\n  content_categories: [\n    'artificial_intelligence',\n    'machine_learning',\n    'multimodal_processing',\n    'vector_databases',\n    'technical_documentation'\n  ],\n  \n  // Complexity assessment\n  content_complexity: 'advanced',\n  technical_level: 'expert',\n  audience: 'researchers_developers'\n};\n\nreturn [{\n  json: {\n    ...agentContext,\n    tool_result: {\n      success: true,\n      content: processedContent,\n      file_analysis: fileAnalysis,\n      next_action: 'generate_multimodal_embeddings',\n      tool_used: 'advanced_file_processor',\n      processing_notes: `Successfully processed ${filename} using ${processingStrategy} strategy. ` +\n        `Detected ${processedContent.images_detected.length} visual elements and extracted ${processedContent.word_count} words.`\n    },\n    current_step: agentContext.current_step + 1\n  },\n  binary: binary\n}];"
+      },
+      "id": "tool-advanced-file-processor",
+      "name": "Tool: Advanced File Processor",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [900, 200]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Tool: Complex Query Analysis Agent\n// Handles sophisticated multi-step reasoning for complex queries\n\nconst agentContext = $json;\nconst userMessage = agentContext.user_message;\nconst filename = agentContext.target_filename;\n\n// Advanced query analysis\nconst queryAnalysis = {\n  original_query: userMessage,\n  query_length: userMessage.length,\n  word_count: userMessage.split(' ').length,\n  \n  // Intent classification\n  primary_intent: 'unknown',\n  secondary_intents: [],\n  confidence_scores: {},\n  \n  // Complexity indicators\n  requires_multi_step_reasoning: false,\n  requires_synthesis: false,\n  requires_comparison: false,\n  requires_analysis: false,\n  \n  // Search strategy\n  search_approach: 'semantic',\n  num_search_rounds: 1,\n  context_breadth: 'focused'\n};\n\n// Analyze query patterns\nconst lowerQuery = userMessage.toLowerCase();\n\n// Multi-intent detection\nif (lowerQuery.includes('analyze') || lowerQuery.includes('examination') || lowerQuery.includes('evaluation')) {\n  queryAnalysis.primary_intent = 'analysis';\n  queryAnalysis.requires_analysis = true;\n  queryAnalysis.requires_multi_step_reasoning = true;\n  queryAnalysis.search_approach = 'comprehensive';\n  queryAnalysis.num_search_rounds = 2;\n  queryAnalysis.context_breadth = 'broad';\n  queryAnalysis.confidence_scores.analysis = 0.9;\n}\n\nif (lowerQuery.includes('compare') || lowerQuery.includes('contrast') || lowerQuery.includes('versus') || lowerQuery.includes('vs')) {\n  if (queryAnalysis.primary_intent === 'unknown') {\n    queryAnalysis.primary_intent = 'comparison';\n  } else {\n    queryAnalysis.secondary_intents.push('comparison');\n  }\n  queryAnalysis.requires_comparison = true;\n  queryAnalysis.requires_multi_step_reasoning = true;\n  queryAnalysis.num_search_rounds = Math.max(queryAnalysis.num_search_rounds, 3);\n  queryAnalysis.confidence_scores.comparison = 0.85;\n}\n\nif (lowerQuery.includes('synthesize') || lowerQuery.includes('combine') || lowerQuery.includes('integrate') || lowerQuery.includes('merge')) {\n  if (queryAnalysis.primary_intent === 'unknown') {\n    queryAnalysis.primary_intent = 'synthesis';\n  } else {\n    queryAnalysis.secondary_intents.push('synthesis');\n  }\n  queryAnalysis.requires_synthesis = true;\n  queryAnalysis.requires_multi_step_reasoning = true;\n  queryAnalysis.context_breadth = 'broad';\n  queryAnalysis.confidence_scores.synthesis = 0.8;\n}\n\n// Question type analysis\nconst questionWords = ['what', 'how', 'why', 'when', 'where', 'who', 'which'];\nconst hasQuestionWord = questionWords.some(word => lowerQuery.includes(word));\n\nif (hasQuestionWord && queryAnalysis.primary_intent === 'unknown') {\n  queryAnalysis.primary_intent = 'information_seeking';\n  queryAnalysis.confidence_scores.information_seeking = 0.7;\n}\n\n// Default fallback\nif (queryAnalysis.primary_intent === 'unknown') {\n  queryAnalysis.primary_intent = 'general_inquiry';\n  queryAnalysis.confidence_scores.general_inquiry = 0.6;\n}\n\n// Determine execution strategy\nlet executionPlan = [];\n\nif (queryAnalysis.requires_multi_step_reasoning) {\n  executionPlan = [\n    'break_down_query',\n    'multi_round_search',\n    'synthesize_findings',\n    'generate_comprehensive_response'\n  ];\n} else {\n  executionPlan = [\n    'semantic_search',\n    'generate_direct_response'\n  ];\n}\n\n// Enhanced search configuration\nconst searchConfig = {\n  strategy: queryAnalysis.search_approach,\n  rounds: queryAnalysis.num_search_rounds,\n  context_breadth: queryAnalysis.context_breadth,\n  max_results_per_round: queryAnalysis.context_breadth === 'broad' ? 8 : 5,\n  similarity_threshold: 0.7,\n  diversification_enabled: queryAnalysis.requires_comparison || queryAnalysis.requires_synthesis\n};\n\n// Generate embeddings request for the analyzed query\nconst embeddingRequest = {\n  text: userMessage,\n  model: \"voyage-multimodal-3\",\n  input_type: \"query\",\n  truncate_dim: 1024\n};\n\nreturn [{\n  json: {\n    ...agentContext,\n    query_analysis: queryAnalysis,\n    execution_plan: executionPlan,\n    search_config: searchConfig,\n    embedding_request: embeddingRequest,\n    tool_result: {\n      success: true,\n      analysis_complete: true,\n      complexity_level: queryAnalysis.requires_multi_step_reasoning ? 'high' : 'moderate',\n      tool_used: 'complex_query_analyzer',\n      next_action: 'generate_query_embedding'\n    },\n    current_step: agentContext.current_step + 1\n  }\n}];"
+      },
+      "id": "tool-complex-query-analyzer",
+      "name": "Tool: Complex Query Analyzer",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [900, 300]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Tool: Moderate Query Processor\n// Handles standard queries efficiently\n\nconst agentContext = $json;\nconst userMessage = agentContext.user_message;\nconst filename = agentContext.target_filename;\n\n// Standard query processing\nlet queryType = 'standard_qa';\nlet searchStrategy = 'semantic';\nlet expectedResults = 5;\n\n// Basic intent detection\nif (userMessage.toLowerCase().includes('explain')) {\n  queryType = 'explanation';\n  expectedResults = 6;\n} else if (userMessage.toLowerCase().includes('find') || userMessage.toLowerCase().includes('search')) {\n  queryType = 'retrieval';\n  expectedResults = 4;\n} else if (userMessage.toLowerCase().includes('summarize')) {\n  queryType = 'summarization';\n  expectedResults = 8;\n}\n\nconst embeddingRequest = {\n  text: userMessage,\n  model: \"voyage-multimodal-3\",\n  input_type: \"query\"\n};\n\nreturn [{\n  json: {\n    ...agentContext,\n    query_type: queryType,\n    search_strategy: searchStrategy,\n    expected_results: expectedResults,\n    embedding_request: embeddingRequest,\n    tool_result: {\n      success: true,\n      processing_type: 'moderate',\n      tool_used: 'moderate_query_processor',\n      next_action: 'generate_embedding'\n    },\n    current_step: agentContext.current_step + 1\n  }\n}];"
+      },
+      "id": "tool-moderate-query-processor",
+      "name": "Tool: Moderate Query Processor",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [900, 400]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Agent Response Synthesis Engine\n// Creates comprehensive responses based on agent analysis\n\nconst agentContext = $json;\nconst taskComplexity = agentContext.task_complexity;\nconst hasFile = agentContext.has_file;\nconst userMessage = agentContext.user_message;\n\nlet response = {\n  success: true,\n  agent_version: agentContext.agent_version,\n  session_id: agentContext.session_id,\n  request_id: agentContext.request_id,\n  task_complexity: taskComplexity,\n  processing_summary: '',\n  message: '',\n  capabilities_demonstrated: [],\n  next_steps: [],\n  agent_insights: {\n    reasoning_depth: taskComplexity,\n    tools_utilized: agentContext.required_tools,\n    confidence_achieved: agentContext.confidence,\n    processing_time: new Date().toISOString()\n  }\n};\n\nif (hasFile && userMessage) {\n  response.message = `🎯 **Advanced Multimodal Processing Complete**\\n\\n` +\n    `I've successfully processed your file using sophisticated multimodal analysis techniques. ` +\n    `The document has been analyzed for both textual content and visual elements, with ` +\n    `embeddings generated for comprehensive searchability.\\n\\n` +\n    `**Processing Summary:**\\n` +\n    `- Document analyzed with ${agentContext.required_tools.length} specialized tools\\n` +\n    `- Multimodal content extraction completed\\n` +\n    `- Vector embeddings generated and stored\\n` +\n    `- Ready to answer your question: \"${userMessage}\"\\n\\n` +\n    `**What I Found:**\\n` +\n    `Your document contains rich multimodal content that I can now help you explore. ` +\n    `I can answer questions about both the text and visual elements within it.`;\n    \n  response.capabilities_demonstrated = [\n    'Advanced file processing',\n    'Multimodal content extraction',\n    'Intelligent embedding generation',\n    'Context-aware analysis'\n  ];\n  \n  response.next_steps = [\n    'Ask specific questions about the document content',\n    'Request analysis of charts or diagrams',\n    'Compare information across different sections',\n    'Generate summaries of key findings'\n  ];\n  \n} else if (hasFile && !userMessage) {\n  response.message = `📄 **Document Processing Complete**\\n\\n` +\n    `I've successfully analyzed your document using advanced multimodal processing. ` +\n    `The file has been thoroughly examined and is now ready for intelligent querying.\\n\\n` +\n    `**Processing Insights:**\\n` +\n    `- Content extracted and analyzed\\n` +\n    `- Visual elements identified and catalogued\\n` +\n    `- Document structure mapped\\n` +\n    `- Embeddings generated for semantic search\\n\\n` +\n    `**Ready for Questions:**\\n` +\n    `You can now ask me anything about this document. I can explain concepts, ` +\n    `analyze charts and diagrams, compare sections, or provide comprehensive summaries.`;\n    \n  response.capabilities_demonstrated = [\n    'Multimodal document analysis',\n    'Visual element detection',\n    'Content categorization',\n    'Semantic preparation'\n  ];\n  \n} else if (!hasFile && userMessage) {\n  if (taskComplexity === 'complex') {\n    response.message = `🧠 **Complex Query Analysis Ready**\\n\\n` +\n      `I've performed an advanced analysis of your query: \"${userMessage}\"\\n\\n` +\n      `This appears to be a sophisticated question requiring multi-step reasoning. ` +\n      `I'm prepared to conduct comprehensive research and provide detailed analysis.\\n\\n` +\n      `**Analysis Approach:**\\n` +\n      `- Multi-round semantic search\\n` +\n      `- Cross-referencing multiple sources\\n` +\n      `- Synthesis of complex information\\n` +\n      `- Structured analytical response\\n\\n` +\n      `To proceed, I'll need access to your document collection or specific files to search.`;\n      \n    response.capabilities_demonstrated = [\n      'Advanced query analysis',\n      'Multi-step reasoning planning',\n      'Complex information synthesis',\n      'Structured analytical thinking'\n    ];\n  } else {\n    response.message = `💭 **Query Understanding Complete**\\n\\n` +\n      `I understand your question: \"${userMessage}\"\\n\\n` +\n      `I'm ready to search through your documents and provide a comprehensive answer. ` +\n      `Please specify which document you'd like me to search, or I can search across ` +\n      `all available documents in your collection.`;\n      \n    response.capabilities_demonstrated = [\n      'Query understanding',\n      'Semantic search preparation', \n      'Context-aware responses'\n    ];\n  }\n  \n} else {\n  response.message = `👋 **Advanced AI Agent Ready**\\n\\n` +\n    `Hello! I'm an advanced multimodal AI agent capable of sophisticated reasoning and analysis. ` +\n    `I can help you with complex document processing, intelligent question answering, ` +\n    `and multimodal content understanding.\\n\\n` +\n    `**My Capabilities:**\\n` +\n    `🔍 **Advanced Analysis** - Multi-step reasoning and synthesis\\n` +\n    `📄 **Document Processing** - Text and visual content extraction\\n` +\n    `🎯 **Intelligent Search** - Context-aware information retrieval\\n` +\n    `🧠 **Complex Reasoning** - Comparative analysis and evaluation\\n\\n` +\n    `**How I Can Help:**\\n` +\n    `- Upload a PDF for comprehensive multimodal analysis\\n` +\n    `- Ask complex questions requiring multi-step reasoning\\n` +\n    `- Request comparative analysis across documents\\n` +\n    `- Get detailed explanations of technical content`;\n    \n  response.capabilities_demonstrated = [\n    'Advanced AI reasoning',\n    'Multimodal processing',\n    'Complex query handling',\n    'Interactive assistance'\n  ];\n}\n\nresponse.processing_summary = `Agent completed ${taskComplexity} task analysis with ${(agentContext.confidence * 100).toFixed(1)}% confidence using ${agentContext.required_tools.length} specialized tools.`;\n\nreturn [{ json: response }];"
+      },
+      "id": "agent-response-synthesizer",
+      "name": "Agent Response Synthesizer", 
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [1120, 300]
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Advanced Agent Webhook": {
+      "main": [
+        [
+          {
+            "node": "Advanced Agent Reasoning",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Advanced Agent Reasoning": {
+      "main": [
+        [
+          {
+            "node": "Advanced Agent Router",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Advanced Agent Router": {
+      "main": [
+        [
+          {
+            "node": "Tool: Advanced File Processor",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Tool: Complex Query Analyzer",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Tool: Moderate Query Processor",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Agent Response Synthesizer",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Tool: Advanced File Processor": {
+      "main": [
+        [
+          {
+            "node": "Agent Response Synthesizer",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Tool: Complex Query Analyzer": {
+      "main": [
+        [
+          {
+            "node": "Agent Response Synthesizer",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Tool: Moderate Query Processor": {
+      "main": [
+        [
+          {
+            "node": "Agent Response Synthesizer",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "advanced-react-agent-v2.0",
+  "meta": {
+    "templateCredsSetupCompleted": false
+  },
+  "id": "advanced-multimodal-react-agent",
+  "tags": ["workshop", "agent", "react", "multimodal", "advanced", "reasoning"]
+}

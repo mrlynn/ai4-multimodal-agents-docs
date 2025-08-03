@@ -1,0 +1,303 @@
+---
+id: python-exercise-4
+title: 🧪 Exercise 4 - Add Memory & Testing
+sidebar_label: 🧪 Exercise 4 - Memory & Testing
+---
+
+# Exercise 4: Add Memory System & Complete Testing
+
+## 🎯 Objective
+Implement conversation memory for your agent and thoroughly test the complete multimodal AI system.
+
+## 📊 Exercise Tasks
+
+### Task 1: Implement Conversation Memory
+```python
+def test_agent_queries(agent):
+    """Test agent with various query types"""
+    
+    test_cases = [
+        {
+            "name": "Document Discovery",
+            "query": "What PDF documents are available?",
+            "expected_tool": "get_document_info"
+        },
+        {
+            "name": "Technical Search",
+            "query": "Find information about neural networks",
+            "expected_tool": "vector_search"
+        },
+        {
+            "name": "Concept Search", 
+            "query": "What is machine learning?",
+            "expected_tool": "vector_search"
+        },
+        {
+            "name": "Visual Content",
+            "query": "Are there any diagrams or charts?",
+            "expected_tool": "vector_search"
+        }
+    ]
+    
+    print("🧪 Running Agent Test Suite")
+    print("=" * 50)
+    
+    for test_case in test_cases:
+        print(f"\n📋 Test: {test_case['name']}")
+        print(f"❓ Query: {test_case['query']}")
+        
+        response = agent.chat(test_case['query'])
+        
+        print(f"🤖 Response: {response['response'][:200]}...")
+        print(f"🛠️ Tool used: {response['tool_used']}")
+        
+        # Check if correct tool was used
+        tool_match = response['tool_used'] == test_case['expected_tool']
+        status = "✅ PASS" if tool_match else "❌ FAIL"
+        print(f"📊 Result: {status}")
+
+# Run tests
+test_agent_queries(enhanced_agent)
+```
+
+### Task 2: Create Memory-Enabled Agent Functions
+```python
+def analyze_search_quality(agent):
+    """Analyze the quality of search results"""
+    
+    test_queries = [
+        "artificial intelligence",
+        "machine learning algorithms", 
+        "data science techniques",
+        "neural network architecture"
+    ]
+    
+    print("\n🔍 Search Quality Analysis")
+    print("=" * 40)
+    
+    for query in test_queries:
+        print(f"\n🔎 Query: '{query}'")
+        
+        # Get search results directly
+        tool_result = agent.vector_search_tool(query, top_k=5)
+        
+        if tool_result["success"]:
+            results = tool_result["results"]
+            scores = [r['score'] for r in results]
+            
+            print(f"📊 Results found: {len(results)}")
+            print(f"📊 Score range: {min(scores):.3f} - {max(scores):.3f}")
+            print(f"📊 Average score: {sum(scores)/len(scores):.3f}")
+            
+            # Show top result
+            if results:
+                top_result = results[0]
+                print(f"🎯 Top result: {top_result['filename']}")
+                print(f"📝 Preview: {top_result['text'][:150]}...")
+        else:
+            print(f"❌ Search failed: {tool_result['error']}")
+
+# Analyze search quality
+analyze_search_quality(enhanced_agent)
+```
+
+### Task 3: Test Memory Persistence
+```python
+def test_conversation_flow(agent):
+    """Test multi-turn conversation"""
+    
+    print("\n💬 Testing Conversation Flow")
+    print("=" * 40)
+    
+    # Reset conversation
+    agent.conversation_history = []
+    
+    conversation = [
+        "What documents do you have available?",
+        "Tell me about machine learning in these documents",
+        "Are there any specific algorithms mentioned?",
+        "What about deep learning techniques?"
+    ]
+    
+    for i, message in enumerate(conversation, 1):
+        print(f"\nTurn {i}: {message}")
+        response = agent.chat(message)
+        print(f"Response: {response['response'][:200]}...")
+        
+        # Check conversation history
+        history_length = len(agent.conversation_history)
+        print(f"📚 History length: {history_length} messages")
+    
+    # Final summary
+    summary = agent.get_conversation_summary()
+    print(f"\n📊 Final Summary: {summary}")
+
+# Test conversation flow
+test_conversation_flow(enhanced_agent)
+```
+
+### Task 4: Test Complete ReAct Agent with Memory
+```python
+def test_multimodal_features(agent):
+    """Test multimodal content detection"""
+    
+    print("\n🖼️ Testing Multimodal Features")
+    print("=" * 40)
+    
+    multimodal_queries = [
+        "Find documents with images or diagrams",
+        "Are there any charts or graphs in the PDFs?",
+        "Show me visual content from the documents",
+        "What figures or illustrations are available?"
+    ]
+    
+    for query in multimodal_queries:
+        print(f"\n🔎 Query: {query}")
+        
+        tool_result = agent.vector_search_tool(query, top_k=3)
+        
+        if tool_result["success"]:
+            results = tool_result["results"]
+            
+            # Check metadata for image indicators
+            has_image_results = []
+            for result in results:
+                # This would work if metadata includes image info
+                text_content = result['text'].lower()
+                has_visual_keywords = any(keyword in text_content for keyword in 
+                                        ['figure', 'chart', 'diagram', 'image', 'graph', 'table'])
+                has_image_results.append(has_visual_keywords)
+            
+            print(f"📊 Results with visual content indicators: {sum(has_image_results)}/{len(results)}")
+            
+            # Show relevant results
+            for i, result in enumerate(results):
+                if has_image_results[i]:
+                    print(f"🖼️ Visual content found in {result['filename']}")
+                    print(f"   {result['text'][:100]}...")
+
+# Test multimodal capabilities
+test_multimodal_features(enhanced_agent)
+```
+
+### Task 5: Test Document Analysis with Images
+```python
+import time
+
+def test_performance(agent):
+    """Test agent response times"""
+    
+    print("\n⏱️ Performance Testing")
+    print("=" * 30)
+    
+    test_queries = [
+        "What documents are available?",
+        "Find AI information",
+        "Search for machine learning",
+        "Tell me about data science"
+    ]
+    
+    response_times = []
+    
+    for query in test_queries:
+        start_time = time.time()
+        response = agent.chat(query)
+        end_time = time.time()
+        
+        response_time = end_time - start_time
+        response_times.append(response_time)
+        
+        print(f"Query: '{query[:30]}...' - {response_time:.2f}s")
+    
+    avg_time = sum(response_times) / len(response_times)
+    max_time = max(response_times)
+    
+    print(f"\n📊 Performance Summary:")
+    print(f"Average response time: {avg_time:.2f}s")
+    print(f"Max response time: {max_time:.2f}s")
+    
+    # Performance criteria
+    if avg_time < 2.0 and max_time < 5.0:
+        print("✅ Performance: GOOD")
+    elif avg_time < 5.0 and max_time < 10.0:
+        print("⚠️ Performance: ACCEPTABLE") 
+    else:
+        print("❌ Performance: NEEDS IMPROVEMENT")
+
+# Test performance
+test_performance(enhanced_agent)
+```
+
+## ✅ Final Validation Checklist
+
+Run this final validation:
+
+```python
+def final_validation(agent):
+    """Final workshop validation"""
+    
+    print("\n🎓 FINAL WORKSHOP VALIDATION")
+    print("=" * 50)
+    
+    checks = [
+        ("Agent initialized", agent is not None),
+        ("MongoDB connected", agent.collection.count_documents({}) > 0),  
+        ("Vector search works", len(agent.vector_search_tool("test")["results"]) > 0),
+        ("Document info works", agent.get_document_info_tool()["success"]),
+        ("Chat works", len(agent.chat("Hello")["response"]) > 0),
+        ("Memory works", len(agent.conversation_history) > 0)
+    ]
+    
+    passed = 0
+    for check_name, result in checks:
+        status = "✅ PASS" if result else "❌ FAIL"
+        print(f"{status} {check_name}")
+        if result:
+            passed += 1
+    
+    print(f"\n🎯 Final Score: {passed}/{len(checks)} checks passed")
+    
+    if passed == len(checks):
+        print("\n🎉 CONGRATULATIONS!")
+        print("You've successfully built a multimodal PDF agent!")
+    else:
+        print(f"\n⚠️ {len(checks) - passed} checks failed. Please review.")
+
+# Run final validation
+final_validation(enhanced_agent)
+```
+
+## ✅ Success Criteria
+- [ ] Memory system stores and retrieves conversation history
+- [ ] Agent maintains context across multiple queries
+- [ ] ReAct agent performs iterative reasoning successfully
+- [ ] Document pages can be analyzed with multimodal understanding
+- [ ] All validation checks pass
+
+## 🎉 Congratulations!
+
+You've successfully completed the Multimodal AI Agent Workshop! You've built:
+
+- ✅ **VoyageAI Integration** - Multimodal embeddings with the Python client
+- ✅ **MongoDB Atlas Vector Search** - Scalable similarity search  
+- ✅ **Google Gemini 2.0 Flash** - Advanced LLM with function calling
+- ✅ **ReAct Agent Pattern** - Reasoning and acting architecture
+- ✅ **Conversation Memory** - Persistent context across sessions
+- ✅ **Production Patterns** - Error handling, normalization, and testing
+
+Your agent can now:
+- Process and understand PDF documents with both text and images
+- Answer complex questions using vector search and retrieval
+- Maintain conversation context across multiple interactions
+- Reason iteratively to find the best answers
+- Analyze visual content in documents
+
+## 🚀 Next Steps
+
+1. **Extend the agent** with more tools and capabilities
+2. **Process larger documents** using batch processing
+3. **Add reranking** for improved search quality
+4. **Deploy to production** with proper API management
+5. **Monitor usage** and optimize costs
+
+Thank you for participating in this workshop! 🚀

@@ -106,32 +106,37 @@ export default function ProgressTracker({ steps = [], currentStep = 0 }) {
   );
 }
 
-export function StepIndicator({ current, total, titles = [] }) {
+export function StepIndicator({ current, total, titles = [], compact = false }) {
   return (
     <div className={styles.stepIndicator}>
-      <div className={styles.breadcrumb}>
+      <div className={`${styles.breadcrumb} ${compact ? styles.compact : ''}`}>
         {Array.from({ length: total }, (_, i) => (
           <React.Fragment key={i}>
             <div className={`${styles.breadcrumbStep} ${
               i < current ? styles.completed : ''
             } ${
               i === current ? styles.active : ''
-            }`}>
+            } ${compact ? styles.compactStep : ''}`}>
               <span className={styles.breadcrumbNumber}>
                 {i < current ? '✓' : i + 1}
               </span>
-              {titles[i] && (
+              {titles[i] && !compact && (
                 <span className={styles.breadcrumbTitle}>{titles[i]}</span>
               )}
             </div>
             {i < total - 1 && (
               <div className={`${styles.breadcrumbConnector} ${
                 i < current ? styles.connectorCompleted : ''
-              }`} />
+              } ${compact ? styles.compactConnector : ''}`} />
             )}
           </React.Fragment>
         ))}
       </div>
+      {compact && titles.length > 0 && (
+        <div className={styles.compactTitle}>
+          Step {current + 1}: {titles[current]}
+        </div>
+      )}
     </div>
   );
 }

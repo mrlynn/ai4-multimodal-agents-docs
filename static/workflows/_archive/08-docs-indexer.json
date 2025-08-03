@@ -1,0 +1,225 @@
+{
+  "name": "Workshop Docs Indexer",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "hours",
+              "hoursInterval": 24
+            }
+          ]
+        }
+      },
+      "id": "schedule-trigger",
+      "name": "Daily Index Update",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.1,
+      "position": [240, 300]
+    },
+    {
+      "parameters": {
+        "path": "index-docs",
+        "responseMode": "lastNode",
+        "options": {}
+      },
+      "id": "manual-trigger",
+      "name": "Manual Index Trigger",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [240, 500]
+    },
+    {
+      "parameters": {
+        "jsCode": "// List all MDX files in the docs directory\nconst fs = require('fs');\nconst path = require('path');\n\n// In production, this would scan the actual docs directory\n// For this workshop, we'll use a predefined list\nconst docFiles = [\n  'objectives-overview.mdx',\n  'n8n-exercise-1.mdx',\n  'n8n-exercise-2.mdx',\n  'n8n-exercise-3.mdx',\n  'n8n-exercise-4.mdx',\n  'python-exercise-1.mdx',\n  'python-exercise-2.mdx',\n  'python-exercise-3.mdx',\n  'python-exercise-4.mdx'\n];\n\nreturn docFiles.map(filename => ({\n  json: {\n    filename,\n    path: `/docs/${filename}`,\n    type: filename.includes('n8n') ? 'n8n' : filename.includes('python') ? 'python' : 'overview'\n  }\n}));"
+      },
+      "id": "list-docs",
+      "name": "List Documentation Files",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [460, 400]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Read and parse MDX content\nconst filename = $json.filename;\nconst filePath = $json.path;\n\n// Simulated content reading - in production, use file system\nconst mockContent = {\n  'objectives-overview.mdx': `# Workshop Objectives Overview\\n\\nThis workshop teaches you to build multimodal PDF agents using n8n, MongoDB Atlas, and Voyage AI.\\n\\n## Learning Goals\\n- Understand vector embeddings\\n- Build AI agents with n8n\\n- Implement RAG systems\\n- Process PDFs with AI`,\n  'n8n-exercise-1.mdx': `# Exercise 1: PDF Processing Workflow\\n\\nCreate an n8n workflow that processes PDF uploads, extracts text, and generates embeddings.\\n\\n## Tasks\\n- Import PDF processor workflow\\n- Configure MongoDB connection\\n- Test with sample PDFs`,\n  'n8n-exercise-2.mdx': `# Exercise 2: Vector Search Workflow\\n\\nImplement vector similarity search using MongoDB Atlas Vector Search.\\n\\n## Tasks\\n- Create vector search index\\n- Build search workflow\\n- Test similarity queries`,\n  'n8n-exercise-3.mdx': `# Exercise 3: Chat Interface\\n\\nBuild a conversational interface that uses your indexed documents.\\n\\n## Tasks\\n- Create chat webhook\\n- Implement context retrieval\\n- Generate AI responses`,\n  'n8n-exercise-4.mdx': `# Exercise 4: Advanced Features\\n\\nAdd advanced capabilities like memory, tools, and multimodal processing.\\n\\n## Tasks\\n- Add conversation memory\\n- Implement custom tools\\n- Handle images and PDFs`\n};\n\n// Extract content and metadata\nconst content = mockContent[filename] || `Content for ${filename}`;\nconst title = content.match(/^# (.+)$/m)?.[1] || filename.replace('.mdx', '');\nconst sections = content.split(/\\n## /).slice(1).map(s => s.split('\\n')[0]);\n\nreturn [{\n  json: {\n    filename,\n    title,\n    content,\n    sections,\n    wordCount: content.split(' ').length,\n    type: $json.type,\n    metadata: {\n      indexed_at: new Date().toISOString(),\n      version: '1.0'\n    }\n  }\n}];"
+      },
+      "id": "read-content",
+      "name": "Read MDX Content",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [680, 400]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Split content into chunks for better retrieval\nconst content = $json.content;\nconst filename = $json.filename;\nconst title = $json.title;\n\n// Split by sections\nconst chunks = [];\nconst sections = content.split(/\\n## /);\n\n// First chunk is the intro\nif (sections[0]) {\n  chunks.push({\n    content: sections[0],\n    section: 'Introduction',\n    chunk_index: 0\n  });\n}\n\n// Process each section\nsections.slice(1).forEach((section, index) => {\n  const lines = section.split('\\n');\n  const sectionTitle = lines[0];\n  const sectionContent = lines.slice(1).join('\\n');\n  \n  chunks.push({\n    content: `## ${sectionTitle}\\n${sectionContent}`,\n    section: sectionTitle,\n    chunk_index: index + 1\n  });\n});\n\nreturn chunks.map(chunk => ({\n  json: {\n    filename,\n    title,\n    chunk_content: chunk.content,\n    section: chunk.section,\n    chunk_index: chunk.chunk_index,\n    metadata: $json.metadata\n  }\n}));"
+      },
+      "id": "chunk-content",
+      "name": "Chunk Content",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [900, 400]
+    },
+    {
+      "parameters": {
+        "url": "={{ $env.WORKSHOP_EMBEDDING_URL || 'https://workshop-embedding-api.vercel.app/api/embed' }}",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"text\": {{ JSON.stringify($json.chunk_content) }},\n  \"model\": \"voyage-3\"\n}",
+        "options": {}
+      },
+      "id": "generate-embeddings",
+      "name": "Generate Embeddings",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [1120, 400]
+    },
+    {
+      "parameters": {
+        "operation": "deleteMany",
+        "collection": "workshop_docs",
+        "query": "={{ {} }}"
+      },
+      "id": "clear-collection",
+      "name": "Clear Existing Docs",
+      "type": "n8n-nodes-base.mongoDb",
+      "typeVersion": 1,
+      "position": [680, 200],
+      "credentials": {
+        "mongoDb": {
+          "id": "mongodb-workshop",
+          "name": "MongoDB Workshop"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "insertOne",
+        "collection": "workshop_docs",
+        "fields": "={\n  \"filename\": {{ JSON.stringify($('Chunk Content').item.json.filename) }},\n  \"title\": {{ JSON.stringify($('Chunk Content').item.json.title) }},\n  \"section\": {{ JSON.stringify($('Chunk Content').item.json.section) }},\n  \"chunk_index\": {{ $('Chunk Content').item.json.chunk_index }},\n  \"content\": {{ JSON.stringify($('Chunk Content').item.json.chunk_content) }},\n  \"embedding\": {{ JSON.stringify($json.embeddings[0]) }},\n  \"metadata\": {{ JSON.stringify($('Chunk Content').item.json.metadata) }}\n}"
+      },
+      "id": "store-chunks",
+      "name": "Store Doc Chunks",
+      "type": "n8n-nodes-base.mongoDb",
+      "typeVersion": 1,
+      "position": [1340, 400],
+      "credentials": {
+        "mongoDb": {
+          "id": "mongodb-workshop",
+          "name": "MongoDB Workshop"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// Aggregate results\nconst items = $input.all();\nconst uniqueFiles = new Set(items.map(item => item.json.filename));\nconst totalChunks = items.length;\n\nreturn [{\n  json: {\n    status: 'success',\n    message: 'Documentation indexed successfully',\n    stats: {\n      files_processed: uniqueFiles.size,\n      chunks_created: totalChunks,\n      collection: 'workshop_docs',\n      indexed_at: new Date().toISOString()\n    }\n  }\n}];"
+      },
+      "id": "aggregate-results",
+      "name": "Aggregate Results",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [1560, 400]
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Daily Index Update": {
+      "main": [
+        [
+          {
+            "node": "Clear Existing Docs",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Manual Index Trigger": {
+      "main": [
+        [
+          {
+            "node": "Clear Existing Docs",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Clear Existing Docs": {
+      "main": [
+        [
+          {
+            "node": "List Documentation Files",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "List Documentation Files": {
+      "main": [
+        [
+          {
+            "node": "Read MDX Content",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Read MDX Content": {
+      "main": [
+        [
+          {
+            "node": "Chunk Content",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Chunk Content": {
+      "main": [
+        [
+          {
+            "node": "Generate Embeddings",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Generate Embeddings": {
+      "main": [
+        [
+          {
+            "node": "Store Doc Chunks",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Store Doc Chunks": {
+      "main": [
+        [
+          {
+            "node": "Aggregate Results",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "docs-indexer-v1",
+  "meta": {
+    "templateCredsSetupCompleted": false
+  },
+  "id": "workshop-docs-indexer",
+  "tags": ["workshop", "rag", "indexing"]
+}

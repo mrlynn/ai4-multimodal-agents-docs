@@ -271,3 +271,27 @@
 .breadcrumbConnector.connectorCompleted {
   background: #28a745;
 }
+
+/* Compact variants */
+.breadcrumb.compact {
+  padding: 0.5rem 1rem;
+  margin: 0.5rem 0;
+  justify-content: center;
+}
+
+.breadcrumbStep.compactStep {
+  padding: 0.3rem 0.6rem;
+  min-width: auto;
+}
+
+.breadcrumbConnector.compactConnector {
+  width: 1rem;
+}
+
+.compactTitle {
+  text-align: center;
+  font-size: 0.9rem;
+  color: #495057;
+  margin-top: 0.5rem;
+  font-weight: 500;
+}

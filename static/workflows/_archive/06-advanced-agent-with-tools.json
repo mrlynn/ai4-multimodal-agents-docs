@@ -1,0 +1,304 @@
+{
+  "name": "Advanced Multimodal Agent with Tools",
+  "nodes": [
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chatTrigger",
+      "typeVersion": 1.1,
+      "position": [240, 300],
+      "id": "advanced-chat-trigger",
+      "name": "When chat message received",
+      "webhookId": "advanced-multimodal-agent"
+    },
+    {
+      "parameters": {
+        "systemPromptTemplate": "You are an advanced multimodal AI agent specialized in document analysis and intelligent reasoning. You have access to multiple tools that allow you to:\n\n1. **Search Documents**: Find relevant information in uploaded PDF documents\n2. **Analyze Images**: Understand charts, diagrams, and visual content mentioned in documents\n3. **Web Search**: Look up additional context or recent information when needed\n4. **Calculator**: Perform calculations on numerical data found in documents\n\n**Your Capabilities:**\n- Provide comprehensive analysis of complex documents\n- Explain relationships between textual and visual content\n- Compare information across multiple documents\n- Synthesize insights from various sources\n- Reason through multi-step problems\n\n**Response Guidelines:**\n- Always search for relevant information before answering\n- Cite specific sources and page numbers when available\n- Explain visual elements (charts, diagrams) when they're relevant\n- Break down complex topics into clear, understandable explanations\n- If information is incomplete, clearly state what you do and don't know\n- Use multiple tools together for comprehensive analysis\n\nBe thorough, accurate, and helpful. Think step-by-step through complex questions.",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2.1,
+      "position": [460, 300],
+      "id": "advanced-agent",
+      "name": "Advanced AI Agent"
+    },
+    {
+      "parameters": {
+        "model": "gemini-2.0-flash-exp",
+        "options": {
+          "temperature": 0.3,
+          "maxOutputTokens": 2048,
+          "topK": 40,
+          "topP": 0.95
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [240, 500],
+      "id": "advanced-gemini-model",
+      "name": "Google Gemini Advanced Model",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "workshop-gemini-api",
+          "name": "Workshop Gemini API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "databaseName": "multimodal_workshop",
+        "collectionName": "agent_sessions",
+        "sessionTTL": 3600
+      },
+      "type": "@n8n/n8n-nodes-langchain.memoryMongoDbChat",
+      "typeVersion": 1,
+      "position": [680, 500],
+      "id": "advanced-mongodb-memory",
+      "name": "Advanced MongoDB Memory",
+      "credentials": {
+        "mongoDb": {
+          "id": "mongodb-workshop",
+          "name": "MongoDB Workshop"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "connectionString": "={{ $env.MONGODB_CONNECTION_STRING }}",
+        "databaseName": "multimodal_workshop",
+        "collectionName": "pdf_documents",
+        "indexName": "multimodal_vector_index",
+        "embeddingDimensions": 1024,
+        "textKey": "text_content",
+        "topK": 8
+      },
+      "type": "@n8n/n8n-nodes-langchain.vectorStoreMongoDb",
+      "typeVersion": 1,
+      "position": [460, 500],
+      "id": "advanced-vectorstore",
+      "name": "Advanced Vector Store",
+      "credentials": {
+        "mongoDb": {
+          "id": "mongodb-workshop",
+          "name": "MongoDB Workshop"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "model": "voyage-multimodal-3",
+        "options": {
+          "inputType": "document"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.embeddingsVoyageAI",
+      "typeVersion": 1,
+      "position": [240, 700],
+      "id": "multimodal-embeddings",
+      "name": "Multimodal Embeddings",
+      "credentials": {
+        "voyageAiApi": {
+          "id": "workshop-voyage-api",
+          "name": "Workshop Voyage API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "name": "search_documents",
+        "description": "Search through uploaded PDF documents to find relevant information. This tool can find both textual content and references to visual elements like charts, diagrams, and tables.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "query": {
+              "type": "string",
+              "description": "The search query to find relevant document sections. Be specific about what you're looking for."
+            },
+            "filename": {
+              "type": "string",
+              "description": "Optional: specific filename to search within. Omit to search all documents."
+            },
+            "include_images": {
+              "type": "boolean",
+              "description": "Set to true to prioritize sections that mention visual elements like charts or diagrams",
+              "default": false
+            }
+          },
+          "required": ["query"]
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.toolVectorStore",
+      "typeVersion": 1,
+      "position": [680, 200],
+      "id": "advanced-search-tool",
+      "name": "Advanced Document Search"
+    },
+    {
+      "parameters": {
+        "name": "web_search",
+        "description": "Search the web for additional context, recent information, or to verify facts. Use this when document information needs to be supplemented with current data.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "query": {
+              "type": "string",
+              "description": "The search query for web search"
+            }
+          },
+          "required": ["query"]
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.toolWebScraper",
+      "typeVersion": 1,
+      "position": [680, 300],
+      "id": "web-search-tool",
+      "name": "Web Search Tool"
+    },
+    {
+      "parameters": {
+        "name": "calculator",
+        "description": "Perform mathematical calculations on numerical data found in documents or provided by users. Useful for analyzing financial data, statistics, or performing calculations mentioned in documents.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "expression": {
+              "type": "string",
+              "description": "Mathematical expression to calculate (e.g., '(100 * 1.08) + 25')"
+            }
+          },
+          "required": ["expression"]
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.toolCalculator",
+      "typeVersion": 1,
+      "position": [680, 400],
+      "id": "calculator-tool",
+      "name": "Calculator Tool"
+    },
+    {
+      "parameters": {
+        "name": "analyze_document_structure",
+        "description": "Analyze the overall structure and organization of a document, including sections, headings, and the relationship between textual and visual content.",
+        "jsCode": "const query = $json.query;\nconst filename = $json.filename;\n\n// This would typically query the database for document metadata\n// For workshop purposes, we'll return a structured analysis\n\nconst analysis = {\n  document: filename || 'All documents',\n  structure: {\n    total_sections: 8,\n    main_topics: [\n      'Introduction to AI Systems',\n      'Machine Learning Fundamentals', \n      'Multimodal Processing',\n      'Vector Databases',\n      'Practical Applications'\n    ],\n    visual_elements: {\n      charts: 3,\n      diagrams: 5,\n      tables: 2,\n      code_examples: 4\n    },\n    content_flow: 'The document follows a logical progression from theoretical concepts to practical implementation',\n    key_insights: [\n      'Strong emphasis on multimodal AI approaches',\n      'Comprehensive coverage of vector search techniques',\n      'Practical examples throughout'\n    ]\n  }\n};\n\nreturn {\n  analysis: JSON.stringify(analysis, null, 2),\n  summary: `Document structure analysis complete for ${filename || 'all documents'}. Found ${analysis.structure.total_sections} main sections with ${analysis.structure.visual_elements.charts + analysis.structure.visual_elements.diagrams + analysis.structure.visual_elements.tables} visual elements.`\n};"
+      },
+      "type": "@n8n/n8n-nodes-langchain.toolCode",
+      "typeVersion": 1,
+      "position": [680, 100],
+      "id": "structure-analysis-tool",
+      "name": "Document Structure Analyzer"
+    }
+  ],
+  "connections": {
+    "When chat message received": {
+      "main": [
+        [
+          {
+            "node": "Advanced AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Advanced Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Advanced AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Advanced MongoDB Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "Advanced AI Agent",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Advanced Vector Store": {
+      "ai_vectorStore": [
+        [
+          {
+            "node": "Advanced Document Search",
+            "type": "ai_vectorStore",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Multimodal Embeddings": {
+      "ai_embedding": [
+        [
+          {
+            "node": "Advanced Vector Store",
+            "type": "ai_embedding",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Advanced Document Search": {
+      "ai_tool": [
+        [
+          {
+            "node": "Advanced AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Web Search Tool": {
+      "ai_tool": [
+        [
+          {
+            "node": "Advanced AI Agent",
+            "type": "ai_tool",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Calculator Tool": {
+      "ai_tool": [
+        [
+          {
+            "node": "Advanced AI Agent",
+            "type": "ai_tool",
+            "index": 2
+          }
+        ]
+      ]
+    },
+    "Document Structure Analyzer": {
+      "ai_tool": [
+        [
+          {
+            "node": "Advanced AI Agent",
+            "type": "ai_tool",
+            "index": 3
+          }
+        ]
+      ]
+    }
+  },
+  "pinData": {},
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "advanced-agent-with-tools-v1",
+  "meta": {
+    "templateCredsSetupCompleted": false
+  },
+  "id": "advanced-multimodal-agent-with-tools",
+  "tags": ["workshop", "agent", "langchain", "multimodal", "advanced", "tools"]
+}

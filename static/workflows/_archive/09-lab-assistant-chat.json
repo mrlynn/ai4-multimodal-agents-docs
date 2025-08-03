@@ -1,0 +1,345 @@
+{
+  "name": "Lab Assistant RAG Chat",
+  "nodes": [
+    {
+      "parameters": {
+        "path": "lab-assistant",
+        "responseMode": "lastNode",
+        "options": {
+          "responseHeaders": {
+            "entries": [
+              {
+                "name": "Access-Control-Allow-Origin",
+                "value": "*"
+              }
+            ]
+          }
+        }
+      },
+      "id": "chat-webhook",
+      "name": "Chat Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [240, 400]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Extract question and conversation history\nconst { question, history = [] } = $json;\n\nif (!question) {\n  throw new Error('No question provided');\n}\n\n// Prepare context from history\nconst contextWindow = history.slice(-5); // Keep last 5 exchanges\nconst contextString = contextWindow\n  .map(msg => `${msg.role}: ${msg.content}`)\n  .join('\\n');\n\nreturn [{\n  json: {\n    question,\n    history: contextWindow,\n    contextString,\n    timestamp: new Date().toISOString()\n  }\n}];"
+      },
+      "id": "parse-request",
+      "name": "Parse Request",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [460, 400]
+    },
+    {
+      "parameters": {
+        "url": "={{ $env.WORKSHOP_EMBEDDING_URL || 'https://workshop-embedding-api.vercel.app/api/embed' }}",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"text\": {{ JSON.stringify($json.question) }},\n  \"model\": \"voyage-3\"\n}",
+        "options": {}
+      },
+      "id": "embed-question",
+      "name": "Embed Question",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [680, 400]
+    },
+    {
+      "parameters": {
+        "operation": "aggregate",
+        "collection": "workshop_docs",
+        "pipeline": "=[\n  {\n    \"$vectorSearch\": {\n      \"index\": \"workshop_docs_vector_index\",\n      \"path\": \"embedding\",\n      \"queryVector\": {{ JSON.stringify($json.embeddings[0]) }},\n      \"numCandidates\": 20,\n      \"limit\": 5\n    }\n  },\n  {\n    \"$project\": {\n      \"_id\": 0,\n      \"title\": 1,\n      \"section\": 1,\n      \"content\": 1,\n      \"filename\": 1,\n      \"score\": { \"$meta\": \"vectorSearchScore\" }\n    }\n  }\n]"
+      },
+      "id": "vector-search",
+      "name": "Vector Search Docs",
+      "type": "n8n-nodes-base.mongoDb",
+      "typeVersion": 1,
+      "position": [900, 400],
+      "credentials": {
+        "mongoDb": {
+          "id": "mongodb-workshop",
+          "name": "MongoDB Workshop"
+        }
+      },
+      "continueOnFail": true
+    },
+    {
+      "parameters": {
+        "jsCode": "// Fallback to text search if vector search fails\nconst question = $('Parse Request').first().json.question;\n\n// Simple keyword extraction\nconst keywords = question.toLowerCase()\n  .split(' ')\n  .filter(word => word.length > 3)\n  .filter(word => !['what', 'when', 'where', 'which', 'how', 'does', 'should', 'could', 'would', 'with', 'about'].includes(word));\n\nreturn [{\n  json: {\n    question,\n    keywords,\n    searchQuery: {\n      $or: keywords.map(keyword => ({\n        content: { $regex: keyword, $options: 'i' }\n      }))\n    }\n  }\n}];"
+      },
+      "id": "fallback-search-prep",
+      "name": "Prepare Text Search",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [900, 600]
+    },
+    {
+      "parameters": {
+        "operation": "find",
+        "collection": "workshop_docs",
+        "query": "={{ $json.searchQuery }}",
+        "limit": 5,
+        "sort": "={{ { chunk_index: 1 } }}"
+      },
+      "id": "text-search",
+      "name": "Text Search Fallback",
+      "type": "n8n-nodes-base.mongoDb",
+      "typeVersion": 1,
+      "position": [1120, 600],
+      "credentials": {
+        "mongoDb": {
+          "id": "mongodb-workshop",
+          "name": "MongoDB Workshop"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// Combine search results\nconst vectorResults = $('Vector Search Docs').all();\nconst textResults = $('Text Search Fallback').all();\nconst question = $('Parse Request').first().json.question;\nconst history = $('Parse Request').first().json.history;\n\n// Use vector results if available, otherwise use text search\nlet searchResults = vectorResults.length > 0 ? vectorResults : textResults;\n\n// Format context from search results\nconst contextDocs = searchResults.slice(0, 3).map(item => {\n  const doc = item.json;\n  return `\\n### ${doc.title || 'Document'} - ${doc.section || 'Section'}\\n${doc.content || ''}`;\n}).join('\\n\\n');\n\n// Prepare prompt for LLM\nconst systemPrompt = `You are a helpful lab assistant for a workshop on building multimodal PDF agents with n8n, MongoDB Atlas, and Voyage AI. \nAnswer questions based on the workshop documentation provided in the context. \nBe concise, accurate, and helpful. If the answer isn't in the context, say so and provide general guidance.`;\n\nconst userPrompt = `Context from workshop documentation:\\n${contextDocs}\\n\\nConversation history:\\n${history.map(h => `${h.role}: ${h.content}`).join('\\n')}\\n\\nQuestion: ${question}\\n\\nProvide a helpful answer based on the workshop documentation:`;\n\nreturn [{\n  json: {\n    systemPrompt,\n    userPrompt,\n    question,\n    contextDocs,\n    searchResultsCount: searchResults.length\n  }\n}];"
+      },
+      "id": "prepare-prompt",
+      "name": "Prepare LLM Prompt",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [1340, 400]
+    },
+    {
+      "parameters": {
+        "resource": "chat",
+        "operation": "complete",
+        "modelId": {
+          "__rl": true,
+          "value": "gpt-4o-mini",
+          "mode": "list"
+        },
+        "messages": {
+          "values": [
+            {
+              "role": "system",
+              "content": "={{ $json.systemPrompt }}"
+            },
+            {
+              "role": "user", 
+              "content": "={{ $json.userPrompt }}"
+            }
+          ]
+        },
+        "options": {
+          "temperature": 0.7,
+          "maxTokens": 500
+        },
+        "simplify": true
+      },
+      "id": "generate-response",
+      "name": "Generate Response",
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 1.4,
+      "position": [1560, 400],
+      "credentials": {
+        "openAiApi": {
+          "id": "openai-api",
+          "name": "OpenAI API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// Mock LLM response for workshop demo\nconst question = $('Prepare LLM Prompt').first().json.question;\nconst contextDocs = $('Prepare LLM Prompt').first().json.contextDocs;\nconst hasContext = $('Prepare LLM Prompt').first().json.searchResultsCount > 0;\n\n// Generate appropriate response based on question\nlet response = '';\n\nif (question.toLowerCase().includes('pdf')) {\n  response = hasContext \n    ? \"Based on the workshop documentation, you'll work with PDF processing in Exercise 1. The workflow includes uploading PDFs via webhook, validating the file type, extracting text content, generating embeddings using Voyage AI, and storing the results in MongoDB Atlas. The complete workflow is available in the `/static/workflows/02-pdf-processor.json` file.\"\n    : \"The workshop covers PDF processing extensively. You'll learn to build workflows that handle PDF uploads, extract text, generate embeddings, and store them for retrieval.\";\n} else if (question.toLowerCase().includes('mongodb')) {\n  response = hasContext\n    ? \"MongoDB Atlas is used throughout the workshop for storing documents and embeddings. You'll need to configure MongoDB credentials with host: localhost, port: 27017, database: workshop, username: admin, and password: mongodb. The workshop uses MongoDB's vector search capabilities for RAG implementation.\"\n    : \"MongoDB Atlas is a key component in this workshop, used for storing and searching vector embeddings.\";\n} else if (question.toLowerCase().includes('vector') || question.toLowerCase().includes('embedding')) {\n  response = hasContext\n    ? \"The workshop uses Voyage AI's voyage-3 model to generate 1024-dimensional embeddings. These embeddings are stored in MongoDB Atlas and used for vector similarity search in the RAG system. You'll implement this in Exercise 2 where you create vector search indexes.\"\n    : \"Vector embeddings are central to the workshop. You'll learn to generate and search embeddings for building RAG systems.\";\n} else if (question.toLowerCase().includes('exercise')) {\n  response = hasContext\n    ? \"The workshop includes 4 main exercises:\\n1. PDF Processing Workflow - Process uploads and generate embeddings\\n2. Vector Search Workflow - Implement similarity search\\n3. Chat Interface - Build conversational interface\\n4. Advanced Features - Add memory, tools, and multimodal capabilities\\n\\nEach exercise builds on the previous one to create a complete multimodal agent.\"\n    : \"The workshop is structured as a series of hands-on exercises that progressively build a complete multimodal PDF agent.\";\n} else {\n  response = hasContext\n    ? `Based on the workshop documentation: ${contextDocs.substring(0, 300)}...\\n\\nThis relates to your question about ${question}.`\n    : `I don't have specific information about \"${question}\" in the workshop documentation. However, this workshop focuses on building multimodal PDF agents using n8n, MongoDB Atlas, and Voyage AI. Would you like to know about any specific aspect of these technologies?`;\n}\n\nreturn [{\n  json: {\n    response,\n    question,\n    sources: hasContext ? 'Workshop documentation' : 'General knowledge',\n    confidence: hasContext ? 'high' : 'medium'\n  }\n}];"
+      },
+      "id": "mock-llm-response",
+      "name": "Mock LLM Response",
+      "type": "n8n-nodes-base.code", 
+      "typeVersion": 2,
+      "position": [1560, 600]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "conditions": [
+              {
+                "value1": "={{ $env.OPENAI_API_KEY }}",
+                "operation": "isNotEmpty"
+              }
+            ]
+          }
+        }
+      },
+      "id": "check-openai",
+      "name": "Check OpenAI Key",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [1340, 600]
+    },
+    {
+      "parameters": {
+        "values": {
+          "string": [
+            {
+              "name": "answer",
+              "value": "={{ $('Generate Response').isExecuted ? $('Generate Response').first().json.message.content : $('Mock LLM Response').first().json.response }}"
+            },
+            {
+              "name": "sources",
+              "value": "={{ $('Generate Response').isExecuted ? 'Workshop documentation (RAG)' : $('Mock LLM Response').first().json.sources }}"
+            },
+            {
+              "name": "model",
+              "value": "={{ $('Generate Response').isExecuted ? 'gpt-4o-mini' : 'mock-response' }}"
+            }
+          ],
+          "number": [
+            {
+              "name": "context_docs_used",
+              "value": "={{ $('Prepare LLM Prompt').first().json.searchResultsCount }}"
+            }
+          ]
+        }
+      },
+      "id": "format-response",
+      "name": "Format Response",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.2,
+      "position": [1780, 400]
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Chat Webhook": {
+      "main": [
+        [
+          {
+            "node": "Parse Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Parse Request": {
+      "main": [
+        [
+          {
+            "node": "Embed Question",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Embed Question": {
+      "main": [
+        [
+          {
+            "node": "Vector Search Docs",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Vector Search Docs": {
+      "main": [
+        [
+          {
+            "node": "Prepare LLM Prompt",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Prepare Text Search",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Prepare Text Search": {
+      "main": [
+        [
+          {
+            "node": "Text Search Fallback",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Text Search Fallback": {
+      "main": [
+        [
+          {
+            "node": "Prepare LLM Prompt",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Prepare LLM Prompt": {
+      "main": [
+        [
+          {
+            "node": "Check OpenAI Key",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check OpenAI Key": {
+      "main": [
+        [
+          {
+            "node": "Generate Response",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Mock LLM Response",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Generate Response": {
+      "main": [
+        [
+          {
+            "node": "Format Response",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Mock LLM Response": {
+      "main": [
+        [
+          {
+            "node": "Format Response",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "lab-assistant-v1",
+  "meta": {
+    "templateCredsSetupCompleted": false
+  },
+  "id": "lab-assistant-rag-chat",
+  "tags": ["workshop", "rag", "chat", "assistant"]
+}

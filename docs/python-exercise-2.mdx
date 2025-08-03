@@ -1,0 +1,156 @@
+---
+id: python-exercise-2
+title: 🔍 Exercise 2 - Embeddings & Vector Search
+sidebar_label: 🔍 Exercise 2 - Vector Search
+---
+
+# Exercise 2: Generate Embeddings & Build Vector Search
+
+## 🎯 Objective
+Generate multimodal embeddings using VoyageAI, store them in MongoDB Atlas, and create a vector search index.
+
+## 📊 Exercise Tasks
+
+### Task 1: Generate Embeddings with VoyageAI
+```python
+from PIL import Image
+import numpy as np
+
+def generate_embedding(data, input_type="document", model="voyage-multimodal-3"):
+    """Generate embedding using VoyageAI client."""
+    if isinstance(data, Image.Image):
+        # For images, use multimodal embedding
+        inputs = [[data]]  # VoyageAI expects nested list format
+        response = voyage_client.multimodal_embed(
+            inputs=inputs, 
+            model=model, 
+            input_type=input_type
+        )
+        embedding = response.embeddings[0]
+    else:
+        # For text, use regular embedding
+        response = voyage_client.embed(
+            texts=[str(data)],
+            model="voyage-2",
+            input_type=input_type
+        )
+        embedding = response.embeddings[0]
+    
+    # Normalize the embedding
+    normalized = normalize_vector(np.array(embedding)).tolist()
+    return normalized
+
+# Generate embeddings for extracted pages
+embedded_docs = []
+for doc in docs:
+    img = Image.open(doc['key'])
+    embedding = generate_embedding(img, input_type="document")
+    doc["embedding"] = embedding
+    embedded_docs.append(doc)
+    
+print(f"✅ Generated {len(embedded_docs)} embeddings")
+```
+
+### Task 2: Insert Embeddings into MongoDB
+```python
+# Database configuration
+DB_NAME = "mongodb_aiewf"
+COLLECTION_NAME = "multimodal_workshop_voyageai"
+
+# Connect to the collection
+collection = mongodb_client[DB_NAME][COLLECTION_NAME]
+
+# Clear existing documents
+collection.delete_many({})
+
+# Insert documents with embeddings
+insert_result = collection.insert_many(embedded_docs)
+print(f"✅ Inserted {len(insert_result.inserted_ids)} documents into MongoDB")
+
+# Verify insertion
+doc_count = collection.count_documents({})
+print(f"📊 Total documents in collection: {doc_count}")
+```
+
+### Task 3: Create Vector Search Index
+```python
+VS_INDEX_NAME = "vector_index_voyageai"
+
+# Define vector index configuration
+model = {
+    "name": VS_INDEX_NAME,
+    "type": "vectorSearch",
+    "definition": {
+        "fields": [
+            {
+                "type": "vector",
+                "path": "embedding",
+                "numDimensions": 1024,
+                "similarity": "cosine",
+            }
+        ]
+    },
+}
+
+# Create the vector search index
+collection.create_search_index(model=model)
+print(f"🎯 Vector search index '{VS_INDEX_NAME}' created!")
+
+# Check index status
+indexes = list(collection.list_search_indexes())
+for idx in indexes:
+    print(f"🔍 Index: {idx.get('name')} - Status: {idx.get('status')}")
+```
+
+### Task 4: Test Vector Search
+```python
+def get_information_for_question_answering(user_query: str):
+    """Retrieve information using vector search."""
+    # Generate query embedding
+    query_embedding = generate_embedding(user_query, input_type="query")
+    
+    # Define aggregation pipeline
+    pipeline = [
+        {
+            "$vectorSearch": {
+                "index": VS_INDEX_NAME,
+                "path": "embedding",
+                "queryVector": query_embedding,
+                "numCandidates": 150,
+                "limit": 2,
+            }
+        },
+        {
+            "$project": {
+                "_id": 0,
+                "key": 1,
+                "page_number": 1,
+                "score": {"$meta": "vectorSearchScore"},
+            }
+        },
+    ]
+    
+    # Execute search
+    results = list(collection.aggregate(pipeline))
+    
+    print(f"🔍 Found {len(results)} relevant documents")
+    for result in results:
+        print(f"  📄 Page {result['page_number']} - Score: {result['score']:.4f}")
+    
+    return [result["key"] for result in results]
+
+# Test the search function
+test_query = "What is the DeepSeek R1 model?"
+relevant_docs = get_information_for_question_answering(test_query)
+print(f"✅ Vector search working! Retrieved {len(relevant_docs)} documents")
+```
+
+## ✅ Success Criteria
+- [ ] Generated embeddings for all extracted pages using VoyageAI
+- [ ] Successfully inserted documents into MongoDB collection
+- [ ] Created vector search index with status "READY"
+- [ ] Vector search function returns relevant results with scores
+- [ ] Test query retrieves appropriate document pages
+
+## 🚀 Next Steps
+With vector search working, proceed to [Exercise 3: Create ReAct Agent](./python-exercise-3)
