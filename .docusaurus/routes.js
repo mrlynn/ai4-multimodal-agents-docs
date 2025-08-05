@@ -59,19 +59,19 @@ export default [
   },
   {
     path: '/docs',
-    component: ComponentCreator('/docs', '9f1'),
+    component: ComponentCreator('/docs', 'c3d'),
     routes: [
       {
         path: '/docs',
-        component: ComponentCreator('/docs', '9b9'),
+        component: ComponentCreator('/docs', 'f1b'),
         routes: [
           {
             path: '/docs',
-            component: ComponentCreator('/docs', 'e8e'),
+            component: ComponentCreator('/docs', '978'),
             routes: [
               {
                 path: '/docs',
-                component: ComponentCreator('/docs', '341'),
+                component: ComponentCreator('/docs', '9b9'),
                 exact: true,
                 sidebar: "tutorialSidebar"
               },
@@ -85,6 +85,12 @@ export default [
                 path: '/docs/codebase',
                 component: ComponentCreator('/docs/codebase', 'b75'),
                 exact: true
+              },
+              {
+                path: '/docs/complete-notebook',
+                component: ComponentCreator('/docs/complete-notebook', 'a2c'),
+                exact: true,
+                sidebar: "tutorialSidebar"
               },
               {
                 path: '/docs/content-organization-guide',

@@ -1,0 +1,1613 @@
+---
+title: Complete Multimodal Agents Workshop Notebook
+sidebar_label: 📓 Complete Notebook
+description: Enhanced multimodal agents workshop with progress tracking, validation, and interactive guidance
+---
+
+import BrowserWindow from '@site/src/components/BrowserWindow';
+import Screenshot from '@site/src/components/Screenshot';
+
+# Multimodal Agents Workshop with Progress Tracking
+
+This enhanced version of the multimodal agents workshop includes comprehensive progress tracking, validation, and interactive guidance using the `jupyter-lab-progress` library.
+
+**Workshop Overview:**
+- Build a multimodal AI agent that can analyze documents and images
+- Use MongoDB Atlas Vector Search for retrieval
+- Implement function calling with Gemini 2.0 Flash
+- Add memory and ReAct reasoning capabilities
+
+## 🎯 Learning Objectives
+
+By the end of this workshop, you will be able to:
+- Process PDFs and extract images for multimodal search
+- Set up MongoDB Atlas vector search indexes
+- Build an AI agent with tool calling capabilities
+- Implement session-based memory for conversational agents
+- Create a ReAct (Reasoning + Acting) agent architecture
+
+## Initialize Progress Tracking
+
+<ExplainableCodeBlock 
+  title="Setup Progress Tracking Libraries"
+  explanation="This code initializes the progress tracking system for the workshop. It attempts to load the jupyter-lab-progress library from a development path if available, otherwise falls back to simple print functions. The progress tracking provides visual feedback during the workshop exercises."
+  concepts={[
+    { term: "sys.path", definition: "Python's list of directories to search for modules when importing" },
+    { term: "Module caching", definition: "Python caches imported modules in sys.modules to avoid re-importing" },
+    { term: "Fallback functions", definition: "Simple implementations used when the main library isn't available" }
+  ]}
+  hints={[
+    "The dev_path check allows using a local development version of the library",
+    "Removing cached modules ensures fresh imports during development",
+    "The try/except pattern provides graceful degradation if the library isn't installed"
+  ]}
+>
+{`# Initialize progress tracking and lab utilities
+import sys
+import os
+
+# Force load from development source if available
+dev_path = "/Users/michael.lynn/code/mongodb/developer-days/jupyter-utils/jupyter-lab-progress"
+if os.path.exists(dev_path) and dev_path not in sys.path:
+    sys.path.insert(0, dev_path)
+
+# Remove any cached modules
+modules_to_remove = [key for key in sys.modules.keys() if key.startswith('jupyter_lab_progress')]
+for module in modules_to_remove:
+    del sys.modules[module]
+
+try:
+    from jupyter_lab_progress import (
+        LabProgress, LabValidator, show_info, show_warning, 
+        show_success, show_error, show_hint
+    )
+    show_success("Progress tracking libraries loaded successfully! 🎉")
+except ImportError as e:
+    print(f"Warning: Could not import progress tracking: {e}")
+    print("Installing basic fallbacks...")
+    def show_info(msg, title=None): print(f"ℹ️ {title or 'Info'}: {msg}")
+    def show_warning(msg, title=None): print(f"⚠️ {title or 'Warning'}: {msg}")
+    def show_success(msg, title=None): print(f"✅ {title or 'Success'}: {msg}")
+    def show_error(msg, title=None): print(f"❌ {title or 'Error'}: {msg}")
+    def show_hint(msg, title=None): print(f"💡 {title or 'Hint'}: {msg}")`}
+</ExplainableCodeBlock>
+
+<ExplainableCodeBlock
+  title="Initialize Lab Progress Tracker"
+  explanation="This code sets up the LabProgress tracker which monitors your progress through the workshop. It defines all the major steps you'll complete and creates a validator for checking your work. The persist=True flag saves your progress between sessions."
+  concepts={[
+    { term: "LabProgress", definition: "A progress tracking class that monitors completion of workshop steps and provides visual feedback" },
+    { term: "LabValidator", definition: "A validation helper that checks if variables exist and have expected values/types" },
+    { term: "persist", definition: "When True, saves progress to a file so you can resume where you left off" }
+  ]}
+  hints={[
+    "The steps array defines the exact order of workshop activities",
+    "The try/except block ensures the workshop continues even without the progress library",
+    "Progress tracking helps identify which sections need more time or attention"
+  ]}
+>
+{`# Set up comprehensive lab progress tracking
+try:
+    progress = LabProgress(
+        steps=[
+            "Environment Setup",
+            "PDF Processing", 
+            "Data Ingestion",
+            "Vector Index Creation",
+            "Agent Tools Setup",
+            "LLM Integration",
+            "Basic Agent Testing",
+            "Memory Implementation",
+            "ReAct Agent Enhancement"
+        ],
+        lab_name="Multimodal Agents Workshop",
+        persist=True
+    )
+    
+    # Set up validation
+    validator = LabValidator(progress_tracker=progress)
+    
+    show_success("Lab progress tracking initialized!")
+    show_info(f"Workshop: {progress.lab_name}")
+    show_info(f"Total steps: {len(progress.steps)}")
+    
+except NameError:
+    show_info("Running without progress tracking")`}
+</ExplainableCodeBlock>
+
+## Step 1: Environment Setup
+
+Let's start by setting up our environment and connecting to MongoDB Atlas.
+
+<ExplainableCodeBlock
+  title="Display Step Guidance"
+  explanation="This code attempts to show helpful tips for the current workshop step. If the progress tracker is available, it displays contextual guidance. Otherwise, it falls back to a simple info message."
+  concepts={[
+    { term: "show_step_tips", definition: "Method that displays helpful guidance specific to the current workshop step" },
+    { term: "AttributeError", definition: "Exception raised when an object doesn't have the expected attribute or method" }
+  ]}
+  hints={[
+    "This pattern is used throughout the workshop to provide step-specific help",
+    "The exception handling ensures the workshop continues smoothly regardless of progress tracker availability"
+  ]}
+>
+{`# Show step guidance
+try:
+    progress.show_step_tips("Environment Setup")
+except (NameError, AttributeError):
+    show_info("Setting up environment and connections...")`}
+</ExplainableCodeBlock>
+
+<ExplainableCodeBlock
+  title="Environment Variable Validation"
+  explanation="This code checks that all required environment variables are set before proceeding. It uses list comprehension to identify missing variables and provides clear feedback about what needs to be configured."
+  concepts={[
+    { term: "os.getenv()", definition: "Safely retrieves environment variables, returning None if not found instead of raising an error" },
+    { term: "List comprehension", definition: "Concise Python syntax for creating lists by filtering/transforming existing sequences" },
+    { term: "Environment variables", definition: "System-level variables that store configuration values outside of code" }
+  ]}
+  hints={[
+    "MONGODB_URI should contain your MongoDB Atlas connection string",
+    "SERVERLESS_URL points to the embedding generation endpoint",
+    "Set environment variables in your terminal or .env file before running"
+  ]}
+>
+{`import os
+from pymongo import MongoClient
+
+# Check environment variables
+required_vars = ["MONGODB_URI", "SERVERLESS_URL"]
+missing_vars = [var for var in required_vars if not os.getenv(var)]
+
+if missing_vars:
+    show_error(f"Missing environment variables: {missing_vars}")
+    show_info("Please set the required environment variables before proceeding")
+else:
+    show_success("All required environment variables are set!")
+
+# Validate connection variables
+try:
+    validator.validate_variable_exists("MONGODB_URI", {"MONGODB_URI": os.getenv("MONGODB_URI")}, str)
+    validator.validate_variable_exists("SERVERLESS_URL", {"SERVERLESS_URL": os.getenv("SERVERLESS_URL")}, str)
+except NameError:
+    pass`}
+</ExplainableCodeBlock>
+
+<ExplainableCodeBlock
+  title="MongoDB Atlas Connection"
+  explanation="This code establishes a connection to MongoDB Atlas using the connection string from environment variables. It tests the connection with a ping command to ensure everything is working before proceeding."
+  concepts={[
+    { term: "MongoClient", definition: "PyMongo's main class for connecting to MongoDB databases" },
+    { term: "ping command", definition: "A simple database command that verifies the connection is alive and authenticated" },
+    { term: "Connection string", definition: "A URI that contains all information needed to connect to MongoDB (host, credentials, options)" }
+  ]}
+  hints={[
+    "The ping command is a lightweight way to verify connectivity without querying data",
+    "If connection fails, check your IP whitelist in Atlas and verify your credentials",
+    "The progress.mark_done() call tracks your completion of this setup step"
+  ]}
+>
+{`# Connect to MongoDB Atlas
+MONGODB_URI = os.getenv("MONGODB_URI")
+SERVERLESS_URL = os.getenv("SERVERLESS_URL")
+LLM_PROVIDER = "google"
+
+# Initialize MongoDB client
+try:
+    mongodb_client = MongoClient(MONGODB_URI)
+    # Test the connection
+    result = mongodb_client.admin.command("ping")
+    
+    if result.get("ok") == 1:
+        show_success("Successfully connected to MongoDB Atlas! 🎉")
+        
+        # Mark step as complete
+        try:
+            progress.mark_done("Environment Setup", score=100, notes="MongoDB connection successful")
+        except NameError:
+            pass
+    else:
+        show_error("MongoDB connection failed")
+        
+except Exception as e:
+    show_error(f"Connection error: {e}")
+    show_hint("Check your connection string and network access settings", 
+             "Connection Troubleshooting")`}
+</ExplainableCodeBlock>
+
+## Step 2: PDF Processing
+
+Download a research paper and extract pages as images for multimodal processing.
+
+<ExplainableCodeBlock
+  title="PDF Processing Step Guidance"
+  explanation="Shows contextual tips for the PDF processing step. This follows the same pattern as earlier step guidance, providing helpful information specific to working with PDFs."
+  concepts={[
+    { term: "Step tips", definition: "Context-specific guidance that helps users understand what they'll accomplish in this section" }
+  ]}
+  hints={[
+    "PDF processing is a key step for creating multimodal embeddings",
+    "Each page will be converted to an image for visual analysis"
+  ]}
+>
+{`# Show step guidance
+try:
+    progress.show_step_tips("PDF Processing")
+except (NameError, AttributeError):
+    show_info("Processing PDF and extracting images...")`}
+</ExplainableCodeBlock>
+
+<ExplainableCodeBlock
+  title="Import PDF Libraries and Setup"
+  explanation="This code imports the necessary libraries for PDF processing and creates a directory structure for storing extracted images. PyMuPDF is used for PDF manipulation, requests for downloading files, and pathlib for cross-platform file operations."
+  concepts={[
+    { term: "pymupdf", definition: "Python library for PDF processing, rendering, and text extraction (also known as fitz)" },
+    { term: "pathlib", definition: "Modern Python library for handling filesystem paths in an object-oriented way" },
+    { term: "parents=True", definition: "Creates parent directories if they don't exist when making a new directory" },
+    { term: "exist_ok=True", definition: "Prevents errors if the directory already exists" }
+  ]}
+  hints={[
+    "PyMuPDF is one of the fastest PDF libraries in Python",
+    "The data/images directory will store all extracted page images",
+    "Using pathlib is more portable than os.path for file operations"
+  ]}
+>
+{`import pymupdf
+import requests
+from pathlib import Path
+
+# Create directory for images
+Path("data/images").mkdir(parents=True, exist_ok=True)
+
+show_info("📚 Reference: https://pymupdf.readthedocs.io/en/latest/how-to-open-a-file.html#opening-remote-files")`}
+</ExplainableCodeBlock>
+
+<ExplainableCodeBlock
+  title="Download and Load PDF Document"
+  explanation="This code downloads a research paper from arXiv and loads it into PyMuPDF for processing. The PDF is downloaded as a byte stream and opened directly in memory without saving to disk first. This is more efficient for temporary processing."
+  concepts={[
+    { term: "requests.get()", definition: "HTTP GET request to download content from a URL" },
+    { term: "response.content", definition: "The raw bytes of the HTTP response body" },
+    { term: "Document(stream=...)", definition: "PyMuPDF method to open a document from memory instead of a file" },
+    { term: "filetype parameter", definition: "Tells PyMuPDF how to interpret the byte stream (PDF, XPS, etc.)" }
+  ]}
+  hints={[
+    "The TODO comment indicates this is an exercise - participants should fill in the Document creation",
+    "Opening from a stream avoids temporary files and is faster for web downloads",
+    "The validation checks ensure the PDF loaded correctly before proceeding"
+  ]}
+>
+{`# Download the DeepSeek paper
+try:
+    show_info("Downloading DeepSeek R1 research paper...")
+    response = requests.get("https://arxiv.org/pdf/2501.12948")
+    
+    if response.status_code != 200:
+        raise ValueError(f"Failed to download PDF. Status code: {response.status_code}")
+    
+    # Get the content of the response
+    pdf_stream = response.content
+    show_success(f"PDF downloaded successfully! Size: {len(pdf_stream)} bytes")
+    
+    # TODO: Open the data in \`pdf_stream\` as a PDF document
+    # HINT: Set the \`filetype\` argument to "pdf"
+    pdf = pymupdf.Document(stream=pdf_stream, filetype="pdf")
+    
+    show_success(f"PDF loaded! Pages: {pdf.page_count}")
+    
+    # Validate PDF processing
+    try:
+        validator.validate_variable_exists('pdf', locals(), pymupdf.Document)
+        validator.validate_custom(
+            pdf.page_count > 0,
+            "PDF has valid page count",
+            "PDF appears to be empty or corrupted"
+        )
+    except NameError:
+        pass
+        
+except Exception as e:
+    show_error(f"PDF processing failed: {e}")
+    show_hint("Check your internet connection and try again", "Download Issue")`}
+</ExplainableCodeBlock>
+
+<ExplainableCodeBlock
+  title="Extract PDF Pages as Images"
+  explanation="This code converts each page of the PDF into a high-resolution image. The zoom factor of 3.0 creates images 3x larger than the default size for better quality when processing with AI models. Each page is rendered as a pixmap (pixel map) and saved as a PNG file."
+  concepts={[
+    { term: "Matrix(zoom, zoom)", definition: "Transformation matrix that scales the page rendering by the zoom factor" },
+    { term: "get_pixmap()", definition: "Renders a PDF page into a raster image (bitmap) representation" },
+    { term: "tqdm", definition: "Progress bar library that shows extraction progress in real-time" },
+    { term: "Pixmap", definition: "PyMuPDF's image object containing pixel data that can be saved to various formats" }
+  ]}
+  hints={[
+    "Higher zoom values create better quality images but use more memory and storage",
+    "The TODO indicates participants should implement the get_pixmap call themselves",
+    "Each image is named with its page number for easy reference later",
+    "The metadata dictionary stores information needed for vector search"
+  ]}
+>
+{`# Extract pages as images
+from tqdm import tqdm
+
+docs = []
+zoom = 3.0
+
+show_info("📚 Reference: https://pymupdf.readthedocs.io/en/latest/page.html#Page.get_pixmap")
+
+try:
+    # Set image matrix dimensions
+    mat = pymupdf.Matrix(zoom, zoom)
+    
+    show_info(f"Extracting {pdf.page_count} pages as images...")
+    
+    # Track partial progress
+    total_pages = pdf.page_count
+    
+    # Iterate through the pages of the PDF
+    for n in tqdm(range(pdf.page_count), desc="Extracting pages"):
+        temp = {}
+        
+        # TODO: Use the \`get_pixmap\` method to render the PDF page
+        # HINT: Access the PDF page as pdf[n]
+        pix = pdf[n].get_pixmap(matrix=mat)
+        
+        # Store image locally
+        key = f"data/images/{n+1}.png"
+        pix.save(key)
+        
+        # Extract image metadata
+        temp["key"] = key
+        temp["width"] = pix.width
+        temp["height"] = pix.height
+        temp["page_number"] = n + 1
+        docs.append(temp)
+    
+    show_success(f"Successfully extracted {len(docs)} pages as images!")
+    show_info(f"Images saved to: data/images/")
+    
+    # Mark step complete
+    try:
+        progress.mark_done("PDF Processing", score=95, 
+                          notes=f"Extracted {len(docs)} pages")
+    except (NameError, AttributeError):
+        pass
+        
+except Exception as e:
+    show_error(f"Image extraction failed: {e}")
+    show_hint("Ensure the data/images directory exists and is writable", "File Access")`}
+</ExplainableCodeBlock>
+
+## Step 3: Data Ingestion
+
+Load pre-generated embeddings and ingest them into MongoDB Atlas.
+
+<ExplainableCodeBlock
+  title="Optional: Generate Your Own Embeddings"
+  explanation="This commented code shows how to generate multimodal embeddings using Voyage AI's API. Embeddings are numerical representations of images that capture their semantic meaning, enabling similarity search. For the workshop, pre-generated embeddings are provided to save time and avoid API requirements."
+  concepts={[
+    { term: "Embeddings", definition: "Dense vector representations that capture semantic meaning of data in a high-dimensional space" },
+    { term: "Multimodal embeddings", definition: "Embeddings that can represent both text and images in the same vector space" },
+    { term: "voyage-multimodal-3", definition: "Voyage AI's model that creates 1024-dimensional embeddings for images and text" },
+    { term: "input_type", definition: "Tells the model whether the input is a 'document' (image) or 'query' (text search)" }
+  ]}
+  hints={[
+    "Pre-generated embeddings allow you to complete the workshop without API keys",
+    "The embedding dimension (1024) must match the vector index configuration",
+    "Voyage AI embeddings are optimized for multimodal search across images and text",
+    "Generating embeddings for many images can take several minutes"
+  ]}
+>
+{`# Optional: Generate embeddings (requires Voyage AI API key)
+show_info("ℹ️ Embedding Generation", "Optional Step")
+show_info("""
+For this workshop, we'll use pre-generated embeddings to save time.
+If you want to generate your own embeddings, uncomment the code below 
+and add your Voyage AI API key.
+
+Follow these steps to get an API key:
+https://docs.voyageai.com/docs/api-key-and-installation#authentication-with-api-keys
+""")
+
+# Uncomment this section if you have a Voyage AI API key
+# from voyageai import Client
+# from PIL import Image
+# 
+# os.environ["VOYAGE_API_KEY"] = "your-api-key-here"
+# voyageai_client = Client()
+# 
+# def get_embedding(data, input_type):
+#     """Get Voyage AI embeddings for images and text."""
+#     embedding = voyageai_client.multimodal_embed(
+#         inputs=[[data]], model="voyage-multimodal-3", input_type=input_type
+#     ).embeddings[0]
+#     return embedding
+# 
+# embedded_docs = []
+# for doc in tqdm(docs, desc="Generating embeddings"):
+#     img = Image.open(doc['key'])
+#     doc["embedding"] = get_embedding(img, "document")
+#     embedded_docs.append(doc)`}
+</ExplainableCodeBlock>
+
+<ExplainableCodeBlock
+  title="Database Configuration"
+  explanation="This code sets up the MongoDB database and collection names that will store our multimodal data. The collection will hold documents with image metadata and their vector embeddings for similarity search."
+  concepts={[
+    { term: "Database", definition: "A container for collections in MongoDB, similar to a schema in relational databases" },
+    { term: "Collection", definition: "A group of documents in MongoDB, similar to a table in relational databases" },
+    { term: "mongodb_client[DB][COLL]", definition: "MongoDB's syntax for accessing a specific collection within a database" }
+  ]}
+  hints={[
+    "Collection names should be descriptive and follow a consistent naming convention",
+    "The database will be created automatically when you first insert data",
+    "Collections in MongoDB are schema-flexible, allowing different document structures"
+  ]}
+>
+{`import json
+
+# Database configuration
+DB_NAME = "mongodb_aiewf"
+COLLECTION_NAME = "multimodal_workshop"
+
+# Connect to the collection
+collection = mongodb_client[DB_NAME][COLLECTION_NAME]
+
+show_info(f"Connected to database: {DB_NAME}")
+show_info(f"Using collection: {COLLECTION_NAME}")`}
+</ExplainableCodeBlock>
+
+<ExplainableCodeBlock
+  title="Load Pre-generated Embeddings"
+  explanation="This code loads pre-computed embeddings from a JSON file. Each document contains image metadata and a 1024-dimensional embedding vector. The validation ensures the data has the correct structure before proceeding to database insertion."
+  concepts={[
+    { term: "JSON", definition: "JavaScript Object Notation - a lightweight data format for storing structured data" },
+    { term: "Embeddings file", definition: "Contains pre-computed vector representations of all PDF pages" },
+    { term: "Required fields", definition: "Each document must have 'embedding' (vector) and 'key' (image path) fields" },
+    { term: "Validation", definition: "Checks that ensure data integrity before database operations" }
+  ]}
+  hints={[
+    "The embeddings.json file should be in your data/ directory",
+    "Pre-generated embeddings save significant time during the workshop",
+    "Each embedding is a 1024-dimensional float array",
+    "The validation prevents errors during database insertion"
+  ]}
+>
+{`# Load pre-generated embeddings
+try:
+    show_info("Loading pre-generated embeddings...")
+    
+    with open("data/embeddings.json", "r") as data_file:
+        json_data = data_file.read()
+    data = json.loads(json_data)
+    
+    show_success(f"Loaded {len(data)} documents with embeddings")
+    
+    # Validate data structure
+    try:
+        validator.validate_custom(
+            len(data) > 0,
+            "Embeddings data loaded successfully",
+            "Embeddings file is empty or invalid"
+        )
+        
+        # Check if first document has required fields
+        if data:
+            required_fields = ['embedding', 'key']
+            missing_fields = [field for field in required_fields if field not in data[0]]
+            
+            validator.validate_custom(
+                len(missing_fields) == 0,
+                "Document structure validation passed",
+                f"Missing required fields: {missing_fields}"
+            )
+    except NameError:
+        pass
+        
+except FileNotFoundError:
+    show_error("Embeddings file not found: data/embeddings.json")
+    show_hint("Make sure the data/embeddings.json file exists in your working directory", 
+             "File Missing")
+except Exception as e:
+    show_error(f"Failed to load embeddings: {e}")`}
+</ExplainableCodeBlock>
+
+<ExplainableCodeBlock
+  title="Bulk Insert Documents into MongoDB"
+  explanation="This code performs a bulk insertion of all documents with embeddings into MongoDB. It first clears any existing data to ensure a clean state, then inserts all documents in a single operation for efficiency. The verification step confirms all documents were successfully stored."
+  concepts={[
+    { term: "delete_many({})", definition: "Removes all documents from the collection (empty filter {} matches everything)" },
+    { term: "insert_many()", definition: "Efficiently inserts multiple documents in a single database operation" },
+    { term: "count_documents()", definition: "Returns the number of documents matching a filter (empty filter counts all)" },
+    { term: "Bulk operations", definition: "Database operations that process multiple documents at once for better performance" }
+  ]}
+  hints={[
+    "The TODO indicates participants should implement the insert_many call",
+    "Bulk insertion is much faster than inserting documents one by one",
+    "The delete operation ensures you start with a clean collection",
+    "Validation confirms no documents were lost during insertion"
+  ]}
+>
+{`# Ingest data into MongoDB
+show_info("📚 Reference: https://pymongo.readthedocs.io/en/stable/api/pymongo/collection.html#pymongo.collection.Collection.insert_many")
+
+try:
+    # Clear existing documents
+    delete_result = collection.delete_many({})
+    show_info(f"Deleted {delete_result.deleted_count} existing documents")
+    
+    # TODO: Bulk insert documents into the collection
+    insert_result = collection.insert_many(data)
+    
+    # Verify insertion
+    doc_count = collection.count_documents({})
+    
+    show_success(f"Successfully ingested {doc_count} documents into {COLLECTION_NAME}! 🎉")
+    
+    # Validate ingestion
+    try:
+        validator.validate_custom(
+            doc_count == len(data),
+            "All documents ingested successfully",
+            f"Document count mismatch: expected {len(data)}, got {doc_count}"
+        )
+        
+        progress.mark_done("Data Ingestion", score=100, 
+                          notes=f"Ingested {doc_count} documents")
+    except NameError:
+        pass
+        
+except Exception as e:
+    show_error(f"Data ingestion failed: {e}")
+    show_hint("Check your MongoDB connection and permissions", "Database Error")`}
+</ExplainableCodeBlock>
+
+## Step 4: Vector Search Index Creation
+
+Create a vector search index to enable similarity search on our multimodal embeddings.
+
+<ExplainableCodeBlock
+  title="Vector Index Creation Step Guidance"
+  explanation="Shows contextual tips for creating the vector search index, which is essential for enabling similarity search on the embeddings stored in MongoDB."
+  concepts={[
+    { term: "Vector index", definition: "A specialized database index that enables fast similarity search on high-dimensional vectors" }
+  ]}
+  hints={[
+    "Vector indexes are required for efficient similarity search",
+    "Index creation may take several minutes for large datasets"
+  ]}
+>
+{`# Show step guidance
+try:
+    progress.show_step_tips("Vector Index Creation")
+except (NameError, AttributeError):
+    show_info("Creating vector search index...")`}
+</ExplainableCodeBlock>
+
+<ExplainableCodeBlock
+  title="Define Vector Search Index Configuration"
+  explanation="This code defines the configuration for MongoDB Atlas Vector Search index. The index will enable fast similarity search on the 1024-dimensional embeddings using cosine similarity, which is optimal for normalized vectors like those from Voyage AI."
+  concepts={[
+    { term: "vectorSearch type", definition: "MongoDB Atlas index type specifically designed for vector similarity search" },
+    { term: "numDimensions", definition: "Must match the embedding size - Voyage multimodal-3 produces 1024-dimensional vectors" },
+    { term: "cosine similarity", definition: "Measures the angle between vectors, ideal for normalized embeddings" },
+    { term: "path: embedding", definition: "The document field containing the vector data to be indexed" }
+  ]}
+  hints={[
+    "The dimensions must exactly match your embedding model's output size",
+    "Cosine similarity is preferred for most text and image embeddings",
+    "The index name will be used later in vector search queries",
+    "Alternative similarity metrics include euclidean and dotProduct"
+  ]}
+>
+{`VS_INDEX_NAME = "vector_index"
+
+# Define vector index configuration
+model = {
+    "name": VS_INDEX_NAME,
+    "type": "vectorSearch",
+    "definition": {
+        "fields": [
+            {
+                "type": "vector",
+                "path": "embedding",
+                "numDimensions": 1024,
+                "similarity": "cosine",
+            }
+        ]
+    },
+}
+
+show_info(f"Index configuration: {VS_INDEX_NAME}")
+show_info("Vector field: embedding")
+show_info("Dimensions: 1024 (Voyage multimodal)")
+show_info("Similarity metric: cosine")`}
+</ExplainableCodeBlock>
+
+<ExplainableCodeBlock
+  title="Create Vector Search Index"
+  explanation="This code creates the vector search index on MongoDB Atlas. It first checks if the index already exists to avoid duplicates, then creates it if needed. Index creation is asynchronous and may take several minutes to complete."
+  concepts={[
+    { term: "list_search_indexes()", definition: "Returns all existing search indexes on the collection" },
+    { term: "create_search_index()", definition: "Creates a new search index with the specified configuration" },
+    { term: "Asynchronous creation", definition: "Index building happens in the background and may take time to complete" },
+    { term: "Index existence check", definition: "Prevents errors by checking if an index already exists before creating" }
+  ]}
+  hints={[
+    "The TODO indicates participants should implement the create_search_index call",
+    "Index creation is asynchronous - the method returns immediately but building takes time",
+    "You can monitor index creation progress in the MongoDB Atlas UI",
+    "Large collections may take 10+ minutes to index"
+  ]}
+>
+{`# Create the vector search index
+show_info("📚 Reference: https://pymongo.readthedocs.io/en/stable/api/pymongo/collection.html#pymongo.collection.Collection.create_search_index")
+
+try:
+    # Check if index already exists
+    existing_indexes = list(collection.list_search_indexes())
+    index_exists = any(idx.get('name') == VS_INDEX_NAME for idx in existing_indexes)
+    
+    if index_exists:
+        show_info(f"Index '{VS_INDEX_NAME}' already exists")
+    else:
+        show_info("Creating vector search index...")
+        
+        # TODO: Create the vector search index
+        collection.create_search_index(model=model)
+        
+        show_success(f"Vector search index '{VS_INDEX_NAME}' created successfully! 🎉")
+    
+    # Mark step complete
+    try:
+        progress.mark_done("Vector Index Creation", score=100, 
+                          notes=f"Index '{VS_INDEX_NAME}' ready")
+    except NameError:
+        pass
+        
+except Exception as e:
+    show_error(f"Index creation failed: {e}")
+    show_hint("Index creation may take a few minutes. Check Atlas UI to monitor progress", 
+             "Index Status")`}
+</ExplainableCodeBlock>
+
+<ExplainableCodeBlock
+  title="Verify Vector Index Status"
+  explanation="This code checks the status of all search indexes and specifically verifies that our vector index is ready for use. Vector indexes go through several states during creation: PENDING, BUILDING, and finally READY."
+  concepts={[
+    { term: "Index status", definition: "Current state of index creation: PENDING (queued), BUILDING (in progress), READY (usable)" },
+    { term: "next() function", definition: "Returns the first item from an iterator that matches a condition, or None if no match" },
+    { term: "Status checking", definition: "Verifying that infrastructure is ready before attempting to use it" }
+  ]}
+  hints={[
+    "Only proceed with vector search when the index status is 'READY'",
+    "Building time depends on collection size and cluster tier",
+    "The Atlas UI provides more detailed progress information",
+    "You can run this cell multiple times to check status updates"
+  ]}
+>
+{`# Verify index status
+try:
+    indexes = list(collection.list_search_indexes())
+    
+    show_info("Current search indexes:")
+    for idx in indexes:
+        name = idx.get('name', 'Unknown')
+        status = idx.get('status', 'Unknown')
+        
+        if status == 'READY':
+            show_success(f"✅ {name}: {status}")
+        else:
+            show_warning(f"⏳ {name}: {status}")
+    
+    # Check if our index is ready
+    our_index = next((idx for idx in indexes if idx.get('name') == VS_INDEX_NAME), None)
+    
+    if our_index and our_index.get('status') == 'READY':
+        show_success(f"Index '{VS_INDEX_NAME}' is ready for vector search! 🚀")
+    else:
+        show_warning(f"Index '{VS_INDEX_NAME}' is still building. Please wait...")
+        show_hint("Index creation can take several minutes. Check the Atlas UI for progress.", 
+                 "Index Building")
+        
+except Exception as e:
+    show_error(f"Failed to check index status: {e}")`}
+</ExplainableCodeBlock>
+
+## Step 5: Agent Tools Setup
+
+Create the vector search tool that our AI agent will use to retrieve relevant information.
+
+<ExplainableCodeBlock
+  title="Import Types for Agent Tools"
+  explanation="Imports the List type for type annotations, which helps with code documentation and IDE support. Type hints make code more readable and help catch errors during development."
+  concepts={[
+    { term: "Type hints", definition: "Python annotations that specify expected data types for function parameters and returns" },
+    { term: "List[str]", definition: "Type annotation indicating a list containing string elements" },
+    { term: "typing module", definition: "Python's built-in module for advanced type annotations" }
+  ]}
+  hints={[
+    "Type hints are optional but improve code quality and IDE support",
+    "The MongoDB documentation link provides vector search examples",
+    "List[str] indicates the function will return a list of strings (image paths)"
+  ]}
+>
+{`from typing import List
+
+show_info("📚 Reference: https://www.mongodb.com/docs/atlas/atlas-vector-search/vector-search-stage/#ann-examples")`}
+</ExplainableCodeBlock>
+
+<ExplainableCodeBlock
+  title="Vector Search Tool Implementation"
+  explanation="This function implements the core vector search capability that our AI agent will use. It takes a user's natural language query, converts it to an embedding using the serverless API, then performs a similarity search against our MongoDB Atlas vector index to find the most relevant document pages."
+  concepts={[
+    { term: "$vectorSearch", definition: "MongoDB Atlas operator that performs approximate nearest neighbor (ANN) search on vector embeddings" },
+    { term: "numCandidates", definition: "Number of candidate documents to consider during the ANN search (affects accuracy vs speed)" },
+    { term: "limit", definition: "Maximum number of results to return from the vector search" },
+    { term: "vectorSearchScore", definition: "Similarity score between the query vector and document vectors (higher is more similar)" }
+  ]}
+  hints={[
+    "The serverless endpoint handles embedding generation to avoid managing API keys directly",
+    "numCandidates should be significantly larger than limit for better accuracy",
+    "The $project stage shapes the output to include only necessary fields plus the similarity score",
+    "Results are automatically sorted by similarity score in descending order"
+  ]}
+>
+{`def get_information_for_question_answering(user_query: str) -> List[str]:
+    """
+    Retrieve information using vector search to answer a user query.
+
+    Args:
+        user_query (str): The user's query string.
+
+    Returns:
+        List[str]: List of image file paths retrieved from vector search.
+    """
+    try:
+        show_info(f"🔍 Searching for: {user_query}")
+        
+        # Embed the user query using our serverless endpoint
+        response = requests.post(
+            url=SERVERLESS_URL,
+            json={
+                "task": "get_embedding",
+                "data": {"input": user_query, "input_type": "query"},
+            },
+        )
+        
+        if response.status_code != 200:
+            show_error(f"Embedding API failed: {response.status_code}")
+            return []
+        
+        # Extract the embedding from the response
+        query_embedding = response.json()["embedding"]
+        show_success(f"Generated query embedding: {len(query_embedding)} dimensions")
+
+        # TODO: Define aggregation pipeline with $vectorSearch and $project stages
+        pipeline = [
+            {
+                "$vectorSearch": {
+                    "index": VS_INDEX_NAME,
+                    "path": "embedding",
+                    "queryVector": query_embedding,
+                    "numCandidates": 150,
+                    "limit": 2,
+                }
+            },
+            {
+                "$project": {
+                    "_id": 0,
+                    "key": 1,
+                    "width": 1,
+                    "height": 1,
+                    "score": {"$meta": "vectorSearchScore"},
+                }
+            },
+        ]
+
+        # TODO: Execute the aggregation pipeline
+        results = list(collection.aggregate(pipeline))
+        
+        # Extract image keys
+        keys = [result["key"] for result in results]
+        scores = [result["score"] for result in results]
+        
+        show_success(f"Found {len(keys)} relevant images")
+        for i, (key, score) in enumerate(zip(keys, scores)):
+            show_info(f"  {i+1}. {key} (score: {score:.4f})")
+        
+        return keys
+        
+    except Exception as e:
+        show_error(f"Vector search failed: {e}")
+        return []`}
+</ExplainableCodeBlock>
+
+<ExplainableCodeBlock
+  title="Define Function Declaration for Gemini"
+  explanation="This creates a function declaration that tells Gemini 2.0 Flash what tools are available. The declaration follows OpenAPI/JSON Schema format and describes the function name, purpose, and parameters. This enables the LLM to intelligently decide when and how to call our vector search function."
+  concepts={[
+    { term: "Function declaration", definition: "A description of available functions that an LLM can call during conversation" },
+    { term: "JSON Schema", definition: "Standard format for describing the structure of JSON data and API parameters" },
+    { term: "Function calling", definition: "LLM capability to invoke external functions based on user queries" },
+    { term: "Parameters schema", definition: "Defines the expected input format and required fields for the function" }
+  ]}
+  hints={[
+    "The TODO indicates participants should implement this declaration themselves",
+    "Clear descriptions help the LLM decide which function to call",
+    "The 'required' array specifies which parameters are mandatory",
+    "Function declarations enable sophisticated agent reasoning"
+  ]}
+>
+{`# Define function declaration for Gemini function calling
+show_info("📚 Reference: https://ai.google.dev/gemini-api/docs/function-calling#step_1_define_function_declaration")
+
+# TODO: Define the function declaration
+get_information_for_question_answering_declaration = {
+    "name": "get_information_for_question_answering",
+    "description": "Retrieve information using vector search to answer a user query.",
+    "parameters": {
+        "type": "object",
+        "properties": {
+            "user_query": {
+                "type": "string",
+                "description": "Query string to use for vector search",
+            }
+        },
+        "required": ["user_query"],
+    },
+}
+
+show_success("Function declaration created for Gemini integration!")
+
+# Mark step complete
+try:
+    progress.mark_done("Agent Tools Setup", score=100, 
+                      notes="Vector search tool and function declaration ready")
+except NameError:
+    pass`}
+</ExplainableCodeBlock>
+
+## Step 6: LLM Integration
+
+Set up Gemini 2.0 Flash with function calling capabilities.
+
+<ExplainableCodeBlock
+  title="Initialize Gemini 2.0 Flash Client"
+  explanation="This code sets up the Google Gemini 2.0 Flash LLM client by obtaining an API key from the serverless endpoint. The client will be used for both tool selection and response generation in our AI agent."
+  concepts={[
+    { term: "genai.Client", definition: "Google's Python client for accessing Gemini AI models" },
+    { term: "API key", definition: "Authentication token required to access Google's AI services" },
+    { term: "Serverless endpoint", definition: "A cloud function that securely provides API keys without exposing them in code" },
+    { term: "gemini-2.0-flash", definition: "Google's fast, multimodal AI model optimized for function calling" }
+  ]}
+  hints={[
+    "The serverless endpoint keeps API keys secure and centralized",
+    "Gemini 2.0 Flash is optimized for both speed and multimodal understanding",
+    "The client validation ensures proper initialization before proceeding",
+    "If API key retrieval fails, check your SERVERLESS_URL configuration"
+  ]}
+>
+{`from google import genai
+from google.genai import types
+from google.genai.types import FunctionCall
+
+LLM = "gemini-2.0-flash"
+
+try:
+    # Get API key from serverless endpoint
+    show_info("Obtaining Gemini API key...")
+    
+    api_response = requests.post(
+        url=SERVERLESS_URL, 
+        json={"task": "get_api_key", "data": LLM_PROVIDER}
+    )
+    
+    if api_response.status_code == 200:
+        api_key = api_response.json()["api_key"]
+        
+        # Initialize Gemini client
+        gemini_client = genai.Client(api_key=api_key)
+        
+        show_success(f"Gemini client initialized with model: {LLM}")
+        
+        # Validate client setup
+        try:
+            validator.validate_variable_exists('gemini_client', locals(), genai.Client)
+        except NameError:
+            pass
+    else:
+        show_error(f"Failed to get API key: {api_response.status_code}")
+        
+except Exception as e:
+    show_error(f"LLM setup failed: {e}")
+    show_hint("Check your SERVERLESS_URL and network connection", "API Key Error")`}
+</ExplainableCodeBlock>
+
+<ExplainableCodeBlock
+  title="Configure Gemini for Function Calling"
+  explanation="This code creates the generation configuration that enables Gemini to use our vector search function. The temperature of 0.0 ensures deterministic responses, and the tools configuration tells Gemini what functions are available to call."
+  concepts={[
+    { term: "types.Tool", definition: "Gemini's wrapper for function declarations that can be called during generation" },
+    { term: "GenerateContentConfig", definition: "Configuration object that controls LLM behavior, including available tools and temperature" },
+    { term: "temperature=0.0", definition: "Makes responses deterministic by removing randomness from token selection" },
+    { term: "Function calling", definition: "LLM capability to invoke external functions based on conversation context" }
+  ]}
+  hints={[
+    "Temperature 0.0 is ideal for consistent, factual responses",
+    "The tools array can contain multiple function declarations",
+    "This configuration will be used for all Gemini API calls",
+    "Function calling enables sophisticated agent reasoning patterns"
+  ]}
+>
+{`# Create generation configuration
+try:
+    tools = types.Tool(
+        function_declarations=[get_information_for_question_answering_declaration]
+    )
+    tools_config = types.GenerateContentConfig(tools=[tools], temperature=0.0)
+    
+    show_success("Generation configuration created with function calling enabled!")
+    show_info("Temperature: 0.0 (deterministic responses)")
+    show_info("Available tools: get_information_for_question_answering")
+    
+    # Mark step complete
+    try:
+        progress.mark_done("LLM Integration", score=100, 
+                          notes="Gemini 2.0 Flash configured with function calling")
+    except NameError:
+        pass
+        
+except Exception as e:
+    show_error(f"Configuration failed: {e}")`}
+</ExplainableCodeBlock>
+
+## Step 7: Basic Agent Implementation
+
+Create the core agent functions for tool selection and response generation.
+
+<ExplainableCodeBlock
+  title="Import Image Processing Library"
+  explanation="Imports PIL (Python Imaging Library) for loading and manipulating images that will be sent to Gemini for multimodal analysis. PIL is essential for opening the PNG files created from PDF pages."
+  concepts={[
+    { term: "PIL (Pillow)", definition: "Python's primary image processing library for loading, manipulating, and saving images" },
+    { term: "Multimodal input", definition: "Sending both text and images to an AI model for analysis" }
+  ]}
+  hints={[
+    "PIL.Image.open() will be used to load extracted PDF page images",
+    "Gemini can process both text and images in the same request",
+    "The reference link provides examples of multimodal function calling"
+  ]}
+>
+{`from PIL import Image
+
+show_info("📚 Reference: https://ai.google.dev/gemini-api/docs/function-calling#step_4_create_user_friendly_response")`}
+</ExplainableCodeBlock>
+
+<ExplainableCodeBlock
+  title="Tool Selection Function"
+  explanation="This function uses Gemini to intelligently decide whether to call our vector search tool based on the conversation context. It analyzes the user's query and available information to determine if additional data retrieval is needed."
+  concepts={[
+    { term: "Tool selection", definition: "LLM-driven decision making about which functions to call based on context" },
+    { term: "System prompt", definition: "Instructions that guide the LLM's behavior and decision-making process" },
+    { term: "FunctionCall object", definition: "Gemini's response containing the function name and arguments to execute" },
+    { term: "response.candidates", definition: "Gemini's API response structure containing potential outputs" }
+  ]}
+  hints={[
+    "The TODO indicates participants should implement the generate_content call",
+    "The system prompt guides when tools should be used vs. direct image explanation",
+    "Function calls are optional - the LLM might decide no tools are needed",
+    "Error handling ensures the agent continues even if tool selection fails"
+  ]}
+>
+{`def select_tool(messages: List) -> FunctionCall | None:
+    """
+    Use an LLM to decide which tool to call.
+
+    Args:
+        messages (List): Messages as a list
+
+    Returns:
+        FunctionCall: Function call object or None
+    """
+    try:
+        system_prompt = [
+            (
+                "You're an AI assistant. Based on the given information, decide which tool to use. "
+                "If the user is asking to explain an image, don't call any tools unless that would help you better explain the image. "
+                "Here is the provided information:\\n"
+            )
+        ]
+        
+        # Input to the LLM
+        contents = system_prompt + messages
+        
+        # TODO: Generate response using Gemini
+        response = gemini_client.models.generate_content(
+            model=LLM, contents=contents, config=tools_config
+        )
+        
+        # Extract and return the function call
+        if response.candidates and response.candidates[0].content.parts:
+            return response.candidates[0].content.parts[0].function_call
+        
+        return None
+        
+    except Exception as e:
+        show_error(f"Tool selection failed: {e}")
+        return None
+
+show_success("Tool selection function created!")`}
+</ExplainableCodeBlock>
+
+```python
+def generate_answer(user_query: str, images: List = []) -> str:
+    """
+    Execute any tools and generate a response.
+
+    Args:
+        user_query (str): User's query string
+        images (List): List of image file paths. Defaults to [].
+
+    Returns:
+        str: LLM-generated response
+    """
+    try:
+        # TODO: Use select_tool to determine if we need to call any tools
+        tool_call = select_tool([user_query])
+        
+        # If a tool call is found and it's our vector search function
+        if (
+            tool_call is not None
+            and tool_call.name == "get_information_for_question_answering"
+        ):
+            show_info(f"🛠️ Agent calling tool: {tool_call.name}")
+            
+            # TODO: Call the tool with the extracted arguments
+            tool_images = get_information_for_question_answering(**tool_call.args)
+            
+            # Add retrieved images to the input images
+            images.extend(tool_images)
+
+        # Prepare system prompt
+        system_prompt = (
+            "Answer the questions based on the provided context only. "
+            "If the context is not sufficient, say I DON'T KNOW. "
+            "DO NOT use any other information to answer the question."
+        )
+        
+        # Prepare contents for the LLM
+        contents = [system_prompt] + [user_query] + [Image.open(image) for image in images]
+
+        # Get the response from the LLM
+        response = gemini_client.models.generate_content(
+            model=LLM,
+            contents=contents,
+            config=types.GenerateContentConfig(temperature=0.0),
+        )
+        
+        answer = response.text
+        return answer
+        
+    except Exception as e:
+        show_error(f"Answer generation failed: {e}")
+        return "I apologize, but I encountered an error while processing your question."
+
+show_success("Answer generation function created!")
+```
+
+```python
+def execute_agent(user_query: str, images: List = []) -> None:
+    """
+    Execute the agent and display the response.
+
+    Args:
+        user_query (str): User query
+        images (List, optional): List of image file paths. Defaults to [].
+    """
+    try:
+        show_info(f"🤖 Processing query: {user_query}")
+        
+        response = generate_answer(user_query, images)
+        
+        show_success("🤖 Agent Response:")
+        print(f"\n{response}\n")
+        
+    except Exception as e:
+        show_error(f"Agent execution failed: {e}")
+
+show_success("Agent execution function created!")
+
+# Mark step complete
+try:
+    progress.mark_done("Basic Agent Testing", score=100, 
+                      notes="Agent functions implemented and ready for testing")
+except NameError:
+    pass
+```
+
+### Testing the Basic Agent
+
+```python
+# Test the agent with different types of queries
+show_info("🧪 Testing the agent with sample queries...")
+
+# Test 1: Text-based query requiring vector search
+show_info("Test 1: Factual question requiring document search")
+execute_agent("What is the Pass@1 accuracy of Deepseek R1 on the MATH500 benchmark?")
+```
+
+```python
+# Test 2: Image explanation (if test image exists)
+import os
+
+if os.path.exists("data/test.png"):
+    show_info("Test 2: Image analysis")
+    execute_agent("Explain the graph in this image:", ["data/test.png"])
+else:
+    show_warning("Test image not found: data/test.png")
+    show_info("Test 2: Using extracted PDF page instead")
+    if docs:
+        execute_agent("What can you see in this document page?", [docs[0]['key']])
+```
+
+## Step 8: Memory Implementation
+
+Add conversational memory to enable multi-turn conversations with context retention.
+
+```python
+from datetime import datetime
+
+# Set up history collection
+history_collection = mongodb_client[DB_NAME]["history"]
+
+show_info(f"Setting up conversation memory in: {DB_NAME}.history")
+show_info("📚 Reference: https://pymongo.readthedocs.io/en/stable/api/pymongo/collection.html#pymongo.collection.Collection.create_index")
+```
+
+```python
+# Create index for efficient session queries
+try:
+    # TODO: Create index on session_id field
+    history_collection.create_index("session_id")
+    
+    show_success("Session index created for conversation history!")
+    
+except Exception as e:
+    show_error(f"Index creation failed: {e}")
+```
+
+```python
+def store_chat_message(session_id: str, role: str, type: str, content: str) -> None:
+    """
+    Create chat history document and store it in MongoDB.
+
+    Args:
+        session_id (str): Session ID
+        role (str): Message role, one of 'user' or 'agent'
+        type (str): Type of message, one of 'text' or 'image'
+        content (str): Content of the message (text or image path)
+    """
+    try:
+        # TODO: Create message document
+        message = {
+            "session_id": session_id,
+            "role": role,
+            "type": type,
+            "content": content,
+            "timestamp": datetime.now(),
+        }
+        
+        # TODO: Insert message into history collection
+        history_collection.insert_one(message)
+        
+    except Exception as e:
+        show_error(f"Failed to store chat message: {e}")
+
+show_success("Chat message storage function created!")
+```
+
+```python
+def retrieve_session_history(session_id: str) -> List:
+    """
+    Retrieve chat history for a particular session.
+
+    Args:
+        session_id (str): Session ID
+
+    Returns:
+        List: List of messages (text and images)
+    """
+    try:
+        show_info("📚 Reference: https://pymongo.readthedocs.io/en/stable/api/pymongo/cursor.html#pymongo.cursor.Cursor.sort")
+        
+        # TODO: Query history collection and sort by timestamp
+        cursor = history_collection.find({"session_id": session_id}).sort("timestamp", 1)
+        
+        messages = []
+        if cursor:
+            for msg in cursor:
+                # If message type is text, append content as is
+                if msg["type"] == "text":
+                    messages.append(msg["content"])
+                # If message type is image, open and append the image
+                elif msg["type"] == "image":
+                    try:
+                        messages.append(Image.open(msg["content"]))
+                    except Exception as e:
+                        show_warning(f"Could not load image {msg['content']}: {e}")
+        
+        return messages
+        
+    except Exception as e:
+        show_error(f"Failed to retrieve session history: {e}")
+        return []
+
+show_success("Session history retrieval function created!")
+```
+
+```python
+# Enhanced generate_answer function with memory
+def generate_answer_with_memory(session_id: str, user_query: str, images: List = []) -> str:
+    """
+    Execute tools and generate response with conversation memory.
+
+    Args:
+        session_id (str): Session ID for conversation tracking
+        user_query (str): User's query string
+        images (List): List of image file paths. Defaults to [].
+
+    Returns:
+        str: LLM-generated response
+    """
+    try:
+        # TODO: Retrieve conversation history
+        history = retrieve_session_history(session_id)
+        
+        show_info(f"Retrieved {len(history)} previous messages for session {session_id}")
+        
+        # Determine if tools need to be called
+        tool_call = select_tool(history + [user_query])
+        
+        if (
+            tool_call is not None
+            and tool_call.name == "get_information_for_question_answering"
+        ):
+            show_info(f"🛠️ Agent calling tool: {tool_call.name}")
+            tool_images = get_information_for_question_answering(**tool_call.args)
+            images.extend(tool_images)
+
+        # Generate response with history context
+        system_prompt = (
+            "Answer the questions based on the provided context only. "
+            "If the context is not sufficient, say I DON'T KNOW. "
+            "DO NOT use any other information to answer the question."
+        )
+        
+        contents = (
+            [system_prompt]
+            + history
+            + [user_query]
+            + [Image.open(image) for image in images]
+        )
+        
+        response = gemini_client.models.generate_content(
+            model=LLM,
+            contents=contents,
+            config=types.GenerateContentConfig(temperature=0.0),
+        )
+        
+        answer = response.text
+        
+        # Store conversation in memory
+        # TODO: Store user query
+        store_chat_message(session_id, "user", "text", user_query)
+        
+        # TODO: Store image references
+        for image in images:
+            store_chat_message(session_id, "user", "image", image)
+        
+        # TODO: Store agent response
+        store_chat_message(session_id, "agent", "text", answer)
+        
+        return answer
+        
+    except Exception as e:
+        show_error(f"Memory-enabled answer generation failed: {e}")
+        return "I apologize, but I encountered an error while processing your question."
+
+show_success("Memory-enabled answer generation function created!")
+```
+
+```python
+# Enhanced execute_agent function with memory
+def execute_agent_with_memory(session_id: str, user_query: str, images: List = []) -> None:
+    """
+    Execute the agent with conversation memory.
+
+    Args:
+        session_id (str): Session ID for conversation tracking
+        user_query (str): User query
+        images (List, optional): List of image file paths. Defaults to [].
+    """
+    try:
+        show_info(f"🧠 Session {session_id} - Processing: {user_query}")
+        
+        response = generate_answer_with_memory(session_id, user_query, images)
+        
+        show_success("🤖 Agent Response:")
+        print(f"\n{response}\n")
+        
+    except Exception as e:
+        show_error(f"Memory-enabled agent execution failed: {e}")
+
+show_success("Memory-enabled agent execution function created!")
+
+# Mark step complete
+try:
+    progress.mark_done("Memory Implementation", score=100, 
+                      notes="Conversation memory system implemented")
+except NameError:
+    pass
+```
+
+### Testing Memory-Enabled Agent
+
+```python
+# Test memory-enabled agent
+show_info("🧪 Testing memory-enabled agent...")
+
+# First query in session
+show_info("Test 1: Initial query")
+execute_agent_with_memory(
+    "session_1",
+    "What is the Pass@1 accuracy of Deepseek R1 on the MATH500 benchmark?",
+)
+```
+
+```python
+# Follow-up query to test memory
+show_info("Test 2: Follow-up query to test memory")
+execute_agent_with_memory(
+    "session_1",
+    "What did I just ask you?",
+)
+```
+
+## Step 9: ReAct Agent Enhancement
+
+Implement a ReAct (Reasoning + Acting) agent that can reason about whether it has enough information and iteratively gather more data if needed.
+
+```python
+def generate_answer_react(user_query: str, images: List = []) -> str:
+    """
+    Implement a ReAct (Reasoning + Acting) agent.
+
+    Args:
+        user_query (str): User's query string
+        images (List): List of image file paths. Defaults to [].
+
+    Returns:
+        str: LLM-generated response
+    """
+    try:
+        show_info("🧠 Starting ReAct agent processing...")
+        
+        # Define reasoning prompt
+        system_prompt = [
+            (
+                "You are an AI assistant. Based on the current information, decide if you have enough to answer the user query, or if you need more information. "
+                "If you have enough information, respond with 'ANSWER: <your answer>'. "
+                "If you need more information, respond with 'TOOL: <question for the tool>'. Keep the question concise. "
+                f"User query: {user_query}\n"
+                "Current information:\n"
+            )
+        ]
+        
+        # Set max iterations to prevent infinite loops
+        max_iterations = 3
+        current_iteration = 0
+        
+        # Initialize list to accumulate information
+        current_information = []
+
+        # If the user provided images, add them to current information
+        if len(images) != 0:
+            current_information.extend([Image.open(image) for image in images])
+            show_info(f"Added {len(images)} user-provided images to context")
+
+        # Run the reasoning → action loop
+        while current_iteration < max_iterations:
+            current_iteration += 1
+            show_info(f"🔄 ReAct Iteration {current_iteration}:")
+            
+            # Generate reasoning and decision
+            response = gemini_client.models.generate_content(
+                model=LLM,
+                contents=system_prompt + current_information,
+                config=types.GenerateContentConfig(temperature=0.0),
+            )
+            
+            decision = response.text
+            show_info(f"💭 Agent decision: {decision[:100]}...")
+            
+            # If the agent has the final answer, return it
+            if "ANSWER:" in decision:
+                final_answer = decision.split("ANSWER:", 1)[1].strip()
+                show_success(f"✅ Final answer reached in {current_iteration} iterations")
+                return final_answer
+            
+            # If the agent decides to use a tool
+            elif "TOOL:" in decision:
+                tool_query = decision.split("TOOL:", 1)[1].strip()
+                show_info(f"🛠️ Agent requesting tool with query: {tool_query}")
+                
+                # Use tool selection to get the function call
+                tool_call = select_tool([tool_query])
+                
+                if (
+                    tool_call is not None
+                    and tool_call.name == "get_information_for_question_answering"
+                ):
+                    show_info(f"📊 Calling vector search with: {tool_call.args}")
+                    
+                    # Call the tool and add results to current information
+                    tool_images = get_information_for_question_answering(**tool_call.args)
+                    
+                    if tool_images:
+                        new_images = [Image.open(image) for image in tool_images]
+                        current_information.extend(new_images)
+                        show_success(f"➕ Added {len(new_images)} retrieved images to context")
+                    else:
+                        show_warning("No relevant images found")
+                        current_information.append("No relevant visual information found for this query.")
+                else:
+                    show_warning("Tool selection failed or returned unexpected tool")
+                    current_information.append("Tool call failed.")
+            else:
+                show_warning("Agent response didn't contain ANSWER or TOOL directive")
+                current_information.append("Unable to determine next action.")
+        
+        # If we've exhausted iterations without a final answer
+        show_warning(f"⚠️ Reached maximum iterations ({max_iterations}) without final answer")
+        return "I apologize, but I couldn't find a definitive answer after exploring the available information. Please try rephrasing your question or asking for more specific details."
+        
+    except Exception as e:
+        show_error(f"ReAct agent failed: {e}")
+        return "I apologize, but I encountered an error while processing your question with the ReAct approach."
+
+show_success("ReAct agent implementation completed!")
+```
+
+```python
+def execute_react_agent(user_query: str, images: List = []) -> None:
+    """
+    Execute the ReAct agent.
+
+    Args:
+        user_query (str): User query
+        images (List, optional): List of image file paths. Defaults to [].
+    """
+    try:
+        show_info(f"🦸‍♀️ ReAct Agent Processing: {user_query}")
+        
+        response = generate_answer_react(user_query, images)
+        
+        show_success("🤖 ReAct Agent Final Response:")
+        print(f"\n{response}\n")
+        
+    except Exception as e:
+        show_error(f"ReAct agent execution failed: {e}")
+
+show_success("ReAct agent execution function created!")
+
+# Mark final step complete
+try:
+    progress.mark_done("ReAct Agent Enhancement", score=100, 
+                      notes="ReAct reasoning and acting agent implemented")
+except NameError:
+    pass
+```
+
+### Testing ReAct Agent
+
+```python
+# Test ReAct agent
+show_info("🧪 Testing ReAct agent with iterative reasoning...")
+
+# Test 1: Question requiring document search
+show_info("Test 1: Complex factual question")
+execute_react_agent("What is the Pass@1 accuracy of Deepseek R1 on the MATH500 benchmark?")
+```
+
+```python
+# Test 2: Image analysis (if available)
+if os.path.exists("data/test.png"):
+    show_info("Test 2: Image analysis with ReAct")
+    execute_react_agent("Explain the graph in this image:", ["data/test.png"])
+else:
+    show_info("Test 2: Document page analysis with ReAct")
+    if docs:
+        execute_react_agent("What technical concepts are discussed in this document page?", [docs[0]['key']])
+```
+
+## 🎉 Workshop Complete!
+
+Congratulations! You've successfully built a comprehensive multimodal AI agent system.
+
+```python
+# Final progress summary
+try:
+    show_success("🎓 Workshop Completed Successfully!")
+    
+    # Display final progress
+    progress.display_progress(detailed=True)
+    
+    # Show completion statistics
+    completion_rate = progress.get_completion_rate()
+    avg_score = progress.get_average_score()
+    
+    show_info(f"📊 Overall Completion: {completion_rate:.1f}%")
+    if avg_score:
+        show_info(f"📈 Average Score: {avg_score:.1f}/100")
+    
+    # Show what was accomplished
+    show_success("""
+    🚀 What You've Built:
+    
+    ✅ PDF processing pipeline for multimodal content
+    ✅ MongoDB Atlas vector search integration
+    ✅ AI agent with function calling capabilities
+    ✅ Conversational memory system
+    ✅ ReAct (Reasoning + Acting) agent architecture
+    ✅ End-to-end multimodal AI application
+    """)
+    
+    # Next steps
+    show_info("""
+    🎯 Next Steps:
+    
+    • Experiment with different types of documents and queries
+    • Modify the agent to work with your own data
+    • Add more sophisticated reasoning capabilities
+    • Integrate with web interfaces or chat applications
+    • Explore other multimodal models and embeddings
+    """)
+    
+except NameError:
+    show_success("🎓 Workshop completed successfully!")
+    show_info("All agent implementations are ready for use.")
+```
+
+### Export Progress Analytics
+
+```python
+# Optional: Export progress analytics
+try:
+    if hasattr(progress, 'export_analytics_json'):
+        analytics_file = progress.export_analytics_json()
+        show_success(f"📄 Progress analytics exported to: {analytics_file}")
+        
+        # Show summary
+        summary = progress.get_analytics_summary()
+        if summary:
+            show_info(f"⏱️ Total session time: {summary.get('session_duration', 'N/A')} seconds")
+            show_info(f"📝 Total interactions: {summary.get('total_events', 'N/A')}")
+except (NameError, AttributeError):
+    pass
+
+show_success("Thank you for completing the Multimodal Agents Workshop! 🙏")
+```
+
+## Running the Complete Notebook
+
+To run this workshop as a Jupyter notebook:
+
+1. Ensure you have all prerequisites installed
+2. Set up your environment variables:
+   - `MONGODB_URI`
+   - `SERVERLESS_URL`
+3. Open Jupyter Lab and run the cells in order
+4. Follow the TODO prompts and hints throughout the workshop
+
+The notebook includes comprehensive progress tracking, validation, and interactive guidance to help you learn effectively.

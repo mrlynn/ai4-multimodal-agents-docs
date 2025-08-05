@@ -20,6 +20,11 @@
               "path": "/docs/codebase"
             },
             {
+              "id": "complete-notebook",
+              "path": "/docs/complete-notebook",
+              "sidebar": "tutorialSidebar"
+            },
+            {
               "id": "content-organization-guide",
               "path": "/docs/content-organization-guide"
             },
@@ -95,8 +100,8 @@
   "docusaurus-lunr-search": {
     "default": {
       "fileNames": {
-        "searchDoc": "search-doc-1754241416004.json",
-        "lunrIndex": "lunr-index-1754241416004.json"
+        "searchDoc": "search-doc-1754401922558.json",
+        "lunrIndex": "lunr-index-1754401922558.json"
       }
     }
   }

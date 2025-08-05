@@ -87,9 +87,9 @@ const sidebars = {
           label: '🧪 Exercise 4 - Testing'
         },
         {
-          type: 'link',
-          label: '📓 Complete Notebook',
-          href: '/static/notebooks/multimodal_agents_lab_voyageai.ipynb'
+          type: 'doc',
+          id: 'complete-notebook',
+          label: '📓 Complete Notebook'
         }
       ]
     }

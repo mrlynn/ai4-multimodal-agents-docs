@@ -22,6 +22,7 @@ import LiveStatusBadge, {
   VoyageAIStatusBadge,
   WorkflowTestBadge
 } from "@site/src/components/LiveStatusBadge";
+import ExplainableCodeBlock, { WorkshopCodeBlock } from "@site/src/components/ExplainableCodeBlock";
 
 export default {
   // Re-use the default mapping
@@ -56,5 +57,7 @@ export default {
   DockerServicesStatusBadge,
   MongoDBAtlasStatusBadge,
   VoyageAIStatusBadge,
-  WorkflowTestBadge
+  WorkflowTestBadge,
+  ExplainableCodeBlock,
+  WorkshopCodeBlock
 };
