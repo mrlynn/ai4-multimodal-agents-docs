@@ -1128,17 +1128,45 @@ except NameError:
 
 ### Testing the Basic Agent
 
-```python
-# Test the agent with different types of queries
+<ExplainableCodeBlock
+  title="Test Basic Agent Functionality"
+  explanation="This code tests the basic agent with a factual question that should trigger vector search. The agent will analyze the query, decide to use the vector search tool, retrieve relevant document pages, and generate an answer based on the visual content."
+  concepts={[
+    { term: "Agent testing", definition: "Validating that the AI agent can correctly use tools and generate appropriate responses" },
+    { term: "Factual query", definition: "A question that requires specific information retrieval rather than general knowledge" },
+    { term: "Tool triggering", definition: "How certain types of queries cause the agent to call specific functions" }
+  ]}
+  hints={[
+    "This question specifically asks about benchmark results that should be in the document",
+    "The agent should recognize this requires vector search and call the appropriate tool",
+    "Watch for the tool calling messages in the output",
+    "The answer should be based on retrieved document images"
+  ]}
+>
+{`# Test the agent with different types of queries
 show_info("🧪 Testing the agent with sample queries...")
 
 # Test 1: Text-based query requiring vector search
 show_info("Test 1: Factual question requiring document search")
-execute_agent("What is the Pass@1 accuracy of Deepseek R1 on the MATH500 benchmark?")
-```
+execute_agent("What is the Pass@1 accuracy of Deepseek R1 on the MATH500 benchmark?")`}
+</ExplainableCodeBlock>
 
-```python
-# Test 2: Image explanation (if test image exists)
+<ExplainableCodeBlock
+  title="Test Image Analysis Capabilities"
+  explanation="This code tests the agent's ability to analyze images directly without needing vector search. It checks for a test image, and if not found, uses one of the extracted PDF pages. This demonstrates multimodal capabilities."
+  concepts={[
+    { term: "Multimodal analysis", definition: "AI model's ability to understand and describe visual content" },
+    { term: "Fallback logic", definition: "Using alternative data when the preferred option isn't available" },
+    { term: "Direct image input", definition: "Providing images directly to the agent without tool-based retrieval" }
+  ]}
+  hints={[
+    "This test should NOT trigger vector search since the image is provided directly",
+    "The agent should analyze the visual content and provide a description",
+    "If no test image exists, it uses the first extracted PDF page",
+    "This demonstrates the difference between tool-based and direct image analysis"
+  ]}
+>
+{`# Test 2: Image explanation (if test image exists)
 import os
 
 if os.path.exists("data/test.png"):
@@ -1148,8 +1176,8 @@ else:
     show_warning("Test image not found: data/test.png")
     show_info("Test 2: Using extracted PDF page instead")
     if docs:
-        execute_agent("What can you see in this document page?", [docs[0]['key']])
-```
+        execute_agent("What can you see in this document page?", [docs[0]['key']])`}
+</ExplainableCodeBlock>
 
 ## Step 8: Memory Implementation
 
@@ -1535,8 +1563,22 @@ else:
 
 Congratulations! You've successfully built a comprehensive multimodal AI agent system.
 
-```python
-# Final progress summary
+<ExplainableCodeBlock
+  title="Workshop Completion Summary"
+  explanation="This final code section displays comprehensive completion statistics and celebrates what you've accomplished. It shows your progress across all workshop steps and provides suggestions for continuing your multimodal AI journey."
+  concepts={[
+    { term: "Progress tracking", definition: "Monitoring and displaying completion status across all workshop activities" },
+    { term: "Completion metrics", definition: "Quantitative measures of workshop progress and performance" },
+    { term: "Learning outcomes", definition: "The practical skills and knowledge gained through hands-on exercises" }
+  ]}
+  hints={[
+    "The progress display shows detailed completion status for each step",
+    "Completion rate and average scores help assess your learning progress",
+    "The accomplishments list summarizes the full AI agent system you built",
+    "Next steps provide ideas for extending your multimodal AI skills"
+  ]}
+>
+{`# Final progress summary
 try:
     show_success("🎓 Workshop Completed Successfully!")
     
@@ -1576,13 +1618,27 @@ try:
     
 except NameError:
     show_success("🎓 Workshop completed successfully!")
-    show_info("All agent implementations are ready for use.")
-```
+    show_info("All agent implementations are ready for use.")`}
+</ExplainableCodeBlock>
 
 ### Export Progress Analytics
 
-```python
-# Optional: Export progress analytics
+<ExplainableCodeBlock
+  title="Export Workshop Analytics"
+  explanation="This optional code exports detailed analytics about your workshop session, including time spent, interactions, and performance metrics. These analytics can help instructors understand learning patterns and improve the workshop experience."
+  concepts={[
+    { term: "Learning analytics", definition: "Data about learning activities that can improve educational experiences" },
+    { term: "Session tracking", definition: "Recording time spent and interactions during the workshop" },
+    { term: "Progress export", definition: "Saving learning progress data for analysis or portfolio purposes" }
+  ]}
+  hints={[
+    "Analytics export is optional and only works if the progress library supports it",
+    "Session data includes total time spent and number of interactions",
+    "This data can help track your learning journey and identify areas for improvement",
+    "Exported analytics can be useful for workshops in educational or corporate settings"
+  ]}
+>
+{`# Optional: Export progress analytics
 try:
     if hasattr(progress, 'export_analytics_json'):
         analytics_file = progress.export_analytics_json()
@@ -1596,8 +1652,8 @@ try:
 except (NameError, AttributeError):
     pass
 
-show_success("Thank you for completing the Multimodal Agents Workshop! 🙏")
-```
+show_success("Thank you for completing the Multimodal Agents Workshop! 🙏")`}
+</ExplainableCodeBlock>
 
 ## Running the Complete Notebook
 
