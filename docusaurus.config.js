@@ -162,11 +162,11 @@ const config = {
             label: "Slides",
             position: "left",
           },
-          // {
-          //   to: "/upload",
-          //   label: "PDF Tester",
-          //   position: "left",
-          // },
+          {
+            to: "https://voyage-multimodal-demo.vercel.app",
+            label: "Agent Demo",
+            position: "left",
+          },
           // {
           //   to: "/assistant",
           //   label: "Lab Assistant",
