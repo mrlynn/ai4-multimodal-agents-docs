@@ -1,303 +1,404 @@
 ---
 id: python-exercise-4
-title: 🧪 Exercise 4 - Add Memory & Testing
-sidebar_label: 🧪 Exercise 4 - Memory & Testing
+title: 🧠 Exercise 4 - Memory & Advanced Features
+sidebar_label: 🧠 Exercise 4 - Memory & ReAct
 ---
 
-# Exercise 4: Add Memory System & Complete Testing
+# Exercise 4: Memory & Advanced Features
+
+<div style={{textAlign: 'center', margin: '20px 0'}}>
+  <a 
+    href="https://codespaces.new/mrlynn/multimodal-agents-lab" 
+    target="_blank" 
+    rel="noopener noreferrer"
+    style={{
+      backgroundColor: '#589636',
+      color: 'white',
+      padding: '12px 24px',
+      borderRadius: '6px',
+      textDecoration: 'none',
+      fontWeight: '900',
+      display: 'inline-block',
+      fontSize: '16px'
+    }}
+  >
+    🚀 Open in GitHub Codespaces
+  </a>
+</div>
 
 ## 🎯 Objective
-Implement conversation memory for your agent and thoroughly test the complete multimodal AI system.
+Add conversation memory to enable multi-turn interactions and implement the ReAct (Reasoning + Acting) pattern for more sophisticated agent behavior.
 
-## 📊 Exercise Tasks
+## 📋 Prerequisites
+- Completed Exercises 1-3
+- Working AI agent with vector search
+- Understanding of conversation context
 
-### Task 1: Implement Conversation Memory
+## 🔧 Lab Steps
+
+### Step 12: Add Memory to the Agent
+
+Implement a conversation memory system using MongoDB to maintain context across interactions.
+
+#### Part A: Set Up Memory Storage
+
 ```python
-def test_agent_queries(agent):
-    """Test agent with various query types"""
-    
-    test_cases = [
-        {
-            "name": "Document Discovery",
-            "query": "What PDF documents are available?",
-            "expected_tool": "get_document_info"
-        },
-        {
-            "name": "Technical Search",
-            "query": "Find information about neural networks",
-            "expected_tool": "vector_search"
-        },
-        {
-            "name": "Concept Search", 
-            "query": "What is machine learning?",
-            "expected_tool": "vector_search"
-        },
-        {
-            "name": "Visual Content",
-            "query": "Are there any diagrams or charts?",
-            "expected_tool": "vector_search"
-        }
-    ]
-    
-    print("🧪 Running Agent Test Suite")
-    print("=" * 50)
-    
-    for test_case in test_cases:
-        print(f"\n📋 Test: {test_case['name']}")
-        print(f"❓ Query: {test_case['query']}")
-        
-        response = agent.chat(test_case['query'])
-        
-        print(f"🤖 Response: {response['response'][:200]}...")
-        print(f"🛠️ Tool used: {response['tool_used']}")
-        
-        # Check if correct tool was used
-        tool_match = response['tool_used'] == test_case['expected_tool']
-        status = "✅ PASS" if tool_match else "❌ FAIL"
-        print(f"📊 Result: {status}")
+from datetime import datetime
 
-# Run tests
-test_agent_queries(enhanced_agent)
+# Instantiate the history collection
+history_collection = mongodb_client[DB_NAME]["history"]
+
+# 🧪 TODO: Create an index on `session_id` on the `history_collection` collection
+<CODE_BLOCK_13>
+
+print("✅ Memory storage initialized with session index!")
 ```
 
-### Task 2: Create Memory-Enabled Agent Functions
+<details>
+<summary>💡 Solution for CODE_BLOCK_13</summary>
+
 ```python
-def analyze_search_quality(agent):
-    """Analyze the quality of search results"""
+history_collection.create_index("session_id")
+```
+
+</details>
+
+📚 **Reference**: [PyMongo - Collection.create_index](https://pymongo.readthedocs.io/en/stable/api/pymongo/collection.html#pymongo.collection.Collection.create_index)
+
+#### Part B: Store Chat Messages
+
+```python
+def store_chat_message(session_id: str, role: str, type: str, content: str) -> None:
+    """
+    Create chat history document and store it in MongoDB
+
+    Args:
+        session_id (str): Session ID
+        role (str): Message role, one of `user` or `agent`
+        type (str): Type of message, one of `text` or `image`
+        content (str): Content of the message. For images, this is the image key.
+    """
+    # Create a message object with all required fields
+    message = {
+        "session_id": session_id,
+        "role": role,
+        "type": type,
+        "content": content,
+        "timestamp": datetime.now(),
+    }
     
-    test_queries = [
-        "artificial intelligence",
-        "machine learning algorithms", 
-        "data science techniques",
-        "neural network architecture"
+    # 🧪 TODO: Insert the `message` into the `history_collection` collection
+    <CODE_BLOCK_14>
+```
+
+<details>
+<summary>💡 Solution for CODE_BLOCK_14</summary>
+
+```python
+history_collection.insert_one(message)
+```
+
+</details>
+
+📚 **Reference**: [PyMongo - Collection.insert_one](https://pymongo.readthedocs.io/en/stable/api/pymongo/collection.html#pymongo.collection.Collection.insert_one)
+
+#### Part C: Retrieve Session History
+
+```python
+def retrieve_session_history(session_id: str) -> List:
+    """
+    Retrieve chat history for a particular session.
+
+    Args:
+        session_id (str): Session ID
+
+    Returns:
+        List: List of messages. Can be a combination of text and images.
+    """
+    # 🧪 TODO: Query the `history_collection` for documents with matching session_id
+    # Sort the results in increasing order by `timestamp`
+    cursor = <CODE_BLOCK_15>
+    
+    messages = []
+    if cursor:
+        for msg in cursor:
+            # If message type is `text`, append content as is
+            if msg["type"] == "text":
+                messages.append(msg["content"])
+            # If message type is `image`, open the image
+            elif msg["type"] == "image":
+                messages.append(Image.open(msg["content"]))
+    return messages
+```
+
+<details>
+<summary>💡 Solution for CODE_BLOCK_15</summary>
+
+```python
+cursor = history_collection.find({"session_id": session_id}).sort("timestamp", 1)
+```
+
+</details>
+
+📚 **Reference**: [PyMongo - Cursor.sort](https://pymongo.readthedocs.io/en/stable/api/pymongo/cursor.html#pymongo.cursor.Cursor.sort)
+
+#### Part D: Update Agent with Memory
+
+```python
+def generate_answer(session_id: str, user_query: str, images: List = []) -> str:
+    """
+    Execute any tools and generate a response with memory
+
+    Args:
+        session_id (str): Session ID
+        user_query (str): User's query string
+        images (List): List of filepaths. Defaults to [].
+
+    Returns:
+        str: LLM-generated response
+    """
+    # 🧪 TODO: Retrieve past conversation history for the session
+    history = <CODE_BLOCK_16>
+    
+    # Determine if any additional tools need to be called
+    tool_call = select_tool(history + [user_query])
+    if (
+        tool_call is not None
+        and tool_call.name == "get_information_for_question_answering"
+    ):
+        print(f"Agent: Calling tool: {tool_call.name}")
+        tool_images = get_information_for_question_answering(**tool_call.args)
+        images.extend(tool_images)
+
+    # Pass system prompt, conversation history, user query and retrieved context
+    system_prompt = f"Answer the questions based on the provided context only. If the context is not sufficient, say I DON'T KNOW. DO NOT use any other information to answer the question."
+    contents = (
+        [system_prompt]
+        + history
+        + [user_query]
+        + [Image.open(image) for image in images]
+    )
+    
+    # Get a response from the LLM
+    response = gemini_client.models.generate_content(
+        model=LLM,
+        contents=contents,
+        config=types.GenerateContentConfig(temperature=0.0),
+    )
+    answer = response.text
+    
+    # 🧪 TODO: Store the user query in memory
+    # Role: "user", Type: "text"
+    <CODE_BLOCK_17>
+    
+    # 🧪 TODO: Store each image filepath in memory
+    # Role: "user", Type: "image"
+    for image in images:
+        <CODE_BLOCK_18>
+    
+    # 🧪 TODO: Store the agent response in memory
+    # Role: "agent", Type: "text"
+    <CODE_BLOCK_19>
+    
+    return answer
+```
+
+<details>
+<summary>💡 Solutions for CODE_BLOCK_16-19</summary>
+
+```python
+# CODE_BLOCK_16:
+history = retrieve_session_history(session_id)
+
+# CODE_BLOCK_17:
+store_chat_message(session_id, "user", "text", user_query)
+
+# CODE_BLOCK_18:
+store_chat_message(session_id, "user", "image", image)
+
+# CODE_BLOCK_19:
+store_chat_message(session_id, "agent", "text", answer)
+```
+
+</details>
+
+#### Part E: Update Execute Function
+
+```python
+def execute_agent(session_id: str, user_query: str, images: List = []) -> None:
+    """
+    Execute the agent with memory support.
+
+    Args:
+        session_id (str): Session ID
+        user_query (str): User query
+        images (List, optional): List of filepaths. Defaults to [].
+    """
+    response = generate_answer(session_id, user_query, images)
+    print("Agent:", response)
+```
+
+### Testing Memory-Enabled Agent
+
+```python
+# First query in a session
+execute_agent(
+    "session_1",
+    "What is the Pass@1 accuracy of Deepseek R1 on the MATH500 benchmark?",
+)
+
+# Follow-up question to test memory
+execute_agent(
+    "session_1",
+    "What did I just ask you?",
+)
+```
+
+## 🦸‍♀️ Bonus: ReAct Agent Implementation
+
+Implement a ReAct (Reasoning + Acting) agent that can reason about whether it has enough information and iteratively gather more data.
+
+### ReAct Agent Implementation
+
+```python
+def generate_answer(user_query: str, images: List = []) -> str:
+    """
+    Implement a ReAct agent
+
+    Args:
+        user_query (str): User's query string
+        images (List): List of filepaths. Defaults to [].
+
+    Returns:
+        str: LLM-generated response
+    """
+    # Define reasoning prompt
+    system_prompt = [
+        (
+            "You are an AI assistant. Based on the current information, decide if you have enough to answer the user query, or if you need more information."
+            "If you have enough information, respond with 'ANSWER: <your answer>'."
+            "If you need more information, respond with 'TOOL: <question for the tool>'. Keep the question concise."
+            f"User query: {user_query}\n"
+            "Current information:\n"
+        )
     ]
     
-    print("\n🔍 Search Quality Analysis")
-    print("=" * 40)
-    
-    for query in test_queries:
-        print(f"\n🔎 Query: '{query}'")
+    # Set max iterations
+    max_iterations = 3
+    current_iteration = 0
+    # Initialize list to accumulate information
+    current_information = []
+
+    # If the user input has images, add them
+    if len(images) != 0:
+        current_information.extend([Image.open(image) for image in images])
+
+    # Run the reasoning → action loop
+    while current_iteration < max_iterations:
+        current_iteration += 1
+        print(f"Iteration {current_iteration}:")
         
-        # Get search results directly
-        tool_result = agent.vector_search_tool(query, top_k=5)
+        # Generate action (answer or tool call)
+        response = gemini_client.models.generate_content(
+            model=LLM,
+            contents=system_prompt + current_information,
+            config=types.GenerateContentConfig(temperature=0.0),
+        )
+        answer = response.text
+        print(f"Agent: {answer}")
         
-        if tool_result["success"]:
-            results = tool_result["results"]
-            scores = [r['score'] for r in results]
-            
-            print(f"📊 Results found: {len(results)}")
-            print(f"📊 Score range: {min(scores):.3f} - {max(scores):.3f}")
-            print(f"📊 Average score: {sum(scores)/len(scores):.3f}")
-            
-            # Show top result
-            if results:
-                top_result = results[0]
-                print(f"🎯 Top result: {top_result['filename']}")
-                print(f"📝 Preview: {top_result['text'][:150]}...")
+        # If the agent has the final answer, return it
+        if "ANSWER" in answer:
+            return answer
+        # If the agent decides to call a tool
         else:
-            print(f"❌ Search failed: {tool_result['error']}")
+            # determine which tool to call
+            tool_call = select_tool([answer])
+            if (
+                tool_call is not None
+                and tool_call.name == "get_information_for_question_answering"
+            ):
+                print(f"Agent: Calling tool: {tool_call.name}")
+                # Call the tool with the arguments
+                tool_images = get_information_for_question_answering(**tool_call.args)
+                # Add images to current information
+                current_information.extend([Image.open(image) for image in tool_images])
+                continue
+    
+    return "I couldn't find a satisfactory answer within the iteration limit."
 
-# Analyze search quality
-analyze_search_quality(enhanced_agent)
+def execute_agent(user_query: str, images: List = []) -> None:
+    """
+    Execute the ReAct agent.
+
+    Args:
+        user_query (str): User query
+        images (List, optional): List of filepaths. Defaults to [].
+    """
+    response = generate_answer(user_query, images)
+    print("Agent:", response)
 ```
 
-### Task 3: Test Memory Persistence
-```python
-def test_conversation_flow(agent):
-    """Test multi-turn conversation"""
-    
-    print("\n💬 Testing Conversation Flow")
-    print("=" * 40)
-    
-    # Reset conversation
-    agent.conversation_history = []
-    
-    conversation = [
-        "What documents do you have available?",
-        "Tell me about machine learning in these documents",
-        "Are there any specific algorithms mentioned?",
-        "What about deep learning techniques?"
-    ]
-    
-    for i, message in enumerate(conversation, 1):
-        print(f"\nTurn {i}: {message}")
-        response = agent.chat(message)
-        print(f"Response: {response['response'][:200]}...")
-        
-        # Check conversation history
-        history_length = len(agent.conversation_history)
-        print(f"📚 History length: {history_length} messages")
-    
-    # Final summary
-    summary = agent.get_conversation_summary()
-    print(f"\n📊 Final Summary: {summary}")
-
-# Test conversation flow
-test_conversation_flow(enhanced_agent)
-```
-
-### Task 4: Test Complete ReAct Agent with Memory
-```python
-def test_multimodal_features(agent):
-    """Test multimodal content detection"""
-    
-    print("\n🖼️ Testing Multimodal Features")
-    print("=" * 40)
-    
-    multimodal_queries = [
-        "Find documents with images or diagrams",
-        "Are there any charts or graphs in the PDFs?",
-        "Show me visual content from the documents",
-        "What figures or illustrations are available?"
-    ]
-    
-    for query in multimodal_queries:
-        print(f"\n🔎 Query: {query}")
-        
-        tool_result = agent.vector_search_tool(query, top_k=3)
-        
-        if tool_result["success"]:
-            results = tool_result["results"]
-            
-            # Check metadata for image indicators
-            has_image_results = []
-            for result in results:
-                # This would work if metadata includes image info
-                text_content = result['text'].lower()
-                has_visual_keywords = any(keyword in text_content for keyword in 
-                                        ['figure', 'chart', 'diagram', 'image', 'graph', 'table'])
-                has_image_results.append(has_visual_keywords)
-            
-            print(f"📊 Results with visual content indicators: {sum(has_image_results)}/{len(results)}")
-            
-            # Show relevant results
-            for i, result in enumerate(results):
-                if has_image_results[i]:
-                    print(f"🖼️ Visual content found in {result['filename']}")
-                    print(f"   {result['text'][:100]}...")
-
-# Test multimodal capabilities
-test_multimodal_features(enhanced_agent)
-```
-
-### Task 5: Test Document Analysis with Images
-```python
-import time
-
-def test_performance(agent):
-    """Test agent response times"""
-    
-    print("\n⏱️ Performance Testing")
-    print("=" * 30)
-    
-    test_queries = [
-        "What documents are available?",
-        "Find AI information",
-        "Search for machine learning",
-        "Tell me about data science"
-    ]
-    
-    response_times = []
-    
-    for query in test_queries:
-        start_time = time.time()
-        response = agent.chat(query)
-        end_time = time.time()
-        
-        response_time = end_time - start_time
-        response_times.append(response_time)
-        
-        print(f"Query: '{query[:30]}...' - {response_time:.2f}s")
-    
-    avg_time = sum(response_times) / len(response_times)
-    max_time = max(response_times)
-    
-    print(f"\n📊 Performance Summary:")
-    print(f"Average response time: {avg_time:.2f}s")
-    print(f"Max response time: {max_time:.2f}s")
-    
-    # Performance criteria
-    if avg_time < 2.0 and max_time < 5.0:
-        print("✅ Performance: GOOD")
-    elif avg_time < 5.0 and max_time < 10.0:
-        print("⚠️ Performance: ACCEPTABLE") 
-    else:
-        print("❌ Performance: NEEDS IMPROVEMENT")
-
-# Test performance
-test_performance(enhanced_agent)
-```
-
-## ✅ Final Validation Checklist
-
-Run this final validation:
+### Testing ReAct Agent
 
 ```python
-def final_validation(agent):
-    """Final workshop validation"""
-    
-    print("\n🎓 FINAL WORKSHOP VALIDATION")
-    print("=" * 50)
-    
-    checks = [
-        ("Agent initialized", agent is not None),
-        ("MongoDB connected", agent.collection.count_documents({}) > 0),  
-        ("Vector search works", len(agent.vector_search_tool("test")["results"]) > 0),
-        ("Document info works", agent.get_document_info_tool()["success"]),
-        ("Chat works", len(agent.chat("Hello")["response"]) > 0),
-        ("Memory works", len(agent.conversation_history) > 0)
-    ]
-    
-    passed = 0
-    for check_name, result in checks:
-        status = "✅ PASS" if result else "❌ FAIL"
-        print(f"{status} {check_name}")
-        if result:
-            passed += 1
-    
-    print(f"\n🎯 Final Score: {passed}/{len(checks)} checks passed")
-    
-    if passed == len(checks):
-        print("\n🎉 CONGRATULATIONS!")
-        print("You've successfully built a multimodal PDF agent!")
-    else:
-        print(f"\n⚠️ {len(checks) - passed} checks failed. Please review.")
+# Test with a question requiring reasoning
+execute_agent("What is the Pass@1 accuracy of Deepseek R1 on the MATH500 benchmark?")
 
-# Run final validation
-final_validation(enhanced_agent)
+# Test with image analysis
+execute_agent("Explain the graph in this image:", ["data/test.png"])
 ```
 
 ## ✅ Success Criteria
-- [ ] Memory system stores and retrieves conversation history
-- [ ] Agent maintains context across multiple queries
-- [ ] ReAct agent performs iterative reasoning successfully
-- [ ] Document pages can be analyzed with multimodal understanding
-- [ ] All validation checks pass
 
-## 🎉 Congratulations!
+By the end of this exercise, you should have:
+- [ ] Memory storage set up with session indexing
+- [ ] Chat messages being stored correctly
+- [ ] Session history retrieval working
+- [ ] Agent maintaining conversation context
+- [ ] Follow-up questions answered using memory
+- [ ] (Bonus) ReAct agent with iterative reasoning
 
-You've successfully completed the Multimodal AI Agent Workshop! You've built:
+## 🎯 What You've Accomplished
 
-- ✅ **VoyageAI Integration** - Multimodal embeddings with the Python client
-- ✅ **MongoDB Atlas Vector Search** - Scalable similarity search  
-- ✅ **Google Gemini 2.0 Flash** - Advanced LLM with function calling
-- ✅ **ReAct Agent Pattern** - Reasoning and acting architecture
-- ✅ **Conversation Memory** - Persistent context across sessions
-- ✅ **Production Patterns** - Error handling, normalization, and testing
+In this exercise, you've:
+1. Built a conversation memory system using MongoDB
+2. Enabled multi-turn conversations with context retention
+3. Implemented session-based chat history
+4. (Bonus) Created a ReAct agent with sophisticated reasoning
+5. Completed a production-ready multimodal AI system
 
-Your agent can now:
-- Process and understand PDF documents with both text and images
-- Answer complex questions using vector search and retrieval
-- Maintain conversation context across multiple interactions
-- Reason iteratively to find the best answers
-- Analyze visual content in documents
+## 💡 Key Concepts
+
+- **Conversation Memory**: Maintaining context across interactions
+- **Session Management**: Isolating conversations by session ID
+- **ReAct Pattern**: Reasoning about information sufficiency before acting
+- **Iterative Refinement**: Gathering information until confident
+- **Multimodal Context**: Storing both text and image references
+
+## 🎉 Workshop Complete!
+
+Congratulations! You've successfully built a comprehensive multimodal AI agent system with:
+- PDF processing and image extraction
+- Vector search for retrieval
+- Function calling with Gemini 2.0 Flash
+- Conversation memory
+- Advanced reasoning capabilities
 
 ## 🚀 Next Steps
 
-1. **Extend the agent** with more tools and capabilities
-2. **Process larger documents** using batch processing
-3. **Add reranking** for improved search quality
-4. **Deploy to production** with proper API management
-5. **Monitor usage** and optimize costs
+Consider extending your agent with:
+1. **Web Interface**: Build a chat UI with Streamlit or Gradio
+2. **Multiple Tools**: Add web search, calculations, or other capabilities
+3. **Fine-tuning**: Optimize prompts for your specific use case
+4. **Production Deployment**: Deploy as an API service
+5. **Analytics**: Track usage patterns and improve responses
 
-Thank you for participating in this workshop! 🚀
+## 📚 Additional Resources
+
+- [MongoDB Atlas Vector Search](https://www.mongodb.com/docs/atlas/atlas-vector-search/)
+- [Google Gemini API Docs](https://ai.google.dev/gemini-api/docs)
+- [ReAct Paper](https://arxiv.org/abs/2210.03629)
+- [Function Calling Best Practices](https://ai.google.dev/gemini-api/docs/function-calling)
+
+Thank you for completing the Multimodal Agents Workshop! 🙏

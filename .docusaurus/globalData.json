@@ -16,6 +16,22 @@
               "sidebar": "tutorialSidebar"
             },
             {
+              "id": "backup/python-exercise-1",
+              "path": "/docs/backup/python-exercise-1"
+            },
+            {
+              "id": "backup/python-exercise-2",
+              "path": "/docs/backup/python-exercise-2"
+            },
+            {
+              "id": "backup/python-exercise-3",
+              "path": "/docs/backup/python-exercise-3"
+            },
+            {
+              "id": "backup/python-exercise-4",
+              "path": "/docs/backup/python-exercise-4"
+            },
+            {
               "id": "codebase",
               "path": "/docs/codebase"
             },
@@ -78,6 +94,11 @@
               "path": "/docs/workshop-alignment-assessment"
             },
             {
+              "id": "workshop-lab-walkthrough",
+              "path": "/docs/workshop-lab-walkthrough",
+              "sidebar": "tutorialSidebar"
+            },
+            {
               "id": "workshop-overview",
               "path": "/docs/workshop-overview",
               "sidebar": "tutorialSidebar"
@@ -100,8 +121,8 @@
   "docusaurus-lunr-search": {
     "default": {
       "fileNames": {
-        "searchDoc": "search-doc-1754506062073.json",
-        "lunrIndex": "lunr-index-1754506062073.json"
+        "searchDoc": "search-doc-1754750614197.json",
+        "lunrIndex": "lunr-index-1754750614197.json"
       }
     }
   }

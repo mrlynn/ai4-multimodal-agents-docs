@@ -1,82 +1,52 @@
 ---
 id: python-exercise-2
-title: 🔍 Exercise 2 - Embeddings & Vector Search
+title: 🔍 Exercise 2 - Vector Search Setup
 sidebar_label: 🔍 Exercise 2 - Vector Search
 ---
 
-# Exercise 2: Generate Embeddings & Build Vector Search
+# Exercise 2: Vector Search Setup
+
+<div style={{textAlign: 'center', margin: '20px 0'}}>
+  <a 
+    href="https://codespaces.new/mrlynn/multimodal-agents-lab" 
+    target="_blank" 
+    rel="noopener noreferrer"
+    style={{
+      backgroundColor: '#589636',
+      color: 'white',
+      padding: '12px 24px',
+      borderRadius: '6px',
+      textDecoration: 'none',
+      fontWeight: '900',
+      display: 'inline-block',
+      fontSize: '16px'
+    }}
+  >
+    🚀 Open in GitHub Codespaces
+  </a>
+</div>
 
 ## 🎯 Objective
-Generate multimodal embeddings using VoyageAI, store them in MongoDB Atlas, and create a vector search index.
+Create a vector search index in MongoDB Atlas and build the search tool function that your AI agent will use to retrieve relevant information.
 
-## 📊 Exercise Tasks
+## 📋 Prerequisites
+- Completed Exercise 1 with documents ingested into MongoDB
+- MongoDB collection with embeddings in place
+- Understanding of vector search concepts
 
-### Task 1: Generate Embeddings with VoyageAI
+## 🔧 Lab Steps
+
+### Step 6: Create a Vector Search Index
+
+Define and create a vector search index to enable similarity searches on your multimodal embeddings.
+
 ```python
-from PIL import Image
-import numpy as np
+VS_INDEX_NAME = "vector_index"
 
-def generate_embedding(data, input_type="document", model="voyage-multimodal-3"):
-    """Generate embedding using VoyageAI client."""
-    if isinstance(data, Image.Image):
-        # For images, use multimodal embedding
-        inputs = [[data]]  # VoyageAI expects nested list format
-        response = voyage_client.multimodal_embed(
-            inputs=inputs, 
-            model=model, 
-            input_type=input_type
-        )
-        embedding = response.embeddings[0]
-    else:
-        # For text, use regular embedding
-        response = voyage_client.embed(
-            texts=[str(data)],
-            model="voyage-2",
-            input_type=input_type
-        )
-        embedding = response.embeddings[0]
-    
-    # Normalize the embedding
-    normalized = normalize_vector(np.array(embedding)).tolist()
-    return normalized
-
-# Generate embeddings for extracted pages
-embedded_docs = []
-for doc in docs:
-    img = Image.open(doc['key'])
-    embedding = generate_embedding(img, input_type="document")
-    doc["embedding"] = embedding
-    embedded_docs.append(doc)
-    
-print(f"✅ Generated {len(embedded_docs)} embeddings")
-```
-
-### Task 2: Insert Embeddings into MongoDB
-```python
-# Database configuration
-DB_NAME = "mongodb_aiewf"
-COLLECTION_NAME = "multimodal_workshop_voyageai"
-
-# Connect to the collection
-collection = mongodb_client[DB_NAME][COLLECTION_NAME]
-
-# Clear existing documents
-collection.delete_many({})
-
-# Insert documents with embeddings
-insert_result = collection.insert_many(embedded_docs)
-print(f"✅ Inserted {len(insert_result.inserted_ids)} documents into MongoDB")
-
-# Verify insertion
-doc_count = collection.count_documents({})
-print(f"📊 Total documents in collection: {doc_count}")
-```
-
-### Task 3: Create Vector Search Index
-```python
-VS_INDEX_NAME = "vector_index_voyageai"
-
-# Define vector index configuration
+# Create vector index definition specifying:
+# path: Path to the embeddings field
+# numDimensions: Number of embedding dimensions - depends on the embedding model used
+# similarity: Similarity metric. One of cosine, euclidean, dotProduct.
 model = {
     "name": VS_INDEX_NAME,
     "type": "vectorSearch",
@@ -92,65 +62,199 @@ model = {
     },
 }
 
-# Create the vector search index
-collection.create_search_index(model=model)
-print(f"🎯 Vector search index '{VS_INDEX_NAME}' created!")
+# 🧪 TODO: Create a vector search index with the above `model` for the `collection` collection
+<CODE_BLOCK_4>
 
-# Check index status
-indexes = list(collection.list_search_indexes())
-for idx in indexes:
-    print(f"🔍 Index: {idx.get('name')} - Status: {idx.get('status')}")
+# Verify that the index is in READY status before proceeding
+list(collection.list_search_indexes())
 ```
 
-### Task 4: Test Vector Search
-```python
-def get_information_for_question_answering(user_query: str):
-    """Retrieve information using vector search."""
-    # Generate query embedding
-    query_embedding = generate_embedding(user_query, input_type="query")
-    
-    # Define aggregation pipeline
-    pipeline = [
-        {
-            "$vectorSearch": {
-                "index": VS_INDEX_NAME,
-                "path": "embedding",
-                "queryVector": query_embedding,
-                "numCandidates": 150,
-                "limit": 2,
-            }
-        },
-        {
-            "$project": {
-                "_id": 0,
-                "key": 1,
-                "page_number": 1,
-                "score": {"$meta": "vectorSearchScore"},
-            }
-        },
-    ]
-    
-    # Execute search
-    results = list(collection.aggregate(pipeline))
-    
-    print(f"🔍 Found {len(results)} relevant documents")
-    for result in results:
-        print(f"  📄 Page {result['page_number']} - Score: {result['score']:.4f}")
-    
-    return [result["key"] for result in results]
+<details>
+<summary>💡 Solution for CODE_BLOCK_4</summary>
 
-# Test the search function
-test_query = "What is the DeepSeek R1 model?"
-relevant_docs = get_information_for_question_answering(test_query)
-print(f"✅ Vector search working! Retrieved {len(relevant_docs)} documents")
+```python
+collection.create_search_index(model=model)
+```
+
+</details>
+
+📚 **Reference**: [PyMongo - Collection.create_search_index](https://pymongo.readthedocs.io/en/stable/api/pymongo/collection.html#pymongo.collection.Collection.create_search_index)
+
+💡 **Important Notes**:
+- The index creation is asynchronous and may take a few minutes
+- Check the Atlas UI or wait for status to be "READY" before proceeding
+- Voyage multimodal embeddings have 1024 dimensions
+
+### Step 7: Create Agent Tools
+
+Build the vector search function that will serve as the core tool for your AI agent.
+
+#### Part A: Implement the Search Function
+
+```python
+from typing import List
+
+def get_information_for_question_answering(user_query: str) -> List[str]:
+    """
+    Retrieve information using vector search to answer a user query.
+
+    Args:
+        user_query (str): The user's query string.
+
+    Returns:
+        List[str]: The retrieved image file paths.
+    """
+    # Embed the user query using our serverless endpoint
+    response = requests.post(
+        url=SERVERLESS_URL,
+        json={
+            "task": "get_embedding",
+            "data": {"input": user_query, "input_type": "query"},
+        },
+    )
+    # Extract the embedding from the response
+    query_embedding = response.json()["embedding"]
+
+    # 🧪 TODO: Define an aggregation pipeline consisting of:
+    # 1. A $vectorSearch stage with:
+    #    - index: VS_INDEX_NAME
+    #    - path: "embedding"
+    #    - queryVector: query_embedding
+    #    - numCandidates: 150
+    #    - limit: 2
+    # 2. A $project stage that:
+    #    - Excludes the `_id` field
+    #    - Includes: `key`, `width`, `height`
+    #    - Includes the vector search score as `score`
+    pipeline = <CODE_BLOCK_5>
+
+    # 🧪 TODO: Execute the aggregation `pipeline` against the `collection` collection
+    results = <CODE_BLOCK_6>
+    
+    # Get images from local storage
+    keys = [result["key"] for result in results]
+    print(f"Keys: {keys}")
+    return keys
+```
+
+<details>
+<summary>💡 Solution for CODE_BLOCK_5</summary>
+
+```python
+pipeline = [
+    {
+        "$vectorSearch": {
+            "index": VS_INDEX_NAME,
+            "path": "embedding",
+            "queryVector": query_embedding,
+            "numCandidates": 150,
+            "limit": 2,
+        }
+    },
+    {
+        "$project": {
+            "_id": 0,
+            "key": 1,
+            "width": 1,
+            "height": 1,
+            "score": {"$meta": "vectorSearchScore"},
+        }
+    },
+]
+```
+
+</details>
+
+<details>
+<summary>💡 Solution for CODE_BLOCK_6</summary>
+
+```python
+results = list(collection.aggregate(pipeline))
+```
+
+</details>
+
+📚 **Reference**: [MongoDB Atlas Vector Search - Basic Example](https://www.mongodb.com/docs/atlas/atlas-vector-search/vector-search-stage/#ann-examples)
+
+#### Part B: Define Function Declaration for Gemini
+
+Create the function declaration that tells Gemini about your search tool.
+
+```python
+# Define the function declaration for the `get_information_for_question_answering` function
+get_information_for_question_answering_declaration = {
+    "name": <CODE_BLOCK_7>,
+    "description": "Retrieve information using vector search to answer a user query.",
+    "parameters": {
+        "type": "object",
+        "properties": {
+            "user_query": {
+                "type": <CODE_BLOCK_8>,
+                "description": "Query string to use for vector search",
+            }
+        },
+        "required": <CODE_BLOCK_9>,
+    },
+}
+```
+
+<details>
+<summary>💡 Solutions for CODE_BLOCK_7, 8, 9</summary>
+
+```python
+# CODE_BLOCK_7:
+"get_information_for_question_answering"
+
+# CODE_BLOCK_8:
+"string"
+
+# CODE_BLOCK_9:
+["user_query"]
+```
+
+</details>
+
+📚 **Reference**: [Gemini Function Calling - Define Function Declaration](https://ai.google.dev/gemini-api/docs/function-calling?example=meeting#step_1_define_function_declaration)
+
+### Testing Your Vector Search
+
+Once your index is ready, test the search function:
+
+```python
+# Test the vector search function
+test_query = "What is deep learning?"
+results = get_information_for_question_answering(test_query)
+print(f"Found {len(results)} relevant images for query: '{test_query}'")
+for i, key in enumerate(results):
+    print(f"  {i+1}. {key}")
 ```
 
 ## ✅ Success Criteria
-- [ ] Generated embeddings for all extracted pages using VoyageAI
-- [ ] Successfully inserted documents into MongoDB collection
-- [ ] Created vector search index with status "READY"
-- [ ] Vector search function returns relevant results with scores
-- [ ] Test query retrieves appropriate document pages
+
+By the end of this exercise, you should have:
+- [ ] Vector search index created and in READY status
+- [ ] Search function implemented with proper aggregation pipeline
+- [ ] Function declaration defined for Gemini integration
+- [ ] Successful test of vector search returning relevant images
+- [ ] Understanding of how vector search works with embeddings
+
+## 🎯 What You've Accomplished
+
+In this exercise, you've:
+1. Created a vector search index optimized for multimodal embeddings
+2. Built a search function that converts queries to embeddings
+3. Implemented MongoDB aggregation pipeline for similarity search
+4. Prepared function declaration for AI agent integration
+5. Created the retrieval component of your RAG system
+
+## 💡 Key Concepts
+
+- **Vector Search**: Finds similar documents based on embedding similarity
+- **numCandidates**: Number of candidates to consider (affects recall)
+- **limit**: Final number of results to return
+- **Cosine Similarity**: Measures angle between embedding vectors
+- **Function Declaration**: Schema that tells the LLM how to use your tool
 
 ## 🚀 Next Steps
-With vector search working, proceed to [Exercise 3: Create ReAct Agent](./python-exercise-3)
+
+Once you've successfully completed all tasks and your vector search is working, proceed to [Exercise 3: Build the AI Agent](./python-exercise-3) where you'll integrate Gemini and create your intelligent agent.

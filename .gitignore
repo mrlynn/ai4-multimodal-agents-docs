@@ -8,3 +8,5 @@ dist
 .vercel
 DOCUMENTATION-UPDATE-PROMPT.md
 _old
+codebase.md
+/docs/backup

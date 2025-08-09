@@ -90,6 +90,11 @@ const sidebars = {
           type: 'doc',
           id: 'complete-notebook',
           label: '📓 Complete Notebook'
+        },
+        {
+          type: 'doc',
+          id: 'workshop-lab-walkthrough',
+          label: '🐍 Python Lab Walkthrough'
         }
       ]
     }

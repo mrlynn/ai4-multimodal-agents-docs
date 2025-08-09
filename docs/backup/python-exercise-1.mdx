@@ -1,0 +1,125 @@
+---
+id: python-exercise-1
+title: 📊 Exercise 1 - Environment Setup & PDF Processing
+sidebar_label: 📊 Exercise 1 - Setup & Data
+---
+
+# Exercise 1: Environment Setup & PDF Processing
+
+<div style={{textAlign: 'center', margin: '10px 0'}}>
+  <a 
+    href="https://codespaces.new/mrlynn/multimodal-agents-lab" 
+    target="_blank" 
+    rel="noopener noreferrer"
+    style={{
+      backgroundColor: '#589636',
+      color: 'white',
+      padding: '12px 24px',
+      borderRadius: '6px',
+      textDecoration: 'none',
+      fontWeight: '900',
+      display: 'inline-block',
+      fontSize: '16px'
+    }}
+  >
+    🚀 Open in GitHub Codespaces
+    </a>
+</div>
+
+## 🎯 Objective
+Set up your environment, connect to MongoDB Atlas, and process PDFs using VoyageAI embeddings.
+
+## 🔧 Setup
+
+### Step 1: Open the Workshop Notebook
+Open the workshop notebook at `/static/notebooks/multimodal_agents_lab_voyageai.ipynb`
+
+### Step 2: Set Environment Variables
+Create a `.env` file with your credentials:
+```bash
+MONGODB_URI="your_mongodb_connection_string"
+VOYAGE_API_KEY="your_voyage_api_key"
+GOOGLE_API_KEY="your_google_api_key"
+```
+
+### Step 3: Install Required Libraries
+```python
+!pip install pymongo voyageai pymupdf google-genai pillow tqdm
+```
+
+## 📊 Exercise Tasks
+
+### Task 1: Initialize Progress Tracking and Connect to MongoDB
+Run the first cells in the notebook to set up tracking and connect to MongoDB:
+
+```python
+# Initialize progress tracking
+from jupyter_lab_progress import LabProgress, LabValidator
+
+progress = LabProgress(
+    steps=[
+        "Environment Setup",
+        "VoyageAI Client Setup",
+        "PDF Processing", 
+        "Embedding Generation",
+        "Data Ingestion"
+    ],
+    lab_name="Multimodal Agents with VoyageAI Client"
+)
+
+# Connect to MongoDB
+from pymongo import MongoClient
+mongodb_client = MongoClient(os.getenv("MONGODB_URI"))
+```
+
+### Task 2: Set Up VoyageAI Client
+```python
+import voyageai
+
+# Initialize VoyageAI client
+voyage_client = voyageai.Client(api_key=os.getenv("VOYAGE_API_KEY"))
+
+# Test the client with a simple embedding
+test_response = voyage_client.embed(
+    texts=["Hello, multimodal world!"],
+    model="voyage-2",
+    input_type="document"
+)
+print(f"🚀 VoyageAI client ready! Embedding dimensions: {len(test_response.embeddings[0])}")
+```
+
+### Task 3: Process PDF and Extract Pages
+```python
+import pymupdf
+import requests
+
+# Download the DeepSeek paper
+response = requests.get("https://arxiv.org/pdf/2501.12948")
+pdf = pymupdf.Document(stream=response.content, filetype="pdf")
+
+# Extract pages as images
+from pathlib import Path
+Path("data/images").mkdir(parents=True, exist_ok=True)
+
+docs = []
+zoom = 3.0
+mat = pymupdf.Matrix(zoom, zoom)
+
+for n in range(min(5, pdf.page_count)):  # Process first 5 pages for testing
+    pix = pdf[n].get_pixmap(matrix=mat)
+    key = f"data/images/{n+1}.png"
+    pix.save(key)
+    docs.append({"key": key, "page_number": n + 1})
+
+print(f"✅ Extracted {len(docs)} pages as images")
+```
+
+## ✅ Success Criteria
+- [ ] MongoDB connection established successfully
+- [ ] VoyageAI client initialized and tested
+- [ ] PDF downloaded and pages extracted as images
+- [ ] At least 5 page images saved to `data/images/`
+- [ ] Progress tracker showing steps completed
+
+## 🚀 Next Steps
+Once you've successfully loaded the data, proceed to [Exercise 2: Build Vector Search](./python-exercise-2)

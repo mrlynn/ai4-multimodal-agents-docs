@@ -113,11 +113,6 @@ export default {
           "position": "left"
         },
         {
-          "to": "/assistant",
-          "label": "Lab Assistant",
-          "position": "left"
-        },
-        {
           "type": "localeDropdown",
           "position": "right",
           "dropdownItemsBefore": [],

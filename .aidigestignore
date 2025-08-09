@@ -1,2 +1,8 @@
 build
 node_modules
+.docusaurus
+.claude
+.git
+CLAUDE.md
+i8n/
+docs/_old/

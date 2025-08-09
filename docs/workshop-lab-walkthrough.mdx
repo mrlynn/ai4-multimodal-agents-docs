@@ -1,0 +1,706 @@
+---
+id: workshop-lab-walkthrough
+title: 🧪 Workshop Lab Walkthrough
+sidebar_label: 🧪 Lab Walkthrough
+description: Complete step-by-step walkthrough of the Multimodal Agents Workshop with explanations and solutions
+---
+
+# Workshop Lab Walkthrough: Building Multimodal AI Agents
+
+This comprehensive guide walks you through each step of the workshop lab notebook, providing detailed explanations and complete solutions for building a multimodal AI agent with MongoDB Atlas and Google Gemini.
+
+<div style={{textAlign: 'center', margin: '20px 0'}}>
+  <a 
+    href="https://codespaces.new/mrlynn/multimodal-agents-lab" 
+    target="_blank" 
+    rel="noopener noreferrer"
+    style={{
+      backgroundColor: '#589636',
+      color: 'white',
+      padding: '12px 24px',
+      borderRadius: '6px',
+      textDecoration: 'none',
+      fontWeight: '900',
+      display: 'inline-block',
+      fontSize: '16px'
+    }}
+  >
+    🚀 Open in GitHub Codespaces
+  </a>
+</div>
+
+## 📋 Prerequisites
+
+Before starting this workshop, ensure you have:
+- Access to the workshop notebooks (`lab.ipynb` and `solutions.ipynb`)
+- MongoDB Atlas connection string
+- Access to the serverless embedding endpoint
+- Basic Python knowledge
+
+## 🎯 Workshop Overview
+
+By the end of this workshop, you will:
+- Process PDFs and extract pages as images
+- Create vector embeddings for multimodal search
+- Build an AI agent with tool-calling capabilities
+- Implement conversation memory
+- Create a ReAct (Reasoning + Acting) agent
+
+---
+
+## Step 1: Setup Prerequisites
+
+First, we need to import necessary libraries and establish our MongoDB connection.
+
+### Explanation
+This step sets up the foundational connections to MongoDB Atlas and defines key variables we'll use throughout the workshop.
+
+### Lab Code
+```python
+import os
+from pymongo import MongoClient
+
+# If you are using your own MongoDB Atlas cluster, use the connection string for your cluster here
+MONGODB_URI = os.getenv("MONGODB_URI")
+# Initialize a MongoDB Python client
+mongodb_client = MongoClient(MONGODB_URI)
+# Check the connection to the server
+mongodb_client.admin.command("ping")
+
+SERVERLESS_URL = os.getenv("SERVERLESS_URL")
+LLM_PROVIDER = "google"
+```
+
+### What's Happening
+- We're loading environment variables for secure credential management
+- Creating a MongoDB client connection
+- Testing the connection with a ping command
+- Setting up the serverless URL for embeddings and LLM provider
+
+---
+
+## Step 2: Read PDF from URL
+
+Download and open a research paper (DeepSeek R1) from arXiv.
+
+### Explanation
+PyMuPDF allows us to work with PDFs directly from URLs without saving them to disk first. This is efficient for processing documents on-the-fly.
+
+### Lab Code with Solution
+```python
+import pymupdf
+import requests
+
+# Download the DeepSeek paper
+response = requests.get("https://arxiv.org/pdf/2501.12948")
+if response.status_code != 200:
+    raise ValueError(f"Failed to download PDF. Status code: {response.status_code}")
+
+# Get the content of the response
+pdf_stream = response.content
+
+# SOLUTION for CODE_BLOCK_1:
+pdf = pymupdf.Document(stream=pdf_stream, filetype="pdf")
+```
+
+### Key Concepts
+- `pymupdf.Document()` can accept a byte stream with the `stream` parameter
+- The `filetype` parameter tells PyMuPDF how to interpret the stream
+- This approach avoids creating temporary files
+
+---
+
+## Step 3: Store PDF Images Locally and Extract Metadata
+
+Convert PDF pages to high-resolution images and extract metadata.
+
+### Explanation
+We convert each PDF page to an image for multimodal processing. The zoom factor controls image resolution - higher values create clearer images but use more storage.
+
+### Lab Code with Solution
+```python
+from tqdm import tqdm
+
+docs = []
+zoom = 3.0
+# Set image matrix dimensions
+mat = pymupdf.Matrix(zoom, zoom)
+
+# Iterate through the pages of the PDF
+for n in tqdm(range(pdf.page_count)):
+    temp = {}
+    
+    # SOLUTION for CODE_BLOCK_2:
+    pix = pdf[n].get_pixmap(matrix=mat)
+    
+    # Store image locally
+    key = f"data/images/{n+1}.png"
+    pix.save(key)
+    
+    # Extract image metadata to be stored in MongoDB
+    temp["key"] = key
+    temp["width"] = pix.width
+    temp["height"] = pix.height
+    docs.append(temp)
+```
+
+### Understanding the Code
+- `pymupdf.Matrix(zoom, zoom)` creates a transformation matrix for scaling
+- `get_pixmap()` renders the PDF page as a raster image
+- We store metadata (dimensions, file path) for each page
+
+---
+
+## Step 4: Generate Image Embeddings (Optional)
+
+This step shows how to generate embeddings using Voyage AI, but we'll use pre-generated embeddings for the workshop.
+
+### Explanation
+Embeddings are numerical representations of images that capture their semantic meaning, enabling similarity search. Voyage AI's multimodal embeddings can understand both text and images.
+
+### Optional Code (if you have Voyage AI API key)
+```python
+from voyageai import Client
+from PIL import Image
+
+# Set Voyage AI API Key
+os.environ["VOYAGE_API_KEY"] = "your-api-key"
+voyageai_client = Client()
+
+def get_embedding(data, input_type):
+    """Get Voyage AI embeddings for images and text."""
+    embedding = voyageai_client.multimodal_embed(
+        inputs=[[data]], 
+        model="voyage-multimodal-3", 
+        input_type=input_type
+    ).embeddings[0]
+    return embedding
+
+# Generate embeddings for each page
+embedded_docs = []
+for doc in tqdm(docs):
+    img = Image.open(f"{doc['key']}")
+    doc["embedding"] = get_embedding(img, "document")
+    embedded_docs.append(doc)
+```
+
+---
+
+## Step 5: Write Embeddings and Metadata to MongoDB
+
+Ingest the document data with embeddings into MongoDB Atlas.
+
+### Explanation
+We'll load pre-generated embeddings and store them in MongoDB Atlas. This creates our searchable document collection.
+
+### Lab Code with Solution
+```python
+import json
+
+# Database name
+DB_NAME = "mongodb_aiewf"
+# Name of the collection to insert documents into
+COLLECTION_NAME = "multimodal_workshop"
+
+# Connect to the collection
+collection = mongodb_client[DB_NAME][COLLECTION_NAME]
+
+# Read data from local file
+with open("data/embeddings.json", "r") as data_file:
+    json_data = data_file.read()
+data = json.loads(json_data)
+
+# Delete existing documents from the collection
+collection.delete_many({})
+print(f"Deleted existing documents from the {COLLECTION_NAME} collection.")
+
+# SOLUTION for CODE_BLOCK_3:
+collection.insert_many(data)
+
+print(
+    f"{collection.count_documents({})} documents ingested into the {COLLECTION_NAME} collection."
+)
+```
+
+### What's Happening
+- We're clearing any existing data to ensure a clean start
+- `insert_many()` efficiently inserts multiple documents in one operation
+- Each document contains the image path, metadata, and embedding vector
+
+---
+
+## Step 6: Create a Vector Search Index
+
+Set up MongoDB Atlas Vector Search to enable similarity searches on our embeddings.
+
+### Explanation
+Vector search indexes enable efficient similarity searches on high-dimensional embedding vectors. We define the index structure including the embedding field, dimensions, and similarity metric.
+
+### Lab Code with Solution
+```python
+VS_INDEX_NAME = "vector_index"
+
+# Create vector index definition
+model = {
+    "name": VS_INDEX_NAME,
+    "type": "vectorSearch",
+    "definition": {
+        "fields": [
+            {
+                "type": "vector",
+                "path": "embedding",
+                "numDimensions": 1024,
+                "similarity": "cosine",
+            }
+        ]
+    },
+}
+
+# SOLUTION for CODE_BLOCK_4:
+collection.create_search_index(model=model)
+
+# Verify that the index is in READY status before proceeding
+list(collection.list_search_indexes())
+```
+
+### Index Configuration Details
+- **path**: Points to the embedding field in our documents
+- **numDimensions**: 1024 for Voyage multimodal embeddings
+- **similarity**: Cosine similarity works well for normalized embeddings
+
+---
+
+## Step 7: Create Agent Tools
+
+Build the vector search function that our AI agent will use to retrieve relevant information.
+
+### Explanation
+This function is the core tool our agent uses to find relevant document pages based on user queries. It embeds the query and performs vector search.
+
+### Lab Code with Solutions
+```python
+from typing import List
+
+def get_information_for_question_answering(user_query: str) -> List[str]:
+    """
+    Retrieve information using vector search to answer a user query.
+    """
+    # Embed the user query using our serverless endpoint
+    response = requests.post(
+        url=SERVERLESS_URL,
+        json={
+            "task": "get_embedding",
+            "data": {"input": user_query, "input_type": "query"},
+        },
+    )
+    # Extract the embedding from the response
+    query_embedding = response.json()["embedding"]
+
+    # SOLUTION for CODE_BLOCK_5:
+    pipeline = [
+        {
+            "$vectorSearch": {
+                "index": VS_INDEX_NAME,
+                "path": "embedding",
+                "queryVector": query_embedding,
+                "numCandidates": 150,
+                "limit": 2,
+            }
+        },
+        {
+            "$project": {
+                "_id": 0,
+                "key": 1,
+                "width": 1,
+                "height": 1,
+                "score": {"$meta": "vectorSearchScore"},
+            }
+        },
+    ]
+
+    # SOLUTION for CODE_BLOCK_6:
+    results = list(collection.aggregate(pipeline))
+    
+    # Get images from local storage
+    keys = [result["key"] for result in results]
+    print(f"Keys: {keys}")
+    return keys
+```
+
+### Function Declaration for Gemini
+```python
+# SOLUTIONS for CODE_BLOCK_7, 8, 9:
+get_information_for_question_answering_declaration = {
+    "name": "get_information_for_question_answering",
+    "description": "Retrieve information using vector search to answer a user query.",
+    "parameters": {
+        "type": "object",
+        "properties": {
+            "user_query": {
+                "type": "string",
+                "description": "Query string to use for vector search",
+            }
+        },
+        "required": ["user_query"],
+    },
+}
+```
+
+### Key Concepts
+- **$vectorSearch**: MongoDB's vector search aggregation stage
+- **numCandidates**: Number of candidates to consider (affects recall)
+- **limit**: Final number of results to return
+- Function declaration follows Gemini's schema for function calling
+
+---
+
+## Step 8: Instantiate the Gemini Client
+
+Set up Google's Gemini 2.0 Flash model for our agent.
+
+### Explanation
+We'll use Gemini 2.0 Flash, which supports multimodal inputs (text + images) and function calling.
+
+### Lab Code
+```python
+from google import genai
+from google.genai import types
+
+LLM = "gemini-2.0-flash"
+
+api_key = requests.post(
+    url=SERVERLESS_URL, json={"task": "get_api_key", "data": LLM_PROVIDER}
+).json()["api_key"]
+
+gemini_client = genai.Client(api_key=api_key)
+```
+
+---
+
+## Step 9: Create Generation Config
+
+Configure Gemini with our tool and generation parameters.
+
+### Explanation
+This configuration tells Gemini about available tools and sets generation parameters like temperature.
+
+### Lab Code
+```python
+# Create a generation config with function declaration
+tools = types.Tool(
+    function_declarations=[get_information_for_question_answering_declaration]
+)
+tools_config = types.GenerateContentConfig(tools=[tools], temperature=0.0)
+```
+
+### Configuration Notes
+- **temperature**: 0.0 for deterministic, fact-based responses
+- **tools**: List of available functions the model can call
+
+---
+
+## Step 10: Define Tool Selection Function
+
+Create a function that uses Gemini to decide when to call tools.
+
+### Explanation
+This function acts as the agent's decision-making component, determining whether to call the vector search tool based on the conversation context.
+
+### Lab Code with Solution
+```python
+from google.genai.types import FunctionCall
+
+def select_tool(messages: List) -> FunctionCall | None:
+    """Use an LLM to decide which tool to call"""
+    system_prompt = [
+        (
+            "You're an AI assistant. Based on the given information, decide which tool to use."
+            "If the user is asking to explain an image, don't call any tools unless that would help you better explain the image."
+            "Here is the provided information:\n"
+        )
+    ]
+    # Input to the LLM
+    contents = system_prompt + messages
+    
+    # SOLUTION for CODE_BLOCK_10:
+    response = gemini_client.models.generate_content(
+        model=LLM, contents=contents, config=tools_config
+    )
+    
+    # Extract and return the function call from the response
+    return response.candidates[0].content.parts[0].function_call
+```
+
+---
+
+## Step 11: Define Functions to Execute Tools and Generate Responses
+
+Create the main agent logic that orchestrates tool calls and generates responses.
+
+### Explanation
+This is the heart of our agent - it decides whether to use tools, executes them, and generates the final response using both retrieved context and the LLM.
+
+### Lab Code with Solutions
+```python
+from PIL import Image
+
+def generate_answer(user_query: str, images: List = []) -> str:
+    """Execute any tools and generate a response"""
+    
+    # SOLUTION for CODE_BLOCK_11:
+    tool_call = select_tool([user_query])
+    
+    # If a tool call is found and the name is get_information_for_question_answering
+    if (
+        tool_call is not None
+        and tool_call.name == "get_information_for_question_answering"
+    ):
+        print(f"Agent: Calling tool: {tool_call.name}")
+        
+        # SOLUTION for CODE_BLOCK_12:
+        tool_images = get_information_for_question_answering(**tool_call.args)
+        
+        # Add images returned by the tool to the list of input images
+        images.extend(tool_images)
+
+    system_prompt = f"Answer the questions based on the provided context only. If the context is not sufficient, say I DON'T KNOW. DO NOT use any other information to answer the question."
+    
+    # Pass the system prompt, user query, and retrieved images to the LLM
+    contents = [system_prompt] + [user_query] + [Image.open(image) for image in images]
+
+    # Get the response from the LLM
+    response = gemini_client.models.generate_content(
+        model=LLM,
+        contents=contents,
+        config=types.GenerateContentConfig(temperature=0.0),
+    )
+    answer = response.text
+    return answer
+
+def execute_agent(user_query: str, images: List = []) -> None:
+    """Execute the agent."""
+    response = generate_answer(user_query, images)
+    print("Agent:", response)
+```
+
+### Agent Flow
+1. Analyze the query to determine if tools are needed
+2. Call vector search if relevant information is required
+3. Combine retrieved images with the query
+4. Generate a response based on the context
+
+---
+
+## Step 12: Add Memory to the Agent
+
+Implement conversation memory to enable multi-turn interactions.
+
+### Explanation
+Memory allows our agent to maintain context across multiple interactions, enabling follow-up questions and maintaining conversation continuity.
+
+### Setting Up Memory Storage
+```python
+from datetime import datetime
+
+# Instantiate the history collection
+history_collection = mongodb_client[DB_NAME]["history"]
+
+# SOLUTION for CODE_BLOCK_13:
+history_collection.create_index("session_id")
+```
+
+### Memory Functions with Solutions
+```python
+def store_chat_message(session_id: str, role: str, type: str, content: str) -> None:
+    """Create chat history document and store it in MongoDB"""
+    message = {
+        "session_id": session_id,
+        "role": role,
+        "type": type,
+        "content": content,
+        "timestamp": datetime.now(),
+    }
+    
+    # SOLUTION for CODE_BLOCK_14:
+    history_collection.insert_one(message)
+
+def retrieve_session_history(session_id: str) -> List:
+    """Retrieve chat history for a particular session."""
+    
+    # SOLUTION for CODE_BLOCK_15:
+    cursor = history_collection.find({"session_id": session_id}).sort("timestamp", 1)
+    
+    messages = []
+    if cursor:
+        for msg in cursor:
+            # If the message type is text, append the content as is
+            if msg["type"] == "text":
+                messages.append(msg["content"])
+            # If message type is image, open the image
+            elif msg["type"] == "image":
+                messages.append(Image.open(msg["content"]))
+    return messages
+```
+
+### Enhanced Agent with Memory
+```python
+def generate_answer(session_id: str, user_query: str, images: List = []) -> str:
+    """Execute any tools and generate a response with memory"""
+    
+    # SOLUTION for CODE_BLOCK_16:
+    history = retrieve_session_history(session_id)
+    
+    # Determine if any additional tools need to be called
+    tool_call = select_tool(history + [user_query])
+    
+    if (
+        tool_call is not None
+        and tool_call.name == "get_information_for_question_answering"
+    ):
+        print(f"Agent: Calling tool: {tool_call.name}")
+        tool_images = get_information_for_question_answering(**tool_call.args)
+        images.extend(tool_images)
+
+    # Generate response with history context
+    system_prompt = f"Answer the questions based on the provided context only. If the context is not sufficient, say I DON'T KNOW. DO NOT use any other information to answer the question."
+    contents = (
+        [system_prompt]
+        + history
+        + [user_query]
+        + [Image.open(image) for image in images]
+    )
+    
+    response = gemini_client.models.generate_content(
+        model=LLM,
+        contents=contents,
+        config=types.GenerateContentConfig(temperature=0.0),
+    )
+    answer = response.text
+    
+    # SOLUTION for CODE_BLOCK_17:
+    store_chat_message(session_id, "user", "text", user_query)
+    
+    # SOLUTION for CODE_BLOCK_18:
+    for image in images:
+        store_chat_message(session_id, "user", "image", image)
+    
+    # SOLUTION for CODE_BLOCK_19:
+    store_chat_message(session_id, "agent", "text", answer)
+    
+    return answer
+```
+
+---
+
+## 🦸‍♀️ Bonus: ReAct Agent Implementation
+
+The ReAct (Reasoning + Acting) pattern creates a more sophisticated agent that can reason about whether it has enough information and iteratively gather more data.
+
+### Explanation
+ReAct agents alternate between reasoning (thinking about what they need) and acting (using tools to gather information). This creates a more thoughtful and thorough agent.
+
+### ReAct Implementation
+```python
+def generate_answer(user_query: str, images: List = []) -> str:
+    """Implement a ReAct agent"""
+    # Define reasoning prompt
+    system_prompt = [
+        (
+            "You are an AI assistant. Based on the current information, decide if you have enough to answer the user query, or if you need more information."
+            "If you have enough information, respond with 'ANSWER: <your answer>'."
+            "If you need more information, respond with 'TOOL: <question for the tool>'. Keep the question concise."
+            f"User query: {user_query}\n"
+            "Current information:\n"
+        )
+    ]
+    
+    # Set max iterations
+    max_iterations = 3
+    current_iteration = 0
+    current_information = []
+
+    # Add user-provided images if any
+    if len(images) != 0:
+        current_information.extend([Image.open(image) for image in images])
+
+    # Run the reasoning → action loop
+    while current_iteration < max_iterations:
+        current_iteration += 1
+        print(f"Iteration {current_iteration}:")
+        
+        # Generate action
+        response = gemini_client.models.generate_content(
+            model=LLM,
+            contents=system_prompt + current_information,
+            config=types.GenerateContentConfig(temperature=0.0),
+        )
+        answer = response.text
+        print(f"Agent: {answer}")
+        
+        # If the agent has the final answer, return it
+        if "ANSWER" in answer:
+            return answer
+        # If the agent decides to call a tool
+        else:
+            # Determine which tool to call
+            tool_call = select_tool([answer])
+            if (
+                tool_call is not None
+                and tool_call.name == "get_information_for_question_answering"
+            ):
+                print(f"Agent: Calling tool: {tool_call.name}")
+                tool_images = get_information_for_question_answering(**tool_call.args)
+                current_information.extend([Image.open(image) for image in tool_images])
+                continue
+```
+
+### ReAct Benefits
+- More transparent reasoning process
+- Can handle complex queries requiring multiple searches
+- Provides insight into the agent's thought process
+- More robust error handling
+
+---
+
+## 🎯 Testing Your Agent
+
+### Basic Test Queries
+```python
+# Test factual question requiring search
+execute_agent("What is the Pass@1 accuracy of Deepseek R1 on the MATH500 benchmark?")
+
+# Test image analysis
+execute_agent("Explain the graph in this image:", ["data/test.png"])
+```
+
+### Memory-Enabled Tests
+```python
+# Start a conversation
+execute_agent("1", "What is the Pass@1 accuracy of Deepseek R1 on the MATH500 benchmark?")
+
+# Test memory with follow-up
+execute_agent("1", "What did I just ask you?")
+```
+
+---
+
+## 🚀 Next Steps
+
+Now that you've completed the workshop, consider:
+
+1. **Experiment with Different Documents**: Try processing different types of PDFs and documents
+2. **Enhance the Agent**: Add more sophisticated reasoning or additional tools
+3. **Build a UI**: Create a web interface for your agent using Streamlit or Gradio
+4. **Production Deployment**: Deploy your agent as an API service
+5. **Explore Other Models**: Try different embedding models or LLMs
+
+## 📚 Additional Resources
+
+- [MongoDB Atlas Vector Search Documentation](https://www.mongodb.com/docs/atlas/atlas-vector-search/)
+- [Google Gemini API Documentation](https://ai.google.dev/gemini-api/docs)
+- [PyMuPDF Documentation](https://pymupdf.readthedocs.io/)
+- [Voyage AI Documentation](https://docs.voyageai.com/)
+
+---
+
+Congratulations on completing the Multimodal Agents Workshop! You've built a sophisticated AI system capable of understanding both text and images, with memory and reasoning capabilities. 🎉

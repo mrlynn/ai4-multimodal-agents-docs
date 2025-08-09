@@ -59,15 +59,15 @@ export default [
   },
   {
     path: '/docs',
-    component: ComponentCreator('/docs', 'c3d'),
+    component: ComponentCreator('/docs', '0e9'),
     routes: [
       {
         path: '/docs',
-        component: ComponentCreator('/docs', 'f1b'),
+        component: ComponentCreator('/docs', 'a98'),
         routes: [
           {
             path: '/docs',
-            component: ComponentCreator('/docs', '978'),
+            component: ComponentCreator('/docs', 'c26'),
             routes: [
               {
                 path: '/docs',
@@ -80,6 +80,26 @@ export default [
                 component: ComponentCreator('/docs/atlas-setup', 'bfb'),
                 exact: true,
                 sidebar: "tutorialSidebar"
+              },
+              {
+                path: '/docs/backup/python-exercise-1',
+                component: ComponentCreator('/docs/backup/python-exercise-1', 'c12'),
+                exact: true
+              },
+              {
+                path: '/docs/backup/python-exercise-2',
+                component: ComponentCreator('/docs/backup/python-exercise-2', '717'),
+                exact: true
+              },
+              {
+                path: '/docs/backup/python-exercise-3',
+                component: ComponentCreator('/docs/backup/python-exercise-3', '9a5'),
+                exact: true
+              },
+              {
+                path: '/docs/backup/python-exercise-4',
+                component: ComponentCreator('/docs/backup/python-exercise-4', '33a'),
+                exact: true
               },
               {
                 path: '/docs/codebase',
@@ -149,6 +169,12 @@ export default [
                 path: '/docs/workshop-alignment-assessment',
                 component: ComponentCreator('/docs/workshop-alignment-assessment', '9ba'),
                 exact: true
+              },
+              {
+                path: '/docs/workshop-lab-walkthrough',
+                component: ComponentCreator('/docs/workshop-lab-walkthrough', 'f9a'),
+                exact: true,
+                sidebar: "tutorialSidebar"
               },
               {
                 path: '/docs/workshop-overview',

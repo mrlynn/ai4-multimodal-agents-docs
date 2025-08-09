@@ -1,0 +1,197 @@
+---
+id: python-exercise-3
+title: 🤖 Exercise 3 - Build AI Agent with Gemini
+sidebar_label: 🤖 Exercise 3 - AI Agent
+---
+
+# Exercise 3: Build AI Agent with Tool Calling
+
+## 🎯 Objective
+Create an intelligent agent using Google Gemini 2.0 Flash with function calling capabilities and implement ReAct pattern.
+
+## 📊 Exercise Tasks
+
+### Task 1: Set Up Gemini and Define Function Tools
+```python
+from google import genai
+from google.genai import types
+from google.genai.types import FunctionCall
+
+LLM = "gemini-2.0-flash"
+
+# Initialize Gemini client
+gemini_client = genai.Client(api_key=os.getenv("GOOGLE_API_KEY"))
+
+# Define function declaration for Gemini
+get_information_for_question_answering_declaration = {
+    "name": "get_information_for_question_answering",
+    "description": "Retrieve information using vector search to answer a user query. Uses VoyageAI embeddings.",
+    "parameters": {
+        "type": "object",
+        "properties": {
+            "user_query": {
+                "type": "string",
+                "description": "Query string to use for vector search",
+            }
+        },
+        "required": ["user_query"],
+    },
+}
+
+# Create tools configuration
+tools = types.Tool(
+    function_declarations=[get_information_for_question_answering_declaration]
+)
+tools_config = types.GenerateContentConfig(tools=[tools], temperature=0.0)
+
+print(f"🤖 Gemini {LLM} configured with function calling!")
+```
+
+### Task 2: Implement Core Agent Functions
+```python
+def select_tool(messages: List) -> FunctionCall | None:
+    """Use LLM to decide which tool to call."""
+    system_prompt = [(
+        "You're an AI assistant. Based on the given information, decide which tool to use. "
+        "If the user is asking to explain an image, don't call any tools unless that would help you better explain the image. "
+        "Here is the provided information:\n"
+    )]
+    
+    contents = system_prompt + messages
+    
+    # Generate response using Gemini
+    response = gemini_client.models.generate_content(
+        model=LLM, contents=contents, config=tools_config
+    )
+    
+    # Extract and return the function call
+    if response.candidates and response.candidates[0].content.parts:
+        return response.candidates[0].content.parts[0].function_call
+    
+    return None
+
+def generate_answer(user_query: str, images: List = []) -> str:
+    """Execute tools and generate response."""
+    # Check if we need to call tools
+    tool_call = select_tool([user_query])
+    
+    if tool_call and tool_call.name == "get_information_for_question_answering":
+        print(f"🛠️ Agent calling tool: {tool_call.name}")
+        
+        # Call the tool with extracted arguments
+        tool_images = get_information_for_question_answering(**tool_call.args)
+        images.extend(tool_images)
+    
+    # Prepare system prompt
+    system_prompt = (
+        "Answer the questions based on the provided context only. "
+        "If the context is not sufficient, say I DON'T KNOW. "
+        "DO NOT use any other information to answer the question."
+    )
+    
+    # Prepare contents for the LLM
+    contents = [system_prompt] + [user_query]
+    if images:
+        contents.extend([Image.open(image) for image in images])
+    
+    # Get response from LLM
+    response = gemini_client.models.generate_content(
+        model=LLM,
+        contents=contents,
+        config=types.GenerateContentConfig(temperature=0.0),
+    )
+    
+    return response.text
+
+def execute_agent(user_query: str, images: List = []) -> None:
+    """Execute the agent and display response."""
+    print(f"🤖 Processing query: {user_query}")
+    response = generate_answer(user_query, images)
+    print(f"\n🤖 Agent Response:\n{response}\n")
+
+# Test the agent
+print("💬 Testing Agent:")
+execute_agent("What is the Pass@1 accuracy of Deepseek R1 on the MATH500 benchmark?")
+```
+
+### Task 3: Implement ReAct Pattern
+```python
+def generate_answer_react(user_query: str, images: List = []) -> str:
+    """Implement ReAct (Reasoning + Acting) agent."""
+    print("🧠 Starting ReAct agent processing...")
+    
+    # Define reasoning prompt
+    system_prompt = [(
+        "You are an AI assistant with access to VoyageAI embeddings for document search. "
+        "Based on the current information, decide if you have enough to answer the user query, "
+        "or if you need more information. "
+        "If you have enough information, respond with 'ANSWER: <your answer>'. "
+        "If you need more information, respond with 'TOOL: <question for the tool>'. "
+        f"User query: {user_query}\n"
+        "Current information:\n"
+    )]
+    
+    max_iterations = 3
+    current_iteration = 0
+    current_information = []
+    
+    # Add user-provided images
+    if images:
+        current_information.extend([Image.open(img) for img in images])
+    
+    # Run reasoning → action loop
+    while current_iteration < max_iterations:
+        current_iteration += 1
+        print(f"🔄 ReAct Iteration {current_iteration}:")
+        
+        # Generate reasoning and decision
+        response = gemini_client.models.generate_content(
+            model=LLM,
+            contents=system_prompt + current_information,
+            config=types.GenerateContentConfig(temperature=0.0),
+        )
+        
+        decision = response.text
+        print(f"💭 Agent decision: {decision[:100]}...")
+        
+        # Check for final answer
+        if "ANSWER:" in decision:
+            final_answer = decision.split("ANSWER:", 1)[1].strip()
+            print(f"✅ Final answer reached in {current_iteration} iterations")
+            return final_answer
+        
+        # Check for tool use
+        elif "TOOL:" in decision:
+            tool_query = decision.split("TOOL:", 1)[1].strip()
+            print(f"🛠️ Agent requesting tool with: {tool_query}")
+            
+            # Call the tool
+            tool_call = select_tool([tool_query])
+            
+            if tool_call and tool_call.name == "get_information_for_question_answering":
+                tool_images = get_information_for_question_answering(**tool_call.args)
+                
+                if tool_images:
+                    new_images = [Image.open(img) for img in tool_images]
+                    current_information.extend(new_images)
+                    print(f"➕ Added {len(new_images)} retrieved images")
+                else:
+                    current_information.append("No relevant information found.")
+    
+    return "I couldn't find a definitive answer after exploring the available information."
+
+# Test ReAct agent
+print("\n🧠 Testing ReAct Agent:")
+execute_react_agent = lambda q: print(f"🤖 ReAct Response:\n{generate_answer_react(q)}\n")
+execute_react_agent("What is the Pass@1 accuracy of Deepseek R1 on the MATH500 benchmark?")
+```
+
+## ✅ Success Criteria
+- [ ] Gemini client configured with function calling
+- [ ] Agent can select and call tools based on queries
+- [ ] Basic agent generates answers using retrieved context
+- [ ] ReAct agent performs iterative reasoning and acting
+- [ ] Agent successfully answers questions about PDF content
+
+## 🚀 Next Steps
+Your AI agent with ReAct pattern is working! Now proceed to [Exercise 4: Add Memory & Testing](./python-exercise-4)

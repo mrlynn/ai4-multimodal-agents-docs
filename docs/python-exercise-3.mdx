@@ -1,197 +1,262 @@
 ---
 id: python-exercise-3
-title: 🤖 Exercise 3 - Build AI Agent with Gemini
+title: 🤖 Exercise 3 - Build the AI Agent
 sidebar_label: 🤖 Exercise 3 - AI Agent
 ---
 
-# Exercise 3: Build AI Agent with Tool Calling
+# Exercise 3: Build the AI Agent
+
+<div style={{textAlign: 'center', margin: '20px 0'}}>
+  <a 
+    href="https://codespaces.new/mrlynn/multimodal-agents-lab" 
+    target="_blank" 
+    rel="noopener noreferrer"
+    style={{
+      backgroundColor: '#589636',
+      color: 'white',
+      padding: '12px 24px',
+      borderRadius: '6px',
+      textDecoration: 'none',
+      fontWeight: '900',
+      display: 'inline-block',
+      fontSize: '16px'
+    }}
+  >
+    🚀 Open in GitHub Codespaces
+  </a>
+</div>
 
 ## 🎯 Objective
-Create an intelligent agent using Google Gemini 2.0 Flash with function calling capabilities and implement ReAct pattern.
+Set up Google Gemini 2.0 Flash with function calling capabilities and build the core agent logic that orchestrates tool calls and generates responses.
 
-## 📊 Exercise Tasks
+## 📋 Prerequisites
+- Completed Exercises 1 & 2
+- Vector search function and declaration ready
+- Understanding of LLM function calling
 
-### Task 1: Set Up Gemini and Define Function Tools
+## 🔧 Lab Steps
+
+### Step 8: Instantiate the Gemini Client
+
+Set up the Gemini 2.0 Flash model for multimodal AI capabilities.
+
 ```python
 from google import genai
 from google.genai import types
-from google.genai.types import FunctionCall
 
 LLM = "gemini-2.0-flash"
 
+# Get API key from serverless endpoint
+api_key = requests.post(
+    url=SERVERLESS_URL, json={"task": "get_api_key", "data": LLM_PROVIDER}
+).json()["api_key"]
+
 # Initialize Gemini client
-gemini_client = genai.Client(api_key=os.getenv("GOOGLE_API_KEY"))
+gemini_client = genai.Client(api_key=api_key)
 
-# Define function declaration for Gemini
-get_information_for_question_answering_declaration = {
-    "name": "get_information_for_question_answering",
-    "description": "Retrieve information using vector search to answer a user query. Uses VoyageAI embeddings.",
-    "parameters": {
-        "type": "object",
-        "properties": {
-            "user_query": {
-                "type": "string",
-                "description": "Query string to use for vector search",
-            }
-        },
-        "required": ["user_query"],
-    },
-}
+print(f"✅ Gemini {LLM} client initialized!")
+```
 
-# Create tools configuration
+### Step 9: Create Generation Config
+
+Configure Gemini with your tool and generation parameters.
+
+```python
+# Create a generation config with the function declaration and temperature set to 0.0
 tools = types.Tool(
     function_declarations=[get_information_for_question_answering_declaration]
 )
 tools_config = types.GenerateContentConfig(tools=[tools], temperature=0.0)
 
-print(f"🤖 Gemini {LLM} configured with function calling!")
+print("✅ Generation config created with function calling enabled!")
 ```
 
-### Task 2: Implement Core Agent Functions
+💡 **Key Parameters**:
+- **temperature**: 0.0 for deterministic, fact-based responses
+- **tools**: List of available functions the model can call
+
+### Step 10: Define Core Agent Functions
+
+Build the tool selection logic and response generation functions.
+
+#### Part A: Tool Selection Function
+
 ```python
+from google.genai.types import FunctionCall
+
 def select_tool(messages: List) -> FunctionCall | None:
-    """Use LLM to decide which tool to call."""
-    system_prompt = [(
-        "You're an AI assistant. Based on the given information, decide which tool to use. "
-        "If the user is asking to explain an image, don't call any tools unless that would help you better explain the image. "
-        "Here is the provided information:\n"
-    )]
-    
+    """
+    Use an LLM to decide which tool to call
+
+    Args:
+        messages (List): Messages as a list
+
+    Returns:
+        FunctionCall: Function call object consisting of the tool name and arguments
+    """
+    system_prompt = [
+        (
+            "You're an AI assistant. Based on the given information, decide which tool to use."
+            "If the user is asking to explain an image, don't call any tools unless that would help you better explain the image."
+            "Here is the provided information:\n"
+        )
+    ]
+    # Input to the LLM
     contents = system_prompt + messages
     
-    # Generate response using Gemini
-    response = gemini_client.models.generate_content(
-        model=LLM, contents=contents, config=tools_config
-    )
+    # 🧪 TODO: Use the `gemini_client`, `LLM`, `contents` and `tools_config` 
+    # to generate a response using Gemini
+    response = <CODE_BLOCK_10>
     
-    # Extract and return the function call
-    if response.candidates and response.candidates[0].content.parts:
-        return response.candidates[0].content.parts[0].function_call
-    
-    return None
+    # Extract and return the function call from the response
+    return response.candidates[0].content.parts[0].function_call
+```
+
+<details>
+<summary>💡 Solution for CODE_BLOCK_10</summary>
+
+```python
+response = gemini_client.models.generate_content(
+    model=LLM, contents=contents, config=tools_config
+)
+```
+
+</details>
+
+📚 **Reference**: [Gemini Function Calling - Create Response](https://ai.google.dev/gemini-api/docs/function-calling?example=meeting#step_4_create_user_friendly_response_with_function_result_and_call_the_model_again)
+
+#### Part B: Answer Generation Function
+
+```python
+from PIL import Image
 
 def generate_answer(user_query: str, images: List = []) -> str:
-    """Execute tools and generate response."""
-    # Check if we need to call tools
-    tool_call = select_tool([user_query])
+    """
+    Execute any tools and generate a response
+
+    Args:
+        user_query (str): User's query string
+        images (List): List of filepaths. Defaults to [].
+
+    Returns:
+        str: LLM-generated response
+    """
+    # 🧪 TODO: Use the `select_tool` function to determine if tools are needed
+    # NOTE: Input to `select_tool` should be a list
+    tool_call = <CODE_BLOCK_11>
     
-    if tool_call and tool_call.name == "get_information_for_question_answering":
-        print(f"🛠️ Agent calling tool: {tool_call.name}")
+    # If a tool call is found and it's our vector search function
+    if (
+        tool_call is not None
+        and tool_call.name == "get_information_for_question_answering"
+    ):
+        print(f"Agent: Calling tool: {tool_call.name}")
         
-        # Call the tool with extracted arguments
-        tool_images = get_information_for_question_answering(**tool_call.args)
+        # 🧪 TODO: Call the tool with the arguments extracted by the LLM
+        tool_images = <CODE_BLOCK_12>
+        
+        # Add images returned by the tool to the list of input images
         images.extend(tool_images)
+
+    system_prompt = f"Answer the questions based on the provided context only. If the context is not sufficient, say I DON'T KNOW. DO NOT use any other information to answer the question."
     
-    # Prepare system prompt
-    system_prompt = (
-        "Answer the questions based on the provided context only. "
-        "If the context is not sufficient, say I DON'T KNOW. "
-        "DO NOT use any other information to answer the question."
-    )
-    
-    # Prepare contents for the LLM
-    contents = [system_prompt] + [user_query]
-    if images:
-        contents.extend([Image.open(image) for image in images])
-    
-    # Get response from LLM
+    # Pass the system prompt, user query, and retrieved images to the LLM
+    contents = [system_prompt] + [user_query] + [Image.open(image) for image in images]
+
+    # Get the response from the LLM
     response = gemini_client.models.generate_content(
         model=LLM,
         contents=contents,
         config=types.GenerateContentConfig(temperature=0.0),
     )
-    
-    return response.text
-
-def execute_agent(user_query: str, images: List = []) -> None:
-    """Execute the agent and display response."""
-    print(f"🤖 Processing query: {user_query}")
-    response = generate_answer(user_query, images)
-    print(f"\n🤖 Agent Response:\n{response}\n")
-
-# Test the agent
-print("💬 Testing Agent:")
-execute_agent("What is the Pass@1 accuracy of Deepseek R1 on the MATH500 benchmark?")
+    answer = response.text
+    return answer
 ```
 
-### Task 3: Implement ReAct Pattern
-```python
-def generate_answer_react(user_query: str, images: List = []) -> str:
-    """Implement ReAct (Reasoning + Acting) agent."""
-    print("🧠 Starting ReAct agent processing...")
-    
-    # Define reasoning prompt
-    system_prompt = [(
-        "You are an AI assistant with access to VoyageAI embeddings for document search. "
-        "Based on the current information, decide if you have enough to answer the user query, "
-        "or if you need more information. "
-        "If you have enough information, respond with 'ANSWER: <your answer>'. "
-        "If you need more information, respond with 'TOOL: <question for the tool>'. "
-        f"User query: {user_query}\n"
-        "Current information:\n"
-    )]
-    
-    max_iterations = 3
-    current_iteration = 0
-    current_information = []
-    
-    # Add user-provided images
-    if images:
-        current_information.extend([Image.open(img) for img in images])
-    
-    # Run reasoning → action loop
-    while current_iteration < max_iterations:
-        current_iteration += 1
-        print(f"🔄 ReAct Iteration {current_iteration}:")
-        
-        # Generate reasoning and decision
-        response = gemini_client.models.generate_content(
-            model=LLM,
-            contents=system_prompt + current_information,
-            config=types.GenerateContentConfig(temperature=0.0),
-        )
-        
-        decision = response.text
-        print(f"💭 Agent decision: {decision[:100]}...")
-        
-        # Check for final answer
-        if "ANSWER:" in decision:
-            final_answer = decision.split("ANSWER:", 1)[1].strip()
-            print(f"✅ Final answer reached in {current_iteration} iterations")
-            return final_answer
-        
-        # Check for tool use
-        elif "TOOL:" in decision:
-            tool_query = decision.split("TOOL:", 1)[1].strip()
-            print(f"🛠️ Agent requesting tool with: {tool_query}")
-            
-            # Call the tool
-            tool_call = select_tool([tool_query])
-            
-            if tool_call and tool_call.name == "get_information_for_question_answering":
-                tool_images = get_information_for_question_answering(**tool_call.args)
-                
-                if tool_images:
-                    new_images = [Image.open(img) for img in tool_images]
-                    current_information.extend(new_images)
-                    print(f"➕ Added {len(new_images)} retrieved images")
-                else:
-                    current_information.append("No relevant information found.")
-    
-    return "I couldn't find a definitive answer after exploring the available information."
+<details>
+<summary>💡 Solution for CODE_BLOCK_11</summary>
 
-# Test ReAct agent
-print("\n🧠 Testing ReAct Agent:")
-execute_react_agent = lambda q: print(f"🤖 ReAct Response:\n{generate_answer_react(q)}\n")
-execute_react_agent("What is the Pass@1 accuracy of Deepseek R1 on the MATH500 benchmark?")
+```python
+tool_call = select_tool([user_query])
+```
+
+</details>
+
+<details>
+<summary>💡 Solution for CODE_BLOCK_12</summary>
+
+```python
+tool_images = get_information_for_question_answering(**tool_call.args)
+```
+
+</details>
+
+📚 **Reference**: [Gemini Function Calling - Execute Function](https://ai.google.dev/gemini-api/docs/function-calling?example=meeting#step_3_execute_set_light_values_function_code)
+
+### Step 11: Define Function to Execute the Agent
+
+Create a user-friendly wrapper to execute your agent.
+
+```python
+def execute_agent(user_query: str, images: List = []) -> None:
+    """
+    Execute the agent.
+
+    Args:
+        user_query (str): User query
+        images (List, optional): List of filepaths. Defaults to [].
+    """
+    response = generate_answer(user_query, images)
+    print("Agent:", response)
+```
+
+### Testing Your Agent
+
+Test your agent with different types of queries:
+
+```python
+# Test the agent with a text input
+execute_agent("What is the Pass@1 accuracy of Deepseek R1 on the MATH500 benchmark?")
+
+# Test the agent with an image input (if you have a test image)
+execute_agent("Explain the graph in this image:", ["data/test.png"])
 ```
 
 ## ✅ Success Criteria
-- [ ] Gemini client configured with function calling
-- [ ] Agent can select and call tools based on queries
-- [ ] Basic agent generates answers using retrieved context
-- [ ] ReAct agent performs iterative reasoning and acting
-- [ ] Agent successfully answers questions about PDF content
+
+By the end of this exercise, you should have:
+- [ ] Gemini 2.0 Flash client initialized successfully
+- [ ] Generation config created with function calling enabled
+- [ ] Tool selection function working correctly
+- [ ] Answer generation function orchestrating tool calls
+- [ ] Agent successfully answering questions using vector search
+- [ ] Agent able to analyze provided images directly
+
+## 🎯 What You've Accomplished
+
+In this exercise, you've:
+1. Set up Gemini 2.0 Flash for multimodal AI tasks
+2. Implemented intelligent tool selection logic
+3. Built the orchestration layer for your agent
+4. Created a complete RAG (Retrieval-Augmented Generation) system
+5. Enabled both text and image understanding capabilities
+
+## 💡 Key Concepts
+
+- **Function Calling**: LLM's ability to recognize when to use tools
+- **Tool Selection**: Decision-making process for using available tools
+- **Multimodal Input**: Processing both text queries and images
+- **RAG Pattern**: Retrieve relevant context, then generate answers
+- **Temperature**: Controls randomness (0.0 = deterministic)
+
+## 🎪 How the Agent Works
+
+1. **Query Analysis**: Agent analyzes the user's question
+2. **Tool Decision**: Determines if vector search is needed
+3. **Retrieval**: If needed, searches for relevant document images
+4. **Context Assembly**: Combines query with retrieved/provided images
+5. **Response Generation**: Generates answer based on available context
 
 ## 🚀 Next Steps
-Your AI agent with ReAct pattern is working! Now proceed to [Exercise 4: Add Memory & Testing](./python-exercise-4)
+
+Congratulations! You now have a working multimodal AI agent. Proceed to [Exercise 4: Memory & Advanced Features](./python-exercise-4) where you'll add conversation memory and implement the ReAct pattern for more sophisticated reasoning.
