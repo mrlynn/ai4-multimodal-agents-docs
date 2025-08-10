@@ -6,8 +6,14 @@ sidebar_position: 4
 ---
 
 import ClickableImage from '@site/src/components/ClickableImage';
+import SlideRecap from '@site/src/components/SlideRecap';
+import { QuickCheck } from '@site/src/components/Quiz';
 
 # 🍃 MongoDB Atlas Cluster Setup
+
+:::tip Solo Learner Tip
+Allow 20-30 minutes for complete Atlas setup. Take screenshots of your connection string and credentials as you go - you'll reference them multiple times during the workshop!
+:::
 
 ## Why MongoDB Atlas?
 
@@ -89,6 +95,11 @@ Set up a database user with the following credentials:
 3. **Important**: Copy and save these credentials - you'll need them for your connection string
 4. Click **"Create Database User"**
 
+**✅ Checkpoint: Verify User Creation**
+- User appears in Database Access tab
+- Password is securely saved
+- User has "Read and write to any database" permissions
+
 ### Step 6: Configure Network Access
 
 For this workshop, we'll allow access from anywhere for simplicity:
@@ -104,6 +115,11 @@ Set up network access:
 3. For workshop purposes, "Allow Access from Anywhere" (0.0.0.0/0) is acceptable
 
    ⚠️ **Production Note**: In production environments, always restrict access to specific IP addresses for security.
+
+**✅ Checkpoint: Verify Network Access**
+- Network access entry shows 0.0.0.0/0 (Allow access from anywhere)
+- Status shows "Active"
+- No connection errors when testing from your environment
 
 ### Step 7: Choose Connection Method
 
@@ -131,6 +147,12 @@ mongodb+srv://workshop:<password>@cluster0.xxxxx.mongodb.net/?retryWrites=true&w
 ```
 
 **Important**: Replace `<password>` with the actual password you created for your database user.
+
+**✅ Checkpoint: Verify Connection String**
+- Password placeholder has been replaced with actual password
+- Connection string format matches: `mongodb+srv://username:password@cluster...`
+- No angle brackets `< >` remain in the string
+- Connection string saved securely in .env file
 
 ---
 
@@ -168,15 +190,28 @@ try:
     client = MongoClient(MONGODB_URI)
     # Test the connection
     result = client.admin.command("ping")
-    if result.get("ok") == 1:
-        print("✅ MongoDB Atlas connected successfully!")
-        
-        # List available databases
-        print("Available databases:", client.list_database_names())
-    else:
-        print("❌ Connection failed")
+    
+    # ✅ Checkpoint: Verify MongoDB connection
+    assert result.get("ok") == 1, "❌ MongoDB connection failed. Check your connection string."
+    print("✅ MongoDB Atlas connected successfully!")
+    
+    # List available databases
+    print("Available databases:", client.list_database_names())
+    
+    # ✅ Checkpoint: Test basic operations
+    test_db = client["test_connection"]
+    test_collection = test_db["test"]
+    test_doc = {"test": "connection", "timestamp": "now"}
+    result = test_collection.insert_one(test_doc)
+    print(f"✅ Test document inserted with ID: {result.inserted_id}")
+    
+    # Clean up test document
+    test_collection.delete_one({"_id": result.inserted_id})
+    print("✅ Atlas setup verification complete!")
+    
 except Exception as e:
     print(f"❌ MongoDB connection failed: {e}")
+    print("Check your MONGODB_URI in .env file and network access settings.")
 ```
 
 ---
@@ -190,6 +225,27 @@ MongoDB Atlas includes native vector search with:
 - **Multiple Distance Metrics**: Cosine, Euclidean, and dot product similarity
 - **Filtering**: Combine vector similarity with traditional MongoDB queries
 - **Real-time Updates**: Vector indexes update automatically as data changes
+
+<QuickCheck
+  question="Which similarity metric is most commonly used for text and image embeddings?"
+  options={[
+    "Cosine similarity - measures angle between vectors",
+    "Euclidean distance - measures straight-line distance", 
+    "Dot product - measures vector magnitude and direction"
+  ]}
+  correctAnswer={0}
+  explanation="Cosine similarity works well for high-dimensional embeddings and is normalized, making it ideal for text/image vectors."
+/>
+
+<QuickCheck
+  question="True or False: MongoDB Atlas vector indexes need manual updates when documents change."
+  options={[
+    "True - you must rebuild indexes manually",
+    "False - vector indexes update automatically"
+  ]}
+  correctAnswer={1}
+  explanation="Atlas vector indexes are maintained automatically when documents are inserted, updated, or deleted."
+/>
 
 ### Document Storage
 
@@ -319,6 +375,25 @@ If you encounter issues:
    - Implement proper backup and disaster recovery strategies
    - Follow data residency requirements if applicable
 
+:::info Performance & Cost Tip
+**Atlas Free Tier Optimization**:
+- M0 clusters have 512MB storage and shared CPU
+- Vector search works great within these limits for learning
+- Upgrade to M10+ for production workloads with dedicated resources
+- Monitor cluster metrics to understand your usage patterns
+:::
+
+<SlideRecap 
+  title="Checkpoint Recap: MongoDB Atlas Ready"
+  items={[
+    { icon: "🏗️", title: "Cluster Deployed", description: "M0 free tier cluster created and accessible from anywhere." },
+    { icon: "👤", title: "Database User Created", description: "Workshop user configured with read/write permissions." },
+    { icon: "🔗", title: "Connection String Ready", description: "Python connection string copied and saved securely." },
+    { icon: "✅", title: "Connection Verified", description: "Successfully tested ping and basic operations." }
+  ]}
+  nextSection="Ready to start processing PDFs and building your agent!"
+/>
+
 ---
 
-**[← Back to Prerequisites Overview](./prerequisites)** | **[Next: Start Workshop →](./python-exercise-1)**
+**Navigation:** **[← Prerequisites Overview](./prerequisites)** | **[🚀 Codespaces Setup →](./codespaces-setup)** | **[Exercise 1: Setup & Data →](./python-exercise-1)** | **[🏠 Workshop Overview](./index)**

@@ -55,9 +55,15 @@ const sidebars = {
           type: 'doc',
           id: 'atlas-setup',
           label: '🍃 Atlas Setup'
+        },
+        {
+          type: 'doc',
+          id: 'codespaces-setup',
+          label: '🍃 Codespaces Setup'
         }
       ]
     },
+    
     {
       type: 'category',
       label: '🐍 Python & Jupyter Exercises',
@@ -97,7 +103,22 @@ const sidebars = {
           label: '🐍 Python Lab Walkthrough'
         }
       ]
-    }
+    },
+    {
+      type: 'category',
+      label: '🛠️ Resources',
+      collapsible: true,
+      collapsed: false,
+      className: 'sidebar-path-python',
+      description: 'Build multimodal AI agents with Python',
+      items: [
+        {
+          type: 'doc',
+          id: 'faq',
+          label: '🤔 FAQ'
+        }
+      ]
+    },
   ],
 };
 

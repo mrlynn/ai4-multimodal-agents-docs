@@ -4,11 +4,14 @@ title: 🔍 Exercise 2 - Vector Search Setup
 sidebar_label: 🔍 Exercise 2 - Vector Search
 ---
 
+import SlideRecap from '@site/src/components/SlideRecap';
+import { QuickCheck } from '@site/src/components/Quiz';
+
 # Exercise 2: Vector Search Setup
 
 <div style={{textAlign: 'center', margin: '20px 0'}}>
   <a 
-    href="https://codespaces.new/mrlynn/multimodal-agents-lab" 
+    href="https://codespaces.new/mongodb-developer/ai4-multimodal-agents-lab" 
     target="_blank" 
     rel="noopener noreferrer"
     style={{
@@ -30,9 +33,13 @@ sidebar_label: 🔍 Exercise 2 - Vector Search
 Create a vector search index in MongoDB Atlas and build the search tool function that your AI agent will use to retrieve relevant information.
 
 ## 📋 Prerequisites
-- Completed Exercise 1 with documents ingested into MongoDB
+- Completed [Exercise 1](./python-exercise-1) with documents ingested into MongoDB
 - MongoDB collection with embeddings in place
 - Understanding of vector search concepts
+
+:::tip Solo Learner Tip
+Vector index creation can take 5-15 minutes depending on your data size. Be patient and use the Atlas UI to monitor progress. Don't proceed until the status shows "READY".
+:::
 
 ## 🔧 Lab Steps
 
@@ -74,6 +81,10 @@ list(collection.list_search_indexes())
 
 ```python
 collection.create_search_index(model=model)
+
+# ✅ Checkpoint: Verify index creation started
+print("✅ Vector search index creation initiated!")
+print("Note: Index building is asynchronous and may take 5-15 minutes.")
 ```
 
 </details>
@@ -170,6 +181,10 @@ pipeline = [
 
 ```python
 results = list(collection.aggregate(pipeline))
+
+# ✅ Checkpoint: Verify search results
+assert len(results) > 0, "❌ No search results found. Check if your vector index is READY."
+print(f"✅ Vector search returned {len(results)} results!")
 ```
 
 </details>
@@ -254,6 +269,50 @@ In this exercise, you've:
 - **limit**: Final number of results to return
 - **Cosine Similarity**: Measures angle between embedding vectors
 - **Function Declaration**: Schema that tells the LLM how to use your tool
+
+<QuickCheck
+  question="What does numCandidates: 150 control in vector search?"
+  options={[
+    "Number of documents initially considered for similarity matching",
+    "Maximum number of results returned",
+    "Number of embedding dimensions"
+  ]}
+  correctAnswer={0}
+  explanation="numCandidates controls the recall vs speed trade-off. More candidates = better accuracy but slower queries."
+/>
+
+<QuickCheck
+  question="True or False: Higher numCandidates values always improve search quality."
+  options={[
+    "True, but at the cost of slower query performance",
+    "False, there's no relationship"
+  ]}
+  correctAnswer={0}
+  explanation="Higher values improve accuracy but increase query time. You need to balance based on your specific needs."
+/>
+
+:::info Performance & Cost Tip
+**Optimizing Vector Search**:
+- `numCandidates`: 10-20x your `limit` for good accuracy
+- For production: Start with 100 candidates, increase if needed
+- Monitor query latency vs accuracy trade-offs
+- Consider caching frequent queries
+:::
+
+<SlideRecap 
+  title="Checkpoint Recap: Vector Search Foundation"
+  items={[
+    { icon: "📦", title: "Index Created", description: "Vector search index configured for 1024-dimensional embeddings." },
+    { icon: "🔍", title: "Search Function Built", description: "Query embedding and similarity search pipeline working." },
+    { icon: "⚙️", title: "Function Declaration Ready", description: "Gemini can now understand how to use your search tool." },
+    { icon: "🎯", title: "RAG Foundation Complete", description: "Ready to build an intelligent agent that retrieves relevant context." }
+  ]}
+  nextSection="Up next: Building your AI agent with Gemini!"
+/>
+
+---
+
+**Navigation:** **[← Exercise 1: Setup & Data](./python-exercise-1)** | **[Exercise 3: Build AI Agent →](./python-exercise-3)** | **[🏠 Workshop Overview](./index)**
 
 ## 🚀 Next Steps
 

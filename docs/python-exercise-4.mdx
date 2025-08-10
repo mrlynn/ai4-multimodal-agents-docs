@@ -4,11 +4,14 @@ title: 🧠 Exercise 4 - Memory & Advanced Features
 sidebar_label: 🧠 Exercise 4 - Memory & ReAct
 ---
 
+import SlideRecap from '@site/src/components/SlideRecap';
+import { QuickCheck } from '@site/src/components/Quiz';
+
 # Exercise 4: Memory & Advanced Features
 
 <div style={{textAlign: 'center', margin: '20px 0'}}>
   <a 
-    href="https://codespaces.new/mrlynn/multimodal-agents-lab" 
+    href="https://codespaces.new/mongodb-developer/ai4-multimodal-agents-lab" 
     target="_blank" 
     rel="noopener noreferrer"
     style={{
@@ -30,9 +33,13 @@ sidebar_label: 🧠 Exercise 4 - Memory & ReAct
 Add conversation memory to enable multi-turn interactions and implement the ReAct (Reasoning + Acting) pattern for more sophisticated agent behavior.
 
 ## 📋 Prerequisites
-- Completed Exercises 1-3
+- Completed [Exercise 1](./python-exercise-1), [2](./python-exercise-2), & [3](./python-exercise-3)
 - Working AI agent with vector search
 - Understanding of conversation context
+
+:::tip Solo Learner Tip
+Memory and ReAct patterns are advanced concepts. Take breaks between sections to let the concepts sink in. Test each memory function individually before combining them.
+:::
 
 ## 🔧 Lab Steps
 
@@ -50,6 +57,9 @@ history_collection = mongodb_client[DB_NAME]["history"]
 
 # 🧪 TODO: Create an index on `session_id` on the `history_collection` collection
 <CODE_BLOCK_13>
+
+# ✅ Checkpoint: Verify index creation
+print("✅ Session index created for efficient history queries!")
 
 print("✅ Memory storage initialized with session index!")
 ```
@@ -89,6 +99,7 @@ def store_chat_message(session_id: str, role: str, type: str, content: str) -> N
     
     # 🧪 TODO: Insert the `message` into the `history_collection` collection
     <CODE_BLOCK_14>
+    print(f"💾 Stored {type}-{role} message for session {session_id}")
 ```
 
 <details>
@@ -400,5 +411,49 @@ Consider extending your agent with:
 - [Google Gemini API Docs](https://ai.google.dev/gemini-api/docs)
 - [ReAct Paper](https://arxiv.org/abs/2210.03629)
 - [Function Calling Best Practices](https://ai.google.dev/gemini-api/docs/function-calling)
+
+<QuickCheck
+  question="What is the main advantage of ReAct agents over simple function calling?"
+  options={[
+    "They can reason about whether they have sufficient information",
+    "They are faster to execute",
+    "They use less memory"
+  ]}
+  correctAnswer={0}
+  explanation="ReAct agents can decide 'do I have enough context?' before answering, leading to more thoughtful and accurate responses."
+/>
+
+<QuickCheck
+  question="True or False: Session-based memory allows multiple users to have separate conversations."
+  options={[
+    "True - each session_id isolates conversations",
+    "False - all conversations are shared"
+  ]}
+  correctAnswer={0}
+  explanation="Session IDs create isolated conversation threads for different users or topics, enabling multi-user applications."
+/>
+
+:::info Performance & Cost Tip
+**Memory & Scaling Considerations**:
+- Implement conversation length limits (e.g., last 20 messages)
+- Consider message compression for long conversations
+- Use TTL indexes to auto-delete old sessions
+- Monitor memory collection size growth
+:::
+
+<SlideRecap 
+  title="Checkpoint Recap: Production-Ready Agent"
+  items={[
+    { icon: "🧠", title: "Memory System Complete", description: "Session-based conversation history with MongoDB storage." },
+    { icon: "🔄", title: "Multi-turn Conversations", description: "Agent remembers context across multiple interactions." },
+    { icon: "🤖", title: "ReAct Agent Enhanced", description: "Sophisticated reasoning with iterative information gathering." },
+    { icon: "🎩", title: "Production Architecture", description: "Scalable, stateful, intelligent multimodal AI system complete!" }
+  ]}
+  nextSection="Congratulations! You've built a production-ready AI agent!"
+/>
+
+---
+
+**Navigation:** **[← Exercise 3: Build AI Agent](./python-exercise-3)** | **[🏠 Workshop Overview](./index)** | **[📓 Complete Notebook Reference](./complete-notebook)**
 
 Thank you for completing the Multimodal Agents Workshop! 🙏

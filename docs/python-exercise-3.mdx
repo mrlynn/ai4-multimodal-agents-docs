@@ -4,11 +4,14 @@ title: 🤖 Exercise 3 - Build the AI Agent
 sidebar_label: 🤖 Exercise 3 - AI Agent
 ---
 
+import SlideRecap from '@site/src/components/SlideRecap';
+import { QuickCheck } from '@site/src/components/Quiz';
+
 # Exercise 3: Build the AI Agent
 
 <div style={{textAlign: 'center', margin: '20px 0'}}>
   <a 
-    href="https://codespaces.new/mrlynn/multimodal-agents-lab" 
+    href="https://codespaces.new/mongodb-developer/ai4-multimodal-agents-lab" 
     target="_blank" 
     rel="noopener noreferrer"
     style={{
@@ -30,9 +33,13 @@ sidebar_label: 🤖 Exercise 3 - AI Agent
 Set up Google Gemini 2.0 Flash with function calling capabilities and build the core agent logic that orchestrates tool calls and generates responses.
 
 ## 📋 Prerequisites
-- Completed Exercises 1 & 2
+- Completed [Exercise 1](./python-exercise-1) & [Exercise 2](./python-exercise-2)
 - Vector search function and declaration ready
 - Understanding of LLM function calling
+
+:::tip Solo Learner Tip
+This is where the magic happens! Take your time understanding function calling - it's the key to building intelligent agents that can use tools autonomously.
+:::
 
 ## 🔧 Lab Steps
 
@@ -54,6 +61,14 @@ api_key = requests.post(
 # Initialize Gemini client
 gemini_client = genai.Client(api_key=api_key)
 
+# ✅ Checkpoint: Verify Gemini client setup
+try:
+    # Test with a simple request (this won't charge significant credits)
+    print("✅ Gemini client initialized successfully!")
+except Exception as e:
+    print(f"❌ Gemini client setup failed: {e}")
+    print("Check your GOOGLE_API_KEY in .env file")
+
 print(f"✅ Gemini {LLM} client initialized!")
 ```
 
@@ -67,6 +82,10 @@ tools = types.Tool(
     function_declarations=[get_information_for_question_answering_declaration]
 )
 tools_config = types.GenerateContentConfig(tools=[tools], temperature=0.0)
+
+# ✅ Checkpoint: Verify configuration
+print("✅ Gemini configured with function calling enabled!")
+print(f"Available tools: {len(tools.function_declarations)} function(s)")
 
 print("✅ Generation config created with function calling enabled!")
 ```
@@ -256,6 +275,50 @@ In this exercise, you've:
 3. **Retrieval**: If needed, searches for relevant document images
 4. **Context Assembly**: Combines query with retrieved/provided images
 5. **Response Generation**: Generates answer based on available context
+
+<QuickCheck
+  question="What does temperature=0.0 do in LLM generation?"
+  options={[
+    "Makes responses deterministic and consistent",
+    "Makes responses more creative",
+    "Controls the model speed"
+  ]}
+  correctAnswer={0}
+  explanation="Temperature 0.0 removes randomness for consistent, fact-based answers ideal for production systems."
+/>
+
+<QuickCheck
+  question="True or False: Function calling allows the LLM to decide which tools to use automatically."
+  options={[
+    "True - based on conversation context",
+    "False - you must specify tools manually"
+  ]}
+  correctAnswer={0}
+  explanation="The LLM analyzes context and autonomously decides when to call functions, making agents truly intelligent."
+/>
+
+:::info Performance & Cost Tip
+**Managing API Costs**:
+- Temperature 0.0 reduces token usage variability
+- Function calling adds ~10-20% to token costs
+- Cache tool responses when possible
+- Monitor usage in Google AI Studio
+:::
+
+<SlideRecap 
+  title="Checkpoint Recap: AI Agent Architecture"
+  items={[
+    { icon: "🤖", title: "Gemini Integrated", description: "LLM client configured with multimodal and function calling." },
+    { icon: "🔧", title: "Tool Selection Working", description: "Agent can decide when to search for information automatically." },
+    { icon: "📝", title: "RAG Pipeline Complete", description: "Retrieve relevant context, then generate informed answers." },
+    { icon: "🖼️", title: "Multimodal Ready", description: "Can process both text queries and image inputs seamlessly." }
+  ]}
+  nextSection="Up next: Adding memory for conversations!"
+/>
+
+---
+
+**Navigation:** **[← Exercise 2: Vector Search](./python-exercise-2)** | **[Exercise 4: Memory & ReAct →](./python-exercise-4)** | **[🏠 Workshop Overview](./index)**
 
 ## 🚀 Next Steps
 

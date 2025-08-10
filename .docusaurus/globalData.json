@@ -36,6 +36,11 @@
               "path": "/docs/codebase"
             },
             {
+              "id": "codespaces-setup",
+              "path": "/docs/codespaces-setup",
+              "sidebar": "tutorialSidebar"
+            },
+            {
               "id": "complete-notebook",
               "path": "/docs/complete-notebook",
               "sidebar": "tutorialSidebar"
@@ -43,6 +48,11 @@
             {
               "id": "content-organization-guide",
               "path": "/docs/content-organization-guide"
+            },
+            {
+              "id": "faq",
+              "path": "/docs/faq",
+              "sidebar": "tutorialSidebar"
             },
             {
               "id": "gemini-setup",
@@ -121,8 +131,8 @@
   "docusaurus-lunr-search": {
     "default": {
       "fileNames": {
-        "searchDoc": "search-doc-1754750614197.json",
-        "lunrIndex": "lunr-index-1754750614197.json"
+        "searchDoc": "search-doc-1754869718074.json",
+        "lunrIndex": "lunr-index-1754869718074.json"
       }
     }
   }

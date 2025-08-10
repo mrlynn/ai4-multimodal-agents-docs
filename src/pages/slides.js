@@ -7,7 +7,7 @@ const demoSlides = [
     id: 'workshop-intro',
     title: 'Workshop Introduction',
     url: 'https://docs.google.com/presentation/d/1YZJRVyoYe1sAtQXCcTxdjpaIQ84-L57842vydaBjcZk',
-    caption: 'Introduction to building multimodal PDF agents with n8n and MongoDB',
+    caption: 'Introduction to building multimodal PDF agents with Voyage and MongoDB',
     notesLink: '/docs/intro',
   },
   {

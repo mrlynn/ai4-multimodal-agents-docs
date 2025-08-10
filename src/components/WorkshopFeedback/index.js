@@ -3,8 +3,8 @@ import styles from './styles.module.css';
 
 export default function WorkshopFeedback({ 
   workshopTitle = "Multimodal PDF Agent Workshop",
-  instructorEmail = "instructor@example.com",
-  githubRepo = "mongodb-developer/multimodal-pdf-agent-n8n"
+  instructorEmail = "michael.lynn@mongodb.com",
+  githubRepo = "/mongodb-developer/ai4-multimodal-agents-lab"
 }) {
   const [isExpanded, setIsExpanded] = useState(false);
   const [feedback, setFeedback] = useState({

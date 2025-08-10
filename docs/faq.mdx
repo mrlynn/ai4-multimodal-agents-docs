@@ -1,0 +1,178 @@
+---
+id: faq
+title: Frequently Asked Questions
+sidebar_position: 100
+---
+
+# Frequently Asked Questions
+
+## Core Technology Questions
+
+**Q: How is MongoDB Vector Search different from something like Pinecone, Weaviate, or FAISS?**
+
+A: MongoDB Vector Search is built directly into Atlas Search - meaning you store, query, and vector-search in the same place as the rest of your data. No separate vector DB, no ETL pipeline, and no syncing headaches. You also get all the indexing, replication, and security of Atlas plus hybrid search (text + vector) in a single query.
+
+**Q: Why use Voyage 3 Multimodal for embeddings?**
+
+A: Voyage 3 can generate embeddings for both text and images in the same vector space, making multimodal retrieval easier. This means I can drop an image into my query, and it retrieves text or other images semantically related to it - without juggling separate pipelines.
+
+**Q: How does multimodal vector search work under the hood?**
+
+A: Everything... text, images, audio is encoded into a shared vector space. The embedding model normalizes the representations so that similar meaning or content lies close together in high-dimensional space. Then MongoDB's `$vectorSearch` operator finds the nearest neighbors.
+
+**Q: What makes MongoDB's implementation production-ready compared to prototype solutions?**
+
+A: MongoDB provides ACID transactions, built-in security (encryption at rest/in transit), role-based access control, point-in-time recovery, and global replication. You're not just getting vector search - you're getting enterprise-grade infrastructure that's been battle-tested for years.
+
+---
+
+## Practical Implementation Questions
+
+**Q: Can I use this without replacing my current search system?**
+
+A: Yes. You can add vector search alongside your existing search in MongoDB Atlas. Start by embedding a subset of your data, run hybrid `$vectorSearch` + `$search` queries, and phase it in.
+
+**Q: How big can my vectors be?**
+
+A: Atlas supports embeddings up to 8192 dimensions. The sweet spot is often 512 - 1536 dimensions for cost and speed reasons, depending on the model.
+
+**Q: What's the latency like?**
+
+A: A large-scale benchmark (15.3M vectors at 2048 dimensions) found &lt;50ms latency with 90-95% recall when using quantization strategies. With proper configurations (e.g., quantization, tuned numCandidates), MongoDB Atlas Vector Search can achieve &lt;50 ms per query even on multi-million document datasets.
+
+**Q: How do I handle different data types in the same collection?**
+
+A: MongoDB's flexible schema lets you store text, images, and metadata in the same document. Use conditional logic in your embedding pipeline to handle each type appropriately, storing vectors in a consistent field structure.
+
+**Q: Can I update embeddings without re-indexing everything?**
+
+A: Yes. MongoDB allows partial updates. You can update individual document embeddings and the vector index will automatically reflect changes without rebuilding from scratch.
+
+---
+
+## RAG and Agent Questions
+
+**Q: How does this tie into RAG (Retrieval-Augmented Generation)?**
+
+A: Vector search provides the retrieval step. RAG agents use the retrieved documents to ground their LLM responses, reducing hallucinations and adding domain-specific context.
+
+**Q: Why use an AI agent instead of a straight RAG query?**
+
+A: Agents can plan and reason - choosing when to search, when to ask follow-up questions, and how to use multimodal inputs. They can chain multiple queries and actions together without you hardcoding every step.
+
+**Q: What's the advantage of "with feedback" vs. "no feedback" planning?**
+
+A: With feedback, the agent evaluates its own intermediate steps - catching mistakes, refining queries, and improving reliability. Without feedback, it executes in a straight line, which is faster but riskier for complex tasks.
+
+**Q: How do I prevent the agent from hallucinating when documents aren't found?**
+
+A: Implement a confidence threshold check. If vector search returns low similarity scores, have the agent explicitly state "I don't have enough information" rather than inventing an answer. Always validate retrieved content before generation.
+
+**Q: Can agents handle multi-turn conversations with context?**
+
+A: Yes. Store conversation history in MongoDB and include relevant context in your vector searches. The agent can query both recent messages and historical context to maintain coherent multi-turn interactions.
+
+---
+
+## Jupyter & Workshop-Specific Questions
+
+**Q: Can I follow along without using Jupyter?**
+
+A: The workshop was designed as a code-along with Jupyter in mind... but you can use the web UI for the assistant in Codespaces to review the code, or even clone the repo and connect from your own IDE via API. The Jupyter integration is just a developer-friendly option for testing code inline.
+
+**Q: What if my session expires or my codespace instance goes to sleep?**
+
+A: Sessions last 24 hours. If it expires, just create a new one in the web UI and reconnect in your notebook. If your codespace instance goes to sleep, just wake it up / restart it and make sure you re-run the cells that require configuration. 
+
+**Q: Do I need GPU access for this workshop?**
+
+A: No. The embedding generation happens via API calls to Voyage AI, and MongoDB Atlas handles the vector operations. Your local machine just needs to run Jupyter and make API calls.
+
+**Q: Can I save and share my completed notebook?**
+
+A: Yes. Export your notebook as `.ipynb` or `.html`. The code cells contain everything needed to reproduce your work, though you'll need your own API keys and MongoDB connection string.
+
+---
+
+## Scaling, Cost, and Operations Questions
+
+**Q: What's the cost impact of adding embeddings?**
+
+A: Cost comes from three sources:
+1. Embedding generation (model API cost)
+2. Storage (vector data in MongoDB)
+3. Query execution (Atlas Search compute)
+
+You can control cost by batching embeddings, compressing vectors, and indexing only the most valuable content.
+
+**Q: How do I keep my embeddings up-to-date?**
+
+A: Use a change stream on your MongoDB collection to trigger an embedding refresh when a document changes.
+
+**Q: Can this handle millions of documents?**
+
+A: Yes. Atlas Vector Search is optimized for large datasets. Index sharding, dimension tuning, and hybrid filtering keep performance high.
+
+**Q: What's the best practice for batch processing embeddings?**
+
+A: Process in chunks of 100-1000 documents, implement retry logic for API failures, track progress in MongoDB, and use parallel processing where the API allows. Consider rate limits and implement exponential backoff.
+
+**Q: How do I monitor vector search performance in production?**
+
+A: MongoDB Atlas provides built-in monitoring for query performance, index usage, and resource consumption. Set up alerts for slow queries and track your p95/p99 latencies.
+
+---
+
+## Security and Compliance Questions
+
+**Q: How do I secure sensitive embeddings?**
+
+A: MongoDB provides field-level encryption, allowing you to encrypt vectors at rest. Combined with TLS for data in transit and role-based access control, you can meet most compliance requirements.
+
+**Q: Can I restrict vector search to specific users or tenants?**
+
+A: Yes. Use MongoDB's built-in RBAC and add filter predicates to your `$vectorSearch` queries to enforce tenant isolation or user-specific access controls.
+
+**Q: What about GDPR and the right to be forgotten?**
+
+A: Since embeddings are stored as regular MongoDB documents, you can delete them like any other data. Implement a deletion pipeline that removes both the source document and its embeddings.
+
+---
+
+## Development and Debugging Questions
+
+**Q: How do I debug why certain documents aren't being retrieved?**
+
+A: Check the similarity scores in your results, verify your embeddings are normalized, ensure your vector index is built correctly, and test with known similar documents to validate your embedding model.
+
+**Q: What's the best way to test vector search locally?**
+
+A: Use MongoDB Atlas Local (included in the workshop) or a small Atlas free tier cluster. Generate embeddings for a subset of data and validate retrieval quality before scaling up.
+
+**Q: How do I measure retrieval quality?**
+
+A: Implement evaluation metrics like precision@k, recall@k, and NDCG. Create a test set with known relevant documents and track how well your vector search retrieves them.
+
+**Q: Can I visualize my embeddings?**
+
+A: Yes. Use dimensionality reduction techniques like t-SNE or UMAP to project your high-dimensional vectors to 2D/3D for visualization. This helps debug clustering and identify outliers.
+
+---
+
+## Integration Questions
+
+**Q: Can I use this with LangChain or LlamaIndex?**
+
+A: Yes. Both frameworks have MongoDB Atlas vector store integrations. You can use them for more complex RAG pipelines while still leveraging the workshop's multimodal capabilities.
+
+**Q: How do I integrate this with my existing Python application?**
+
+A: Use the `pymongo` driver for database operations and the workshop's agent patterns for multimodal search. The code is designed to be modular and extractable.
+
+**Q: What about other programming languages?**
+
+A: MongoDB has official drivers for all major languages. While the workshop uses Python, the vector search functionality works identically across all drivers - just adapt the syntax.
+
+**Q: Can I trigger vector search from MongoDB aggregation pipelines?**
+
+A: Yes. `$vectorSearch` is a standard aggregation stage, so you can combine it with `$match`, `$project`, `$lookup`, and other operators for complex queries.

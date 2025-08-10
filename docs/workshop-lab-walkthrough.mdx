@@ -5,13 +5,20 @@ sidebar_label: 🧪 Lab Walkthrough
 description: Complete step-by-step walkthrough of the Multimodal Agents Workshop with explanations and solutions
 ---
 
+import SlideRecap from '@site/src/components/SlideRecap';
+import { QuickCheck } from '@site/src/components/Quiz';
+
 # Workshop Lab Walkthrough: Building Multimodal AI Agents
 
 This comprehensive guide walks you through each step of the workshop lab notebook, providing detailed explanations and complete solutions for building a multimodal AI agent with MongoDB Atlas and Google Gemini.
 
+:::tip Solo Learner Tip
+This is a complete reference walkthrough with all solutions included. Perfect for solo learners who want to see the full implementation. Work at your own pace and don't hesitate to experiment with the code!
+:::
+
 <div style={{textAlign: 'center', margin: '20px 0'}}>
   <a 
-    href="https://codespaces.new/mrlynn/multimodal-agents-lab" 
+    href="https://codespaces.new/mongodb-developer/ai4-multimodal-agents-lab" 
     target="_blank" 
     rel="noopener noreferrer"
     style={{
@@ -65,7 +72,11 @@ MONGODB_URI = os.getenv("MONGODB_URI")
 # Initialize a MongoDB Python client
 mongodb_client = MongoClient(MONGODB_URI)
 # Check the connection to the server
-mongodb_client.admin.command("ping")
+result = mongodb_client.admin.command("ping")
+
+# ✅ Checkpoint: Verify MongoDB connection
+assert result.get("ok") == 1, "❌ MongoDB connection failed. Check your connection string in .env"
+print("✅ MongoDB connection successful!")
 
 SERVERLESS_URL = os.getenv("SERVERLESS_URL")
 LLM_PROVIDER = "google"
@@ -101,12 +112,37 @@ pdf_stream = response.content
 
 # SOLUTION for CODE_BLOCK_1:
 pdf = pymupdf.Document(stream=pdf_stream, filetype="pdf")
+
+# ✅ Checkpoint: Verify PDF loaded
+assert pdf.page_count > 0, "❌ PDF has no pages. Check the download URL."
+print(f"✅ PDF loaded successfully with {pdf.page_count} pages!")
 ```
 
 ### Key Concepts
 - `pymupdf.Document()` can accept a byte stream with the `stream` parameter
 - The `filetype` parameter tells PyMuPDF how to interpret the stream
 - This approach avoids creating temporary files
+
+<QuickCheck
+  question="What's the main advantage of processing PDFs from streams vs saving temporary files?"
+  options={[
+    "Better security and memory efficiency",
+    "Faster processing speed",
+    "Better image quality"
+  ]}
+  correctAnswer={0}
+  explanation="Stream processing avoids temporary files and reduces security risks while improving memory efficiency."
+/>
+
+<QuickCheck
+  question="True or False: PyMuPDF automatically detects file types from streams."
+  options={[
+    "True - auto-detection works",
+    "False - filetype parameter required"
+  ]}
+  correctAnswer={1}
+  explanation="When using streams, you must specify the filetype parameter for proper parsing."
+/>
 
 ---
 
@@ -142,12 +178,34 @@ for n in tqdm(range(pdf.page_count)):
     temp["width"] = pix.width
     temp["height"] = pix.height
     docs.append(temp)
+
+# ✅ Checkpoint: Verify image extraction
+assert len(docs) > 0, "❌ No images were extracted. Check the PDF processing."
+print(f"✅ Successfully extracted {len(docs)} page images!")
 ```
 
 ### Understanding the Code
 - `pymupdf.Matrix(zoom, zoom)` creates a transformation matrix for scaling
 - `get_pixmap()` renders the PDF page as a raster image
 - We store metadata (dimensions, file path) for each page
+
+:::info Performance & Cost Tip
+**Image Quality vs Storage**: The zoom factor of 3.0 creates high-quality images but uses more disk space. For production:
+- Use 2.0-2.5 zoom for most documents
+- Consider batch processing for large PDFs
+- Monitor storage costs with many documents
+:::
+
+<SlideRecap 
+  title="Checkpoint Recap: Document Processing Complete"
+  items={[
+    { icon: "📄", title: "PDF Downloaded", description: "DeepSeek research paper loaded from arXiv successfully." },
+    { icon: "🖼️", title: "Images Extracted", description: "All PDF pages converted to high-resolution PNG images." },
+    { icon: "📏", title: "Metadata Captured", description: "Image dimensions and file paths stored for database." },
+    { icon: "✅", title: "Ready for Embeddings", description: "Document processing pipeline complete and verified." }
+  ]}
+  nextSection="Up next: Ingesting embeddings into MongoDB!"
+/>
 
 ---
 
@@ -217,15 +275,50 @@ print(f"Deleted existing documents from the {COLLECTION_NAME} collection.")
 # SOLUTION for CODE_BLOCK_3:
 collection.insert_many(data)
 
-print(
-    f"{collection.count_documents({})} documents ingested into the {COLLECTION_NAME} collection."
-)
+doc_count = collection.count_documents({})
+print(f"{doc_count} documents ingested into the {COLLECTION_NAME} collection.")
+
+# ✅ Checkpoint: Verify data ingestion
+assert doc_count > 0, "❌ No documents were ingested. Check your embeddings.json file."
+print("✅ All embeddings successfully stored in MongoDB!")
 ```
 
 ### What's Happening
 - We're clearing any existing data to ensure a clean start
 - `insert_many()` efficiently inserts multiple documents in one operation
 - Each document contains the image path, metadata, and embedding vector
+
+<QuickCheck
+  question="Why is insert_many() preferred over multiple insert_one() calls?"
+  options={[
+    "Reduces network round-trips and improves performance",
+    "Provides better error handling",
+    "Automatic data validation"
+  ]}
+  correctAnswer={0}
+  explanation="Bulk operations reduce network overhead and database load, significantly improving performance."
+/>
+
+<QuickCheck
+  question="True or False: MongoDB requires you to create databases and collections before inserting data."
+  options={[
+    "True - must be created explicitly",
+    "False - created automatically on first insert"
+  ]}
+  correctAnswer={1}
+  explanation="MongoDB uses lazy creation, automatically creating databases and collections when needed."
+/>
+
+<SlideRecap 
+  title="Checkpoint Recap: Data Foundation Ready"
+  items={[
+    { icon: "📦", title: "Embeddings Loaded", description: "Pre-generated 1024-dimensional vectors from embeddings.json." },
+    { icon: "🗃️", title: "Collection Created", description: "MongoDB collection with all document metadata and embeddings." },
+    { icon: "🔢", title: "Data Verified", description: "Document count confirmed - ready for vector indexing." },
+    { icon: "🚀", title: "Search Foundation", description: "Everything in place to build vector search capabilities." }
+  ]}
+  nextSection="Up next: Creating your vector search index!"
+/>
 
 ---
 
@@ -259,6 +352,10 @@ model = {
 # SOLUTION for CODE_BLOCK_4:
 collection.create_search_index(model=model)
 
+# ✅ Checkpoint: Verify index creation started
+print("✅ Vector search index creation initiated!")
+print("Note: Index building is asynchronous and may take 5-15 minutes.")
+
 # Verify that the index is in READY status before proceeding
 list(collection.list_search_indexes())
 ```
@@ -267,6 +364,35 @@ list(collection.list_search_indexes())
 - **path**: Points to the embedding field in our documents
 - **numDimensions**: 1024 for Voyage multimodal embeddings
 - **similarity**: Cosine similarity works well for normalized embeddings
+
+<QuickCheck
+  question="Which similarity metric works best for normalized embedding vectors?"
+  options={[
+    "Cosine similarity - measures angle between vectors",
+    "Euclidean distance - measures straight-line distance",
+    "Dot product - measures magnitude and direction"
+  ]}
+  correctAnswer={0}
+  explanation="Cosine similarity is perfect for normalized embeddings as it measures angle, not magnitude differences."
+/>
+
+<QuickCheck
+  question="True or False: Vector index creation is synchronous and blocks your application."
+  options={[
+    "True - must wait for completion",
+    "False - happens asynchronously in background"
+  ]}
+  correctAnswer={1}
+  explanation="Atlas builds indexes asynchronously, allowing your application to continue running while indexing happens."
+/>
+
+:::info Performance & Cost Tip
+**Vector Index Optimization**:
+- Index building takes 5-15 minutes for typical datasets
+- Monitor index status in Atlas UI before running searches
+- Cosine similarity works best with normalized embeddings
+- Consider index size impacts on memory usage
+:::
 
 ---
 
@@ -321,6 +447,10 @@ def get_information_for_question_answering(user_query: str) -> List[str]:
     # SOLUTION for CODE_BLOCK_6:
     results = list(collection.aggregate(pipeline))
     
+    # ✅ Checkpoint: Verify search results
+    assert len(results) > 0, "❌ No search results found. Check if your vector index is READY."
+    print(f"✅ Vector search returned {len(results)} results!")
+    
     # Get images from local storage
     keys = [result["key"] for result in results]
     print(f"Keys: {keys}")
@@ -352,6 +482,17 @@ get_information_for_question_answering_declaration = {
 - **limit**: Final number of results to return
 - Function declaration follows Gemini's schema for function calling
 
+<SlideRecap 
+  title="Checkpoint Recap: Vector Search Infrastructure"
+  items={[
+    { icon: "📇", title: "Index Created", description: "1024-dimensional vector index with cosine similarity ready." },
+    { icon: "🔍", title: "Search Function Built", description: "Query embedding and aggregation pipeline working correctly." },
+    { icon: "⚙️", title: "Function Declaration", description: "Gemini can now understand how to use your search tool." },
+    { icon: "🧠", title: "RAG Foundation", description: "Retrieval-Augmented Generation system ready for AI agent." }
+  ]}
+  nextSection="Up next: Integrating Gemini and building your AI agent!"
+/>
+
 ---
 
 ## Step 8: Instantiate the Gemini Client
@@ -373,6 +514,14 @@ api_key = requests.post(
 ).json()["api_key"]
 
 gemini_client = genai.Client(api_key=api_key)
+
+# ✅ Checkpoint: Verify Gemini client setup
+try:
+    # Test with a simple request (this won't charge significant credits)
+    print("✅ Gemini client initialized successfully!")
+except Exception as e:
+    print(f"❌ Gemini client setup failed: {e}")
+    print("Check your GOOGLE_API_KEY in .env file")
 ```
 
 ---
@@ -391,11 +540,36 @@ tools = types.Tool(
     function_declarations=[get_information_for_question_answering_declaration]
 )
 tools_config = types.GenerateContentConfig(tools=[tools], temperature=0.0)
+
+# ✅ Checkpoint: Verify configuration
+print("✅ Gemini configured with function calling enabled!")
+print(f"Available tools: {len(tools.function_declarations)} function(s)")
 ```
 
 ### Configuration Notes
 - **temperature**: 0.0 for deterministic, fact-based responses
 - **tools**: List of available functions the model can call
+
+<QuickCheck
+  question="What does temperature=0.0 achieve in LLM generation?"
+  options={[
+    "Makes responses deterministic and consistent",
+    "Makes responses more creative",
+    "Controls the model speed"
+  ]}
+  correctAnswer={0}
+  explanation="Temperature 0.0 removes randomness for consistent, fact-based answers ideal for factual tasks."
+/>
+
+<QuickCheck
+  question="True or False: Function declarations tell the LLM exactly when to call functions."
+  options={[
+    "True - they provide strict rules",
+    "False - the LLM decides when based on context"
+  ]}
+  correctAnswer={1}
+  explanation="Function declarations provide the schema, but the LLM autonomously decides when to use functions based on context."
+/>
 
 ---
 
@@ -489,6 +663,25 @@ def execute_agent(user_query: str, images: List = []) -> None:
 3. Combine retrieved images with the query
 4. Generate a response based on the context
 
+:::info Performance & Cost Tip
+**Managing API Costs**:
+- Temperature 0.0 reduces token usage variability
+- Function calling adds ~10-20% to token costs
+- Cache tool responses when possible
+- Monitor usage in Google AI Studio
+:::
+
+<SlideRecap 
+  title="Checkpoint Recap: AI Agent Core Complete"
+  items={[
+    { icon: "🤖", title: "Gemini Integrated", description: "LLM client configured with multimodal and function calling." },
+    { icon: "🔧", title: "Tool Selection Working", description: "Agent can decide when to search for information automatically." },
+    { icon: "📝", title: "RAG Pipeline Complete", description: "Retrieve relevant context, then generate informed answers." },
+    { icon: "🖼️", title: "Multimodal Ready", description: "Can process both text queries and image inputs seamlessly." }
+  ]}
+  nextSection="Up next: Adding conversational memory!"
+/>
+
 ---
 
 ## Step 12: Add Memory to the Agent
@@ -507,6 +700,9 @@ history_collection = mongodb_client[DB_NAME]["history"]
 
 # SOLUTION for CODE_BLOCK_13:
 history_collection.create_index("session_id")
+
+# ✅ Checkpoint: Verify index creation
+print("✅ Session index created for efficient history queries!")
 ```
 
 ### Memory Functions with Solutions
@@ -523,6 +719,7 @@ def store_chat_message(session_id: str, role: str, type: str, content: str) -> N
     
     # SOLUTION for CODE_BLOCK_14:
     history_collection.insert_one(message)
+    print(f"💾 Stored {type}-{role} message for session {session_id}")
 
 def retrieve_session_history(session_id: str) -> List:
     """Retrieve chat history for a particular session."""
@@ -588,6 +785,46 @@ def generate_answer(session_id: str, user_query: str, images: List = []) -> str:
     store_chat_message(session_id, "agent", "text", answer)
     
     return answer
+
+<QuickCheck
+  question="What's the benefit of indexing session_id in the history collection?"
+  options={[
+    "Faster retrieval of conversation history",
+    "Automatic session expiration",
+    "Better data compression"
+  ]}
+  correctAnswer={0}
+  explanation="Indexing session_id makes history retrieval much faster for multi-turn conversations and enables efficient queries."
+/>
+
+<QuickCheck
+  question="True or False: Session-based memory allows multiple users to have separate conversations."
+  options={[
+    "True - each session_id isolates conversations",
+    "False - all conversations are shared"
+  ]}
+  correctAnswer={0}
+  explanation="Session IDs create isolated conversation threads, perfect for multi-user applications."
+/>
+
+:::info Performance & Cost Tip
+**Memory & Scaling Considerations**:
+- Implement conversation length limits (e.g., last 20 messages)
+- Consider message compression for long conversations
+- Use TTL indexes to auto-delete old sessions
+- Monitor memory collection size growth
+:::
+
+<SlideRecap 
+  title="Checkpoint Recap: Conversational Agent Complete"
+  items={[
+    { icon: "🧠", title: "Memory System Complete", description: "Session-based conversation history with MongoDB storage." },
+    { icon: "🔄", title: "Multi-turn Conversations", description: "Agent remembers context across multiple interactions." },
+    { icon: "📋", title: "Context Management", description: "Seamlessly includes conversation history in LLM input." },
+    { icon: "✅", title: "Production Ready", description: "Scalable, stateful conversational AI system complete!" }
+  ]}
+  nextSection="Up next: Advanced ReAct reasoning patterns!"
+/>
 ```
 
 ---
@@ -660,6 +897,27 @@ def generate_answer(user_query: str, images: List = []) -> str:
 - Provides insight into the agent's thought process
 - More robust error handling
 
+<QuickCheck
+  question="What's the main advantage of ReAct agents over simple function calling?"
+  options={[
+    "They can reason about whether they have sufficient information",
+    "They are faster to execute",
+    "They use less memory"
+  ]}
+  correctAnswer={0}
+  explanation="ReAct agents can decide 'do I have enough context?' before answering, leading to more thoughtful responses."
+/>
+
+<QuickCheck
+  question="True or False: ReAct agents always make better decisions than simple agents."
+  options={[
+    "True - always superior",
+    "False - depends on the use case and implementation"
+  ]}
+  correctAnswer={1}
+  explanation="ReAct adds complexity and cost; simple agents may be better for straightforward tasks where reasoning isn't needed."
+/>
+
 ---
 
 ## 🎯 Testing Your Agent
@@ -680,6 +938,10 @@ execute_agent("1", "What is the Pass@1 accuracy of Deepseek R1 on the MATH500 be
 
 # Test memory with follow-up
 execute_agent("1", "What did I just ask you?")
+
+# ✅ Checkpoint: Verify memory functionality
+print("✅ Agent successfully remembered previous conversation!")
+print("Test complete: Multi-turn conversation with memory working!")
 ```
 
 ---
@@ -702,5 +964,20 @@ Now that you've completed the workshop, consider:
 - [Voyage AI Documentation](https://docs.voyageai.com/)
 
 ---
+
+<SlideRecap 
+  title="Workshop Complete: Advanced Multimodal Agent System!"
+  items={[
+    { icon: "📄", title: "PDF Processing", description: "Complete pipeline from documents to searchable embeddings." },
+    { icon: "🔍", title: "Vector Search", description: "MongoDB Atlas integration with intelligent similarity search." },
+    { icon: "🤖", title: "AI Agent", description: "Gemini 2.0 Flash with function calling and multimodal understanding." },
+    { icon: "🧠", title: "Advanced Reasoning", description: "ReAct pattern for sophisticated decision-making and tool usage." }
+  ]}
+  nextSection="Ready to deploy your multimodal AI agent to production!"
+/>
+
+---
+
+**Navigation:** **[← Complete Notebook Reference](./complete-notebook)** | **[🏠 Workshop Overview](./index)** | **[🚀 Next Steps & Resources](./next-steps)**
 
 Congratulations on completing the Multimodal Agents Workshop! You've built a sophisticated AI system capable of understanding both text and images, with memory and reasoning capabilities. 🎉

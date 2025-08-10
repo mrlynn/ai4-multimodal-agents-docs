@@ -4,11 +4,14 @@ title: 📊 Exercise 1 - Environment Setup & Data Processing
 sidebar_label: 📊 Exercise 1 - Setup & Data
 ---
 
+import SlideRecap from '@site/src/components/SlideRecap';
+import { QuickCheck } from '@site/src/components/Quiz';
+
 # Exercise 1: Environment Setup & Data Processing
 
 <div style={{textAlign: 'center', margin: '20px 0'}}>
   <a 
-    href="https://codespaces.new/mrlynn/multimodal-agents-lab" 
+    href="https://codespaces.new/mongodb-developer/ai4-multimodal-agents-lab" 
     target="_blank" 
     rel="noopener noreferrer"
     style={{
@@ -30,9 +33,13 @@ sidebar_label: 📊 Exercise 1 - Setup & Data
 Set up your environment, process a PDF document into images, and ingest pre-generated embeddings into MongoDB Atlas.
 
 ## 📋 Prerequisites
-- MongoDB Atlas connection string
+- MongoDB Atlas connection string ([Setup Guide](./atlas-setup))
 - Access to the serverless endpoint for embeddings
-- Python environment with required packages
+- Python environment with required packages ([Codespaces Setup](./codespaces-setup))
+
+:::tip Solo Learner Tip
+If you're working alone, complete the [Codespaces Setup Guide](./codespaces-setup) first. Give yourself 15 minutes to configure your `.env` file with all credentials.
+:::
 
 ## 🔧 Lab Steps
 
@@ -49,7 +56,11 @@ MONGODB_URI = os.getenv("MONGODB_URI")
 # Initialize a MongoDB Python client
 mongodb_client = MongoClient(MONGODB_URI)
 # Check the connection to the server
-mongodb_client.admin.command("ping")
+result = mongodb_client.admin.command("ping")
+
+# ✅ Checkpoint: Verify MongoDB connection
+assert result.get("ok") == 1, "❌ MongoDB connection failed. Check your connection string in .env"
+print("✅ MongoDB connection successful!")
 
 SERVERLESS_URL = os.getenv("SERVERLESS_URL")
 LLM_PROVIDER = "google"
@@ -76,6 +87,10 @@ pdf_stream = response.content
 # 🧪 TODO: Open the data in `pdf_stream` as a PDF document and store it in `pdf`.
 # HINT: Set the `filetype` argument to "pdf".
 pdf = <CODE_BLOCK_1>
+
+# ✅ Checkpoint: Verify PDF loaded
+assert pdf.page_count > 0, "❌ PDF has no pages. Check the download URL."
+print(f"✅ PDF loaded successfully with {pdf.page_count} pages!")
 ```
 
 <details>
@@ -118,6 +133,10 @@ for n in tqdm(range(pdf.page_count)):
     temp["width"] = pix.width
     temp["height"] = pix.height
     docs.append(temp)
+
+# ✅ Checkpoint: Verify image extraction
+assert len(docs) > 0, "❌ No images were extracted. Check the PDF processing."
+print(f"✅ Successfully extracted {len(docs)} page images!")
 ```
 
 <details>
@@ -188,9 +207,12 @@ print(f"Deleted existing documents from the {COLLECTION_NAME} collection.")
 # 🧪 TODO: Bulk insert documents in `data`, into the `collection` collection.
 <CODE_BLOCK_3>
 
-print(
-    f"{collection.count_documents({})} documents ingested into the {COLLECTION_NAME} collection."
-)
+doc_count = collection.count_documents({})
+print(f"✅ {doc_count} documents ingested into the {COLLECTION_NAME} collection.")
+
+# ✅ Checkpoint: Verify data ingestion
+assert doc_count > 0, "❌ No documents were ingested. Check your embeddings.json file."
+print("✅ All embeddings successfully stored in MongoDB!")
 ```
 
 <details>
@@ -222,6 +244,49 @@ In this exercise, you've:
 2. Processed a research paper PDF into individual page images
 3. Prepared for multimodal search by storing documents with embeddings
 4. Created the data foundation for building your AI agent
+
+<QuickCheck
+  question="What format does PyMuPDF use to scale PDF pages during image extraction?"
+  options={[
+    "Percentage (e.g., 300%)",
+    "Matrix transformation with zoom factor",
+    "DPI settings"
+  ]}
+  correctAnswer={1}
+  explanation="PyMuPDF uses pymupdf.Matrix(zoom, zoom) for scaling pages during image extraction."
+/>
+
+<QuickCheck
+  question="True or False: MongoDB Atlas requires you to manually create databases before inserting documents."
+  options={[
+    "True - databases must be created first",
+    "False - databases are created automatically"
+  ]}
+  correctAnswer={1}
+  explanation="MongoDB Atlas creates databases and collections automatically on first insert (lazy creation)."
+/>
+
+:::info Performance & Cost Tip
+**Image Quality vs Storage**: The zoom factor of 3.0 creates high-quality images but uses more disk space. For production:
+- Use 2.0-2.5 zoom for most documents
+- Consider batch processing for large PDFs
+- Monitor storage costs with many documents
+:::
+
+<SlideRecap 
+  title="Checkpoint Recap: Environment & Data Processing"
+  items={[
+    { icon: "🔌", title: "MongoDB Connected", description: "Successfully connected to Atlas and verified with ping." },
+    { icon: "📄", title: "PDF Processed", description: "Downloaded DeepSeek paper and extracted all pages as images." },
+    { icon: "💾", title: "Data Ingested", description: "Pre-generated embeddings loaded into MongoDB collection." },
+    { icon: "✅", title: "Ready for Search", description: "Foundation complete for building vector search capabilities." }
+  ]}
+  nextSection="Up next: Creating your vector search index!"
+/>
+
+---
+
+**Navigation:** [🏠 Workshop Overview](./index) | **[Exercise 2: Vector Search Setup →](./python-exercise-2)**
 
 ## 🚀 Next Steps
 

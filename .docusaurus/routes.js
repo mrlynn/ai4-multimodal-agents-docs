@@ -59,15 +59,15 @@ export default [
   },
   {
     path: '/docs',
-    component: ComponentCreator('/docs', '0e9'),
+    component: ComponentCreator('/docs', '158'),
     routes: [
       {
         path: '/docs',
-        component: ComponentCreator('/docs', 'a98'),
+        component: ComponentCreator('/docs', '94c'),
         routes: [
           {
             path: '/docs',
-            component: ComponentCreator('/docs', 'c26'),
+            component: ComponentCreator('/docs', 'fdd'),
             routes: [
               {
                 path: '/docs',
@@ -107,6 +107,12 @@ export default [
                 exact: true
               },
               {
+                path: '/docs/codespaces-setup',
+                component: ComponentCreator('/docs/codespaces-setup', 'd23'),
+                exact: true,
+                sidebar: "tutorialSidebar"
+              },
+              {
                 path: '/docs/complete-notebook',
                 component: ComponentCreator('/docs/complete-notebook', 'a2c'),
                 exact: true,
@@ -116,6 +122,12 @@ export default [
                 path: '/docs/content-organization-guide',
                 component: ComponentCreator('/docs/content-organization-guide', 'b6f'),
                 exact: true
+              },
+              {
+                path: '/docs/faq',
+                component: ComponentCreator('/docs/faq', '5a0'),
+                exact: true,
+                sidebar: "tutorialSidebar"
               },
               {
                 path: '/docs/gemini-setup',
