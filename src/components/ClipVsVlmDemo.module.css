@@ -5,6 +5,12 @@
   max-width: 1200px;
   margin: 0 auto;
   padding: 1rem;
+  background: transparent;
+}
+
+/* Ensure solid background in fullscreen mode */
+.modal .container {
+  background: transparent;
 }
 
 .header {
@@ -160,6 +166,9 @@
   background: var(--ifm-background-surface-color);
   padding: 1rem;
   margin-bottom: 1rem;
+  /* Ensure opaque background */
+  backdrop-filter: none;
+  opacity: 1;
 }
 
 .cardDark {
@@ -403,10 +412,19 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background: var(--ifm-background-color);
+  /* Use solid background colors for light and dark modes */
+  background: rgb(255, 255, 255);
   z-index: 9999;
   overflow-y: auto;
   animation: fadeIn 0.2s ease-out;
+  /* Ensure modal has solid background */
+  backdrop-filter: none;
+  isolation: isolate;
+}
+
+/* Dark mode modal background */
+[data-theme='dark'] .modal {
+  background: rgb(24, 25, 26);
 }
 
 @keyframes fadeIn {
