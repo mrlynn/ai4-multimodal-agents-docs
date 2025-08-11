@@ -1,0 +1,251 @@
+---
+title: 🔐 TA Solutions & Resources
+description: Secret page for Teaching Assistants with all workshop solutions and resources
+hide_title: false
+---
+
+import BrowserWindow from '@site/src/components/BrowserWindow';
+
+# 🔐 TA Solutions & Resources
+
+:::danger ⚠️ FOR TEACHING ASSISTANTS ONLY
+This page contains complete solutions for all workshop exercises. Please use responsibly and help participants learn by guiding them to discover solutions rather than providing direct answers.
+:::
+
+## 📖 Quick Access Navigation
+
+- [Code Block Solutions](#-code-block-solutions)
+- [Workshop Resources](#-workshop-resources)  
+- [Troubleshooting Guide](#️-troubleshooting-guide)
+
+---
+
+## 🔢 Code Block Solutions
+
+### CODE_BLOCK_1: Open PDF Document
+```python
+pdf = pymupdf.Document(stream=pdf_stream, filetype="pdf")
+```
+
+### CODE_BLOCK_2: Extract PDF Page as Pixmap
+```python
+pix = pdf[n].get_pixmap(matrix=mat)
+```
+
+### CODE_BLOCK_3: Bulk Insert Documents
+```python
+collection.insert_many(data)
+```
+
+### CODE_BLOCK_4: Create Vector Search Index
+```python
+collection.create_search_index(model=model)
+```
+
+### CODE_BLOCK_5: Vector Search Pipeline
+```python
+pipeline = [
+    {
+        "$vectorSearch": {
+            "index": VS_INDEX_NAME,
+            "path": "embedding",
+            "queryVector": query_embedding,
+            "numCandidates": 150,
+            "limit": 2,
+        }
+    },
+    {
+        "$project": {
+            "_id": 0,
+            "key": 1,
+            "width": 1,
+            "height": 1,
+            "score": {"$meta": "vectorSearchScore"},
+        }
+    },
+]
+```
+
+### CODE_BLOCK_6: Execute Aggregation Pipeline
+```python
+results = list(collection.aggregate(pipeline))
+```
+
+### CODE_BLOCK_7: Function Declaration Name
+```python
+"name": "get_information_for_question_answering"
+```
+
+### CODE_BLOCK_8: Parameter Type
+```python
+"type": "string"
+```
+
+### CODE_BLOCK_9: Required Parameters
+```python
+"required": ["user_query"]
+```
+
+### CODE_BLOCK_10: Generate Content with Gemini
+```python
+response = gemini_client.models.generate_content(
+    model=LLM, contents=contents, config=tools_config
+)
+```
+
+### CODE_BLOCK_11: Tool Selection
+```python
+tool_call = select_tool([user_query])
+```
+
+### CODE_BLOCK_12: Call Information Retrieval Tool
+```python
+tool_images = get_information_for_question_answering(**tool_call.args)
+```
+
+### CODE_BLOCK_13: Create Session Index
+```python
+history_collection.create_index("session_id")
+```
+
+### CODE_BLOCK_14: Insert Chat Message
+```python
+history_collection.insert_one(message)
+```
+
+### CODE_BLOCK_15: Query Session History
+```python
+cursor = history_collection.find({"session_id": session_id}).sort("timestamp", 1)
+```
+
+### CODE_BLOCK_16: Retrieve Session History
+```python
+history = retrieve_session_history(session_id)
+```
+
+### CODE_BLOCK_17: Store User Query
+```python
+store_chat_message(session_id, "user", "text", user_query)
+```
+
+### CODE_BLOCK_18: Store User Images
+```python
+store_chat_message(session_id, "user", "image", image)
+```
+
+### CODE_BLOCK_19: Store Agent Response
+```python
+store_chat_message(session_id, "agent", "text", answer)
+```
+
+---
+
+## 🔗 Workshop Resources
+
+### 📚 Documentation & Learning
+- **Workshop Documentation**: [mdb.link/ai4-docs](https://ai4-multimodal-agents-docs.vercel.app/)
+- **MongoDB Learn Course**: [mdb.link/ai4-badge](https://learn.mongodb.com/learn/course/ai-agents-with-voyage-ai-and-mongodb-atlas)
+- **Voyage AI Multimodal Guide**: [mdb.link/ai4-vlm](https://blog.voyageai.com/2024/11/12/voyage-multimodal-embedding/)
+
+### 🚀 Demo Applications
+- **Live Agent Demo**: [mdb.link/ai4-agent](https://voyage-multimodal-demo.vercel.app/?utm_campaign=ai4_workshop)
+- **Alternative Link**: [mdb.link/ai4](https://voyage-multimodal-demo.vercel.app/?utm_campaign=ai4_workshop)
+
+### 💻 Code Repositories
+- **Demo Repository**: [mdb.link/ai4-demo](https://github.com/mongodb-developer/ai4-multimodal-agents-demo)
+- **Workshop Repository**: [mdb.link/ai4-workshop](https://github.com/mongodb-developer/ai4-multimodal-agents-workshop)
+
+### 📊 Feedback & Survey
+- **Workshop Survey**: [mdb.link/ai4-survey](https://forms.gle/RBGw1zY9FxL8N5fP7)
+
+---
+
+## 🛠️ Troubleshooting Guide
+
+### Common Issues & Solutions
+
+#### 1. **PDF Processing Errors**
+```python
+# Issue: PDF won't open
+# Solution: Ensure correct filetype parameter
+pdf = pymupdf.Document(stream=pdf_stream, filetype="pdf")
+```
+
+#### 2. **Vector Search Not Working**
+- ✅ Verify index status: `collection.list_search_indexes()`
+- ✅ Check index name matches: `VS_INDEX_NAME = "vector_index"`
+- ✅ Confirm 1024 dimensions for Voyage multimodal embeddings
+
+#### 3. **Function Calling Issues**
+```python
+# Ensure proper function declaration structure:
+{
+    "name": "get_information_for_question_answering",
+    "description": "Retrieve information using vector search to answer a user query.",
+    "parameters": {
+        "type": "object",
+        "properties": {
+            "user_query": {
+                "type": "string",
+                "description": "Query string to use for vector search",
+            }
+        },
+        "required": ["user_query"],
+    },
+}
+```
+
+#### 4. **Memory/History Problems**
+- ✅ Check session_id index: `history_collection.create_index("session_id")`
+- ✅ Verify timestamp sorting: `.sort("timestamp", 1)`
+- ✅ Confirm message structure includes all required fields
+
+#### 5. **Environment Setup Issues**
+```bash
+# Check required environment variables
+echo $MONGODB_URI
+echo $SERVERLESS_URL
+
+# Verify MongoDB connection
+mongodb_client.admin.command("ping")
+```
+
+---
+
+## 🎓 Teaching Tips
+
+### For Each Code Block:
+1. **First**: Let participants attempt the solution
+2. **Guide**: Ask leading questions to help them discover the answer
+3. **Hint**: Provide gentle nudges using the documentation references
+4. **Last Resort**: Show the solution and explain the reasoning
+
+### Key Learning Moments:
+- **Vector Search**: Emphasize the pipeline structure and scoring
+- **Function Calling**: Highlight the importance of proper parameter typing
+- **Memory Implementation**: Show how chat history enables conversational AI
+- **ReAct Pattern**: Explain the reasoning → acting → reasoning loop
+
+### Debugging Approach:
+1. Check error messages carefully
+2. Verify all prerequisites are met
+3. Test each component individually
+4. Use print statements to trace execution
+5. Refer to API documentation for parameter requirements
+
+---
+
+## 📞 Support Contacts
+
+For additional support during the workshop:
+- **Technical Issues**: Check MongoDB Developer Community
+- **API Problems**: Refer to Voyage AI documentation
+- **General Questions**: Use the workshop Discord/Slack channel
+
+:::tip Pro Tip for TAs
+Keep this page bookmarked and use Ctrl/Cmd+F to quickly find specific solutions during the workshop. Remember to encourage learning through discovery rather than immediately providing answers!
+:::
+
+---
+
+*Last updated: Workshop Solutions v1.0*

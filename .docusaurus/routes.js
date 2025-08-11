@@ -53,6 +53,11 @@ export default [
     exact: true
   },
   {
+    path: '/ta-solutions',
+    component: ComponentCreator('/ta-solutions', '205'),
+    exact: true
+  },
+  {
     path: '/upload',
     component: ComponentCreator('/upload', '536'),
     exact: true
