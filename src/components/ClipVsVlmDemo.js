@@ -575,6 +575,7 @@ function ClipVsVlmDemo() {
   const [selected, setSelected] = useState("para1");
   const [step, setStep] = useState(0); // index within steps
   const [playing, setPlaying] = useState(false);
+  const [isFullscreen, setIsFullscreen] = useState(false);
 
   const steps = mode === MODES.CLIP ? CLIP_STEPS : VLM_STEPS;
 
@@ -592,7 +593,24 @@ function ClipVsVlmDemo() {
 
   const highlight = mode === MODES.CLIP ? "#22c55e" : MONGODB_COLORS.lavender;
 
-  return (
+  // Handle escape key for fullscreen
+  useEffect(() => {
+    const handleEscape = (e) => {
+      if (e.key === 'Escape' && isFullscreen) {
+        setIsFullscreen(false);
+      }
+    };
+    if (isFullscreen) {
+      document.addEventListener('keydown', handleEscape);
+      document.body.style.overflow = 'hidden';
+    }
+    return () => {
+      document.removeEventListener('keydown', handleEscape);
+      document.body.style.overflow = '';
+    };
+  }, [isFullscreen]);
+
+  const demoContent = (
     <div className={styles.container}>
       {/* Header */}
       <div className={styles.header}>
@@ -693,6 +711,44 @@ function ClipVsVlmDemo() {
         <DiffCard title="Strength" clip="Fast retrieval via similarity" vlm="Grounded reasoning & Q&A" />
       </div>
     </div>
+  );
+
+  // Fullscreen button icon
+  const FullscreenIcon = () => (
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+      <path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3" />
+    </svg>
+  );
+
+  return (
+    <>
+      {/* Regular view with fullscreen button */}
+      <div style={{ position: 'relative' }}>
+        <button
+          className={styles.fullscreenButton}
+          onClick={() => setIsFullscreen(true)}
+          title="View in fullscreen"
+        >
+          <FullscreenIcon />
+        </button>
+        {demoContent}
+      </div>
+
+      {/* Fullscreen modal */}
+      {isFullscreen && (
+        <div className={styles.modal}>
+          <button
+            className={styles.closeButton}
+            onClick={() => setIsFullscreen(false)}
+          >
+            ✕ Close Fullscreen
+          </button>
+          <div className={styles.modalContent}>
+            {demoContent}
+          </div>
+        </div>
+      )}
+    </>
   );
 }
 
