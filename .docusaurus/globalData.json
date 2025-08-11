@@ -32,6 +32,11 @@
               "path": "/docs/backup/python-exercise-4"
             },
             {
+              "id": "clip-vs-vlm-demo",
+              "path": "/docs/clip-vs-vlm-demo",
+              "sidebar": "tutorialSidebar"
+            },
+            {
               "id": "codebase",
               "path": "/docs/codebase"
             },
@@ -131,8 +136,8 @@
   "docusaurus-lunr-search": {
     "default": {
       "fileNames": {
-        "searchDoc": "search-doc-1754869718074.json",
-        "lunrIndex": "lunr-index-1754869718074.json"
+        "searchDoc": "search-doc-1754911621116.json",
+        "lunrIndex": "lunr-index-1754911621116.json"
       }
     }
   }

@@ -1,0 +1,54 @@
+---
+title: CLIP vs VLM Architecture Demo
+sidebar_position: 95
+hide_table_of_contents: true
+---
+
+import ClipVsVlmDemo from '@site/src/components/ClipVsVlmDemo';
+
+# CLIP vs VLM Architecture Demo
+
+This interactive demonstration illustrates the fundamental differences between **CLIP** (Contrastive Language-Image Pre-training) and **VLM** (Vision Language Model) architectures for processing multimodal content.
+
+## Key Concepts
+
+### CLIP Architecture
+- **Two-tower design**: Separate encoders for text and images
+- **Contrastive learning**: Learns to align text and image representations
+- **Separate embedding spaces**: Text and visual embeddings exist in distinct spaces
+- **Similarity-based retrieval**: Uses cosine similarity to find matching pairs
+
+### VLM Architecture
+- **Unified model**: Single backbone processes both modalities
+- **Cross-modal attention**: Text and images attend to each other
+- **Shared representation**: Both modalities exist in the same embedding space
+- **Contextual understanding**: Better suited for reasoning and Q&A tasks
+
+## Interactive Demo
+
+Use the controls below to explore how each architecture processes a multimodal PDF document:
+
+<ClipVsVlmDemo />
+
+## When to Use Each Architecture
+
+### Use CLIP when you need:
+- Fast similarity-based retrieval
+- Image-text matching at scale
+- Zero-shot classification
+- Efficient embedding generation
+
+### Use VLM when you need:
+- Complex reasoning over multimodal data
+- Question answering with visual context
+- Step-by-step explanations
+- Grounded understanding of relationships
+
+## Technical Implementation
+
+In the context of our workshop's multimodal PDF agent:
+
+1. **CLIP approach**: Would encode PDF text chunks and images separately, then use vector similarity to retrieve relevant content
+2. **VLM approach**: Processes the entire PDF context jointly, enabling the agent to reason about relationships between text and figures
+
+The choice between architectures depends on your specific use case. For our workshop, we leverage embedding models that can handle both approaches, giving you flexibility in implementation.

@@ -109,7 +109,12 @@ export default {
         },
         {
           "to": "https://voyage-multimodal-demo.vercel.app",
-          "label": "Agent Demo",
+          "label": "Agent Demo (NextJS)",
+          "position": "left"
+        },
+        {
+          "to": "https://github.com/mrlynn/ai4-demo",
+          "label": "Agent Demo (FastAPI + React)",
           "position": "left"
         },
         {

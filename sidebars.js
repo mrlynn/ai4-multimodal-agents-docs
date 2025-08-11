@@ -116,6 +116,11 @@ const sidebars = {
           type: 'doc',
           id: 'faq',
           label: '🤔 FAQ'
+        },
+        {
+          type: 'doc',
+          id: 'clip-vs-vlm-demo',
+          label: '🎨 CLIP vs VLM Demo'
         }
       ]
     },

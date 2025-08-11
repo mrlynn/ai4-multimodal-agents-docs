@@ -70,17 +70,17 @@
     },
     "config": "config---assistant-5-e-9-186"
   },
-  "/docs-158": {
+  "/docs-f2b": {
     "__comp": "__comp---theme-docs-root-5-e-9-0b6",
     "__context": {
       "plugin": "plugin---docsaba-d7c"
     }
   },
-  "/docs-94c": {
+  "/docs-a61": {
     "__comp": "__comp---theme-doc-version-roota-7-b-5de",
     "__props": "__props---docs-005-788"
   },
-  "/docs-fdd": {
+  "/docs-c26": {
     "__comp": "__comp---theme-doc-roota-94-67a"
   },
   "/docs-9b9": {
@@ -106,6 +106,10 @@
   "/docs/backup/python-exercise-4-33a": {
     "__comp": "__comp---theme-doc-item-178-a40",
     "content": "content---docs-backup-python-exercise-4-af-9-727"
+  },
+  "/docs/clip-vs-vlm-demo-58d": {
+    "__comp": "__comp---theme-doc-item-178-a40",
+    "content": "content---docs-clip-vs-vlm-democd-0-fdf"
   },
   "/docs/codebase-b75": {
     "__comp": "__comp---theme-doc-item-178-a40",

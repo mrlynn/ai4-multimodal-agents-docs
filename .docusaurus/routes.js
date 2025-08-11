@@ -59,15 +59,15 @@ export default [
   },
   {
     path: '/docs',
-    component: ComponentCreator('/docs', '158'),
+    component: ComponentCreator('/docs', 'f2b'),
     routes: [
       {
         path: '/docs',
-        component: ComponentCreator('/docs', '94c'),
+        component: ComponentCreator('/docs', 'a61'),
         routes: [
           {
             path: '/docs',
-            component: ComponentCreator('/docs', 'fdd'),
+            component: ComponentCreator('/docs', 'c26'),
             routes: [
               {
                 path: '/docs',
@@ -100,6 +100,12 @@ export default [
                 path: '/docs/backup/python-exercise-4',
                 component: ComponentCreator('/docs/backup/python-exercise-4', '33a'),
                 exact: true
+              },
+              {
+                path: '/docs/clip-vs-vlm-demo',
+                component: ComponentCreator('/docs/clip-vs-vlm-demo', '58d'),
+                exact: true,
+                sidebar: "tutorialSidebar"
               },
               {
                 path: '/docs/codebase',
