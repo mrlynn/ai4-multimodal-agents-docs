@@ -121,6 +121,9 @@ const config = {
       }),
     ],
   ],
+  clientModules: [
+    require.resolve('./src/client-modules/routePreloader.js'),
+  ],
   plugins: [
     [
       require.resolve("docusaurus-lunr-search"),

@@ -65,6 +65,9 @@ export default {
       }
     ]
   ],
+  "clientModules": [
+    "/Users/michael.lynn/code/ai4/workshop-docs/src/client-modules/routePreloader.js"
+  ],
   "plugins": [
     [
       "/Users/michael.lynn/code/ai4/workshop-docs/node_modules/docusaurus-lunr-search/src/index.js",
@@ -424,7 +427,6 @@ export default {
   "scripts": [],
   "headTags": [],
   "stylesheets": [],
-  "clientModules": [],
   "titleDelimiter": "|",
   "noIndex": false
 };
