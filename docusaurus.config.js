@@ -87,7 +87,7 @@ const config = {
   baseUrl: process.env.CODESPACES || process.env.VERCEL_URL || process.env.NODE_ENV === 'development' ? `/` : `/${workshopName}/`,
   projectName: `${organizationName}.github.io`,
   organizationName: `${organizationName}`,
-  trailingSlash: false,
+  trailingSlash: undefined,
   onBrokenLinks: "ignore", // Changed from "warn" to allow build with missing Spanish translations
   onBrokenMarkdownLinks: "warn",
   favicon: `${favicon}`,

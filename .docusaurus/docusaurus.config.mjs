@@ -10,7 +10,6 @@ export default {
   "baseUrl": "/",
   "projectName": "mongodb-developer.github.io",
   "organizationName": "mongodb-developer",
-  "trailingSlash": false,
   "onBrokenLinks": "ignore",
   "onBrokenMarkdownLinks": "warn",
   "favicon": "img/favicon.svg",

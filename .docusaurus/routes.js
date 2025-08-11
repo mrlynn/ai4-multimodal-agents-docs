@@ -64,19 +64,19 @@ export default [
   },
   {
     path: '/docs',
-    component: ComponentCreator('/docs', 'f2b'),
+    component: ComponentCreator('/docs', '2b1'),
     routes: [
       {
         path: '/docs',
-        component: ComponentCreator('/docs', 'a61'),
+        component: ComponentCreator('/docs', 'f81'),
         routes: [
           {
             path: '/docs',
-            component: ComponentCreator('/docs', 'c26'),
+            component: ComponentCreator('/docs', 'ea1'),
             routes: [
               {
-                path: '/docs',
-                component: ComponentCreator('/docs', '9b9'),
+                path: '/docs/',
+                component: ComponentCreator('/docs/', 'b98'),
                 exact: true,
                 sidebar: "tutorialSidebar"
               },
